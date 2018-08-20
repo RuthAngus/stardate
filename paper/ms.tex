@@ -1,0 +1,95 @@
+\documentclass[useAMS, usenatbib, preprint, 12pt]{aastex}
+\usepackage{cite, natbib}
+\usepackage{float}
+\usepackage{epsfig}
+\usepackage{cases}
+\usepackage[section]{placeins}
+\usepackage{graphicx, subfigure}
+\usepackage{color}
+\usepackage{bm}
+
+\newcommand{\columbia}{3}
+\newcommand{\cca}{2}
+\newcommand{\amnh}{1}
+\newcommand{\kepler}{{\it Kepler}}
+\newcommand{\corot}{{\it CoRoT}}
+\newcommand{\Ktwo}{{\it K2}}
+\newcommand{\ktwo}{\Ktwo}
+\newcommand{\TESS}{{\it TESS}}
+\newcommand{\LSST}{{\it LSST}}
+\newcommand{\Wfirst}{{\it Wfirst}}
+\newcommand{\SDSS}{{\it SDSS}}
+\newcommand{\PLATO}{{\it PLATO}}
+\newcommand{\Gaia}{{\it Gaia}}
+\newcommand{\gaia}{{\it Gaia}}
+\newcommand{\Teff}{$T_{\mathrm{eff}}$}
+\newcommand{\teff}{$T_{\mathrm{eff}}$}
+\newcommand{\FeH}{[Fe/H]}
+\newcommand{\feh}{[Fe/H]}
+\newcommand{\ie}{{\it i.e.}}
+\newcommand{\eg}{{\it e.g.}}
+\newcommand{\logg}{log \emph{g}}
+\newcommand{\dnu}{$\Delta \nu$}
+\newcommand{\numax}{$\nu_{\mathrm{max}}$}
+
+\newcommand{\racomment}[1]{{\color{red}#1}}
+
+\begin{document}
+
+\title{Inferring stellar ages by combining isochrone fitting with
+gyrochronology}
+
+\author{%
+    Ruth Angus\altaffilmark{\amnh, }\altaffilmark{\cca, }\altaffilmark{\columbia},
+   {\it et al.}
+}
+
+\altaffiltext{\amnh}{American Museum of Natural History, Central Park West,
+Manhattan, NY}
+\altaffiltext{\cca}{Center for Computational Astrophysics, Flatiron Institute,
+162 5th Avenue, Manhattan, NY}
+\altaffiltext{\columbia}{Department of Astronomy, Columbia
+University, NY, NY}
+
+% Experiment design.
+
+% TEST
+% Test the method on simulated data.
+% PLOT: histograms over inferred ages (1) just isochrones (2) just
+% gyrochronology, (3) both.
+
+% TEST
+% Test the method on stars in clusters.
+% PLOT: histograms over inferred ages (1) just isochrones (2) just
+% gyrochronology, (3) both.
+% With and without spectroscopy.
+
+% TEST
+% Test the method on asteroseismic dwarfs.
+
+% APPLY
+% The method to a handful of planet hosts.
+
+
+\begin{abstract}
+    \include{abstract}
+\end{abstract}
+
+\section{Introduction}
+
+\include{intro}
+
+
+% acknowledgements
+Some of the data presented in this paper were obtained from the Mikulski
+Archive for Space Telescopes (MAST).
+STScI is operated by the Association of Universities for Research in
+Astronomy, Inc., under NASA contract NAS5-26555.
+Support for MAST for non-HST data is provided by the NASA Office of Space
+Science via grant NNX09AF08G and by other grants and contracts.
+This paper includes data collected by the Kepler mission. Funding for the
+Kepler mission is provided by the NASA Science Mission directorate.
+
+\bibliographystyle{plainnat}
+\bibliography{hz.bib}
+\end{document}
