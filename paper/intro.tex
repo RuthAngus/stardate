@@ -74,31 +74,58 @@ Due to the abundance of rotation periods for MS stars already provided by
 \kepler/\ktwo\ and the many more expected from future photometric surveys,
 rotation-dating, or `gyrochronology' is one of the most readily available
 methods for inferring stellar ages.
-% More background
+Magnetic braking in MS stars was observed by \citet{Skumanich1972} who, using
+observations of young clusters and the Sun, found that the rotation periods of
+Solar-type stars decay with the square-root of time.
+Now, the relation between rotation period and age is well-established and has
+been studied in detail \racomment{CITATIONS}.
+The convenient characteristic of stars that allows their ages to be inferred
+from their {\it current} rotation periods, not their primordial ones, comes
+from the steep dependence of spin-down rate on rotation period.
+Observations of young clusters indicate that stellar angular momentum loss
+rate is proportional to the cube of the angular velocity.
+This means that a star spinning with high angular velocity will experience a
+much greater angular momentum loss rate than a slowly spinning star.
+For this reason, no matter the initial rotation period of a Sun-like star,
+after around the age of the Hyades, ($\sim$ 600 Myr) stellar rotation periods
+appear to converge onto a tight sequence.
+After this time, the age of a star can be inferred, to first order, from its
+mass and rotation period alone.
 
-Gyrochronology works well for young stars but a question mark still hangs over
-its accuracy for stars older than the Sun.
-Recent results show that old \kepler\ asteroseismic stars rotate more rapidly
-than expected given their age \citep[\eg][]{Angus2015, Vansaders2016,
-Metcalfe2016}.
-This has been attributed to an evolving magnetic dynamo: as stars reach a
-critical Rossby number (the ratio of rotation period to the convective
-overturn timescale), their magnetic field `switches off' and stars maintain a
-consistent rotation period after that time.
-Whilst this physical explanation produces a model that fits the data, it is
-driven by observations, not theory, and other explanations could provide an
-answer.
-The data sets typically used to test the age-rotation relations are highly
-heterogeneous and each set has its own detection and selection biases.
-For example, asteroseismology favours quiet stars whereas rotation periods are
-easiest to measure for active stars.
+Despite significant advances in theoretical models of stellar spin-down as
+well as new calibrations of empirical models, the gyrochronology relations
+have not yet been finalized.
+In particular, they suffer from a lack of suitable calibration stars at old
+ages and low masses.
+These regions of parameter space are particularly important because some
+evidence suggests that rotational evolution changes at old ages and low
+masses.
+For example, recent results show that old \kepler\ asteroseismic stars rotate
+more rapidly than expected given their age \citep[\eg][]{Angus2015,
+vansaders2016}.
+These data can be reproduced with a model that relaxes magnetic breaking at a
+critical Rossby number, $Ro$ (the ratio of rotation period to the convective
+overturn timescale) of around the Solar value.
+As stellar rotation periods lengthen and stars cross this $Ro$ threshold, they
+maintain a constant rotation period after that time.
+The gyrochronology model described in \citet{vansaders2016} and
+\citet{vansaders2018} includes weakened magnetic braking after stars reach the
+Solar $Ro$ threshold.
 
-The models developed and calibrated by \citet{epstein2014, vansaders2015,
-vansaders2016} are stellar evolution models and a set of isochrones  which
-include rotation period as an additional parameter.
-The methodology we presented here is related to these models in that both use
-a combination of rotation periods and observable properties that track
-evolution on the Hertzprung-Russel diagram in concert.
+The models developed and calibrated in \citet{epstein2014, vansaders2015,
+vansaders2016, vansaders2018} are expensive to compute and, just as with most
+isochrones and stellar evolution tracks, are usually pre-computed over a grid
+of stellar parameters in order to perform tractable inference.
+In order to infer an age from these models, one would effectively perform
+isochrone fitting but in this case, rotation period would be added as an
+additional parameter and the ages inferred would therefore be more precise and
+accurate.
+In liu of these models becoming readily available to the community, we develop
+here a complementary method that combines isochrones with an empirical
+gyrochronology model using a hierarchical Bayesian model.
+The methodology presented here is related to the family of models described
+above in that both use a combination of rotation periods and other observable
+properties that track evolution on the Hertzprung-Russell diagram in concert.
 A major difference is that the gyrochronology model used here is an entirely
 empirically calibrated one, as opposed to a physically derived one.
 One major advantage of using a physically motivated gyrochronology model over
@@ -107,33 +134,17 @@ or extrapolate over parts of parameter space with sparse data coverage.
 However, rotational spin-down is a complex process that is not yet fully
 understood and currently no physical model can accurately reproduce all the
 data available.
-For this reason, even physically motivated gyrochronology models cannot be
-used to reliably extrapolate into unexplored parameter space.
+For this reason, even physically motivated gyrochronology models cannot always
+be used to reliably extrapolate into unexplored parameter space.
 Although we use a simple version of an empirical gyrochronology model in this
 work, which, like the physical gyrochronology models, cannot yet reproduce all
 the observed data, several simple modifications could be made to this model
-that would produce significant improvements.
+that {\it would} produce significant improvements.
 For example, including and allowing for outliers; stars with anomalously fast
 or slow rotation periods, could be incorporated into our model.
-
-Ultimately, this model will provide a baseline against which other physically
-motivated models can be compared.
-
-% % A history of rotation-dating.
-% The phenomenon of magnetic braking in MS stars was first observed almost fifty
-% years ago by \citet{Skumanich1972} who observed that the rotation periods of
-% the Sun and young cluster stars decay with the square-root of time.
-% Later, a mass-dependence was added to the relation between age and rotation
-% period --- less massive stars lose angular momentum faster than more massive
-% ones.
-% \citet{Kawaler1988} derived a formalism for this angular momentum loss and his
-% relation depended on the mass loss rate, the ....
-% More recently, \citet{Barnes2003} demonstrated that a simple relation could be
-% used to describe `gyrochronology', the method of rotation-dating, and further
-% works \citep[\eg][]{Barnes2007, Mamajek2008, Barnes2010, Meibom2011},
-% continue to demonstrate that the relation between rotation period and age
-% holds true while theorists \citep[\eg][]{Matt2012, Epstein2014} modify and
-% extend the efforts to produce physical models of this phenomenon.
+Ultimately, the model we present here will provide a baseline against which
+more physically motivated models, e.g. the \citet{vansaders2016} models, can
+be compared.
 
 % Bayesian isochrone fitting.
-%-----------------------
+%--------------------------
