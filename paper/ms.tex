@@ -26,6 +26,11 @@
 \newcommand{\teff}{$T_{\mathrm{eff}}$}
 \newcommand{\FeH}{[Fe/H]}
 \newcommand{\feh}{[Fe/H]}
+\newcommand{\fhat}{$\hat{F}$}
+\newcommand{\pmega}{$\bar{\omega}$}
+\newcommand{\mj}{$m_j$}
+\newcommand{\mh}{$m_h$}
+\newcommand{\mk}{$m_k$}
 \newcommand{\ie}{{\it i.e.}}
 \newcommand{\eg}{{\it e.g.}}
 \newcommand{\logg}{log \emph{g}}
@@ -51,35 +56,88 @@ Manhattan, NY}
 \altaffiltext{\columbia}{Department of Astronomy, Columbia
 University, NY, NY}
 
-% Experiment design.
-
-% TEST
-% Test the method on simulated data.
-% PLOT: histograms over inferred ages (1) just isochrones (2) just
-% gyrochronology, (3) both.
-
-% TEST
-% Test the method on stars in clusters.
-% PLOT: histograms over inferred ages (1) just isochrones (2) just
-% gyrochronology, (3) both.
-% With and without spectroscopy.
-
-% TEST
-% Test the method on asteroseismic dwarfs.
-
-% APPLY
-% The method to a handful of planet hosts.
-
-
 \begin{abstract}
     \include{abstract}
 \end{abstract}
 
 \section{Introduction}
+% Motivation and context
+%-----------------------------------------------------------------------------
+%   - The need for better stellar ages.
+%   - Why are MS ages harder than red giant ages?
+%   - Introduce gyrochronology
+%   - Theoretical vs empirical gyro models
+%   - Describe the project presented here.
+%   - Inconsistency and inaccuracy of models
+%   - Bayesian isochrone fitting.
+%   - Sum up
+%   - Paper outline
+
+% Relevant literature
+%-----------------------------------------------------------------------------
+%   - Skumanich, Kawaler, Barnes
+%   - Modern theoretical models
+%   - Failings of gyrochronology
+%   - Future challenges of gyro (inc outliers)
+
 \include{intro}
 
 \section{Method}
+% The model
+%-----------------------------------------------------------------------------
+%   - Introduction
+%   - Why iso and gyro are independent
+%   - A description of the PGM
+%   - The PGM
+%   - The formulas
+%   - A description and reiteration in words.
+%   - A word about the gyrochronology model.
+
+% Practicalities: sampling, etc.
+%-----------------------------------------------------------------------------
+%   - isochrones.py
+%   - Emcee
+%   - Assessing convergence
 \include{method}
+
+\section{Results}
+% Intro
+% TEST 1: simulations
+%-----------------------------------------------------------------------------
+%   - The simulated data
+%   - The results
+% PLOT: histograms over inferred ages (1) just isochrones (2) just
+% gyrochronology, (3) both.
+
+% TEST 2: Clusters
+%-----------------------------------------------------------------------------
+%   - The cluster data
+%   - The results
+% PLOT: histograms over inferred ages (1) just isochrones (2) just
+% gyrochronology, (3) both.
+
+% TEST 3
+% Test the method on asteroseismic dwarfs.
+
+% Rolling out/future
+% Adding new datasets/dimensions/methods.
+%-----------------------------------------------------------------------------
+
+\section{Discussion}
+% Implications
+%-----------------------------------------------------------------------------
+%   - Summarize the results
+%   - How will this be used/what will it be useful for?
+%   - Where is it not useful?
+
+% Future and improvements
+%-----------------------------------------------------------------------------
+%   - A more sophisticated gyrochronology model
+%   - Mixture model, etc.
+
+\section{Conclusion}
+% Summarize the paper.
+%-----------------------------------------------------------------------------
 
 % acknowledgements
 Some of the data presented in this paper were obtained from the Mikulski

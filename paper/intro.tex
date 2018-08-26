@@ -1,6 +1,3 @@
-% Relevant literature
-% Paper outline
-
 % Motivation and context
 %-----------------------
 
@@ -9,10 +6,10 @@ The formation and evolution of the Milky Way (MW) and the planetary systems
 within it are two topics of significant interest to the astronomical community
 today.
 Both of these fields require precise and accurate ages of thousands of stars.
-Recent advances in galactic archaeology have made use of the ages of red giant
-stars, some derived from asteroseismology and some from spectroscopy.
+Recent advances in galactic archaeology have made use of the ages of red
+giants, some calculated from asteroseismology and some from spectroscopy.
 The age distribution of stellar populations in the MW have been explored using
-these stellar ages.
+the ages of these stars.
 Red giants are highly luminous and can be observed to great distances, thus
 providing age information on the scale of tens of kilo-parsecs.
 Main sequence (MS) stars on the other hand, although fainter, are more
@@ -25,60 +22,58 @@ the ages of MS stars that are needed to capture snapshots of planet evolution.
 Unfortunately, the very property that makes MS stars good hosts for habitable
 planets also makes them difficult to date: they do not change substantially
 over time.
-% Typical age uncertainties of giants.
+
+% Why are MS ages harder than red giant ages?
+Unlike the spectra or photometric colors of red giants, MS star spectra do not
+contain a significant amount of age information.
+This can be understood as due to the spacing of isochrones on a
+Hertsprung-Russell or color-magnitude diagram.
+On the MS, isochrones are tightly spaced and, even with very precise
+measurements of effective temperature and luminosity, the position of a MS
+on the HR diagram might be consistent with range of isochrones spanning
+several billion years.
+On the giant branch however, isochrones are spread further apart, so that
+sufficiently precisely measured temperatures and luminosities may yield ages
+that are precise to within 20\% or better.
 % Typical age uncertainties of dwarfs.
+\racomment{Look at typical age uncertainties from APOGEE.}
+Asteroseismology can provide precise ages of both red giant and MS stars
+however, due to the greater abundance of observation suitable for {\it red
+giant} asteroseismology, precise red giant asteroseismic ages once again
+outnumber MS ages.
+The typical periods of red giant asteroseismic pulsations are long and can be
+detected using \kepler's long cadence mode of one observation per thirty
+minutes, which is its most common observing mode.
+MS stars, on the other hand, oscillate with periods of just a few minutes, and
+the long cadence \kepler\ observations, taken once every half-hour are not
+capable of resolving these pulsations.
+Instead, they must be observed in \kepler's short cadence mode (one
+observation every minute), as has been done for around two thousand stars.
+However, since the amplitude of pulsation scales with stellar radius, the
+majority of successfully measured ages using short-cadence observations
+(currently around 500) are
+for subgiants; a relatively small number of these stars are truly on the MS.
+This may change now that the short cadence \kepler\ light curves have been
+reprocessed and new precise ages for the full sample of two thousand stars may
+be measured shortly.
 
-% Stellar ages provide the key to understanding the evolution of all
-% astrophysical objects.
-% For main sequence (MS) stars however, age is a difficult property to infer.
-% This is predominantly because hydrogen burning stars do not change
-% appreciably during their time spent on the MS:
-A star like the Sun will increase in luminosity by only around a factor of two
-before turning off the MS.
-In addition, the Sun's temperature will only increase by around 100 K during
-its $\sim$8 billion year MS lifetime.
-Luminosity and temperature are not sensitive proxies for age and can also be
-difficult to measure with their precision highly sensitive to their distance
-and the amount of extincting dust along the line of sight.
-On the other hand, Sun's rotation period will vary by almost an order of
-magnitude over its MS lifetime.
-Stellar rotation periods are much more sensitive to age than luminosity or
-temperature and can be measured precisely with little dependence on distance
-and none on extinction.
-Incorporating rotation period measurements into isochrone fitting methods
-provides additional information that allows for much more precise age
-inference.
-
-% Inconsistency and inaccuracy of models
-In addition to the difficulties imposed by the slow timescale for change
-within MS stars that results in poor age precision, different dating methods
-often produce inconsistent predictions for the age of a star as a result of
-model inaccuracies.
-For example, an asteroseismic age will not necessarily agree with a isochronal
-or rotational age.
-Even isochronal ages derived from different stellar evolution models can be
-inconsistent.
-% physics driving models are wrong.
-% Not enough calibration data.
-This arises from...
-
-% The method presented here will solve the following problems.
-
-% Relevant literature.
-%-----------------------
-
-% Gyrochronology
-%-----------------------
-
+% Introduce gyrochronology
+An alternative dating method that uses stellar rotation periods,
+gyrochronology, has the potential to provide MS star ages that are precise to
+around 20\%.
 Due to the abundance of rotation periods for MS stars already provided by
 \kepler/\ktwo\ and the many more expected from future photometric surveys,
-rotation-dating, or `gyrochronology' is one of the most readily available
-methods for inferring stellar ages.
+gyrochronology is one of the most readily available methods for inferring
+stellar ages and, as such, has gained interest over the last few years.
+% How does it work?
 Magnetic braking in MS stars was observed by \citet{Skumanich1972} who, using
 observations of young clusters and the Sun, found that the rotation periods of
 Solar-type stars decay with the square-root of time.
-Now, the relation between rotation period and age is well-established and has
-been studied in detail \racomment{CITATIONS}.
+It has since been established that the rotation period of a star depends, to
+first order, only on its age and mass.
+This means that by measuring a star's rotation period and a mass proxy (B-V
+color is the most commonly used mass-proxy in the literature), one can
+determine its age.
 The convenient characteristic of stars that allows their ages to be inferred
 from their {\it current} rotation periods, not their primordial ones, comes
 from the steep dependence of spin-down rate on rotation period.
@@ -92,6 +87,19 @@ appear to converge onto a tight sequence.
 After this time, the age of a star can be inferred, to first order, from its
 mass and rotation period alone.
 
+% Theoretical vs empirical gyro models
+The relation between age, rotation period and mass has been studied in detail
+\racomment{CITATIONS}, and several different models have been developed to
+capture the rotation evolution of stars.
+Some of these models are theoretical and model angular momentum loss as a
+function of the properties of magnetic field and stellar wind.
+Others are empirical and attempt to capture the behavior of stars from a
+purely observational standpoint, using simple functional forms that can
+reproduce the data.
+Both types of model, theoretical and empirical, must be calibrated using
+observations since even the theoretical models are highly sensitive to stellar
+properties that are not measurable, mass-loss rate and magnetic field
+geometry, for example.
 Despite significant advances in theoretical models of stellar spin-down as
 well as new calibrations of empirical models, the gyrochronology relations
 have not yet been finalized.
@@ -112,6 +120,7 @@ The gyrochronology model described in \citet{vansaders2016} and
 \citet{vansaders2018} includes weakened magnetic braking after stars reach the
 Solar $Ro$ threshold.
 
+% Describe the project presented here.
 The models developed and calibrated in \citet{epstein2014, vansaders2015,
 vansaders2016, vansaders2018} are expensive to compute and, just as with most
 isochrones and stellar evolution tracks, are usually pre-computed over a grid
@@ -120,12 +129,11 @@ In order to infer an age from these models, one would effectively perform
 isochrone fitting but in this case, rotation period would be added as an
 additional parameter and the ages inferred would therefore be more precise and
 accurate.
-In liu of these models becoming readily available to the community, we develop
-here a complementary method that combines isochrones with an empirical
-gyrochronology model using a hierarchical Bayesian model.
-The methodology presented here is related to the family of models described
-above in that both use a combination of rotation periods and other observable
-properties that track evolution on the Hertzprung-Russell diagram in concert.
+We present here a complementary method that combines isochrones with an
+empirical gyrochronology model using a Bayesian framework.
+The methodology is related to the family of models described above in that
+both use a combination of rotation periods and other observable properties
+that track stellar evolution on the HR diagram in concert.
 A major difference is that the gyrochronology model used here is an entirely
 empirically calibrated one, as opposed to a physically derived one.
 One major advantage of using a physically motivated gyrochronology model over
@@ -146,5 +154,38 @@ Ultimately, the model we present here will provide a baseline against which
 more physically motivated models, e.g. the \citet{vansaders2016} models, can
 be compared.
 
+% % Inconsistency and inaccuracy of models
+% In addition to the difficulties imposed by the slow timescale for change
+% within MS stars that results in poor age precision, different dating methods
+% often produce inconsistent predictions for the age of a star as a result of
+% model inaccuracies.
+% For example, an asteroseismic age will not necessarily agree with a isochronal
+% one and even isochronal ages derived from different stellar evolution models
+% can be inconsistent.
+% % physics driving models are wrong.
+% % Not enough calibration data.
+% This problem arises from a lack of calibrators with sufficiently precise
+% stellar properties.
+
 % Bayesian isochrone fitting.
-%--------------------------
+
+% Sum up.
+A star like the Sun will increase in luminosity by only around a factor of two
+before turning off the MS.
+In addition, the Sun's temperature will only increase by around 100 K during
+its $\sim$8 billion year MS lifetime.
+Luminosity and temperature are not sensitive proxies for age and can also be
+difficult to measure with their precision highly sensitive to their distance
+and the amount of extincting dust along the line of sight.
+On the other hand, Sun's rotation period will vary by almost an order of
+magnitude over its MS lifetime.
+Stellar rotation periods are much more sensitive to age than luminosity or
+temperature and can be measured precisely with little dependence on distance
+and none on extinction.
+Incorporating rotation period measurements into isochrone fitting methods
+provides additional information that allows for much more precise age
+inference.
+%-----------------------------------------------------------------------------
+
+% Paper outline
+%-----------------------------------------------------------------------------
