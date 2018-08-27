@@ -1,0 +1,86 @@
+% Intro
+% TEST 1: simulations
+%-----------------------------------------------------------------------------
+%   - The simulated data
+%   - The results
+% PLOT: histograms over inferred ages (1) just isochrones (2) just
+% gyrochronology, (3) both.
+
+% TEST 2: Clusters
+%-----------------------------------------------------------------------------
+%   - The cluster data
+%   - The results
+% PLOT: histograms over inferred ages (1) just isochrones (2) just
+% gyrochronology, (3) both.
+
+% TEST 3
+% Test the method on asteroseismic dwarfs.
+
+% Rolling out/future
+%   - Adding new datasets/dimensions/methods.
+%-----------------------------------------------------------------------------
+
+% Intro
+%-----------------------------------------------------------------------------
+In order to demonstrate the functionality of our method, we conduct a series
+of tests.
+In the first we simulate a set of observables from a set of fundamental
+parameters for a few hundred stars using the MIST \citep{choi} stellar
+evolution models.
+In the second we test our model by attempting the measure the ages of stars in
+known clusters who's ages have been established through ensemble isochrone
+fitting and MS turn-off.
+In the third test we compare our ages with those of asteroseismic measurements
+for around twenty stars.
+
+% TEST 1: simulations
+%-----------------------------------------------------------------------------
+%   - The simulated data
+For the first test we began with a set of 1000 stars and drew masses, ages,
+bulk metallicities, distances and extinctions at random from the following
+uniform distributions:
+\begin{eqnarray}
+& M \sim U(0.5, 1.5)~[M_\odot] \\
+& A \sim U(0.5, 14)\mathrm{~[Gyr]} \\
+& F \sim U(-0.2, 0.2) \\
+& D \sim U(10, 1000)~\mathrm{[pc]} \\
+& A_V \sim U(0, 1).
+\end{eqnarray}
+\teff, \logg, \fhat, {\bf \mx}, \pmega\ and B-V were then generated using
+these stellar parameters with the MIST stellar evolution models \citep{choi}
+and rotation periods, $P$ were generated from the gyrochronology relation in
+equation \ref{eqn:gyro} with age, $A$, and B-V.
+We then performed cuts on these simulated stars to remove evolved stars and
+stars that are too hot.
+The rotation periods of evolved stars, defined here to be those with \logg\ >
+4.5 begin to increase as soon as they turn off the MS and their radii start to
+enlarge and cannot be modeled with the gyrochronology relation of equation
+\ref{eqn:gyro}.
+In addition, hot stars (defined as 6250 K < \teff) cannot be modeled using
+equation \ref{eqn:gyro} because their convective envelopes are extremely
+shallow and their magnetic fields are weaker, leading to a lack of magnetic
+braking.
+The rotation periods of these stars do not increase substantially during their
+time on the MS.
+After performing these cuts, 460 \racomment{update} stars remain in the sample
+of simulated stars.
+We attempt to measure their true periods using our method outlined in section
+\ref{sec:method}.
+For all stars, our initial guesses for the parameters are $M = 1M_\odot$, $A =
+1$ Gyr, $F = 0$, $D = 500$ pc and $A_V = 0.1$.
+
+%   - The results
+Figure \ref{fig:sims_gyro_and_iso} shows the results of using our model to
+estimate the posterior PDFs over stellar ages, using simulated stars.
+The true stellar ages are plotted on the $x$-axis and the median values of the
+recovered PDFs over ages are plotted on the $y$-axis.
+
+% TEST 2: Clusters
+%-----------------------------------------------------------------------------
+%   - The cluster data
+%   - The results
+
+% TEST 3: Asteroseismology
+%-----------------------------------------------------------------------------
+%   - The asteroseismic data
+%   - The results
