@@ -19,4 +19,7 @@ simulated_data.csv: produced by Simulate_data.ipynb.
 combined_data.csv: produced by production_run.ipynb. Resaving data with more
 generic column names.
 
+chronology.py: contains the general functions that perform the age inference.
 
+Results_notebook.ipynb: a walk through of all the tests described in the
+manuscript.
