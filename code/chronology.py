@@ -207,8 +207,11 @@ def make_plots(sampler, i, truths, savedir):
     plt.close()
 
     print("Making corner plot...")
-    labels = ["ln(mass [M_sun])", "log10(age [yr])", "[Fe/H]",
-              "ln(distance [Kpc])", "Av"]
+    labels = ["$\ln(\mathrm{Mass~}[M_\odot])$",
+              "$\log_{10}(\mathrm{Age~[yr]})$",
+              "$\mathrm{[Fe/H]}$",
+              "$\ln(\mathrm{Distance~[Kpc])}$",
+              "$A_v$"]
     corner.corner(samples, labels=labels);
     plt.savefig("{0}/{1}_corner".format(savedir, i))
     plt.close()
