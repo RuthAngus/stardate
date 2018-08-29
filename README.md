@@ -23,3 +23,5 @@ chronology.py: contains the general functions that perform the age inference.
 
 Results_notebook.ipynb: a walk through of all the tests described in the
 manuscript.
+
+Results_plots.ipynb: creating all the plots in the paper.
