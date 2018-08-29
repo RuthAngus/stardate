@@ -195,7 +195,7 @@ def make_plots(sampler, i, truths, savedir):
     plt.axvline(med, color="k", label="$\mathrm{Median~age~[Gyr]}$")
     plt.axvline(med - std, color="k", linestyle="--")
     plt.axvline(med + std, color="k", linestyle="--")
-    plt.savefig("{0}/{1}_marginal_age".format(savedir, i))
+    plt.savefig("{0}/{1}_marginal_age".format(savedir, str(i).zfill(4)))
     plt.close()
 
     print("Plotting production chains...")
@@ -203,7 +203,7 @@ def make_plots(sampler, i, truths, savedir):
     for j in range(ndim):
         plt.subplot(ndim, 1, j+1)
         plt.plot(sampler.chain[:, :, j].T, "k", alpha=.1)
-    plt.savefig("{0}/{1}_chains".format(savedir, i))
+    plt.savefig("{0}/{1}_chains".format(savedir, str(i).zfill(4)))
     plt.close()
 
     print("Making corner plot...")
@@ -213,7 +213,7 @@ def make_plots(sampler, i, truths, savedir):
               "$\ln(\mathrm{Distance~[Kpc])}$",
               "$A_v$"]
     corner.corner(samples, labels=labels);
-    plt.savefig("{0}/{1}_corner".format(savedir, i))
+    plt.savefig("{0}/{1}_corner".format(savedir, str(i).zfill(4)))
     plt.close()
 
     print("Making linear corner plot...")
@@ -223,5 +223,5 @@ def make_plots(sampler, i, truths, savedir):
     slin[:, 1] = (10**samples[:, 1])*1e-9
     labels = ["mass [M_sun]", "age [Gyr]", "[Fe/H]", "distance [Kpc]", "Av"]
     corner.corner(slin, labels=labels);
-    plt.savefig("{0}/{1}_corner_linear".format(savedir, i))
+    plt.savefig("{0}/{1}_corner_linear".format(savedir, str(i).zfill(4)))
     plt.close()
