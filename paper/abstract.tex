@@ -13,8 +13,8 @@ In addition, for those stars with observed rotation periods, gyrochronal ages
 may also be available.
 By combining two sets of observable stellar properties and dating methods that
 are sensitive to different evolving processes in stars: isochrone fitting and
-gyrochronology; it may be possible to infer more precise and accurate ages
-than using either method in isolation.
+gyrochronology; it is possible to infer more precise and accurate ages than
+using either method in isolation.
 % Multiple pieces of age-sensitive information may be combined to infer more
 % precise and accurate ages than using Method & data
 In this investigation, the isochronal observables of main sequence stars
@@ -23,18 +23,27 @@ In this investigation, the isochronal observables of main sequence stars
 predicted from {\it both} stellar evolution models and gyrochronology.
 % The aim of this approach is to improve upon age measurements made with either
 % one of the two methods alone.
-This is a pilot study, not aiming to produce a state-of-the-art dating model,
-rather to explore the process of combining two heterogeneous dating methods.
 % and reveal weaknesses in one or both.
 % Results
+We show that incorporating rotation periods into isochrone models
+significantly improves the precision of inferred ages.
+However, since ages predicted with gyrochronology are, in general, much more
+{\it precise} than isochronal ages but not necessarily more {\it accurate},
+care must be taken to ensure either a) the gyrochronology relation being used
+is {\it extremely} accurate, or b) its precision is relaxed by introducing a
+mixture model or some intrinsic scatter or similar.
+In this pilot study we do not aim to produce a new state-of-the-art dating
+model, our goal is simply to explore the process of combining two
+heterogeneous dating methods.
 Combining methods like this can illuminate flaws in one or both, although
 without ground truth it can be difficult to identify the cause of
 inconsistencies.
 Although calibration is not the main purpose of this exploratory investigation
 and the parameters of our gyrochronology model are fixed, only a slight
 modification to our algorithm would be required to perform a calibration.
-We provide open source code that calculates stellar ages from spectroscopic
-parameters and/or apparent magnitudes, and rotation periods.
+Accompanying this publication is open source, packaged and documented code,
+that calculates stellar ages from spectroscopic parameters and/or apparent
+magnitudes, parallaxes and rotation periods.
 
 % Since spectroscopic properties provide relatively weak age information, our
 % model places greater weight on the rotation-ages of stars.
