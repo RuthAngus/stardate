@@ -217,6 +217,8 @@ There is, after all only one age for each star.
 If the two or more dating methods do not agree on the same age then one or
 models must be inaccurate.
 % More words about the implications of this.
+% Move this to a different section?
+% PRIORS!
 
 %   - A word about the gyrochronology model.
 The gyrochronology model we use to predict $P_P$ is, % $P_{\mathrm{pred}, i}$ is,
@@ -224,14 +226,29 @@ The gyrochronology model we use to predict $P_P$ is, % $P_{\mathrm{pred}, i}$ is
     P = A^\eta \alpha (B-V - \delta)^\beta,
 \end{equation}
 \label{eqn:gyro}
-where $\eta$, $\alpha$, $\beta$ and $\delta$ are taken from \citet{angus2015}.
+where $\eta$, $\alpha$, $\beta$ and $\delta$ take values 0.55, 0.4, 0.31 and
+0.45 respectively.
+These values are taken from the recalibration in \citet{angus2015} that uses
+young cluster stars, old asteroseismic stars and incorporates a mixture model
+that prevents outliers from influencing the fit.
+In \citet{angus2015} it was found that the old asteroseismic stars could not
+be fit using the above functional form and \citet{vansaders2016} discovered
+that these old stars have ceased their magnetic braking and cannot be modeled
+with a Skumanich-like spin-down law.
+In future, the above model should be updated to a broken power law, or
+similar, in order to account for the change in slope of the rotation
+period-age relation.
+However, in this work we seek not to recalibrate the gyrochronology models,
+just to introduce this new framework where rotation periods are modeled
+simultaneously with isochronal features.
 Although this gyrochronology model does not provide a good fit to all the
 available data, we reiterate that no single model {\it is} able to reproduce
 all the data, and that there is utility in using an extremely simple
 functional form.
 Again, this is not meant as a calibration exercise: in this paper we are more
-concerned with introducing a new framework which allows an improved
-gyrochronology model to easily be swapped in for this one.
+concerned with introducing a new approach to modeling stellar ages.
+However, our method is highly flexible and modular and an improved
+gyrochronology model could easily be swapped in for this one.
 
 % Practicalities: sampling, etc.
 %-----------------------------------------------------------------------------
