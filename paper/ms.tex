@@ -1,4 +1,5 @@
 \documentclass[useAMS, usenatbib, preprint, 12pt]{aastex}
+% \documentclass[a4paper,fleqn,usenatbib,useAMS]{mnras}
 \usepackage{cite, natbib}
 \usepackage{float}
 \usepackage{epsfig}
@@ -47,52 +48,46 @@
 
 \begin{document}
 
-\title{Inferring stellar ages by combining isochrone fitting with
-gyrochronology}
+% \title{Inferring stellar ages by combining isochrone fitting with
+% gyrochronology}
+\title{Inferring stellar ages using a combination of stellar evolution models
+and gyrochronology}
 
-\author{%
-    Ruth Angus\altaffilmark{\amnh, }\altaffilmark{\cca, }\altaffilmark{\columbia},
-   {\it et al.}
-}
+% \author{%
+%     Ruth Angus\altaffilmark{\amnh, }\altaffilmark{\cca, }\altaffilmark{\columbia},
+%    {\it et al.}
+% }
 
-\altaffiltext{\amnh}{American Museum of Natural History, Central Park West,
-Manhattan, NY}
-\altaffiltext{\cca}{Center for Computational Astrophysics, Flatiron Institute,
-162 5th Avenue, Manhattan, NY}
-\altaffiltext{\columbia}{Department of Astronomy, Columbia
-University, NY, NY}
+% \altaffiltext{\amnh}{American Museum of Natural History, Central Park West,
+% Manhattan, NY}
+% \altaffiltext{\cca}{Center for Computational Astrophysics, Flatiron Institute,
+% 162 5th Avenue, Manhattan, NY}
+% \altaffiltext{\columbia}{Department of Astronomy, Columbia
+% University, NY, NY}
 
 \begin{abstract}
     \include{abstract}
 \end{abstract}
 
 % Code to do:
-% Get key functions into a separate python module and just call those
-% functions for each experiment you conduct from an ipython notebook.
+%  Run on cluster
 
 % TIDYING:
 % make sure P_rot is changed to P consistently.
 
 \section{Introduction}
+\label{sec:intro}
 % Motivation and context
 %-----------------------------------------------------------------------------
 %   - The need for better stellar ages.
 %   - Why are MS ages harder than red giant ages?
 %   - Introduce gyrochronology
+%   - How does gyrochronology work?
 %   - Theoretical vs empirical gyro models
+%   - Motivation for improvements to gyrochronology relations
 %   - Describe the project presented here.
-%   - Inconsistency and inaccuracy of models
-%   - Bayesian isochrone fitting.
 %   - Sum up
 %   - Paper outline
-
-% Relevant literature
-%-----------------------------------------------------------------------------
-%   - Skumanich, Kawaler, Barnes
-%   - Modern theoretical models
-%   - Failings of gyrochronology
-%   - Future challenges of gyro (inc outliers)
-
 \include{intro}
 
 \section{Method}
@@ -115,21 +110,18 @@ University, NY, NY}
 \include{method}
 
 \section{Results}
+\label{sec:results}
 % Intro
 % TEST 1: simulations
 %-----------------------------------------------------------------------------
 %   - The simulated data
 %   - The results
-% PLOT: histograms over inferred ages (1) just isochrones (2) just
-% gyrochronology, (3) both.
 % Discuss intrinsic scatter.
 
 % TEST 2: Clusters
 %-----------------------------------------------------------------------------
 %   - The cluster data
 %   - The results
-% PLOT: histograms over inferred ages (1) just isochrones (2) just
-% gyrochronology, (3) both.
 
 % TEST 3: Asteroseismology
 %-----------------------------------------------------------------------------
@@ -140,6 +132,7 @@ University, NY, NY}
 \include{results}
 
 \section{Discussion}
+\label{sec:discussion}
 % Implications
 %-----------------------------------------------------------------------------
 %   - Summarize the results
@@ -161,7 +154,7 @@ University, NY, NY}
 \include{discussion}
 
 \section{Conclusion}
-% Summarize the paper.
+% Summarize. the. paper.
 %-----------------------------------------------------------------------------
 
 % acknowledgements
