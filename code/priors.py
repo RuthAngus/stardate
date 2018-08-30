@@ -16,7 +16,7 @@ def lng_prior(abn):
 
 def age_prior(age, bounds=(8,10.15)):
     """
-    Uniform true age prior; where 'age' is actually log(age)
+    Uniform true age prior; where 'age' is actually log10(age [yrs])
     """
     minage, maxage = bounds
     if age < minage or age > maxage:
