@@ -5,10 +5,10 @@
 %-----------------------------------------------------------------------------
 %   - Summarize the results
 %   - Precision vs accuracy.
-%   - How including the rotation period improves precision of all parameters.
 %   - How will this be used/what will it be useful for?
 %   - Where is it not useful?
 %   - Caveats and gotchas -- isochrones aren't 100% accurate.
+%   - How including the rotation period improves precision of all parameters.
 
 % Future and improvements
 %-----------------------------------------------------------------------------
@@ -50,20 +50,10 @@ Paler stars have less precise inferred ages.
 % Figure \ref{fig:accuracy} shows the simulated star sample, now colored by
 % the {\it accuracy} of their inferred ages.
 
-%   - How including the rotation period improves precision of all parameters.
-Our focus so far has been on stellar age because this is the most difficult
-stellar parameter to measure.
-However, if the age precision is improved, then the mass, \feh, distance and
-extinction precision must also be improved, since these parameters are
-strongly correlated and co-dependent in the isochronal model.
-Figure \ref{fig:mass_improvement} shows the improvement in relative precision
-of mass measurements from our simulated star sample.
-
 %   - How will this be used/what will it be useful for?
-The method we present here will be useful for a large number of stars: any
-cool, MS star with a measurable rotation period.
-This number is already in the tens-of-thousands from \kepler\ alone and will
-be expanded with \tess, \lsst, \wfirst, \plato, \gaia, \panstarrs\ and more.
+The method we present here will be useful for a large number of stars:
+tens-of-thousands \kepler\ stars already and many more from
+\tess, \lsst, \wfirst, \plato, \gaia, \panstarrs\ and more.
 %   - Where is it not useful?
 However, there are also several types of star for which gyrochronology is, in
 general, {\it not} useful.
@@ -113,3 +103,13 @@ but in general, ages predicted using different stellar evolution models will
 vary by around 10\%.
 We use the MIST models in our code because they cover a broader range of ages,
 masses and metallicities than the Dartmouth models.
+
+%   - How including the rotation period improves precision of all parameters.
+Our focus so far has been on stellar age because this is the most difficult
+stellar parameter to measure.
+However, if the age precision is improved, then the mass, \feh, distance and
+extinction precision must also be improved, since these parameters are
+strongly correlated and co-dependent in the isochronal model.
+Figure \ref{fig:mass_improvement} shows the improvement in relative precision
+of mass measurements from our simulated star sample.
+
