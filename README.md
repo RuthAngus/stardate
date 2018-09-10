@@ -1,6 +1,9 @@
 Habitable Zoning
 ===============
 
+CODE:
+====
+
 age_inference.ipynb: infer ages using isochrones and rotation periods.
 
 Crossmatching_and_munging.ipynb: Crossmatch targets with Gaia, CKS, Mcquillan
@@ -27,3 +30,12 @@ manuscript.
 Results_plots.ipynb: creating all the plots in the paper
 
 Cluster_results_notebook.ipynb: running code on clusters.
+
+
+DATA:
+=====
+hyades.csv: a csv file containing Douglas rotation periods and Gaia data for
+Hyads.
+
+Douglas_hyades.csv: a file containing Stephanie Douglas' rotation periods for
+the Hyades.
