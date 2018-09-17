@@ -31,6 +31,7 @@ Results_plots.ipynb: creating all the plots in the paper
 
 Cluster_results_notebook.ipynb: running code on clusters.
 
+Hyades.ipynb: attempting to consolidate Hyades data.
 
 DATA:
 =====
@@ -38,4 +39,4 @@ hyades.csv: a csv file containing Douglas rotation periods and Gaia data for
 Hyads.
 
 Douglas_hyades.csv: a file containing Stephanie Douglas' rotation periods for
-the Hyades.
+the Hyades
