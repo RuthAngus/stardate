@@ -150,21 +150,32 @@ model.
 %-----------------------------------------------------------------------------
 %   - The cluster data
 In order to test our model on real stars with known ages, we selected a sample
-of cluster stars with spectroscopic parameters and rotation periods.
-We use a sample of Hyades members with spectroscopic parameters (\teff, \logg\
-and bulk metallicity) from \citet{brewer}, \ktwo\ rotation periods from
-\citet{douglas} and parallaxes from \gaia.
-Note that the age of the Hyades is generally measured using stellar
-evolution/isochrone models where the ensemble of stars at the same age but a
-{\it range of masses} allows a very precise isochronal age to be inferred.
-In particular, this allows the main sequence-turn off to be identified which,
-since it appears as a sharp feature in a mono-age population, allows the age
-of the population to be precisely inferred.
-In this experiment we do not force the Hyades members to have the same age.
-We are instead using these stars to reveal the spread in recovered ages and
-identify regions of parameter space where the predicted ages deviate from the
-established age for the Hyades (in other words, the precision and accuracy of
-our method).
+of cluster stars with precisely measured ages from ensemble isochrone fitting
+and main sequence turn off.
+The ages of open clusters can be measured much more precisely than field
+stars for two main reasons.
+Firstly, the stars have the same age (to within a few million years), so the
+age of a cluster can be inferred with an increased precision that is
+proportional to the square root of the number stars, relative to a single star
+case.
+In addition, stars in the same cluster form (we assume) from the same
+molecular cloud and therefore have the same metallicity.
+Since cluster stars have the same metallicity and age, stars fall on the same
+isochrone and the main sequence turn
+off can be identified.
+We compiled rotation periods and spectroscopic parameters for Hyades members
+from the literature and cross matched these stars with the Gaia DR2 catalog.
+Out of a total of N Hyades stars with rotation periods \citep{radick1987,
+radick1995, hartman2011, delorme2011, douglas2016}, N of them have precise
+spectroscopic parameters \citet{brewer}.
+The rest have Gaia photometry ($G$, $G_BP$ and $G_RP$ bands), Kepler
+photometry ($Kp$) and Gaia parallaxes.
+We then inferred the age of each star using our model.
+We did not force the Hyades members to have the same age since the aim of this
+experiment was to reveal the precision and accuracy of our method by
+quantifying the level of scatter in our predicted ages and identifying regions
+of parameter space where the ages deviate from the established age for the
+Hyades.
 
 %   - The results
 The results are shown in figure \ref{fig:cluster_results} which follows the
