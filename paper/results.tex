@@ -163,17 +163,51 @@ molecular cloud and therefore have the same metallicity.
 Since cluster stars have the same metallicity and age, stars fall on the same
 isochrone and the main sequence turn
 off can be identified.
-We compiled rotation periods and spectroscopic parameters for Hyades members
-from the literature and cross matched these stars with the Gaia DR2 catalog.
-Out of a total of N Hyades stars with rotation periods \citep{radick1987,
-radick1995, hartman2011, delorme2011, douglas2016}, N of them have precise
-spectroscopic parameters \citet{brewer}.
-The rest have Gaia photometry ($G$, $G_BP$ and $G_RP$ bands), Kepler
-photometry ($Kp$) and Gaia parallaxes.
-We only selected stars with Gaia DR2 radial velocity (RV) measurements, and
-required that their RVs had to be consistent with the cluster RV of around 40
-kms$^{-1}$.
-Two stars with RVs $< 30$ kms${^}-1$ were removed from the catalog.
+We compiled rotation periods and spectroscopic parameters for members of
+the Pleiades which is 150 million years old, Praesepe, a 650 Myr cluster,
+NGC 6811, 1.1 Myrs and NGC 6819, 2.5 Myrs.
+Rotation periods from the Pleiades \citep{rebull2016} and Praesepe
+\citep{douglas2016} were obtained from frequency analysis of \ktwo\ data, and
+rotation periods for NGC 6811 \citep{meibom2013} and 6819 \citep{meibom2015}
+stars were measured from \kepler\ prime light curves.
+We crossmatched stars with measured rotation periods from these clusters with
+the Gaia DR2 catalog.
+% Cutting outliers and limiting color range.
+In order to fit a new gyrochronology relation to these data we restricted the
+sample of cluster stars to the color range, 0.56 $<$ \gcolor\ $<$ 3 in order
+to remove early F and late M dwarfs whos' rotation periods do not fall on the
+`gyrochronology main sequence'.
+Although it {\it may} be possible to crudely predict the ages of these stars
+(at least the M dwarfs) from their rotation periods, the age-rotation-color
+relation for these stars is very different to the FGK star relations and is
+not the focus of this paper.
+The rotation periods of the cluster stars in the restricted color range are
+plotted against their \Gaia\ colors in figure \ref{fig:clusters}.
+
+% Out of a total of N Hyades stars with rotation periods \citep{radick1987,
+% radick1995, hartman2011, delorme2011, douglas2016}, N of them have precise
+% spectroscopic parameters \citet{brewer}.
+% The rest have Gaia photometry ($G$, $G_BP$ and $G_RP$ bands), Kepler
+% photometry ($Kp$) and Gaia parallaxes.
+% We only selected stars with Gaia DR2 radial velocity (RV) measurements, and
+% required that their RVs had to be consistent with the cluster RV of around 40
+% kms$^{-1}$.
+% Two stars with RVs $< 30$ kms$^{-1}$ were removed from the catalog.
+
+% The Cluster figure
+\begin{figure}
+  \caption{
+The rotation periods of stars in open clusters, and the Sun, plotted against
+    their \Gaia\ colors (\gcolor) in logarithmic space.
+We fit a polynomial gyrochronology model to these data in order to predict
+    rotation periods from \gaia\ colors and ages.
+The result of this fit is plotted on top of the data at the ages of
+    the cluster stars and the Sun.
+}
+  \centering
+    \includegraphics[width=1.1\textwidth]{clusters.pdf}
+\label{fig:clusters}
+\end{figure}
 
 We then inferred the age of each star using our model.
 We did not force the Hyades members to have the same age since the aim of this

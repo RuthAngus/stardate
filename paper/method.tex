@@ -228,39 +228,44 @@ produce a `posterior' belief about their values.
 These priors are described in the appendix.
 
 %   - A word about the gyrochronology model.
-The gyrochronology model we use to predict $P_P$ is, % $P_{\mathrm{pred}, i}$ is,
+We use a three-dimensional polynomial model to predict rotation period as a
+function of \gaia\ color and age.
+This model consists of a 4th order polynomial in logarithmic Gaia color:
+$G_{Bp} - G_{Rp}$, which we write as $C_G$ for simplicity, and a 1st order
+polynomial (a straight line) in logarithmic age.
 \begin{equation}
-    P = A^\eta \alpha (B-V - \delta)^\beta,
+    \log(P) = a + b\log(C_G) + c\log^2(C_G) + d\log^3(C_G) + e\log^4(C_G)
+    + f\log(A)
 \label{eqn:gyro}
 \end{equation}
-where $\eta$, $\alpha$, $\beta$ and $\delta$ take values 0.55, 0.4, 0.31 and
-0.45 respectively.
-These values are adopted from the recalibration performed in \citet{angus2015}
-that uses young cluster stars and old asteroseismic stars and incorporates a
-mixture model that prevents outliers from influencing the fit.
+where $P$ is rotation period in days, $C_G$ is Gaia color, $A$ is stellar age
+in years and the lower case letters are free parameters which we fit to the
+data using linear least squares.
+A more detailed description of this process is provided in section
+\ref{section:results}.
+
 In \citet{angus2015} it was found that the old asteroseismic stars could not
-be fit using the above functional form.
+be fit using a single power law in age.
 Subsequently, \citet{vansaders2016} discovered that the magnetic braking of
 these old stars has ceased and cannot be modeled with a Skumanich-like
 spin-down law.
-In future, the above model should be updated to a broken power law, or
-similar, in order to account for the change in slope of the rotation
-period-age relation.
+In future, the above model should be updated to include a more flexible
+treatment of rotation period as a function of age in order to account for the
+change in slope of the rotation period-age relation.
 Until then, this method should only be used for stars below the Rossby number
 threshold, \ie\ who's rotation period to convection overturn time ratio
-($P/\tau = Ro$)
-does not exceed 2.1 \citep{vansaders2016}.
-In this work we do not seek to recalibrate the gyrochronology models, but
-simply to introduce this new framework where rotation periods are modeled
-simultaneously with isochronal features.
+($P/\tau = Ro$) does not exceed 2.1 \citep{vansaders2016}.
+In this work we are chiefly concerned with introducing a new framework where
+rotation periods are modeled {\it simultaneously} with isochronal features.
 Although this gyrochronology model does not provide a good fit to all the
 available data, we reiterate that no single model {\it is} able to reproduce
-all the data, and that there is utility in using an extremely simple
-functional form like this.
-Again, this is not meant as a calibration exercise: in this paper we are more
-concerned with introducing a new approach to modeling stellar ages, however,
-our method is highly flexible and modular and an improved gyrochronology model
-could easily be swapped in for this one in future.
+all the data, and that there is utility in using such a simple, linear,
+empirical model like this.
+Again, we are not particularly attempting to improve gyrochronology models in
+this work: in this paper we are more concerned with introducing a new approach
+to modeling stellar ages, however, our method is highly flexible and modular
+and an improved gyrochronology model could easily be swapped in for this one
+in future.
 
 The Sun's color in the Gaia color bandpasses, $G_{Bp} - G_{Rp}$, is 0.82
 \citep{casagrande2018}.
