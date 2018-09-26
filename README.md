@@ -4,6 +4,25 @@ Habitable Zoning
 CODE:
 ====
 
+Most recent:
+
+NGC6811_19.ipynb: assembling data for the Kepler clusters.
+
+Praesepe_exploration.ipynb: consolidating cluster data and fitting linear
+model.
+
+Cluster_results_notebook.ipynb: running code on clusters.
+
+Hyades.ipynb: attempting to consolidate Hyades data.
+
+chronology.py: contains the general functions that perform the age inference.
+
+Results_notebook.ipynb: a walk through of all the tests described in the
+manuscript.
+
+Results_plots.ipynb: creating all the plots in the paper
+
+
 age_inference.ipynb: infer ages using isochrones and rotation periods.
 
 Crossmatching_and_munging.ipynb: Crossmatch targets with Gaia, CKS, Mcquillan
@@ -22,16 +41,6 @@ simulated_data.csv: produced by Simulate_data.ipynb.
 combined_data.csv: produced by production_run.ipynb. Resaving data with more
 generic column names.
 
-chronology.py: contains the general functions that perform the age inference.
-
-Results_notebook.ipynb: a walk through of all the tests described in the
-manuscript.
-
-Results_plots.ipynb: creating all the plots in the paper
-
-Cluster_results_notebook.ipynb: running code on clusters.
-
-Hyades.ipynb: attempting to consolidate Hyades data.
 
 DATA:
 =====
