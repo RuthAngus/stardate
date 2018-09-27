@@ -121,24 +121,25 @@ def lnprior(params):
 
 def lnprob(lnparams, *args):
     """
-    lnparams are [ln(mass), log10(age [yrs]), [Fe/H], ln(distance [kpc]), A_v]
+    lnparams are [eep, log10(age [yrs]), [Fe/H], ln(distance [kpc]), A_v]
     """
 
     # Transform mass and distance back to linear.
     params = lnparams*1
-    params[0] = np.exp(lnparams[0])
+    # params[0] = np.exp(lnparams[0])
     params[3] = np.exp(lnparams[3])
 
     mod, period, period_err, bv_est, gyro_only, iso_only = args
 
-    mag_pars = (params[0], params[1], params[2], params[3]*1e3, params[4])
+    # mag_pars = (params[0], params[1], params[2], params[3]*1e3, params[4])
+    mag_pars = (params[0], params[1], params[2], params[3], params[4])
     B = mist.mag["B"](*mag_pars)
     V = mist.mag["V"](*mag_pars)
     bv = B-V
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
-    lnpr = lnprior(params)
+    lnpr = mod.lnprior(params)
     if lnpr == -np.inf:
         return lnpr
 
@@ -158,7 +159,7 @@ def lnprob(lnparams, *args):
         # estimate if gyro_only.
         if gyro_only:
             return -.5*((period - gyro_model(params[1], bv_est))
-                        /period_err)**2 + lnpr
+                        /period_err)**2 + mod.lnprior(params)
 
         else:
             return mod.lnlike(params) + gyro_lnlike + lnpr
@@ -207,7 +208,7 @@ def make_plots(sampler, i, truths, savedir):
     plt.close()
 
     print("Making corner plot...")
-    labels = ["$\ln(\mathrm{Mass~}[M_\odot])$",
+    labels = ["$\mathrm{EEP}$",
               "$\log_{10}(\mathrm{Age~[yr]})$",
               "$\mathrm{[Fe/H]}$",
               "$\ln(\mathrm{Distance~[Kpc])}$",
@@ -218,10 +219,9 @@ def make_plots(sampler, i, truths, savedir):
 
     print("Making linear corner plot...")
     slin = samples*1
-    slin[:, 0] = np.exp(samples[:, 0])
     slin[:, 3] = np.exp(samples[:, 3])
     slin[:, 1] = (10**samples[:, 1])*1e-9
-    labels = ["mass [M_sun]", "age [Gyr]", "[Fe/H]", "distance [Kpc]", "Av"]
+    labels = ["EEP", "Age [Gyr]", "[Fe/H]", "Distance [Kpc]", "Av"]
     corner.corner(slin, labels=labels);
     plt.savefig("{0}/{1}_corner_linear".format(savedir, str(i).zfill(4)))
     plt.close()
