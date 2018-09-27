@@ -323,16 +323,21 @@ The full log-likelihood is then calculated: $\ln(\mathcal{L}_{\mathrm{full}})
 added to the log-prior to produce a single sample from the posterior PDF.
 
 %   - Emcee, including assessing convergence.
-We sample the joint posterior PDF over age, mass, metallicity, distance and
+We sampled the joint posterior PDF over age, mass, metallicity, distance and
 extinction using the affine invariant ensemble sampler, {\tt emcee}
 \citep{foreman-mackey2013}.
-24 walkers are used with 15,000 burn-in steps followed by 25,000 full-run
-steps.
-This provides a total of $25,000 \times 24 = 600,000$ non-independent samples.
-In order to assess convergence we calculate the autocorrelation time of each
-MCMC chain.
-The method described above is embarassingly parallelizable, since the physical
-parameters of each star can be inferred on a separate node.
+We used 24 walkers and sampled the posterior PDF until 100 {\it independent}
+samples were obtained.
+We estimated the autocorrelation length, indicating how many steps are taken
+per independent sample, after every 100 steps using the autocorrelation tool
+built into {\tt emcee}.
+We stopped obtaining samples when either {\it both} 100 times the
+autocorrelation length was reached {\it and} the change in autocorrelation
+length over 100 samples was less than 0.01, or the maximum of 100,000 samples
+was obtained.
+This allowed use to continue obtaining samples from the posterior
+This provided an average of ... non-independent samples.
+The method described above is trivially parallelizable, since the
+inference proccess for each star can be inferred on a separate node.
 Running our code on a cluster, we found that a posterior PDF can be estimated
 for a single star in around one minute.
-
