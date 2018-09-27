@@ -140,13 +140,13 @@ def lnprob(lnparams, *args):
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
     lnpr = mod.lnprior(params)
-    if lnpr == -np.inf:
-        return lnpr
+    if not np.isfinite(lnpr):
+        return lnpr, lnpr
 
     else:
 
         if iso_only:
-            return mod.lnlike(params) + lnpr
+            return mod.lnlike(params) + lnpr, lnpr
 
         else:
             if bv > .45:
@@ -159,24 +159,57 @@ def lnprob(lnparams, *args):
         # estimate if gyro_only.
         if gyro_only:
             return -.5*((period - gyro_model(params[1], bv_est))
-                        /period_err)**2 + mod.lnprior(params)
+                        /period_err)**2 + mod.lnprior(params), lnpr
 
         else:
-            return mod.lnlike(params) + gyro_lnlike + lnpr
+            return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 
 
-def run_mcmc(obs, args, p_init, burnin=5000, production=10000, ndim=5,
-             nwalkers=24):
+def run_mcmc(obs, args, p_init, backend, burnin=5000, production=10000,
+             ndim=5, nwalkers=24):
 
     p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
 
-    print("Burning in...")
-    sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=args)
-    p0, lnp, state = sampler.run_mcmc(p0, burnin)
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=args,
+                                    backend=backend)
 
-    print("Production run...")
-    sampler.reset()
-    p0, lnp, state = sampler.run_mcmc(p0, production)
+    # Copied from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
+    # ======================================================================
+    max_n = 100000
+
+    # We'll track how the average autocorrelation time estimate changes
+    index = 0
+    autocorr = np.empty(max_n)
+
+    # This will be useful to testing convergence
+    old_tau = np.inf
+
+    # Now we'll sample for up to max_n steps
+    for sample in sampler.sample(p0, iterations=max_n, progress=True):
+        # Only check convergence every 100 steps
+        if sampler.iteration % 100:
+            continue
+
+        # Compute the autocorrelation time so far
+        # Using tol=0 means that we'll always get an estimate even
+        # if it isn't trustworthy
+        tau = sampler.get_autocorr_time(tol=0)
+        autocorr[index] = np.mean(tau)
+        index += 1
+
+        # print("autocorrelation time = ", tau, "steps = ", sampler.iteration)
+        # # Check convergence
+        converged = np.all(tau * 100 < sampler.iteration)
+        converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
+        if converged:
+            break
+        old_tau = tau
+    # ======================================================================
+
+    # p0, lnp, state = sampler.run_mcmc(p0, burnin)
+    # print("Production run...")
+    # sampler.reset()
+    # p0, lnp, state = sampler.run_mcmc(p0, production)
 
     return sampler
 
