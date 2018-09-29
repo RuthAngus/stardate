@@ -40,3 +40,7 @@ Hyads.
 
 Douglas_hyades.csv: a file containing Stephanie Douglas' rotation periods for
 the Hyades
+
+praesepe-result.csv: the Gaia DR2 catalogue of praesepe stars.
+praesepe_no_outliers.csv: the Gaia DR2 - rotation period crossmatched
+catalogue of praesepe stars with outliers removed.

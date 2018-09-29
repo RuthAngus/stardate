@@ -236,7 +236,7 @@ def make_plots(sampler, i, truths, savedir):
     plt.figure(figsize=(16, 9))
     for j in range(ndim):
         plt.subplot(ndim, 1, j+1)
-        plt.plot(sampler.chain[:, :, j].T, "k", alpha=.1)
+        plt.plot(sampler.chain[10000:, :, j].T, "k", alpha=.1)
     plt.savefig("{0}/{1}_chains".format(savedir, str(i).zfill(4)))
     plt.close()
 
@@ -246,7 +246,8 @@ def make_plots(sampler, i, truths, savedir):
               "$\mathrm{[Fe/H]}$",
               "$\ln(\mathrm{Distance~[Kpc])}$",
               "$A_v$"]
-    corner.corner(samples, labels=labels);
+    corner.corner(sampler.chain[10000:, :, :], labels=labels);
+    # corner.corner(samples, labels=labels);
     plt.savefig("{0}/{1}_corner".format(savedir, str(i).zfill(4)))
     plt.close()
 
@@ -255,6 +256,6 @@ def make_plots(sampler, i, truths, savedir):
     slin[:, 3] = np.exp(samples[:, 3])
     slin[:, 1] = (10**samples[:, 1])*1e-9
     labels = ["EEP", "Age [Gyr]", "[Fe/H]", "Distance [Kpc]", "Av"]
-    corner.corner(slin, labels=labels);
+    corner.corner(samples[10000:, :], labels=labels);
     plt.savefig("{0}/{1}_corner_linear".format(savedir, str(i).zfill(4)))
     plt.close()
