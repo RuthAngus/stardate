@@ -163,26 +163,68 @@ molecular cloud and therefore have the same metallicity.
 Since cluster stars have the same metallicity and age, stars fall on the same
 isochrone and the main sequence turn
 off can be identified.
-We compiled rotation periods and spectroscopic parameters for members of
-the Pleiades which is 150 million years old, Praesepe, a 650 Myr cluster,
-NGC 6811, 1.1 Myrs and NGC 6819, 2.5 Myrs.
-Rotation periods from the Pleiades \citep{rebull2016} and Praesepe
-\citep{douglas2016} were obtained from frequency analysis of \ktwo\ data, and
-rotation periods for NGC 6811 \citep{meibom2013} and 6819 \citep{meibom2015}
-stars were measured from \kepler\ prime light curves.
-We crossmatched stars with measured rotation periods from these clusters with
-the Gaia DR2 catalog.
+We compiled rotation periods and Gaia photometry and parallaxes for members of
+Praesepe, a 650 Myr cluster.
+We chose Praesepe because it is relatively tightly clustered on the sky and
+many of its members were therefore targeted in a single \ktwo\ campaign, from
+which it was possible to measure rotation periods via frequency analysis of
+member's light curves \citep{douglas2015}.
+% We compiled rotation periods and spectroscopic parameters for members of
+% the Pleiades which is 150 million years old, Praesepe, a 650 Myr cluster,
+% NGC 6811, 1.1 Myrs and NGC 6819, 2.5 Myrs.
+% Rotation periods from the Pleiades \citep{rebull2016} and Praesepe
+% \citep{douglas2016} were obtained from frequency analysis of \ktwo\ data, and
+% rotation periods for NGC 6811 \citep{meibom2013} and 6819 \citep{meibom2015}
+% stars were measured from \kepler\ prime light curves.
+We crossmatched N Praesepe members with measured rotation periods
+\citep{douglas2015}, with the Gaia DR2 catalog \racomment{Gaia DR2 citation},
+using a 5'' search radius.
+The result was a sample of N stars with rotation periods, parallaxes and
+\gaia\ $G$, $G_{BP}$ and $G_{RP}$ -band photometry.
+Figure \ref{figure:praesepe} shows the rotation periods of Praesepe members as
+a function of their dust-corrected \gaia\ \gcolor\ colors.
+We used the {\tt dustmaps} {\tt python} package to calculate dust extinction
+along the line of sight to these stars.
+The filled blue circles show the FGK stars on the `rotational main sequence'
+that were used to calibrate a relation between rotation period and color for
+this cluster.
+% REDDENNING!!!!!
+
 % Cutting outliers and limiting color range.
-In order to fit a new gyrochronology relation to these data we restricted the
-sample of cluster stars to the color range, 0.56 $<$ \gcolor\ $<$ 3 in order
-to remove early F and late M dwarfs whos' rotation periods do not fall on the
+In order to fit a period-color relation to these data we restricted the sample
+of cluster stars to the color range, 0.56 $<$ \gcolor\ $<$ 3 in order to
+remove early F and late M dwarfs whos' rotation periods do not fall on the
 `gyrochronology main sequence'.
 Although it {\it may} be possible to crudely predict the ages of these stars
 (at least the M dwarfs) from their rotation periods, the age-rotation-color
 relation for these stars is very different to the FGK star relations and is
 not the focus of this paper.
-The rotation periods of the cluster stars in the restricted color range are
-plotted against their \Gaia\ colors in figure \ref{fig:clusters}.
+In addition, we removed rapidly rotating stars from the sample since, although
+modeling outliers is important and consequential for gyrochronology in
+general, the goal of this paper is not to produce a perfect gyrochronology
+that reproduces stochasticity in the data, just a simple function that fits
+the rotational main sequence of Praesepe.
+In future we plan to update the gyrochronology models to include M dwarfs,
+and the outlying rapid rotators using a mixture of Gaussians.
+Similarly, we used only Praesepe in this study because the period-color
+relations of each open cluster with rotation periods has a different shape.
+This is likely due to differences in metalicities, incomplete or noisy
+membership lists and differences in rotation period measurement algorithms.
+A global gyrochronology calibration, using all cluster data is planned for the
+future but, again, is beyond the scope of the project presented here.
+The rotation periods of the Praesepe members in the restricted color range and
+with outliers removed are plotted against their \Gaia\ colors in figure
+\ref{fig:Praesepe}.
+We used linear least squares to fit a linear model to Praesepe and the Sun.
+A 4th order polynomial in $\log(G_{BP} - G_{RP})$ and a straight line in
+$\log(\mathrm{Age~[yrs]})$ was fit to reproduce
+$\log(\mathrm{rotation~period~[days]})$.
+\begin{equation}
+    \log(P) = a + b\log(C_G) + c\log^2(C_G) + d\log^3(C_G) + e\log^4(C_G) +
+    f\log(A),
+\end{equation}
+\label{eq:new_gyro}
+were $P$ is period, $C_G$ is \Gaia \gcolor\ color, and A is age.
 
 % Out of a total of N Hyades stars with rotation periods \citep{radick1987,
 % radick1995, hartman2011, delorme2011, douglas2016}, N of them have precise
@@ -197,24 +239,37 @@ plotted against their \Gaia\ colors in figure \ref{fig:clusters}.
 % The Cluster figure
 \begin{figure}
   \caption{
-The rotation periods of stars in open clusters, and the Sun, plotted against
+% The rotation periods of stars in open clusters, and the Sun, plotted against
+%     their \Gaia\ colors (\gcolor) in logarithmic space.
+% The result of this fit is plotted on top of the data at the ages of
+%     the cluster stars and the Sun.
+    The rotation periods of Praesepe members and the Sun, plotted against
     their \Gaia\ colors (\gcolor) in logarithmic space.
-We fit a polynomial gyrochronology model to these data in order to predict
-    rotation periods from \gaia\ colors and ages.
+    We fit a 4th order polynomial to these data in order to predict
+    rotation periods from \gaia\ colors, and a 1st order polynomial (a
+    straight line) in age.
 The result of this fit is plotted on top of the data at the ages of
-    the cluster stars and the Sun.
+    Praesepe and the Sun.
 }
   \centering
     \includegraphics[width=1.1\textwidth]{clusters.pdf}
 \label{fig:clusters}
 \end{figure}
 
-We then inferred the age of each star using our model.
-We did not force the Hyades members to have the same age since the aim of this
-experiment was to reveal the precision and accuracy of our method by
+The age of each Praesepe member was inferred using both gyrochronology models:
+the legacy model of equation \ref{eq:gyro} and the Praesepe model of equation
+\ref{eq:new_gyro}.
+This exercise is not designed to test one gyrochronology model against
+another: the model fit to the Praesepe data will provide a better age
+prediction by design, as the legacy model was fit to number of clusters at
+once.
+The point of this exercise is to show how precise gyrochronology could be if
+the perfect model is used.
+We did not force the cluster members to have the same age since the aim of
+this experiment was to reveal the precision and accuracy of our method by
 quantifying the level of scatter in our predicted ages and identifying regions
-of parameter space where the ages deviate from the established age for the
-Hyades.
+of parameter space where the ages deviate from the established age for
+Praesepe.
 
 %   - The results
 The results are shown in figure \ref{fig:cluster_results} which follows the
