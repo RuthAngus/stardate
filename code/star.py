@@ -59,8 +59,6 @@ class star(object):
         savedir: str
             The name of the directory where the
         """
-        assert gyro_only + iso_only < 2, "Either gyro_only or iso_only can" \
-            "be true, not both"
 
         # Set the initial values
         mass_init, age_init, feh_init, distance_init, Av_init = inits
