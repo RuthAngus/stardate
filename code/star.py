@@ -7,6 +7,7 @@ from chronology import setup, run_mcmc, make_plots
 from isochrones import StarModel
 import pandas as pd
 import emcee
+import corner
 
 from isochrones.mist import MIST_Isochrone
 mist = MIST_Isochrone()
@@ -22,7 +23,7 @@ plt.rcParams.update(plotpar)
 
 class star(object):
 
-    def __init__(self, iso_params, prot, prot_err):
+    def __init__(self, iso_params, prot, prot_err, savedir=".", suffix="_"):
         """
         params
         -------
@@ -36,14 +37,20 @@ class star(object):
             The rotation period of the star in days.
         prot_err: float
             The uncertainty on the stellar rotation period in days.
+        savedir: str
+            The name of the directory where the samples will be saved.
+        suffix: str
+            The id or name of the star to use in the filename.
         """
 
         self.iso_params = iso_params
         self.prot = prot
         self.prot_err = prot_err
+        self.savedir = savedir
+        self.suffix = suffix
 
     def fit(self, inits=[1., 9., 0., .5, .01], nwalkers=24, max_n=100000,
-            iso_only=False, savedir="."):
+            iso_only=False):
         """
         params
         ------
@@ -56,8 +63,6 @@ class star(object):
             The maximum number of samples to obtain.
         iso_only: boolean
             If true only the isochronal likelihood function will be used.
-        savedir: str
-            The name of the directory where the
         """
 
         # Set the initial values
@@ -73,7 +78,8 @@ class star(object):
 
         # Set up the backend
         # Don't forget to clear it in case the file already exists
-        filename = "{0}/{1}_samples.h5".format(savedir, str(i).zfill(4))
+        filename = "{0}/{1}_samples.h5".format(self.savedir,
+                                               str(self.suffix).zfill(4))
         backend = emcee.backends.HDFBackend(filename)
         nwalkers, ndim = 24, 5
         backend.reset(nwalkers, ndim)
@@ -83,23 +89,14 @@ class star(object):
         args = [mod, self.prot, self.prot_err, iso_only]  # lnprob arguments
 
         # Run the MCMC
-        sampler = run_mcmc(obs, args, p_init, backend, ndim=ndim,
+        sampler = run_mcmc(self.iso_params, args, p_init, backend, ndim=ndim,
                            nwalkers=nwalkers, max_n=max_n)
-
-        # Save the samples
-        samples = sampler.flatchain
-        print("Saving samples...")
-        with h5py.File("{0}/{1}.h5".format(savedir, str(i).zfill(4)),
-                       "w") as f:
-            data = f.create_dataset("samples", np.shape(samples))
-            data[:, :] = samples
 
         self.sampler = sampler
         return sampler
 
 
-    def make_plots(self, truths=[None, None, None, None, None], savedir=".",
-                   suffix="_", burnin=10000):
+    def make_plots(self, truths=[None, None, None, None, None], burnin=10000):
         """
         params
         ------
@@ -107,22 +104,17 @@ class star(object):
             A list of true values to give to corner.py that will be plotted
             in corner plots. If an entry is "None", no line will be plotted.
             Default = [None, None, None, None, None]
-        savedir: str
-            The directory where plots should be saved. Default = "."
-        suffix: str or int or float
-            The id or name of the star to use in the filename for saved
-            figures. The default is "_".
         burnin: int
             The number of burn in samples at the beginning of the MCMC to
             throw away. The default is 100000.
         """
 
-        nwalkers, nsteps, ndim = np.shape(sampler.chain)
+        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         print("nsteps = ", nsteps, "burnin = ", burnin)
         assert burnin < nsteps, "The number of burn in samples to throw" \
             "away can't exceed the number of steps."
 
-        samples = sampler.flatchain
+        samples = self.sampler.flatchain
 
         print("Plotting age posterior")
         age_gyr = (10**samples[burnin:, 1])*1e-9
@@ -135,15 +127,17 @@ class star(object):
         plt.axvline(med, color="k", label="$\mathrm{Median~age~[Gyr]}$")
         plt.axvline(med - std, color="k", linestyle="--")
         plt.axvline(med + std, color="k", linestyle="--")
-        plt.savefig("{0}/{1}_marginal_age".format(savedir, str(i).zfill(4)))
+        plt.savefig("{0}/{1}_marginal_age".format(self.savedir,
+                                                  str(self.suffix).zfill(4)))
         plt.close()
 
         print("Plotting production chains...")
         plt.figure(figsize=(16, 9))
         for j in range(ndim):
             plt.subplot(ndim, 1, j+1)
-            plt.plot(sampler.chain[:, burnin:, j].T, "k", alpha=.1)
-        plt.savefig("{0}/{1}_chains".format(savedir, str(i).zfill(4)))
+            plt.plot(self.sampler.chain[:, burnin:, j].T, "k", alpha=.1)
+        plt.savefig("{0}/{1}_chains".format(self.savedir,
+                                            str(self.suffix).zfill(4)))
         plt.close()
 
         print("Making corner plot...")
@@ -153,15 +147,17 @@ class star(object):
                   "$\ln(\mathrm{Distance~[Kpc])}$",
                   "$A_v$"]
         corner.corner(samples[burnin:, :], labels=labels, truths=truths);
-        plt.savefig("{0}/{1}_corner".format(savedir, str(i).zfill(4)))
+        plt.savefig("{0}/{1}_corner".format(self.savedir,
+                                            str(self.suffix).zfill(4)))
         plt.close()
 
         # Make mass histogram
-        samples = sampler.flatchain
+        samples = self.sampler.flatchain
         mass_samps = mist.mass(samples[:, 0], samples[:, 1], samples[:, 2])
         plt.hist(mass_samps, 50);
         if truths[0]:
                 plt.axvline(truths[0], color="tab:orange",
                             label="$\mathrm{True~mass~}[M_\odot]$")
-        plt.savefig("{0}/{1}_marginal_mass".format(savedir, str(i).zfill(4)))
+        plt.savefig("{0}/{1}_marginal_mass".format(self.savedir,
+                                                   str(self.suffix).zfill(4)))
         plt.close()
