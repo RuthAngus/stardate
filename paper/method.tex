@@ -29,8 +29,8 @@ For example, if a star's rotation period, parallax, and apparent magnitudes in
 a range of bandpasses are available, it is possible to predict its age from
 both gyrochronology and isochrone fitting separately.
 How these two age predictions are later combined is then a difficult choice.
-Is it best to average these predictions or just use the more precise of the
-two, or the one believed to be more accurate?
+Is it best to average these predictions, to use the more precise of the two,
+or the one believed to be more accurate?
 The methodology described here provides an objective method for combining age
 estimates.
 There is, after all, only one age for each star.
@@ -126,9 +126,9 @@ on stellar mass.
 Mass determines $C_{B-V}$ and $C_{B-V}$, along with age determines rotation
 period.
 The purpose of this PGM is not to depict the physical realities of stellar
-evolution, it is only a visual description of the structure of the model {\it
-we} use here.
-Braking up the problem this way allows us to efficiently join isochronology
+evolution, it is only a visual description of the structure of the model we
+use here.
+Breaking up the problem this way allows us to efficiently join isochronology
 and gyrochronology and infer the joint age of a star from all its observables.
 It may well be that rotation period depends directly on mass and metallicity
 in reality, but it is more practical for us to assume that these dependencies are
@@ -140,21 +140,35 @@ weak enough not to significantly affect the ages that we ultimately infer.
 A probabilistic graphical model (PGM) showing the conditional
 dependencies between the parameters (white nodes) and
 observables (gray nodes) in our model.
-Apparent magnitude, $m_x$, effective temperature, \teff, surface gravity,
-\logg, observed bulk metallicity, $\hat{F}$, and parallax, $\bar{\omega}$ are
-determined by the mass, $M$, age, $A$, distance, $D$, extinction, $A_V$
-and bulk metallicity, $F$, of a star.
-These dependencies are indicated by arrows that start at a `parent' node
-and end at the dependent observable, or `child' node.
-The box drawn around some of the nodes indicates that everything inside it
-depends on every parameter that points toward it.
-For example, \logg\ depends on $A$, $M$, $D$, $A_V$, and $F$.
-In our model, rotation period, $P$, only depends on age and a
-B-V color that is a latent parameter, predicted from the isochronal model.
+% ${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
+%     metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
+%     {\it observables}: apparent magnitudes, $m_x$, effective temperature,
+%     \teff, surface gravity, \logg, observed bulk metallicity, $\hat{F}$, and
+%     parallax, $\bar{\omega}$.
+% determined by the mass, $M$, age, $A$, distance, $D$, extinction, $A_V$
+% and bulk metallicity, $F$, of a star.
+${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
+    metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
+    {\it observables}: apparent magnitudes, effective temperature, surface
+    gravity, observed bulk metallicity, and parallax.
+    The observables, ${\bf O}$, are determined by the parameters, $A$ and
+    ${\bf \theta}$.
+    $C_{B-V}$ is a latent parameter that is also determined by the parameters
+    $A$ and ${\bf \theta}$.
+    In our model, the rotation period observable, $P$, is determined {\it
+    only} by the age, $A$, and color ${C_{B-V}}$ parameters.
+The dependencies of observables on parameters and parameters on parameters are
+    indicated by arrows that start at a `parent' node and end at the dependent
+    observable, or `child' node.
+% The box drawn around some of the nodes indicates that everything inside it
+% depends on every parameter that points toward it.
+% For example, \logg\ depends on $A$, $M$, $D$, $A_V$, and $F$.
+% In our model, rotation period, $P$, only depends on age and a
+% B-V color that is a latent parameter, predicted from the isochronal model.
 In our model, rotation period does not directly depend on distance,
 extinction, metallicity or mass, only age and B-V color.
 This PGM is a representation of the factorized joint PDF over parameters and
-observables which is written in equation \ref{eqn:joint}.
+observables which is written in equation \ref{eqn:factorized}.
 }
   \centering
     \includegraphics[width=.7\textwidth]{PGM}
