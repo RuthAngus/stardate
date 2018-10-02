@@ -165,8 +165,7 @@ def lnprob(lnparams, *args):
             return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 
 
-def run_mcmc(obs, args, p_init, backend, burnin=5000, production=10000,
-             ndim=5, nwalkers=24):
+def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24):
 
     p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
 
@@ -206,26 +205,22 @@ def run_mcmc(obs, args, p_init, backend, burnin=5000, production=10000,
         old_tau = tau
     # ======================================================================
 
-    # p0, lnp, state = sampler.run_mcmc(p0, burnin)
-    # print("Production run...")
-    # sampler.reset()
-    # p0, lnp, state = sampler.run_mcmc(p0, production)
-
     return sampler
 
 
-def make_plots(sampler, i, truths, savedir):
+def make_plots(sampler, i, truths, savedir, burnin=10000):
     ndim = 5
 
     samples = sampler.flatchain
 
     print("Plotting age posterior")
-    age_gyr = (10**samples[:, 1])*1e-9
+    age_gyr = (10**samples[burnin:, 1])*1e-9
     plt.hist(age_gyr)
     plt.xlabel("Age [Gyr]")
     med, std = np.median(age_gyr), np.std(age_gyr)
-    plt.axvline(10**(truths[1])*1e-9, color="tab:orange",
-                label="$\mathrm{True~age~[Gyr]}$")
+    if truths[1]:
+        plt.axvline(10**(truths[1])*1e-9, color="tab:orange",
+                    label="$\mathrm{True~age~[Gyr]}$")
     plt.axvline(med, color="k", label="$\mathrm{Median~age~[Gyr]}$")
     plt.axvline(med - std, color="k", linestyle="--")
     plt.axvline(med + std, color="k", linestyle="--")
@@ -236,7 +231,7 @@ def make_plots(sampler, i, truths, savedir):
     plt.figure(figsize=(16, 9))
     for j in range(ndim):
         plt.subplot(ndim, 1, j+1)
-        plt.plot(sampler.chain[10000:, :, j].T, "k", alpha=.1)
+        plt.plot(sampler.chain[burnin:, :, j].T, "k", alpha=.1)
     plt.savefig("{0}/{1}_chains".format(savedir, str(i).zfill(4)))
     plt.close()
 
@@ -246,16 +241,16 @@ def make_plots(sampler, i, truths, savedir):
               "$\mathrm{[Fe/H]}$",
               "$\ln(\mathrm{Distance~[Kpc])}$",
               "$A_v$"]
-    corner.corner(sampler.chain[10000:, :, :], labels=labels);
+    corner.corner(sampler.chain[burnin:, :, :], labels=labels, truths=truths);
     # corner.corner(samples, labels=labels);
     plt.savefig("{0}/{1}_corner".format(savedir, str(i).zfill(4)))
     plt.close()
 
     print("Making linear corner plot...")
     slin = samples*1
-    slin[:, 3] = np.exp(samples[:, 3])
-    slin[:, 1] = (10**samples[:, 1])*1e-9
+    slin[:, 3] = np.exp(samples[burnin:, 3])
+    slin[:, 1] = (10**samples[burnin:, 1])*1e-9
     labels = ["EEP", "Age [Gyr]", "[Fe/H]", "Distance [Kpc]", "Av"]
-    corner.corner(samples[10000:, :], labels=labels);
+    corner.corner(samples[burnin:, :], labels=labels);
     plt.savefig("{0}/{1}_corner_linear".format(savedir, str(i).zfill(4)))
     plt.close()
