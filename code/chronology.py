@@ -129,7 +129,7 @@ def lnprob(lnparams, *args):
     # params[0] = np.exp(lnparams[0])
     params[3] = np.exp(lnparams[3])
 
-    mod, period, period_err, bv_est, gyro_only, iso_only = args
+    mod, period, period_err, bv_est, iso_only = args
 
     # mag_pars = (params[0], params[1], params[2], params[3]*1e3, params[4])
     mag_pars = (params[0], params[1], params[2], params[3], params[4])
@@ -143,26 +143,16 @@ def lnprob(lnparams, *args):
     if not np.isfinite(lnpr):
         return lnpr, lnpr
 
+    if iso_only:
+        return mod.lnlike(params) + lnpr, lnpr
+
+    if bv > .45:
+        gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
+                            /period_err)**2
     else:
+        gyro_lnlike = 0
 
-        if iso_only:
-            return mod.lnlike(params) + lnpr, lnpr
-
-        else:
-            if bv > .45:
-                gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
-                                   /period_err)**2
-            else:
-                gyro_lnlike = 0
-
-        # B-V is estimated from mass, etc, so you need to use a different B-V
-        # estimate if gyro_only.
-        if gyro_only:
-            return -.5*((period - gyro_model(params[1], bv_est))
-                        /period_err)**2 + mod.lnprior(params), lnpr
-
-        else:
-            return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
+    return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 
 
 def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24):
