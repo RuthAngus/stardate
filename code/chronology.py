@@ -129,7 +129,7 @@ def lnprob(lnparams, *args):
     # params[0] = np.exp(lnparams[0])
     params[3] = np.exp(lnparams[3])
 
-    mod, period, period_err, bv_est, iso_only = args
+    mod, period, period_err, iso_only = args
 
     # mag_pars = (params[0], params[1], params[2], params[3]*1e3, params[4])
     mag_pars = (params[0], params[1], params[2], params[3], params[4])
@@ -155,7 +155,7 @@ def lnprob(lnparams, *args):
     return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 
 
-def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24):
+def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, max_n=100000):
 
     p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
 
@@ -164,7 +164,6 @@ def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24):
 
     # Copied from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
     # ======================================================================
-    max_n = 100000
 
     # We'll track how the average autocorrelation time estimate changes
     index = 0
@@ -199,7 +198,10 @@ def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24):
 
 
 def make_plots(sampler, i, truths, savedir, burnin=10000):
-    ndim = 5
+
+    nwalkers, nsteps, ndim = np.shape(sampler.chain)
+    assert burnin < nsteps, "The number of burn in samples to throw away" \
+        "can't exceed the total number of samples."
 
     samples = sampler.flatchain
 
@@ -221,7 +223,7 @@ def make_plots(sampler, i, truths, savedir, burnin=10000):
     plt.figure(figsize=(16, 9))
     for j in range(ndim):
         plt.subplot(ndim, 1, j+1)
-        plt.plot(sampler.chain[burnin:, :, j].T, "k", alpha=.1)
+        plt.plot(sampler.chain[:, burnin:, j].T, "k", alpha=.1)
     plt.savefig("{0}/{1}_chains".format(savedir, str(i).zfill(4)))
     plt.close()
 
@@ -231,16 +233,16 @@ def make_plots(sampler, i, truths, savedir, burnin=10000):
               "$\mathrm{[Fe/H]}$",
               "$\ln(\mathrm{Distance~[Kpc])}$",
               "$A_v$"]
-    corner.corner(sampler.chain[burnin:, :, :], labels=labels, truths=truths);
-    # corner.corner(samples, labels=labels);
+    corner.corner(samples[burnin:, :], labels=labels, truths=truths);
     plt.savefig("{0}/{1}_corner".format(savedir, str(i).zfill(4)))
     plt.close()
 
-    print("Making linear corner plot...")
-    slin = samples*1
-    slin[:, 3] = np.exp(samples[burnin:, 3])
-    slin[:, 1] = (10**samples[burnin:, 1])*1e-9
-    labels = ["EEP", "Age [Gyr]", "[Fe/H]", "Distance [Kpc]", "Av"]
-    corner.corner(samples[burnin:, :], labels=labels);
-    plt.savefig("{0}/{1}_corner_linear".format(savedir, str(i).zfill(4)))
+    # Make mass histogram
+    samples = sampler.flatchain
+    mass_samps = mist.mass(samples[:, 0], samples[:, 1], samples[:, 2])
+    plt.hist(mass_samps, 50);
+    if truths[0]:
+            plt.axvline(truths[0], color="tab:orange",
+                        label="$\mathrm{True~mass~}[M_\odot]$")
+    plt.savefig("{0}/{1}_marginal_mass".format(savedir, str(i).zfill(4)))
     plt.close()
