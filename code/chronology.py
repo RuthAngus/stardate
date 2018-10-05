@@ -29,6 +29,7 @@ import h5py
 
 def setup(obs, gyro_only=False, iso_only=False):
     """
+    DEPRECATED!!!!!
     setup: (function)
         Generates the StarModel object with observational inputs and the
         arguments to pass to the log-probability function.
