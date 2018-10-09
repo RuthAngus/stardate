@@ -74,87 +74,145 @@ For all stars, our initial guesses for the parameters are $M = 1M_\odot$, $A =
 1$ Gyr, $F = 0$, $D = 500$ pc and $A_V = 0.1$.
 
 % The simulation figures
+
+% iso only
 \begin{figure}
   \caption{
+The results of a test in which we simulated observable properties of stars
+    with the same model we used to infer their properties.
+In this experiment we used {\it only} stellar evolution models to infer ages;
+we did not use rotation periods.
+    For results where we used {\it both} stellar evolution models {\it and}
+    gyrochronology, see figure \ref{fig:iso_and_gyro}.
+The true age, used to produce associated observables is shown on the x-axis,
+    and the ages we inferred are shown on the y-axos.
+This figure shows the posterior PDFs over stellar age for each of the
+    simulated stars as a `violin plot', where samples from the posterior are
+    plotted vertically as a smooth, symmetric function.
+The widths of these functions indicates the probability over age: wider
+    regions represent more probable ages.
+The median values of the posterior PDFs are plotted as solid horizontal lines.
+This figure demonstrates that when only stellar evolution models are used to
+    infer ages for field MS stars, the resulting predicted ages are extremely
+    imprecise.
 }
   \centering
     \includegraphics[width=1.1\textwidth]{../plots/iso_only_violin.pdf}
-\label{fig:clusters}
+\label{fig:iso_only}
 \end{figure}
 
+\begin{figure}
+  \caption{
+The results of a test in which we simulated observable properties of stars
+    with the same model we used to infer their properties.
+    In this experiment we used {\it both} stellar evolution models to {\and}
+    rotation periods to infer ages.
+For results where we used stellar evolution models {\it only}, see the
+    previous figure (figure \ref{fig:iso_only}).
+The true age, used to produce associated observables is shown on the x-axis,
+    and the ages we inferred are shown on the y-axis.
+This figure shows the posterior PDFs over stellar age for each of the
+    simulated stars as a `violin plot', where samples from the posterior are
+    plotted vertically as a smooth, symmetric function.
+The widths of these functions indicates the probability over age: wider
+    regions represent more probable ages.
+The median values of the posterior PDFs are plotted as solid horizontal lines.
+    This figure demonstrates that when rotation periods (gyrochronoloy) {\it
+    and} stellar evolution models are used to infer the ages of field MS
+    stars, the resulting predicted ages relatively precise; much more precise
+    than when using stellar evolution models alone.
+}
+  \centering
+    \includegraphics[width=1.1\textwidth]{../plots/iso_only_violin.pdf}
+\label{fig:iso_and_gyro}
+\end{figure}
 
 %   - The results
-The top panel of figure \ref{fig:sims_results} shows the results of using a
-{\it purely isochrone} model to estimate the posterior PDFs over the
-stellar ages of simulated stars.
-The rotation periods of stars have not been incorporated into this model,
-these posterior PDFs were obtained by isochrone fitting only.
-In some cases (shown as points with large errorbars) there is no constraint on
-the stellar age: the age of the star is consistent with all ages from 0-14
-Gyrs.
+Figure \ref{fig:iso_only} shows the results of using a
+stellar evolution model model to estimate the posterior PDFs over the stellar
+ages of simulated stars.
+The rotation periods of stars have not been incorporated into this model:
+these posterior PDFs were obtained by isochrone fitting only, using the
+likelihood function in equation \ref{eqn:iso_likelihood}.
+In most cases ages are only weakly constrained by the stellar evolution
+models.
+In some cases there is no constraint on the stellar age: the age of the star
+is consistent with all ages from 0-14 Gyrs.
 The reason for this is that the temperatures and luminosities of stars do not
 change very much on the main sequence.
 The isochrones are tightly spaced in the MS region of the HR-diagram and, as a
 result, even precisely measured temperatures and luminosities often do not
 yield precise ages.
-In other cases there is a moderate constraint on the age.
-% Accuracy
-% precision
-
-In the second panel of figure \ref{fig:sims_results} the results of simply
-using a gyrochronology model are demonstrated.
-These ages have been {\it inferred} using the likelihood of equation
-\ref{eqn:gyro_likelihood}, rather than calculated by plugging numbers into the
-gyrochronology relation of equation \ref{eqn:gyro}.
-This means that uncertainties on the rotation periods are propagated through
-to the posterior.
-For this experiment, the B-V colors were pre-computed using the MIST
-isochronal model grid, rather than being jointly inferred at the same time as
-the ages.
-Again, the true stellar ages are plotted on the $x$-axis and the median values
-of the recovered PDFs over ages are plotted on the $y$-axis.
-Here, unlike in the pure isochrone fitting case, the recovered ages are
-precise.
-That is because, in the gyrochronology model, age is the only free parameter
-as opposed to the isochrone model demonstrated in the top panel which has five
-free parameters: age, mass, metallicity, distance and extinction {\it and}
-these parameters are highly correlated.
-It is also because gyrochronology isochrones (or gyrochrones) are more widely
+Figure \ref{fig:iso_and_gyro} shows the results of using a stellar evolution,
+combined with a gyrochronology model.
+These ages have been inferred using the likelihood of equation
+\ref{eqn:both_likelihood}.
+Again, the true stellar ages are plotted on the $x$-axis and the posterior
+PDFs of the inferred ages are plotted on the $y$-axis.
+Here, unlike the case where only stellar evolution models were used, the
+recovered ages are precise.
+This is because gyrochronology isochrones (or gyrochrones) are more widely
 separated relative to the observational uncertainties than the isochrones used
 above.
-In addition, there is no intrinsic scatter built into this gyrochronology
-model; it is deterministic.
-This means that the pair of measurements: rotation period and B-V, returns a
-single-valued age, rather than a probability distribution over ages.
-Because we are testing the gyrochronology-only model on {\it simulated} data,
-these results look precise {\it and} accurate, but that is misrepresentive.
-Inaccuracies would arise if the gyrochronology were incorrect or not precisely
-calibrated in all parts of parameter space which is in fact the case in
-reality.
-However, since we simulated these data from the same model we used to recover
-the ages, the resulting ages inferred are accurate by construction.
+Put another way, the rotation periods of two stars of different ages and the
+same mass will have rotation periods that differ significantly -- almost
+certainly more than the observational uncertainty on rotation period.
+On the other hand, two stars of the same mass and different age are likely to
+have extremely similar luminosities and temperatures and the differences
+between these properties are likely to be smaller than the observational
+uncertainties.
 
-The third panel of figure \ref{fig:sims_results} shows the perfect middle
-ground between precise but inaccurate gyrochronology and accurate but
-imprecise isochrone models.
+% We're cheating here.
+Figure \ref{gyro_only} demonstrates the results of inferring ages using
+rotation periods only, and this illustrates why the combination of isochronal
+and gyrochronal ages is so precise: almost all this precision comes from
+rotation periods.
+This simulation experiment is unrealistic for two main reasons: firstly, we
+simulated data from the same gyrochronology model we used to infer ages and so
+the results will be perfectly accurate by design.
+Secondly, we simulated data without any intrinsic scatter built into the
+gyrochronology model; it is a deterministic model.
+This means that a rotation period and color predicts a corresponding
+single-valued age, rather than a probability distribution over ages.
+This is unrealistic given observations of open clusters who's members clearly
+show excess scatter in their rotation periods, particularly for less massive
+stars.
+These results look precise and accurate, but this is misleading.
+Inaccuracies would arise if the gyrochronology model was incorrect or poorly
+calibrated in all parts of parameter space and imprecision would arise if
+intrinsic scatter were built into the gyrochronology model.
+The result of using a deterministic model, such as the one used in this
+experiment, is that the uncertainties on stellar ages will be unrealistically
+small.
+
+%   - Summarize and discuss the experiment.
+In this experiment, we compared the precision of MS field star ages inferred
+with stellar evolution models only, and with stellar evolution models {\it
+combined} with gyrochronology models.
+We showed that including gyrochronology in the stellar evolution model results
+in much more precise age predictions.
+We have not yet made any statement about accuracy however; the above
+experiment produces accurate ages by construction.
+In order to test the potential of this method to produce accurate results, we
+test our model on real data in the following section.
 
 % TEST 4: with and without spectroscopy
-Although inferred ages are likely to be more precise if spectroscopic
-parameters are available (\teff, \logg\ and \feh), it is still possible to
-place constraints on stellar ages if only photometric colors are available,
-especially if the star has a precise parallax measurement.
-Figure \ref{fig:just_photometry} demonstrates the decrease in precision when
-only photometric colors (J, H and K), parallaxes and rotation periods are
-used as observables.
-The top panel of figure \ref{fig:just_photometry} shows an isochrones-only
-model and the bottom panel shows the results of using isochrones {\it and}
-gyrochronology.
-When spectroscopic parameters are not available, including age information
-from a stellar rotation period becomes extremely important as it is far more
-age-sensitive than photometric colors.
-The trade-off, however, is that stellar ages will become gyrochronology
-dominated, and it is even more important to use an accurate gyrochronology
-model.
+% Although inferred ages are likely to be more precise if spectroscopic
+% parameters are available (\teff, \logg\ and \feh), it is still possible to
+% place constraints on stellar ages if only photometric colors are available,
+% especially if the star has a precise parallax measurement.
+% Figure \ref{fig:just_photometry} demonstrates the decrease in precision when
+% only photometric colors (J, H and K), parallaxes and rotation periods are
+% used as observables.
+% The top panel of figure \ref{fig:just_photometry} shows an isochrones-only
+% model and the bottom panel shows the results of using isochrones {\it and}
+% gyrochronology.
+% When spectroscopic parameters are not available, including age information
+% from a stellar rotation period becomes extremely important as it is far more
+% age-sensitive than photometric colors.
+% The trade-off, however, is that stellar ages will become gyrochronology
+% dominated, and it is even more important to use an accurate gyrochronology
+% model.
 
 % TEST 2: Clusters
 %-----------------------------------------------------------------------------

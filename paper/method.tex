@@ -399,9 +399,13 @@ corresponding to it, along with the observed rotation period, are then passed
 to the gyrochronal likelhood function (equation \ref{eqn:gyro_likelihood}).
 The gyrochronal log-likelihood, $\ln(\mathcal{L}_{\mathrm{gyro}})$, is
 computed.
-The full log-likelihood is then calculated: $\ln(\mathcal{L}_{\mathrm{full}})
-= \ln(\mathcal{L}_{\mathrm{iso}}) + \ln(\mathcal{L}_{\mathrm{gyro}})$ and
-added to the log-prior to produce a single sample from the posterior PDF.
+The full log-likelihood is then calculated,
+\begin{equation}
+$\ln(\mathcal{L}_{\mathrm{full}})
+= \ln(\mathcal{L}_{\mathrm{iso}}) + \ln(\mathcal{L}_{\mathrm{gyro}})$,
+    \label{eqn:both_likelihood}
+\end{equation}
+and added to the log-prior to produce a single sample from the posterior PDF.
 
 %   - Emcee, including assessing convergence.
 We sampled the joint posterior PDF over age, mass, metallicity, distance and
