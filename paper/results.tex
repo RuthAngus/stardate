@@ -313,9 +313,10 @@ were $P$ is period, $C_G$ is \Gaia \gcolor\ color, and A is age.
 %     the cluster stars and the Sun.
     The rotation periods of Praesepe members and the Sun, plotted against
     their \Gaia\ colors (\gcolor) in logarithmic space.
-    We fit a 4th order polynomial to these data in order to predict
-    rotation periods from \gaia\ colors, and a 1st order polynomial (a
-    straight line) in age.
+    We fit a linear model to these data in order to predict
+    rotation periods from \gaia\ colors and age.
+    This model consisted of a fourth-order polynomial in $\log_{10}$ color,
+    and a 1st order polynomial (a straight line) in $\log_{10}$ age.
 The result of this fit is plotted on top of the data at the ages of
     Praesepe and the Sun.
 }
@@ -324,15 +325,15 @@ The result of this fit is plotted on top of the data at the ages of
 \label{fig:clusters}
 \end{figure}
 
-The age of each Praesepe member was inferred using both gyrochronology models:
-the legacy model of equation \ref{eq:gyro} and the Praesepe model of equation
-\ref{eq:new_gyro}.
+The age of each Praesepe member was inferred using both of these
+gyrochronology models: the legacy model of equation \ref{eq:gyro} and the
+Praesepe model of equation \ref{eq:new_gyro}.
 This exercise is not designed to test one gyrochronology model against
 another: the model fit to the Praesepe data will provide a better age
 prediction by design, as the legacy model was fit to number of clusters at
 once.
 The point of this exercise is to show how precise gyrochronology could be if
-the perfect model is used.
+a {\it perfect} model was used.
 We did not force the cluster members to have the same age since the aim of
 this experiment was to reveal the precision and accuracy of our method by
 quantifying the level of scatter in our predicted ages and identifying regions
@@ -340,21 +341,25 @@ of parameter space where the ages deviate from the established age for
 Praesepe.
 
 %   - The results
-The results are shown in figure \ref{fig:cluster_results} which follows the
-same layout as figure \ref{fig:sims_results}.
+The resulting ages predicted for individual members of Praesepe (treating each
+one as an isolated field star) are shown in figures
+\ref{fig:praesepe_old_model_ages} and \ref{fig:praesepe_new_model_ages}.
+Figure \ref{fig:praesepe_old_model_ages} demonstrates the power of
+incorporating gyrochronology into stellar evolution models.
+The orange distributions show individual posterior PDFs over stellar age for
+each member of Praesepe, where ages were inferred using stellar evolution
+models {\it only}, with \gaia\ colors (\gcolor), \gaia\ apparent magnitude
+($G$), and \gaia\ parallaxes as the observable properties.
+The blue distributions are posterior PDFs over stellar age for each member of
+Praesepe, where ages were inferred using stellar evolution models {\it and}
+a gyrochronology model.
+These results were produce using a gyrochronology relation (equation
+\ref{eqn:old_gyro} that was calibrated using the Hyades, Coma Berenices and
+Pleiades clusters, plus the Sun and old asteroseismic stars \citep{angus2015}.
 The top panels shows the ages inferred using an isochrone-only model, the
 middle shows a gyrochrone-only model and the bottom shows an isochrone plus
 gyrochrone model.
-Once again, the top panel demonstrates that using an isochrone model alone
-produces imprecise ages.
-The middle panel shows ages recovered using only a gyrochronal model and it
-reveals inaccuracies in the gyrochronology relation used here.
-
-The bottom panel, once again, demonstrates the power of using both isochronal
-and gyrochronal models together to provide a balance of precision and
-accuracy.
-
-% TEST 3: Asteroseismology
-%-----------------------------------------------------------------------------
-%   - The asteroseismic data
-%   - The results
+This figure demonstrates that using stellar evolution models {\it alone} to
+calculate the ages of cool MS dwarf stars results in extremely imprecise ages,
+however when gyrochonology is incorporated, the precision increases
+significantly.
