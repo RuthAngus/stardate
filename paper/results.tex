@@ -325,25 +325,28 @@ The result of this fit is plotted on top of the data at the ages of
 \label{fig:clusters}
 \end{figure}
 
-The age of each Praesepe member was inferred using both of these
-gyrochronology models: the legacy model of equation \ref{eq:gyro} and the
-Praesepe model of equation \ref{eq:new_gyro}.
-This exercise is not designed to test one gyrochronology model against
-another: the model fit to the Praesepe data will provide a better age
-prediction by design, as the legacy model was fit to number of clusters at
-once.
-The point of this exercise is to show how precise gyrochronology could be if
-a {\it perfect} model was used.
-We did not force the cluster members to have the same age since the aim of
-this experiment was to reveal the precision and accuracy of our method by
-quantifying the level of scatter in our predicted ages and identifying regions
-of parameter space where the ages deviate from the established age for
-Praesepe.
+% The age of each Praesepe member was inferred using both of these
+% gyrochronology models: the legacy model of equation \ref{eq:gyro} and the
+% Praesepe model of equation \ref{eq:new_gyro}.
+% This exercise is not designed to test one gyrochronology model against
+% another: the model fit to the Praesepe data will provide a better age
+% prediction by design, as the legacy model was fit to number of clusters at
+% once.
+% The point of this exercise is to show how precise gyrochronology could be if
+% a {\it perfect} model was used.
+% The age of each Praesepe member was inferred using our combined stellar
+% evolution and gyrochronology model.
+% We did not force the cluster members to have the same age since the aim of
+% this experiment was to reveal the precision and accuracy of our method by
+% quantifying the level of scatter in our predicted ages and identifying regions
+% of parameter space where the ages deviate from the established age for
+% Praesepe.
 
-%   - The results
-The resulting ages predicted for individual members of Praesepe (treating each
-one as an isolated field star) are shown in figures
-\ref{fig:praesepe_old_model_ages} and \ref{fig:praesepe_new_model_ages}.
+%   - Praesepe results: ages
+The resulting ages predicted for individual members of Praesepe (where each
+member is treated as an isolated field star) are shown in figure
+\ref{fig:praesepe_old_model_ages}.
+ % and \ref{fig:praesepe_new_model_ages}.
 Figure \ref{fig:praesepe_old_model_ages} demonstrates the power of
 incorporating gyrochronology into stellar evolution models.
 The orange distributions show individual posterior PDFs over stellar age for
@@ -353,13 +356,62 @@ models {\it only}, with \gaia\ colors (\gcolor), \gaia\ apparent magnitude
 The blue distributions are posterior PDFs over stellar age for each member of
 Praesepe, where ages were inferred using stellar evolution models {\it and}
 a gyrochronology model.
-These results were produce using a gyrochronology relation (equation
-\ref{eqn:old_gyro} that was calibrated using the Hyades, Coma Berenices and
-Pleiades clusters, plus the Sun and old asteroseismic stars \citep{angus2015}.
-The top panels shows the ages inferred using an isochrone-only model, the
-middle shows a gyrochrone-only model and the bottom shows an isochrone plus
-gyrochrone model.
-This figure demonstrates that using stellar evolution models {\it alone} to
-calculate the ages of cool MS dwarf stars results in extremely imprecise ages,
-however when gyrochonology is incorporated, the precision increases
+The blue posteriors are much more strongly peaked around the true age of the
+cluster and this demonstrates that rotation periods carry far more age
+information than photometric colors, even when parallaxes are available.
+The median age of Praesepe members, as predicted using stellar evolution
+models only is .... and the median standard deviation of the age measurements
+(the median spread in the orange posteriors of figure
+\ref{fig:praesepe_old_model_ages}) is ....
+In contrast, the median age of Praesepe members, as predicted using stellar
+evolution models {\it and} gyrochronology (the blue posteriors in figure
+\ref{fig:praesepe_old_model_ages}) is ... and the median standard deviation of
+these posteriors is....
+
+%   - Praesepe results: metallicity, mass, distance
+Stellar rotation periods are age-informative and so including them in our
+analysis leads to the more precise measurement of ages.
+However, rotation periods do not carry very much information about the
+metallicity of a star, nor their distance.
+They are also not particularly informative about the mass of a star because
+rotation periods depend on both mass and age, and stellar mass is strongly
+informed by color and temperature information, so the mass of a star is
+determined from the stellar evolution models.
+However, age, mass and metallicity are correlated: a star can be more blue
+because it is more massive, older or more metal poor.
+For this reason, if a star's age is more tightly constrained, constraints on
+mass and metallicity will also improve.
+Figures ... and ... show the differences in posterior PDFs over metallicity
+and mass respectively, calculated for Prasepe stars where rotation period
+information is both used (blue posteriors) and not used (orange posteriors).
+The black line in figure ... shows the metallicity of Prasepe
+\racomment{citation}.
+There is little difference between blue and orange because rotation periods do
+not strongly depend on metallicity or mass (independantly of age).
+However, the precision of mass and metallicity measurements is slightly
+improved due to the fact that age, mass and metallicity are correlated.
+In this example of fitting our model to Prasepe data, we use \gaia\ parallaxes
+which are extremely informative about the distances to stars and increasing
+the information about stellar ages is unlikely to propoagate through to these
+distances at a meaningful level.
+
+%   - Praesepe results: the Praesepe gyro relation
+The results in figure \ref{fig:praesepe_old_model_ages} were produced using a
+gyrochronology relation (equation \ref{eqn:old_gyro}) that was calibrated
+using the Hyades, Coma Berenices and Pleiades clusters, plus the Sun and old
+asteroseismic stars \citep{angus2015}.
+Figure \ref{fig:praesepe_new_model_ages} however, shows the results of
+inferring the ages of Praesepe members with the dedicated Praesepe
+gyrochronology relation of equation \ref{eqn:gyro_age_praesepe}.
+We include these results because we would like to provide an idea of the kind
+of age measurement accuracy that is achievable in the best case: where the
+gyrochronology model perfectly reproduces the data.
+
+%   - Summary
+To summarize the results of this section of the paper: fitting our new age
+model to simulated stars and members of the Praesepe cluster (an open cluster
+with a precisely measured age from ensemble isochrone fitting and MS turn-off)
+demonstrates that using stellar evolution models {\it alone} to calculate the
+ages of cool MS dwarf stars results in extremely imprecise ages, however when
+gyrochonology is incorporated, the precision of age measurements increase
 significantly.
