@@ -97,6 +97,89 @@ class star(object):
         return sampler
 
 
+    def age(self, burnin=10000):
+        """
+        params
+        ------
+        burnin: int
+            The number of samples to cut off at the beginning of the MCMC
+            when calculating the posterior percentiles.
+        Returns the median age and lower and upper uncertainties.
+        Age is log10(Age/yrs).
+        """
+        samples = self.sampler.flatchain
+        age = np.median(samples[burnin:, 1])
+        errp = np.percentile(samples[burnin:, 1], 84) - age
+        errm = age - np.percentile(samples[burnin:, 1], 16)
+        return age, errm, errp
+
+
+    def mass(self, burnin=10000):
+        """
+        params
+        ------
+        burnin: int
+            The number of samples to cut off at the beginning of the MCMC
+            when calculating the posterior percentiles.
+        Returns the median mass and lower and upper uncertainties in units of
+        solar mass.
+        """
+        samples = self.sampler.flatchain
+        mass = np.median(samples[burnin:, 0])
+        errp = np.percentile(samples[burnin:, 0], 84) - mass
+        errm = mass - np.percentile(samples[burnin:, 0], 16)
+        return mass, errm, errp
+
+
+    def feh(self, burnin=10000):
+        """
+        params
+        ------
+        burnin: int
+            The number of samples to cut off at the beginning of the MCMC
+            when calculating the posterior percentiles.
+        Returns the median metallicity and lower and upper uncertainties.
+        """
+        samples = self.sampler.flatchain
+        feh = np.median(samples[burnin:, 2])
+        errp = np.percentile(samples[burnin:, 2], 84) - feh
+        errm = feh - np.percentile(samples[burnin:, 2], 16)
+        return feh, errm, errp
+
+
+    def distance(self, burnin=10000):
+        """
+        params
+        ------
+        burnin: int
+            The number of samples to cut off at the beginning of the MCMC
+            when calculating the posterior percentiles.
+        Returns the median distance and lower and upper uncertainties in
+        parsecs.
+        """
+        samples = self.sampler.flatchain
+        distance = np.median(samples[burnin:, 3])
+        errp = np.percentile(samples[burnin:, 3], 84) - distance
+        errm = distance - np.percentile(samples[burnin:, 3], 16)
+        return distance, errm, errp
+
+
+    def Av(self, burnin=10000):
+        """
+        params
+        ------
+        burnin: int
+            The number of samples to cut off at the beginning of the MCMC
+            when calculating the posterior percentiles.
+        Returns the median distance and lower and upper uncertainties in
+        parsecs.
+        """
+        samples = self.sampler.flatchain
+        av = np.median(samples[burnin:, 4])
+        errp = np.percentile(samples[burnin:, 4], 84) - av
+        errm = av - np.percentile(samples[burnin:, 4], 16)
+
+
     def make_plots(self, truths=[None, None, None, None, None], burnin=10000):
         """
         params
