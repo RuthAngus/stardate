@@ -36,18 +36,3 @@ Example useage
     median_feh, lower_feh_err, upper_feh_err, feh_samples = star.feh
     median_distance, lower_distance_err, upper_distance_err, distance_samples = star.distance
     median_Av, lower_Av_err, upper_Av_err, Av_samples = star.Av
-
-
-.. Contents:
-
-.. toctree::
-   :maxdepth: 2
-
-
-
-.. Indices and tables
-
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-* :ref:`search`
-
