@@ -21,13 +21,22 @@ Example useage
                   "parallax": (10, .01)}  # in milliarcseconds
 
     prot, prot_err = 26, 1
-    star = sd(iso_params, prot, prot_err)
+    star = sd.star(iso_params, prot, prot_err)
     sampler = star.fit()
 
     print("stellar age = ", star.age[0], "+", star.age[2],
           "-", star.age[1])
 
     >> stellar age = 4.5 + 2.1 - 1.3
+
+    # Accessing posteriors samples over age, mass, metallicity, distance and extinction
+
+    median_mass, lower_mass_err, upper_mass_err, mass_samples = star.mass
+    median_age, lower_age_err, upper_age_err, age_samples = star.age
+    median_feh, lower_feh_err, upper_feh_err, feh_samples = star.feh
+    median_distance, lower_distance_err, upper_distance_err, distance_samples = star.distance
+    median_Av, lower_Av_err, upper_Av_err, Av_samples = star.Av
+
 
 .. Contents:
 

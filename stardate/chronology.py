@@ -108,10 +108,29 @@ class star(object):
         Age is log10(Age/yrs).
         """
         samples = self.sampler.flatchain
-        age = np.median(samples[burnin:, 1])
-        errp = np.percentile(samples[burnin:, 1], 84) - age
-        errm = age - np.percentile(samples[burnin:, 1], 16)
-        return age, errm, errp
+        asamps = samples[burnin:, 1]
+        a = np.median(asamps)
+        errp = np.percentile(asamps, 84) - a
+        errm = a - np.percentile(asamps, 16)
+        return a, errm, errp, asamps
+
+
+    def eep(self, burnin=10000):
+        """
+        params
+        ------
+        burnin: int
+            The number of samples to cut off at the beginning of the MCMC
+            when calculating the posterior percentiles.
+        Returns the median mass and lower and upper uncertainties in units of
+        solar mass.
+        """
+        samples = self.sampler.flatchain
+        esamps = samples[burnin:, 0]
+        e = np.median(esamps)
+        errp = np.percentile(esamps, 84) - e
+        errm = e - np.percentile(esamps, 16)
+        return e, errm, errp, esamps
 
 
     def mass(self, burnin=10000):
@@ -125,10 +144,12 @@ class star(object):
         solar mass.
         """
         samples = self.sampler.flatchain
-        mass = np.median(samples[burnin:, 0])
-        errp = np.percentile(samples[burnin:, 0], 84) - mass
-        errm = mass - np.percentile(samples[burnin:, 0], 16)
-        return mass, errm, errp
+        msamps = mist.mass(samples[burnin:, 0], samples[burnin:, 1],
+                           samples[burnin:, 2])
+        m = np.median(msamps)
+        errp = np.percentile(msamps, 84) - m
+        errm = m - np.percentile(esamps, 16)
+        return m, errm, errp, msamps
 
 
     def feh(self, burnin=10000):
@@ -141,10 +162,11 @@ class star(object):
         Returns the median metallicity and lower and upper uncertainties.
         """
         samples = self.sampler.flatchain
-        feh = np.median(samples[burnin:, 2])
-        errp = np.percentile(samples[burnin:, 2], 84) - feh
-        errm = feh - np.percentile(samples[burnin:, 2], 16)
-        return feh, errm, errp
+        fsamps = samples[burnin:, 2]
+        f = np.median(fsamps)
+        errp = np.percentile(fsamps, 84) - f
+        errm = f - np.percentile(fsamps, 16)
+        return f, errm, errp, fsamps
 
 
     def distance(self, burnin=10000):
@@ -158,10 +180,11 @@ class star(object):
         parsecs.
         """
         samples = self.sampler.flatchain
-        distance = np.median(samples[burnin:, 3])
-        errp = np.percentile(samples[burnin:, 3], 84) - distance
-        errm = distance - np.percentile(samples[burnin:, 3], 16)
-        return distance, errm, errp
+        dsamps = np.exp(samples[burnin:, 3])
+        d = np.median(dsamps)
+        errp = np.percentile(dsamps, 84) - d
+        errm = d - np.percentile(dsamps, 16)
+        return d, errm, errp, dsamps
 
 
     def Av(self, burnin=10000):
@@ -175,9 +198,11 @@ class star(object):
         parsecs.
         """
         samples = self.sampler.flatchain
-        av = np.median(samples[burnin:, 4])
-        errp = np.percentile(samples[burnin:, 4], 84) - av
-        errm = av - np.percentile(samples[burnin:, 4], 16)
+        avsamps = samples[burnin:, 4]
+        a_v = np.median(avsamps)
+        errp = np.percentile(avsamps, 84) - a_v
+        errm = a_v - np.percentile(avsamps, 16)
+        return a_v, errm, errp, avsamps
 
 
     def make_plots(self, truths=[None, None, None, None, None], burnin=10000):
