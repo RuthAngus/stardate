@@ -1,6 +1,6 @@
 from setuptools import setup
 
-setup(name='stardate',
+setup(name='stardate_code',
       version='0.0.1',
       description='Inferring stellar ages using stellar evolution models and gyrochronology',
       url='http://github.com/RuthAngus/stardate',
