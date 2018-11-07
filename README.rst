@@ -17,6 +17,14 @@ Installation
     >> cd stardate
     >> python setup.py install
 
+You'll also need to download isochrones and switch to the eep branch:
+
+::
+    >> git clone https://github.com/timothydmorton/isochrones
+    >> cd isochrones
+    >> git checkout eep
+    >> python setup.py install
+
 
 Example useage
 ============
