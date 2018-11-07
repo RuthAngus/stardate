@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import h5py
 import tqdm
-from lhf import setup, run_mcmc, make_plots
+# from lhf import setup, run_mcmc, make_plots
 from isochrones import StarModel
 import pandas as pd
 import emcee
