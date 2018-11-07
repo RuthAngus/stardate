@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -78,8 +79,8 @@ class star(object):
         np.random.seed(42)
 
         # Create the directory if it doesn't already exist.
-        if not os.path.exists(savedir):
-            os.makedirs(savedir)
+        if not os.path.exists(self.savedir):
+            os.makedirs(self.savedir)
 
         # Set up the backend
         # Don't forget to clear it in case the file already exists

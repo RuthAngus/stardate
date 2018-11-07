@@ -8,5 +8,5 @@ setup(name='stardate_code',
       author_email='ruthangus@gmail.com',
       license='MIT',
       packages=['stardate'],
-      install_requires=['numpy', 'matplotlib', 'pandas', 'h5py', 'tqdm', 'isochrones', 'emcee', 'corner'],
+      install_requires=['numpy', 'matplotlib', 'pandas', 'h5py', 'tqdm', 'isochrones', 'emcee', 'corner', 'os'],
       zip_safe=False)
