@@ -77,6 +77,10 @@ class star(object):
 
         np.random.seed(42)
 
+        # Create the directory if it doesn't already exist.
+        if not os.path.exists(savedir):
+            os.makedirs(savedir)
+
         # Set up the backend
         # Don't forget to clear it in case the file already exists
         filename = "{0}/{1}_samples.h5".format(self.savedir,
