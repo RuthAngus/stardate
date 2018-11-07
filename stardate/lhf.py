@@ -22,7 +22,6 @@ from isochrones.mist import MIST_Isochrone
 mist = MIST_Isochrone()
 from isochrones import StarModel
 import emcee
-import priors
 import corner
 import h5py
 
@@ -92,32 +91,6 @@ def gyro_model(log10_age, bv):
 
     log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c)
     return 10**log_P
-
-
-def lnprior(params):
-    """
-    lnprior on all parameters.
-    params need to be linear except age which is log10(age [yr]).
-    """
-
-    # log Priors over age, metallicity and distance.
-    # (The priors in priors.py are not in log)
-    age_prior = np.log(priors.age_prior(params[1]))
-    feh_prior = np.log(priors.feh_prior(params[2]))
-    distance_prior = np.log(priors.distance_prior(np.exp(params[3])))
-
-    # Uniform prior on extinction.
-    mAv = (0 <= params[4]) * (params[4] < 1)  # Prior on A_v
-    mAv = mAv == 1
-
-    # Uniform prior on mass
-    m = (-20 < params[0]) * (params[0]) < 20  # Broad bounds on mass.
-
-    if mAv and m and np.isfinite(age_prior) and np.isfinite(distance_prior):
-        return age_prior + feh_prior + distance_prior
-
-    else:
-        return -np.inf
 
 
 def lnprob(lnparams, *args):
