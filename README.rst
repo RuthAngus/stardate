@@ -9,6 +9,13 @@ Code for stellar age inference
 stardate combines isochrone fitting with gyrochronology to provide precise
 stellar ages.
 
+Installation
+============
+>> git clone https://github.com/RuthAngus/stardate.git
+>> cd stardate
+>> python setup.py install
+
+
 Example useage
 ============
 ::
