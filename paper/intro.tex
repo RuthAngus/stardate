@@ -9,10 +9,11 @@ The formation and evolution of the Milky Way (MW) and the planetary systems
 within it are two topics of significant interest in astronomy today.
 Both of these fields require precise and accurate ages of tens to hundreds of
 thousands of stars.
-Precise ages of red giant stars, some calculated from asteroseismology and
-some from spectroscopy have recently been used to explore the age
-distributions of stellar populations in the MW
-\racomment{\citep[\eg][]{citation}}.
+Precise ages of red giant stars, some calculated from asteroseismology, some
+from spectroscopy, some from physical models and some from machine learning
+methods have recently been used to explore the age distributions of stellar
+populations in the MW \citep[\eg][]{ness2015, stello2017, das2018,
+sanders2018}.
 Red giants are highly luminous and can be observed to great distances, thus
 providing age information on the scale of tens of kilo-parsecs.
 Main sequence (MS) stars on the other hand, although fainter, are more
@@ -25,8 +26,87 @@ Almost all exoplanets discovered to date orbit MS stars and it is therefore
 Unfortunately, the very property that makes MS stars good hosts for habitable
 planets also makes them difficult to date: they do not change substantially
 over time.
+% There are several properties of giant stars that make them easier to date than
+% MS stars.
+% One property is that their acoustic oscillations have long periods of hours to
+% days and large amplitudes, so they can be detected and resolved using the
+% \kepler\ spacecraft's long cadence mode.
+% The acoustic modes of MS stars, on the other hand, have typical periods of
+% five minutes, which are unresolvable in \kepler's long cadence mode (thirty
+% minutes between observations).
+% The large numbers of giants with asteroseismic ages \citep[\eg][]{huber2010,
+% yu2016, stello2017, yu2018, de_assis_peralta2018} provides a large training
+% set for machine learning methods.
+% In addition the ages of red giants are strongly correlated with their masses,
+% so if mass can be measured (from the spectrum, for example), so can age
+% \citep{ness2015}.
+
+% Age is the most elusive fundamental stellar property and is extremely
+% difficult to measure for field stars -- especially cool stars on the MS.
+% However, a time axis is essential for studying the evolution and formation of
+% any astronomical object, from a planetary system to the Milky Way itself, so
+% improvements in stellar age-dating methods would have a wide-reaching impact
+% across astronomy.
+% For example, in the field of exoplanets the ages of planet hosting stars could
+% be used to explore the dynamical and architectural evolution of planetary
+% systems.
+% % The typical timescales for planetary system stability could be inferred,
+% % leading to implications for the fates of planetary systems in the Milky Way
+% % including our own.
+% New stellar ages would also benefit galactic archaeologists and could resolve
+% the mystery behind the formation of the galactic thin disk.
+% {\bf The need for more precise and accurate stellar ages is virtually
+% universal within astronomy.}
+
+The difficulty of age-dating is particularly acute for low mass (GKM) stars on
+the MS: precisely those that comprise the majority of known planet hosts.
+Using conventional dating methods, uncertainties on the ages of these stars
+can be as large as the age of the Universe, \ie\ they are completely
+unconstrained.
+% , and
+% ages precise to within 50\% are considered `ultra-precise'
+% \citep{soderblom2010}.
+The stars eligible for {\it truly} precise age-dating, where age uncertainties
+can be as low as 10\%, are those in nearby open clusters, those with
+observable acoustic oscillations (asteroseismic stars), those just turning off
+the MS, and the Sun
+\citep[see][for a review of stellar ages]{soderblom2010}.
+There are only a few tens of cool, MS stars with precise ages that are
+suitable for exoplanet population studies, however {\it tens-of-thousands} of
+precise ages are needed to study the evolution of planetary systems.
+The number of planets detected in open clusters, therefore with precise ages,
+is growing, however there are still only a couple of dozen of these discovered
+so far and the total number of detectable planets in clusters is unlikely to
+reach statistical numbers in the near future, if ever.
+In order to study the evolution of planetary systems, a significant number of
+precise ages for cool MS {\it field} stars are needed.
+Neither cluster stars nor asteroseismic stars can currently provide the
+numbers required for exoplanet population studies: age-dating methods for cool
+MS field stars {\it must} be improved before the evolution of planets can be
+explored.
+
+% Planetary system studies are one example of an astronomical field that would
+% greatly benefit from a large stellar age catalog.
+% Another notable field that requires large numbers of stellar ages is galactic
+% archaeology.
+% Machine learning methods have significantly improved age-dating for field red
+% giant stars recently, and large-scale catalogs of precise giant ages have lead
+% to dramatic breakthroughs in galactic archaeology \citep[\eg][]{ness2015,
+% das2018, sanders2018}, but these methods are not yet applicable to MS stars,
+% yet MS stars are more numerous than red giants and their ages could
+% revolutionize galactic archaeology.
+% The largest catalog of precise ages for field {\it MS} stars currently
+% available is the short-cadence Kepler asteroseismic catalog of 500 stars
+% \citep{chaplin2014}.
+% However, few of these stars are truly on the MS (most are on the subgiant
+% branch) and even fewer are cool -- most being A, F and G types.
+% There is currently {\it no} large catalog of stellar ages for field MS stars,
+% and there is unlikely to be one until after the launch of {\it PLATO} and the
+% release of a large catalog of asteroseismic properties.
 
 %   - Why are MS ages harder than red giant ages?
+% Unlike red giants, the masses of MS stars are not strongly correlated with
+% age, so mass cannot be used as an age proxy.
 The spectra and colors of MS stars do not contain a significant amount of age
 information because they do not change rapidly.
 This is represented in the spacing of isochrones on a Hertsprung-Russell (HR)
@@ -35,13 +115,100 @@ On the MS, isochrones are tightly spaced and, even with very precise
 measurements of effective temperature and luminosity, the position of a MS
 star on the HR diagram may be consistent with range of isochrones spanning
 several billion years.
-On the giant branch however, isochrones are spread further apart, so that
-sufficiently precisely measured temperatures and luminosities may yield ages
-that are precise to within 20\% or better.
+At main sequence turn-off however, isochrones are spread further apart, so
+that sufficiently precisely measured temperatures and luminosities may yield
+ages that are extremely precise.
 % Typical age uncertainties of dwarfs.
-\racomment{Look at typical age uncertainties from APOGEE.} Asteroseismology
-can provide precise ages of {\it both} red giant and MS stars but due to the
-greater quantity of observations suitable for {\it red giant}
+The classical method for measuring stellar ages is isochrone placement, or
+isochrone fitting, where surface gravity changes resulting from fusion in the
+core (usually observed via luminosity, $L$, and effective temperature, \teff,
+or absolute magnitude and colour) are compared with a set of models that trace
+stellar evolution across the Hertzprung-Russell, or color-magnitude diagram
+(CMD).
+Surface gravity changes have been thoroughly mapped with physical models, and
+can be used to calculate relatively accurate (but not necessarily precise)
+ages, barring some small, $\sim$10\% variations between different models.
+Isochronal ages {\it can} be precise for stars turning off the MS, because the
+rate of change in brightness and temperature is large during this phase of
+stellar evolution.
+However, on the MS itself, there is little differentiation between stars of
+different ages in the $L$ and \teff\ plane, so ages tend to be very imprecise.
+Gyrochronology, the method of inferring a star's age from its rotation period
+is much better suited to measuring ages on the MS.
+
+\begin{figure}
+  \caption{
+    This figure shows Solar-metallicity MIST isochrones in \Gaia\ absolute
+    G-band magnitude and Gaia $G_{BP} - G_{RP}$ color.
+    In the left panel the isochrones are colored by the minimum absolute age
+    uncertainty at each point on the CMD, calculated using the Fisher
+    information, based on the typical uncertainties of \Gaia\ photometry
+    (represented by black errorbars in the upper right).
+    The purple color in the top left corresponds to small age uncertainties,
+    \ie\ good age precision.
+    Age precision increases as stars begin to turn off the MS.
+    On the MS however, particularly at low masses, the age precision is poor.
+    For late K dwarfs, for example, isochrone fitting age uncertainties exceed
+    the age of the Universe.
+    This makes sense when you consider that typical \Gaia\ uncertaintes on $G$
+    and $G_{BP} - G_{RP}$ exceed the entire width of the MS, which spans
+    0.01-14 Gyrs.
+    Isochrone fitting is not an appropriate age-dating method for MS stars,
+    especially at low masses.
+    In the right panel the isochrones are colored by the logarithmic
+    {\it relative} age precision at each point in the CMD.
+    Relative age uncertainties range from 100\% for the oldest MS GKM stars,
+    to several thousand percent for the youngest.
+    These age uncertainties were calculated using the derivatives of $G$ and
+    $G_{BP} - G_{RP}$ with age, \ie\ the rate of change in a star's luminosity
+    and temperature.
+    For example, K dwarf temperatures increase at a rate of only around 20 K
+    per billion years.
+    The precision with which an age can be measured is related to the
+    separation between isochrones, which indicate epochs of rapid change
+    (steep gradients).\label{fig:fischer_iso}
+}
+  \centering
+    \includegraphics[width=1\textwidth]{iso_fisher_temp.png}
+\label{fig:iso_fisher}
+\end{figure}
+
+\begin{figure}
+  \caption{
+    As figure \ref{fig:iso_fisher}, however in this case the minimum age
+    uncertainties are calculated based on isochrone fitting and gyrochronology
+    {\it combined}.
+    The isochrones are colored by the minimum relative age uncertainty at each
+    point on the CMD, based on the typical uncertainties of Gaia photometry
+    and Kepler rotation period uncertainties (assumed to be around 1 day).
+    In contrast to figure \ref{fig:iso_fisher}, here the left panel shows the
+    {\it logarithmic} absolute age and the right panel shows the linear
+    relative age.
+    The isochrones still supply precise ages at the MS turn off (purple, upper
+    left) however, gyrochronology supplies precise ages on the MS (15 - 25\%
+    relative precision).
+    Gyrochronology and isochrone fitting complement each other and when used
+    together, all subgiants and MS stars can have ages more precise than 30\%.
+    \label{fig:fischer_gyro}
+}
+  \centering
+    \includegraphics[width=1\textwidth]{gyro_fisher_temp.png}
+\label{fig:gyro_fisher}
+\end{figure}
+
+The gyrochronology model used to calculate the Fisher information is a simple
+polynomial model, fit to Praesepe and the Sun only.
+The minimum theoretical absolute age uncertainty (left panel) ranges from tens
+of millions to a few billion years (up to around 3 Gyr for old G dwarfs).
+This is the minimum theoretical precision given the adopted gyrochronology
+model and, since the model used for this calculation does not include
+intrinsic scatter which is particularly large for young stars, the minimum age
+uncertainty for young stars is over-optimistic.
+Similarly, our model does not account for weakened magnetic braking at old
+ages \citep{vansaders2016} so is also optimistic for old dwarfs.
+
+Asteroseismology can provide precise ages of {\it both} red giant and MS stars
+but due to the greater quantity of observations suitable for {\it red giant}
 asteroseismology, precise red giant asteroseismic ages outnumber MS ages.
 % The frequencies of acoustic pulsations reveal the densities of stars, and,
 % as
@@ -132,36 +299,21 @@ mass and rotation period alone; this is the principle behind gyrochronology.
 % stellar age estimates, unless the models are wrong.
 
 %   - Theoretical vs empirical gyro models
-The relation between age, rotation period and mass has been studied in detail
-\racomment{CITATIONS}, and several different models have been developed to
-capture the rotational evolution of Sun-like stars.
+The relation between age, rotation period and mass has been studied in detail,
+and several different models have been developed to capture the rotational
+evolution of Sun-like stars.
 Some of these models are theoretical and based on physical processes; modeling
 angular momentum loss as a function of the stellar properties as well as the
-properties of the magnetic field and stellar wind.
+properties of the magnetic field and stellar wind \citep{kawaler1988,
+kawaler1989, vansaders2013, matt2015, vansaders2016}.
 Other models are empirical and capture the behavior of stars from a purely
 observational standpoint, using simple functional forms that can reproduce the
-data.
-Both types of model; theoretical and empirical, must be calibrated using
+data \citep{barnes2003, barnes2007, mamajek2008, angus2015}.
+Both types of model, theoretical and empirical, must be calibrated using
 observations.
-Even the theoretical models are highly sensitive to some stellar properties
-that are not measurable: mass-loss rate and magnetic field geometry, for
-example.
-However, despite significant advances in both types of model,
-% theoretical models of stellar spin-down as well as new calibrations of
-% empirical models,
-the gyrochronology relations have not yet been finalized for two main reasons.
-Firstly, the rotational evolution of stars is complex and not well understood.
-It is difficult to reproduce the trends in the data using the known physical
-processes acting within stellar interiors, surfaces and winds.
-It is also challenging to come up with an empirical model that is flexible
-enough to capture trends in the data.
-Secondly, there is a lack of suitable calibration stars with precisely
-measured ages, particularly at old ages.  % and low masses.
-% These regions of parameter space are especially important because some
-% evidence suggests that rotational evolution goes through a transition at old
-% ages and low masses.
-% This region of parameter space is especially important because new evidence
-% This region of parameter space is
+% Even the theoretical models are highly sensitive to some stellar properties
+% that are not measurable: mass-loss rate and magnetic field geometry, for
+% example.
 Old calibrators are especially important because new evidence suggests that
 rotational evolution goes through a transition at old age or, more
 specifically, at a large Rossby number, $Ro$ (the ratio of rotation period to
@@ -177,27 +329,27 @@ move stars cross this $Ro$ threshold, stars stop spinning down and maintain a
 constant rotation period from then until they evolve off the MS.
 The implication is that the ages of stars with $Ro >$ 2.1 cannot be measured
 from their rotation periods.
-
-%   - Motivation for improvements to gyrochronology relations
 Despite recent advances in rotation-dating, such as the new $Ro$ transition
-models \citep{vansaders2016}, there is substantial room for
-improvement in the gyrochronology relations.
-For example, there is, as yet no {\it fully} empirical gyrochronology model
-that includes a weakened magnetic braking law after the $Ro$ = 2.1 transition.
-Empirical models have value as they are often more flexible than physical
-models and can capture trends in the data before the physical processes at
-work are fully understood.
-In addition, no single gyrochronology relation can reproduce the rotational
-behaviour of all open clusters; the relation between rotation period, age and
-mass varies from cluster to cluster in a way that cannot be captured by
-any current model.
-Again, this is related to the issue of model flexibility.
-Finally, more stars with precisely measured old ages are needed to confidently
-calibrate gyrochronology models at old ages.
-New asteroseismic calibrators will become available from reprocessed \kepler\
-short cadence light curves, however significant numbers of suitable
-gyrochronology calibrators may not be accessible until after the European
-Space Agency's \plato\ mission is launched.
+models \citep{vansaders2016, vansaders2018}, there is still substantial room
+for improvement in the gyrochronology relations.
+
+% %   - Motivation for improvements to gyrochronology relations
+% % For example, there is, as yet no {\it fully} empirical gyrochronology model
+% % that includes a weakened magnetic braking law after the $Ro$ = 2.1 transition.
+% Empirical models have value as they are often more flexible than physical
+% models and can capture trends in the data before the physical processes at
+% work are fully understood.
+% In addition, no single gyrochronology relation can reproduce the rotational
+% behaviour of all open clusters; the relation between rotation period, age and
+% mass varies from cluster to cluster in a way that cannot be captured by
+% any current model.
+% Again, this is related to the issue of model flexibility.
+% Finally, more stars with precisely measured old ages are needed to confidently
+% calibrate gyrochronology models at old ages.
+% New asteroseismic calibrators will become available from reprocessed \kepler\
+% short cadence light curves, however significant numbers of suitable
+% gyrochronology calibrators may not be accessible until after the European
+% Space Agency's \plato\ mission is launched.
 
 %   - Describe the project presented here.
 The gyrochronology models that capture post $Ro$-threshold, rotational
@@ -207,12 +359,12 @@ dating.
 % vansaders2016, vansaders2018} However, despite their superior accuracy, they
 These models are expensive to compute and, just as with most isochrones and
 stellar evolution tracks, are usually pre-computed over a grid of stellar
-parameters in order to perform computionally tractable inference.
-Inferring ages using these models is similar to inferring an age using any set
-of isochrones, with the main difference being that rotation period is an
-additional dimension.
-Ages calculated using these models are therefore likely to be more precise
-than using rotation-free isochrones since rotation period provides an
+parameters, then interpolation is used to predict the age of a star.
+The process of measuring a stellar age with these models is similar to
+inferring an age using any set of isochrones, with the main difference being
+that rotation period is an additional dimension.
+Ages calculated using these models are therefore likely to be much more
+precise than using rotation-free isochrones since rotation period provides an
 additional anchor-point for the age of a star.
 % In order to infer an age from these models, one would effectively perform
 % isochrone fitting but in this case, rotation period would be added as an
@@ -262,18 +414,59 @@ always seem to behave predictably.
 % inaccurately predicted ages with over-optimistic precision.
 % Instead, these data could be appropriately modeled with a stochastic mixture
 % of broad Gaussians, or similar.
-A further advantage of empirical models is that it can be extremely fast to
-fit them to data.
-We use a simple, deterministic gyrochronology model in this work, which, like
-any other gyrochronology model, cannot yet reproduce all the observed data.
-However, simple modifications could be made to this model to produce
+A further advantage of empirical models is that inference is more tractable:
+it can be extremely fast to fit them to data.
+We use a simple, empirical, deterministic gyrochronology model in this work,
+which, like any other gyrochronology model, cannot yet reproduce all the
+observed data.
+Simple modifications could be made to this model to produce
 significant improvements, for example, by including instrinsic scatter and
-outliers.
-We leave these improvements for a future project.
+outliers, however we leave these improvements for a future project.
 % For example, an allowance for outliers; stars with anomalously fast or slow
 % rotation periods, could be build into our model.
 Ultimately, the model we present here will provide a baseline against which
 more physically motivated models can be compared.
+
+Despite significant advances in both theoretical and empirical gyrochronology
+models, no existing model is currently able to reproduce the data.
+% theoretical models of stellar spin-down as well as new calibrations of
+% empirical models, the gyrochronology relations have not yet been finalized
+% because
+New high quality rotation periods recently measured from Kepler/K2
+observations reveal that rotational evolution is more complicated than
+previously thought, partly because the shape of the rotation-color relation is
+different and unique for each cluster \citep{meibom2011, meibom2015,
+rebull2016, douglas2016, rebull2017, douglas2017} and partly because stars
+appear to stop spinning down at old ages \citep{angus2015, vansaders2016,
+vansaders2018}.
+Theoretical models have been developed to reproduce the lack of magnetic
+braking at old ages \citep{vansaders2016, vansaders2018}, however no model has
+yet been designed to fit the individual shape of every cluster.
+In addition, the relation between rotation period, color and age appears to be
+stochastic at all ages and masses, particularly for young and low-mass
+stars.
+The gyrochronology relations could be improved in three main ways.
+Firstly,
+because stellar evolution is a noisy process that produces outliers and
+scatter, gyrochronology models could be non-deterministic.
+Secondly, the gyrochronology models could be more flexible in order to
+capture the inter-cluster variation in the shape of the rotation-color
+relations.
+Finally, new calibrators are needed to more precisely constrain rotational
+evolution at low masses and old ages.
+ % for two main reasons.
+% Firstly, the rotational evolution of stars is complex and not well understood.
+% It is difficult to reproduce the trends in the data using the known physical
+% processes acting within stellar interiors, surfaces and winds.
+% It is also challenging to come up with an empirical model that is flexible
+% enough to capture trends in the data.
+% Secondly, there is a lack of suitable calibration stars with precisely
+% measured ages, particularly at old ages.  % and low masses.
+% % These regions of parameter space are especially important because some
+% % evidence suggests that rotational evolution goes through a transition at old
+% % ages and low masses.
+% % This region of parameter space is especially important because new evidence
+% % This region of parameter space is
 
 % % Inconsistency and inaccuracy of models
 % In addition to the difficulties imposed by the slow timescale for change
