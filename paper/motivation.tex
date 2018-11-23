@@ -1,0 +1,290 @@
+\section{Combining isochrone fitting with Gyrochronology: Motivation}
+
+In order to demonstrate why a combination of gyrochronology and isochrone
+fitting can provide more precise ages than either method used in isolation, we
+calculated the information provided by each method over the color-magnitude
+diagram.
+The decrease in rotation period with time is roughly proportional to the
+inverse square root of age, $\frac{dP_{\mathrm{rot}}}{dt} \propto
+\mathrm{Age}^{-n}$, where n$\sim$0.5 \citep{skumanich1972}.
+This means that rotational isochrones, or `gyrochrones' are widely spaced and
+provide much more {\it information} about age than traditional isochrones.
+The difference in information conveyed by rotation vs \teff\ and $L$ can be
+quantified by calculating the time derivatives of a star's observables.
+The rate of change of \teff\ and $L$ dictates the minimum theoretical
+uncertainty on an age calculated via isochrone fitting, given some
+observational uncertainties.
+Similarly, the rate of change of rotation period dictates the minimum
+uncertainty on an age inferred via gyrochronology.
+In order to quantify the minimum theoretical uncertainty on ages calculated
+via isochrone fitting and gyrochronology, we calculated the Fisher information
+for the MIST isochrones \citep{paxton2011, paxton2013, paxton2015, dotter2016,
+choi2016, paxton2018} and an empirical polynomial gyrochronology model, fit to
+the Praesepe cluster.
+The Fisher information quantifies the amount of information that an observable
+imparts onto an unknown parameter.
+In the case of isochrone fitting, the observables are $G$ and \gcolor\ and the
+parameter is age, or time, $t$.
+The Fisher information is the variance of the parameter, $t$, given the
+covariance of the observables and their derivatives with respect to $t$.
+The inverse covariance matrix of the parameters (in this case we have just one
+parameter, age or time, $t$), given the covariance matrix of the data, ${\bf y}
+= [G, G_{BP} - G_{RP}$, is given by the following equation,
+\begin{equation}
+    C_{t}^{-1} = \left[\frac{d{\bf y}}{dt}\right]^T
+    C_{\bf y}^{-1} \left[\frac{d{\bf y}}{dt}\right].
+\end{equation}
+Since we just have one parameter, $C_t^{-1}$ is a scalar, the inverse variance
+of age, $\sigma_{\mathrm{Age}}^{-2}$.
+In order to calculate the age uncertainty from the MIST isochrones and
+gyrochronology model, we calculated numerical derivatives of $\frac{dG}{dt}$,
+and $\frac{d(G_{BP} - G_{RP})}{dt}$ at every point on the MIST model grids.
+We then calculated the age uncertainty, $\sigma_{\mathrm{Age,~iso}}$ at every
+point on the grid.
+Figure \ref{fig:iso_fisher} shows Solar-metallicity MIST isochrones, colored
+by $\sigma_{\mathrm{Age,~iso}}$.
+
+Figure \ref{fig:iso_fisher} shows the minimum theoretical absolute age
+uncertainty, $\sigma_{\mathrm{Age,~iso}}$ (left panel), calculated using
+typical \Gaia\ $M_G$ and \gcolor\ uncertainties represented as black errorbars
+in the top right corner.
+The typical \Gaia\ uncertainties are $0.5$ in both $M_G$ and \gcolor.
+These estimates are based on a calculation of the median uncertainty on \Gaia\
+absolute G-magnitude of cool stars which is dominated by the parallax
+uncertainty.
+We assumed the same uncertainty on \gcolor.
+The minimum uncertainty on isochronal age ranges from around 10 million years
+at MS turn off (upper left yellow area) to around the age of the Universe for
+K dwarfs.
+The minimum {\it relative} age uncertainty,
+$\sigma_{\mathrm{Age,~iso}}/\mathrm{Age} \times 100$, plotted in the right
+panel ranges from less than 1\% for old MS turn off stars which have ages
+around 13 Gyr and age uncertainties less than 0.1 Gyr, up to tens-of-thousands
+of percent for the youngest K and M dwarfs with unconstrained ages.
+
+We also calculated the Fisher information for a combined isochronal and
+gyrochronology model.
+In this case we effectively had four observables: $G$ and \gcolor, determined
+by the MIST isochrones; and $P_{\mathrm{rot}}$ (rotation period) and \gcolor\
+{\it again}, this time determined by the gyrochronology model.
+We used a simple gyrochronology model, calibrated by fitting a fourth-order
+polynomial in rotation period-\Gaia\ color space and a first order polynomical
+in rotation period-age space to the 625 Myr Praesepe cluster and the Sun,
+only.
+This model is described in more detail in section \ref{section:results}.
+We calculated analytic derivatives for $\frac{dP_{\mathrm{rot}}}{dt}$ and
+$\left(\frac{d(G_{BP} - G_{RP})}{dt}\right)_{\mathrm{gyro}}$ and combined
+these with the numerical derivatives of $\frac{dG}{dt}$ and
+$\left(\frac{d(G_{BP} - G_{RP})}{dt}\right)_{\mathrm{iso}}$ in order to
+calculate the total age uncertainty, $\sigma_{\mathrm{Age,~(iso~\&~gyro)}}$.
+Figures \ref{fig:iso_fisher} and \ref{fig:gyro_fisher} show Solar-metallicity
+MIST isochrones, colored by $\sigma_{\mathrm{Age~(iso)}}$ and
+$\sigma_{\mathrm{Age~(iso~\&~gyro)}}$.
+
+Figure \ref{fig:gyro_fisher} shows the same results as figure
+\ref{fig:iso_fisher} where this time the age uncertainties are calculated
+using isochrones and a polynomial gyrochronology model.
+Here the age uncertainties were calculated using typical \Gaia\ $M_G$ and
+\gcolor\ uncertainties, represented as black errorbars in the top right
+corner, and rotation period uncertainties of 1 day.
+The minimum theoretical absolute age uncertainty,
+$\sigma_{\mathrm{Age,~(iso~\&~gyro)}}$ (left panel), ranges from tens of
+millions of years for stars at MS turn off to a few billion years (up to
+around 3 Gyr for old G dwarfs).
+The very precise ages at MS turn off are still provided by isochrone fitting
+-- the incredible precision achievable with isochrone fitting at MS turn off
+dominates over the precision provided by gyrochronology.
+The gyrochronology model used to calculate the Fisher information is not
+appropriate for stars turning off the MS as it does not account for a rapid
+decrease in rotation period that may be caused by the stellar radius
+increasing \citep[see][]{vansaders2013}.
+However, it provides an upper limit on $\sigma_{\mathrm{Age,~gyro}}$ which is
+is, in any case, dominated by $\sigma_{\mathrm{Age,~iso}}$.
+The right-hand panel of figure \ref{fig:gyro_fisher} shows the relative age
+uncertainty achievable with joint isochronal and gyrochronal age inference.
+Relative age uncertainty,
+$\mathrm{Age}/\sigma_{\mathrm{Age~(iso~\%~gyro)}}\times 100$ ranges from less
+than 1\% at MS turn off, where isochrones are widely spaced, to a maximum of
+around 30\% for young G dwarfs, where gyrochrones are most tightly spaced.
+The minimum relative age uncertainty on GKM stars on the MS is typically
+around 20\% because gyrochronology predicts precise ages for these kinds of
+stars.
+Gyrochronology contributes most of the precision on the MS because rotation
+period information dominates over $M_G$ information.
+An important caveat of this demonstration is that this is the minimum
+theoretical precision given the {\it adopted} gyrochronology model and, since
+the model used for this calculation does not include intrinsic scatter )which
+is particularly large for young stars), these minimum age uncertainty
+calculations are over-optimistic, especially for young stars.
+Similarly, our model does not account for weakened magnetic braking at old
+ages \citep{vansaders2016} so is also optimistic for old dwarfs.
+Still, these figures provide an idea of gyrochronology's potential to deliver
+much more precise ages than are achievable with isochrone fitting alone for
+cool MS stars.
+
+% Asteroseismology can provide precise ages of {\it both} red giant and MS stars
+% but due to the greater quantity of observations suitable for {\it red giant}
+% asteroseismology, precise red giant asteroseismic ages outnumber MS ages.
+% % The frequencies of acoustic pulsations reveal the densities of stars, and,
+% % as
+% % those densities are age-dependent, can provide precise stellar age
+% % measurements.
+% % \kepler, a high-precision space-based photometric survey produces light curves
+% % of stars that are sometimes precise enough to detect brightness fluctuations
+% % caused by these acoustic pulsations.
+% The typical periods of red giant acoustic pulsations are long (on the orders
+% of hours to weeks) and can be detected using \kepler's long cadence mode of
+% one observation per thirty minutes, \kepler's standard and most common
+% observing mode.
+% In addition, the amplitudes of red giant pulsations are typically very large,
+% significantly greater than \kepler's photometric noise floor.
+% MS stars, on the other hand, oscillate with periods of just a few minutes and
+% the long cadence \kepler\ observations, taken once every half-hour, are
+% far above the Nyquist limit and not capable of resolving these pulsations.
+% Asteroseismic measurements of MS stars can only be made when observed in
+% \kepler's short cadence mode of one observation every minute.
+% % Around two thousand stars were observed in short cadence mode during \kepler's
+% % original mission.
+% However, since the amplitude of pulsation scales with stellar radius, the
+% majority of stars with asteroseismic ages successfully measured using \kepler\
+% short-cadence observations, of which there are currently around 500
+% \citep{chaplin2014}, are subgiants.
+% Only $\sim$30 of these are truly on the MS.
+% This may change soon however: \kepler's short cadence
+% light curves have recently been reprocessed and new, precise ages for the {\it
+% all} stars observed in short cadence mode (around 2000 in the original
+% \kepler\ mission) may be measured and made available soon.
+
+% %   - Introduce gyrochronology
+% % A star like the Sun will increase in luminosity by only around a factor of two
+% % before turning off the MS.
+% % In addition, the Sun's temperature will only increase by around 100 K during
+% % its $\sim$8 billion year MS lifetime.
+% The Sun's rotation period will vary by almost an order of magnitude over its
+% MS lifetime due to magnetic braking.
+% In contrast, luminosity and temperature are not sensitive age proxies for
+% Sun-like stars, are often inferred indirectly, and can be difficult to infer
+% precisely.
+% In addition, the precision with which the luminosity and temperature of a star
+% can be measured is highly sensitive to its distance and the amount of
+% extincting dust along the line of sight.
+% Stellar rotation periods are much more sensitive to age than luminosity or
+% temperature and can be measured precisely, with little dependence on distance
+% and none on extinction, directly from \kepler\ light curves.
+% % Incorporating rotation period measurements into isochrone fitting methods
+% % provides additional information that allows for much more precise age
+% % inference.
+% Gyrochronology, the dating method that uses stellar rotation periods, has the
+% potential to provide MS star ages that are precise to around 20\%
+% \citep{epstein2014}.
+% Due to the abundance of rotation periods of MS stars already provided by
+% \kepler/\ktwo\ and the many more expected from future photometric surveys,
+% gyrochronology is one of the most readily available methods for inferring
+% precise stellar ages and, as such, has gained interest over the last few
+% years.
+
+% % Inconsistency and inaccuracy of models
+% In addition to the difficulties imposed by the slow timescale for change
+% within MS stars that results in poor age precision, different dating methods
+% often produce inconsistent predictions for the age of a star as a result of
+% model inaccuracies.
+% For example, an asteroseismic age will not necessarily agree with a isochronal
+% one and even isochronal ages derived from different stellar evolution models
+% can be inconsistent.
+% % physics driving models are wrong.
+% % Not enough calibration data.
+% This problem arises from a lack of calibrators with sufficiently precise
+% stellar properties.
+
+% Bayesian isochrone fitting.
+% This section should contain more background about the poor uncertainties
+% expected when a purely isochrone fitting technique is used.
+
+% Sum up.
+%-----------------------------------------------------------------------------
+% There is still some way to go before the models we use to age-date
+% MS stars produce precise and accurate ages.
+% This paper presents an incremental step toward improving age-dating models and
+% best-practises.
+% It also provides a discussion on the balance between accuracy and precision
+% within age-dating models.
+
+% Paper outline
+%-----------------------------------------------------------------------------
+This paper is laid out as follows.
+In section \ref{section:method} we describe our new age-dating model and its
+implementation, in section \ref{section:results} we test this model on
+simulated stars, cluster stars and asteroseismic stars, and in section
+\ref{section:discussion} we discuss the implications of these tests and future
+pathways for development.
+Throughout this paper we use the term {\it `observables'} to refer to the
+following observed properties of a star, \teff, \logg, observed bulk
+metallicity ($[\hat{\mathrm{Fe/H}}]$), parallax ($\bar{\omega}$), photometric
+colors in different passbands ($\bf{m_x}$) and rotation period
+($P_{\mathrm{rot}}$).
+The term {\it `parameters'} refers to the physical properties of that star:
+age ($A$), mass ($M$), true bulk metallicity (\feh), distance ($D$) and V-band
+extinction ($A_V$).
+These are the properties that generate the observables.
+
+\begin{figure}
+  \caption{
+    This figure shows Solar-metallicity MIST isochrones in \Gaia\ absolute
+    G-band magnitude and Gaia $G_{BP} - G_{RP}$ color.
+    In the left panel the isochrones are colored by the minimum absolute age
+    uncertainty at each point on the CMD, calculated using the Fisher
+    information, based on the typical uncertainties of \Gaia\ photometry
+    (represented by black errorbars in the upper right).
+    The Sun's position \citep{casagrande2018} is indicated with the Solar\
+    symbol.
+    The purple color in the top left corresponds to small age uncertainties,
+    \ie\ good age precision.
+    Age precision increases as stars begin to turn off the MS.
+    On the MS however, particularly at low masses, the age precision is poor.
+    For late K dwarfs, for example, isochrone fitting age uncertainties exceed
+    the age of the Universe.
+    This makes sense when you consider that typical \Gaia\ uncertaintes on $G$
+    and $G_{BP} - G_{RP}$ exceed the entire width of the MS, which spans
+    0.01-14 Gyrs.
+    Isochrone fitting is not an appropriate age-dating method for MS stars,
+    especially at low masses.
+    In the right panel the isochrones are colored by the logarithmic
+    {\it relative} age precision at each point in the CMD.
+    Relative age uncertainties range from 100\% for the oldest MS GKM stars,
+    to several thousand percent for the youngest.
+    These age uncertainties were calculated using the derivatives of $G$ and
+    $G_{BP} - G_{RP}$ with age, \ie\ the rate of change in a star's luminosity
+    and temperature.
+    For example, K dwarf temperatures increase at a rate of only around 20 K
+    per billion years.
+    The precision with which an age can be measured is related to the
+    separation between isochrones, which indicate epochs of rapid change
+    (steep gradients).\label{fig:fischer_iso}
+}
+  \centering
+    \includegraphics[width=1\textwidth]{iso_fisher_temp.png}
+\label{fig:iso_fisher}
+\end{figure}
+
+\begin{figure}
+  \caption{
+    As figure \ref{fig:iso_fisher}, however in this case the minimum age
+    uncertainties are calculated based on isochrone fitting and gyrochronology
+    {\it combined}.
+    The isochrones are colored by the minimum relative age uncertainty at each
+    point on the CMD, based on the typical uncertainties of Gaia photometry
+    and Kepler rotation period uncertainties (assumed to be around 1 day).
+    In contrast to figure \ref{fig:iso_fisher}, here the left panel shows the
+    {\it logarithmic} absolute age and the right panel shows the linear
+    relative age.
+    The isochrones still supply precise ages at the MS turn off (purple, upper
+    left) however, gyrochronology supplies precise ages on the MS (15 - 25\%
+    relative precision).
+    Gyrochronology and isochrone fitting complement each other and when used
+    together, all subgiants and MS stars can have ages more precise than 30\%.
+    \label{fig:fischer_gyro}
+}
+  \centering
+    \includegraphics[width=1\textwidth]{gyro_fisher_temp.png}
+\label{fig:gyro_fisher}
+\end{figure}
