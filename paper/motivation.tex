@@ -135,6 +135,60 @@ Still, these figures provide an idea of gyrochronology's potential to deliver
 much more precise ages than are achievable with isochrone fitting alone for
 cool MS stars.
 
+% The Praesepe model
+In order to calculate analytic derivatives of the gyrochronology model, we
+fit a linear model to the Praesepe open cluster and the Sun.
+We used a three-dimensional polynomial model to predict age as a
+function of \gaia\ color and rotation period for Praesepe and the Sun.
+This model consists of a 4th order polynomial in logarithmic Gaia color:
+$G_{Bp} - G_{Rp}$, which we write as $C_G$ for simplicity, and a 1st order
+polynomial (a straight line) in logarithmic age.
+For this analysis, rotation periods for Praesepe were obtained from
+\citet{rebull2017} and their \gaia\ colors were obtained by crossmatching
+their sky-projected positions with the \gaia\ DR2 catalog.
+% We used \gcolor\ instead of (B-V) because, due to the $\sim$ billion stars
+% observed by \gaia, it is now the most abundant and widely available
+% photometric color.
+% Our gyrochronology likelihood function is designed to compare observed
+% rotation period to predicted rotation period.
+% For this reason the gyrochronology model we used must predict rotation period
+% as a function of age and color.
+When {\it calibrating} the gyrochronology model, we chose to make {\it age}
+the dependent variable because the uncertainties on stellar age are much
+greater than the uncertainties on rotation period.
+We fitted the following model to Praesepe members:
+\begin{equation}
+    \log_{10}(A) = a + b\log_{10}(C_G) + c\log_{10}^2(C_G) +
+    d\log_{10}^3(C_G) + e\log_{10}^4(C_G) + f\log_{10}(P)
+\label{eqn:gyro_age_praesepe}
+\end{equation}
+where $P$ is rotation period in days, $C_G$ is Gaia color, $A$ is stellar age
+in years and the lower case letters are free parameters.
+We adopted an age for Praesepe of 650 $\pm$ 100 million years
+\citep{brandt2016, gossage2018}, a Solar age of 4.56 $\pm$ 0.01 Gyr
+\citep{connelly2012}, and a Solar rotation period of 26 days \citep[][Morris
+\etal, in prep]{balthasar1986, howe2000}.
+The Sun's color in the Gaia color bandpasses, $G_{Bp} - G_{Rp}$, is 0.82
+\citep{casagrande2018}.
+We found best-fit values: $a = 7.37 \pm 0.03, b = -1.4 \pm 0.1, c = 5.0 \pm
+0.8, d = -34 \pm 3, e = 66 \pm 14$, and $f = 1.49 \pm 0.02$.
+% The $f$ parameter is the inverse of the slope of the rotation period and age
+% which was originally measured to be around 0.5.
+% Our Praesepe and Sun-only fit results in a slightly steeper age dependence of
+% around 0.67, however this value is likely be
+% We inverted this relation to predict rotation period as a function of color
+% and age,
+% \begin{equation}
+%     \log_{10}(P) = \frac{\log_{10}(A) - a - b\log_{10}(C_G) - c\log_{10}^2(C_G) -
+%     d\log_{10}^3(C_G) - e\log_{10}^4(C_G)}{f}.
+% \label{eqn:gyro_age_praesepe}
+% \end{equation}
+% Both gyrochronology models of equations \ref{eqn:gyro} and
+% \ref{eqn:gyro_age_praesepe} are used to predict the ages of individual
+% Praesepe stars from their rotation periods and apparent magnitudes in section
+% \ref{section:results}.
+
+
 \begin{figure}
   \caption{
     This figure shows Solar-metallicity MIST isochrones in \Gaia\ absolute
