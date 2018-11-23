@@ -22,16 +22,19 @@
 
 % Intro
 %-----------------------------------------------------------------------------
-In order to demonstrate the functionality of our method, we conducted two
-tests.
-In the first we simulated a set of observables from a set of fundamental
-parameters for a few hundred stars using the MIST \citep{choi} stellar
-evolution models.
-In the second we tested our model by attempting the measure the ages of stars
-in the Praesepe open cluster who's age has been measured precisely because it
-is an ensemble of coeval stars with the same metallicity; a single stellar
-poplulation, and its age can be established through isochrone fitting and MS
-turn-off.
+In order to demonstrate the performance of our method, we conducted two sets
+of tests.
+In the first we simulated a set of observables from a set fundamental
+parameters for a few hundred stars using the MIST stellar evolution models and
+compared the parameters predicted with our model to the true parameters used
+to generate the data.
+In the second we tested our model by attempting the measure the ages of
+individual stars in the Praesepe open cluster and compared the results to the
+establised age of Praesepe.
+The age of Praesepe, like any open cluster, has been measured precisely
+because it is an ensemble of coeval stars with the same metallicity; a single
+stellar poplulation, and its age can be precisely established through
+isochrone fitting and MS turn-off.
 
 % TEST 1: simulations
 %-----------------------------------------------------------------------------
@@ -47,7 +50,7 @@ uniform distributions:
 & A_V \sim U(0, 1).
 \end{eqnarray}
 \teff, \logg, \fhat, {\bf \mx}, \pmega\ and B-V were then generated using
-these stellar parameters with the MIST stellar evolution models \citep{choi}
+these stellar parameters with the MIST stellar evolution models
 and rotation periods, $P$ were generated from the gyrochronology relation in
 equation \ref{eqn:gyro} with age, $A$, and B-V.
 % Uncertainties.
@@ -236,7 +239,7 @@ Praesepe, a 650 Myr cluster.
 We chose Praesepe because it is relatively tightly clustered on the sky and
 many of its members were therefore targeted in a single \ktwo\ campaign, from
 which it was possible to measure rotation periods via frequency analysis of
-member's light curves \citep{douglas2015}.
+member's light curves \citep{douglas2017}.
 % We compiled rotation periods and spectroscopic parameters for members of
 % the Pleiades which is 150 million years old, Praesepe, a 650 Myr cluster,
 % NGC 6811, 1.1 Myrs and NGC 6819, 2.5 Myrs.
@@ -245,7 +248,7 @@ member's light curves \citep{douglas2015}.
 % rotation periods for NGC 6811 \citep{meibom2013} and 6819 \citep{meibom2015}
 % stars were measured from \kepler\ prime light curves.
 We crossmatched N Praesepe members with measured rotation periods
-\citep{douglas2015}, with the Gaia DR2 catalog \racomment{Gaia DR2 citation},
+\citep{douglas2017}, with the Gaia DR2 catalog \racomment{Gaia DR2 citation},
 using a 5'' search radius.
 The result was a sample of N stars with rotation periods, parallaxes and
 \gaia\ $G$, $G_{BP}$ and $G_{RP}$ -band photometry.
