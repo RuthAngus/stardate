@@ -126,6 +126,12 @@ def lnprob(lnparams, *args):
     else:
         gyro_lnlike = 0
 
+    # If EEP is greater than 425, the star has started evolving up the
+    # subgiant branch, so it should have a precise isochronal age and an
+    # unreliable gyro age -- shut gyrochronology off!
+    # if params[0] > 425:
+    #     gyro_lnlike = 0
+
     return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 
 
