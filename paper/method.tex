@@ -55,22 +55,25 @@ be multiplied together.
 
 The desired end product of this method is an estimate of the non-normalized
 posterior probability density function (PDF) over the age of a star,
-\begin{equation} p(A|{\bf m_x}, T_{\mathrm{eff}}, \log g, \hat{F}, P,
-    \bar{\omega}), \end{equation} where $A$ is age, ${\bf m_x}$ is a vector of
-apparent magnitudes in various bandpasses (in our model ${\bf m_x} =
-[m_J,~m_H,~m_K]$), \fhat\ is the {\it observed} bulk metallicity, $P$ is
-the rotation period and \pmega\ is parallax.
+\begin{equation}
+    p(A|{\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
+    P_{\mathrm{rot}}, \bar{\omega}),
+\end{equation}
+where $A$ is age, ${\bf m_x}$ is a vector of
+apparent magnitudes in various bandpasses, \fhat\ is the {\it observed} bulk
+metallicity, \prot\ is the rotation period and \pmega\ is parallax.
 In order to calculate a posterior PDF over age, we must marginalize over
 parameters that relate to age, but are not of interest in this study: mass
 ($M$), distance ($D$), V-band extinction ($A_V$) and the {\it inferred} bulk
-metallicity, $\mathrm{F}$.
+metallicity, \feh.
 The marginalization involves integrating over these extra parameters,
 \begin{eqnarray}
-& p(A|{\bf m_x}, T_{\mathrm{eff}}, \log g, \hat{F}, P, \bar{\omega})
+    & p(A|{\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
+    P_{\mathrm{rot}}, \bar{\omega})
 \\ \nonumber
-& \propto \int p({\bf m_x}, T_{\mathrm{eff}}, \log g, \hat{F}, P, \bar{\omega}|
-A, M, D, A_V, F)~p(A)p(M)p(D)p(A_V)p(F)
-dMdDdA_VdF.
+    & \propto \int p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
+    P_\mathrm{rot}, \bar{\omega}|
+    A, M, D, A_V, F)~p(A)p(M)p(D)p(A_V)p(F)dMdDdA_VdF.
 \label{eqn:bayes}
 \end{eqnarray}
 This equation is a form of Bayes' rule,
@@ -79,28 +82,28 @@ This equation is a form of Bayes' rule,
 \end{equation}
 where the likelihood of the data given the model is,
 \begin{equation}
-p({\bf m_x}, T_{\mathrm{eff}}, \log g, \hat{F}, P, \bar{\omega}|A, M, D,
-A_V, F),
+    p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, P_{\mathrm{rot}},
+    \bar{\omega}|A, M, D, A_V, F),
 \end{equation}
 and the prior PDF over parameters is,
 \begin{equation}
-p(A)p(M)p(D)p(A_V)p(F).
+    p(A)p(M)p(D)p(A_V)p(F).
 \label{eqn:prior}
 \end{equation}
 
 %   - Why iso and gyro are independent.
 Not all of the observables on the left of the `$|$' in the likelihood depend
 on all of the parameters to the right of it.
-For example, rotation period, $P$ doesn't depend on V-band extinction, $A_V$.
+For example, rotation period, \prot\ doesn't depend on V-band extinction,
+$A_V$.
 In our model, we make use of conditional independencies like this and use them
 to factorize the likelihood.
 Instead of the likelihood we wrote in equation \ref{eqn:bayes},
 where every observable depends on every parameter, our model can be factorized
 as,
 \begin{equation}
-    p({\bf m_x}, T_{\mathrm{eff}}, \log g, \hat{F}, \bar{\omega}, C_{B-V}|A,
-    M, D, A_V, F)
-    ~p(P|A, C_{B-V}),
+    p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega},
+    C_{B-V}|A, M, D, A_V, F) ~p(P_\mathrm{rot}|A, C_{B-V}),
 \label{eqn:factorized}
 \end{equation}
 where we have introduced a new parameter, $C_{B-V}$, which is the $B-V$ color
@@ -118,7 +121,7 @@ circles) and observables (in grey circles) with arrows leading from the causal
 processes to the dependent processes.
 For example, it is the mass, age, metallicity, extinction and distance that
 determines the observed spectroscopic properties (\teff, \logg\ and \feh)
-and apparant magnitudes ($m_J$, $m_H$ and $m_K$).
+and apparant magnitudes (${\bf m_x}$).
 These parameters also determine the B-V color of a star.
 In turn, it is a star's age and B-V color that determine its rotation period.
 Note that, written this way, stellar rotation periods do not directly depend
@@ -131,49 +134,8 @@ use here.
 Breaking up the problem this way allows us to efficiently join isochronology
 and gyrochronology and infer the joint age of a star from all its observables.
 It may well be that rotation period depends directly on mass and metallicity
-in reality, but it is more practical for us to assume that these dependencies are
-weak enough not to significantly affect the ages that we ultimately infer.
-
-% The PGM
-\begin{figure}
-  \caption{
-A probabilistic graphical model (PGM) showing the conditional
-dependencies between the parameters (white nodes) and
-observables (gray nodes) in our model.
-% ${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
-%     metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
-%     {\it observables}: apparent magnitudes, $m_x$, effective temperature,
-%     \teff, surface gravity, \logg, observed bulk metallicity, $\hat{F}$, and
-%     parallax, $\bar{\omega}$.
-% determined by the mass, $M$, age, $A$, distance, $D$, extinction, $A_V$
-% and bulk metallicity, $F$, of a star.
-${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
-    metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
-    {\it observables}: apparent magnitudes, effective temperature, surface
-    gravity, observed bulk metallicity, and parallax.
-    The observables, ${\bf O}$, are determined by the parameters, $A$ and
-    ${\bf \theta}$.
-    $C_{B-V}$ is a latent parameter that is also determined by the parameters
-    $A$ and ${\bf \theta}$.
-    In our model, the rotation period observable, $P$, is determined {\it
-    only} by the age, $A$, and color ${C_{B-V}}$ parameters.
-The dependencies of observables on parameters and parameters on parameters are
-    indicated by arrows that start at a `parent' node and end at the dependent
-    observable, or `child' node.
-% The box drawn around some of the nodes indicates that everything inside it
-% depends on every parameter that points toward it.
-% For example, \logg\ depends on $A$, $M$, $D$, $A_V$, and $F$.
-% In our model, rotation period, $P$, only depends on age and a
-% B-V color that is a latent parameter, predicted from the isochronal model.
-In our model, rotation period does not directly depend on distance,
-extinction, metallicity or mass, only age and B-V color.
-This PGM is a representation of the factorized joint PDF over parameters and
-observables which is written in equation \ref{eqn:factorized}.
-}
-  \centering
-    \includegraphics[width=.7\textwidth]{PGM}
-\label{fig:PGM}
-\end{figure}
+in reality, but it is more practical for us to assume that these dependencies
+are weak enough not to significantly affect the ages that we ultimately infer.
 
 %   - The formulas
 The factorization of the likelihood described in equation \ref{eqn:factorized}
@@ -186,7 +148,8 @@ and independently distributed.
 These assumptions allow us to use Gaussian likelihood functions.
 The isochronal likelihood function is,
 \begin{eqnarray}
-    & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x}, T_{\mathrm{eff}}, \log g, \hat{F},
+    & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x}, T_{\mathrm{eff}}, \log(g),
+    \hat{F},
     \bar{\omega}, C_{B-V}|A, M, D,
     A_V, F) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}}
@@ -195,16 +158,16 @@ The isochronal likelihood function is,
 \label{eqn:iso_likelihood}
 \end{eqnarray}
 where ${\bf O_I}$ is the vector of $n$ observables: \teff, \logg, \fhat,
-\pmega, \mj, \mh\ and \mk and $\Sigma$ is the covariance matrix of that set of
+\pmega, ${\bf m_x}$ and $\Sigma$ is the covariance matrix of that set of
 observables.
 ${\bf I}$ is the vector of {\it model} observables that correspond to a set of
-parameters: $A$, $M$, $F$, $D$ and $A_V$, calculated using an isochrone model.
+parameters: $A$, $M$, \feh, $D$ and $A_V$, calculated using an isochrone model.
 We assume there is no covariance between these observables and so this
 covariance matrix consists of individual parameter variances along the
 diagonal with zeros everywhere else.
 The gyrochronal likelihood function is,
 \begin{eqnarray}
-    & \mathcal{L_{\mathrm{gyro}}} = p(P |A, C_{B-V}) \\ \nonumber
+    & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |A, C_{B-V}) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi) \det(\Sigma_P)}}
     \exp\left( -\frac{1}{2} ({\bf P_O} - {\bf P_P})^T \Sigma ^{-1}
     ({\bf P_O} - {\bf P_P})\right),
@@ -225,17 +188,17 @@ The full likelihood function used in our model is the product of these two
 likelihood functions,
 \begin{eqnarray}
     & \mathcal{L_{\mathrm{full}}} = \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}}
-    \exp\left( -\frac{1}{2} ({\bf O_I} - {\bf I})^T \Sigma ^{-1}
-    ({\bf O_I} - {\bf I})\right) \\ \nonumber
+    \exp\left( -\frac{1}{2} [{\bf O_I} - {\bf I}]^T \Sigma ^{-1}
+    [{\bf O_I} - {\bf I}]\right) \\ \nonumber
     & \times
     \frac{1}{\sqrt{(2\pi) \det(\Sigma_P)}}
-    \exp\left( -\frac{1}{2} ({\bf P_O} - {\bf P_P})^T \Sigma ^{-1}
-    ({\bf P_O} - {\bf P_P})\right).
+    \exp\left( -\frac{1}{2} [{\bf P_O} - {\bf P_P}]^T \Sigma ^{-1}
+    [{\bf P_O} - {\bf P_P}]\right).
 \label{eqn:full_likelihood}
 \end{eqnarray}
 
 %   - Priors
-We place priors over the model parameters $A$, $M$, $F$, $D$ and $A_V$.
+We place priors over the model parameters $A$, $M$, \feh, $D$ and $A_V$.
 These priors represent our `prior beliefs' about the values these parameters
 will take, before we use the data to update those beliefs via a likelihood and
 produce a `posterior' belief about their values.
@@ -257,7 +220,7 @@ It then calculates the residual vector $({\bf O_I} - {\bf I})$ where ${\bf
 O_I}$ is the vector of observables and ${\bf I}$ is a vector of corresponding
 predicted observables.
 The prediction is calculated using a set of isochrones \citep[we use the MIST
-models][]{paxton2011, paxton2013, paxton2015, dotter2016, choi2016, paxton2018},
+models,][]{paxton2011, paxton2013, paxton2015, dotter2016, choi2016, paxton2018},
 where the set of {\it model} observables that correspond
 to a set of physical parameters is returned.
 This requires interpolation over the model grids since, especially at high
@@ -277,7 +240,7 @@ The inference processes procedes as follows (as a reminder, we use {\it
 observables} to refer to the data: \teff, \logg, etc and {\it parameters} to
 refer to the model parameters: age, mass, etc).
 First, a set of parameters: age, mass, true bulk metallicity, distance and
-extinction, as well as observed values of \teff, \logg, bulk metallicity,
+extinction, as well as observables \teff, \logg, bulk metallicity,
 2MASS colors and parallax (${\bf O_I}$) for a single star are passed to the
 isochronal likelihood function (equation \ref{eqn:iso_likelihood}).
 Then, a set of {\it model} values of \teff, \logg, bulk metallicity, 2MASS
@@ -359,72 +322,114 @@ mass.
 In future, it may be better to model stars in physical rather than observable
 parameter space.
 
-Although the gyrochronology model described above \citep[equation
-\ref{eqn:gyro},][]{angus2015} has been calibrated using a number of cluster
-stars, it does not provide a good fit to any individual cluster.
-No current gyrochronology model is able to capture the behavior of rotation as
-a function of color and age for individual benchmark clusters: the shape of
-this relation is different in each and current models are not flexible enough
-to capture inter-cluster differences in rotational evolution.
-For this reason, we also explored the rotational evolution of a single
-cluster, in order to produce a best-case model and demonstrate the potential
-of rotation-dating in a case where the model is perfectly accurate.
-We chose Praesepe as it is a relatively old open cluster \citep[$\sim$ 600
-Myrs][]{gossage2018}, meaning its Solar-type members have converged onto the
-rotational main sequence, and it is relatively compact on the sky so many of
-its members were observed during a single \ktwo\ campaign.
-In fact, Praesepe was repeatedly observed by \ktwo, in Campaigns 5, 16 and 18,
-however we only use rotation periods published from the analysis of Campaign 5
-in this work \citep{rebull2016}.
+% Although the gyrochronology model described above \citep[equation
+% \ref{eqn:gyro},][]{angus2015} has been calibrated using a number of cluster
+% stars, it does not provide a good fit to any individual cluster.
+% No current gyrochronology model is able to capture the behavior of rotation as
+% a function of color and age for individual benchmark clusters: the shape of
+% this relation is different in each and current models are not flexible enough
+% to capture inter-cluster differences in rotational evolution.
+% For this reason, we also explored the rotational evolution of a single
+% cluster, in order to produce a best-case model and demonstrate the potential
+% of rotation-dating in a case where the model is perfectly accurate.
+% We chose Praesepe as it is a relatively old open cluster \citep[$\sim$ 600
+% Myrs][]{gossage2018}, meaning its Solar-type members have converged onto the
+% rotational main sequence, and it is relatively compact on the sky so many of
+% its members were observed during a single \ktwo\ campaign.
+% In fact, Praesepe was repeatedly observed by \ktwo, in Campaigns 5, 16 and 18,
+% however we only use rotation periods published from the analysis of Campaign 5
+% in this work \citep{rebull2016}.
 
-% The Praesepe model
-We used a three-dimensional polynomial model to predict rotation period as a
-function of \gaia\ color and age for Praesepe and the Sun.
-This model consists of a 4th order polynomial in logarithmic Gaia color:
-$G_{Bp} - G_{Rp}$, which we write as $C_G$ for simplicity, and a 1st order
-polynomial (a straight line) in logarithmic age.
-We used \gcolor\ instead of (B-V) because, due to the $\sim$ billion stars
-observed by \gaia, it is now the most abundant and widely available
-photometric color.
-Our gyrochronology likelihood function is designed to compare observed
-rotation period to predicted rotation period.
-For this reason the gyrochronology model we used must predict rotation period
-as a function of age and color.
-However, when {\it calibrating} the gyrochronology model, we chose to make
-{\it age} the dependent variable because the uncertainties on age are much
-greater than the uncertainties on rotation period.
-Since we are using a linear model, the relation is easily invertable.
-We fitted the following model to Praesepe members:
-\begin{equation}
-    \log_{10}(A) = a + b\log_{10}(C_G) + c\log_{10}^2(C_G) +
-    d\log_{10}^3(C_G) + e\log_{10}^4(C_G) + f\log_{10}(P)
-\label{eqn:gyro_age_praesepe}
-\end{equation}
-where $P$ is rotation period in days, $C_G$ is Gaia color, $A$ is stellar age
-in years and the lower case letters are free parameters which we fitted to the
-data using linear least squares.
-We adopted an age for Praesepe of 600 million years \citep{gossage2018}, a
-Solar age of 4.56 Gyr \citep{connelly2012}, and a Solar rotation period of 26
-days \citep[][Morris \etal, in prep]{balthasar1986, howe2000}.
-The Sun's color in the Gaia color bandpasses, $G_{Bp} - G_{Rp}$, is 0.82
-\citep{casagrande2018}.
-We found best-fit values: $a = 7.37 \pm 0.03, b = -1.4 \pm 0.1, c = 5.0 \pm
-0.8, d = -34 \pm 3, e = 66 \pm 14$, and $f = 1.49 \pm 0.02$.
-Rotation periods for Prasepe were obtained from \citet{rebull2017} and their
-\gaia\ colors were obtained by crossmatching their sky-projected positions
-with the \gaia\ DR2 catalog.
-% The $f$ parameter is the inverse of the slope of the rotation period and age
-% which was originally measured to be around 0.5.
-% Our Praesepe and Sun-only fit results in a slightly steeper age dependence of
-% around 0.67, however this value is likely be
-We inverted this relation to predict rotation period as a function of color
-and age,
-\begin{equation}
-    \log_{10}(P) = \frac{\log_{10}(A) - a - b\log_{10}(C_G) - c\log_{10}^2(C_G) -
-    d\log_{10}^3(C_G) - e\log_{10}^4(C_G)}{f}.
-\label{eqn:gyro_age_praesepe}
-\end{equation}
-Both gyrochronology models of equations \ref{eqn:gyro} and
-\ref{eqn:gyro_age_praesepe} are used to predict the ages of individual
-Praesepe stars from their rotation periods and apparent magnitudes in section
-\ref{section:results}.
+% % The Praesepe model
+% We used a three-dimensional polynomial model to predict rotation period as a
+% function of \gaia\ color and age for Praesepe and the Sun.
+% This model consists of a 4th order polynomial in logarithmic Gaia color:
+% $G_{Bp} - G_{Rp}$, which we write as $C_G$ for simplicity, and a 1st order
+% polynomial (a straight line) in logarithmic age.
+% We used \gcolor\ instead of (B-V) because, due to the $\sim$ billion stars
+% observed by \gaia, it is now the most abundant and widely available
+% photometric color.
+% Our gyrochronology likelihood function is designed to compare observed
+% rotation period to predicted rotation period.
+% For this reason the gyrochronology model we used must predict rotation period
+% as a function of age and color.
+% However, when {\it calibrating} the gyrochronology model, we chose to make
+% {\it age} the dependent variable because the uncertainties on age are much
+% greater than the uncertainties on rotation period.
+% Since we are using a linear model, the relation is easily invertable.
+% We fitted the following model to Praesepe members:
+% \begin{equation}
+%     \log_{10}(A) = a + b\log_{10}(C_G) + c\log_{10}^2(C_G) +
+%     d\log_{10}^3(C_G) + e\log_{10}^4(C_G) + f\log_{10}(P)
+% \label{eqn:gyro_age_praesepe}
+% \end{equation}
+% where $P$ is rotation period in days, $C_G$ is Gaia color, $A$ is stellar age
+% in years and the lower case letters are free parameters which we fitted to the
+% data using linear least squares.
+% We adopted an age for Praesepe of 600 million years \citep{gossage2018}, a
+% Solar age of 4.56 Gyr \citep{connelly2012}, and a Solar rotation period of 26
+% days \citep[][Morris \etal, in prep]{balthasar1986, howe2000}.
+% The Sun's color in the Gaia color bandpasses, $G_{Bp} - G_{Rp}$, is 0.82
+% \citep{casagrande2018}.
+% We found best-fit values: $a = 7.37 \pm 0.03, b = -1.4 \pm 0.1, c = 5.0 \pm
+% 0.8, d = -34 \pm 3, e = 66 \pm 14$, and $f = 1.49 \pm 0.02$.
+% Rotation periods for Prasepe were obtained from \citet{rebull2017} and their
+% \gaia\ colors were obtained by crossmatching their sky-projected positions
+% with the \gaia\ DR2 catalog.
+% % The $f$ parameter is the inverse of the slope of the rotation period and age
+% % which was originally measured to be around 0.5.
+% % Our Praesepe and Sun-only fit results in a slightly steeper age dependence of
+% % around 0.67, however this value is likely be
+% We inverted this relation to predict rotation period as a function of color
+% and age,
+% \begin{equation}
+%     \log_{10}(P) = \frac{\log_{10}(A) - a - b\log_{10}(C_G) - c\log_{10}^2(C_G) -
+%     d\log_{10}^3(C_G) - e\log_{10}^4(C_G)}{f}.
+% \label{eqn:gyro_age_praesepe}
+% \end{equation}
+% Both gyrochronology models of equations \ref{eqn:gyro} and
+% \ref{eqn:gyro_age_praesepe} are used to predict the ages of individual
+% Praesepe stars from their rotation periods and apparent magnitudes in section
+% \ref{section:results}.
+
+% The PGM
+\begin{figure}
+  \caption{
+A probabilistic graphical model (PGM) showing the conditional
+dependencies between the parameters (white nodes) and
+observables (gray nodes) in our model.
+% ${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
+%     metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
+%     {\it observables}: apparent magnitudes, $m_x$, effective temperature,
+%     \teff, surface gravity, \logg, observed bulk metallicity, $\hat{F}$, and
+%     parallax, $\bar{\omega}$.
+% determined by the mass, $M$, age, $A$, distance, $D$, extinction, $A_V$
+% and bulk metallicity, $F$, of a star.
+${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
+    metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
+    {\it observables}: apparent magnitudes, effective temperature, surface
+    gravity, observed bulk metallicity, and parallax.
+    The observables, ${\bf O}$, are determined by the parameters, $A$ and
+    ${\bf \theta}$.
+    $C_{B-V}$ is a latent parameter that is also determined by the parameters
+    $A$ and ${\bf \theta}$.
+    In our model, the rotation period observable, $P$, is determined {\it
+    only} by the age, $A$, and color ${C_{B-V}}$ parameters.
+The dependencies of observables on parameters and parameters on parameters are
+    indicated by arrows that start at a `parent' node and end at the dependent
+    observable, or `child' node.
+% The box drawn around some of the nodes indicates that everything inside it
+% depends on every parameter that points toward it.
+% For example, \logg\ depends on $A$, $M$, $D$, $A_V$, and $F$.
+% In our model, rotation period, $P$, only depends on age and a
+% B-V color that is a latent parameter, predicted from the isochronal model.
+In our model, rotation period does not directly depend on distance,
+extinction, metallicity or mass, only age and B-V color.
+This PGM is a representation of the factorized joint PDF over parameters and
+observables which is written in equation \ref{eqn:factorized}.
+}
+  \centering
+    \includegraphics[width=.7\textwidth]{PGM}
+\label{fig:PGM}
+\end{figure}
+
