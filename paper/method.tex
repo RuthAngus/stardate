@@ -1,27 +1,6 @@
 \section{Method}
 \label{section:method}
 
-% The model
-%-----------------------------------------------------------------------------
-%   - Introduction
-%   - Why iso and gyro are independent
-%   - The formulas
-%   - A description and reiteration in words.
-
-% PGM
-%-----------------------------------------------------------------------------
-%   - The PGM
-%   - A description of the PGM
-
-% Practicalities: sampling, etc.
-%-----------------------------------------------------------------------------
-%   - Emcee
-%   - Assessing convergence
-
-
-% The model
-%-----------------------------------------------------------------------------
-
 %   - Introduction
 A common approach to stellar age-dating is to make separate age predictions
 using separate sets of observables.
@@ -34,9 +13,6 @@ or the one believed to be more accurate?
 The methodology described here provides an objective method for combining age
 estimates.
 There is, after all, only one age for each star.
-% If the two or more dating methods do not agree on the same age then one or
-% models must be inaccurate.
-% More words about the implications of this.
 In Bayesian statistics, combining information from different models can be
 relatively simple, as long as the processes being modeled; those that
 generated the data, are independent.
@@ -291,9 +267,6 @@ age in Myrs and $\eta$, $\alpha$, $\beta$ and $\delta$ take values 0.55, 0.4,
 This functional form was introduced by \citep{barnes2007} and the parameter
 values are adopted from the recalibration performed in \citet{angus2015},
 which is based on young cluster stars and old asteroseismic stars.
- % and
-% incorporates a Gaussian mixture model that prevents outliers from influencing
-% the fit.
 
 It was recently shown that a simple power law in age does not provide a good
 fit to old asteroseismic stars \citep{angus2015, vansaders2016}.
@@ -418,11 +391,6 @@ ${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
 The dependencies of observables on parameters and parameters on parameters are
     indicated by arrows that start at a `parent' node and end at the dependent
     observable, or `child' node.
-% The box drawn around some of the nodes indicates that everything inside it
-% depends on every parameter that points toward it.
-% For example, \logg\ depends on $A$, $M$, $D$, $A_V$, and $F$.
-% In our model, rotation period, $P$, only depends on age and a
-% B-V color that is a latent parameter, predicted from the isochronal model.
 In our model, rotation period does not directly depend on distance,
 extinction, metallicity or mass, only age and B-V color.
 This PGM is a representation of the factorized joint PDF over parameters and
@@ -432,4 +400,3 @@ observables which is written in equation \ref{eqn:factorized}.
     \includegraphics[width=.7\textwidth]{PGM}
 \label{fig:PGM}
 \end{figure}
-
