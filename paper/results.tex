@@ -39,9 +39,8 @@ isochrone fitting and MS turn-off.
 % TEST 1: simulations
 %-----------------------------------------------------------------------------
 %   - The simulated data
-For the first test we began with a set of 1000 stars and drew masses, ages,
-bulk metallicities, distances and extinctions at random from the following
-uniform distributions:
+For the first test we drew masses, ages, bulk metallicities, distances and
+extinctions at random for 1000 stars from the following uniform distributions:
 \begin{eqnarray}
 & M \sim U(0.5, 1.5)~[M_\odot] \\
 & A \sim U(0.5, 14)\mathrm{~[Gyr]} \\
@@ -49,114 +48,57 @@ uniform distributions:
 & D \sim U(10, 1000)~\mathrm{[pc]} \\
 & A_V \sim U(0, 1).
 \end{eqnarray}
-\teff, \logg, \fhat, {\bf \mx}, \pmega\ and B-V were then generated using
-these stellar parameters with the MIST stellar evolution models
-and rotation periods, $P$ were generated from the gyrochronology relation in
-equation \ref{eqn:gyro} with age, $A$, and B-V.
+\teff, \logg, \fhat, \pmega\, $C_{B-V}$ and apparent magnitudes $J$, $H$ and
+$K$ were generated from these stellar parameters using the MIST stellar
+evolution models.
+Rotation periods were generated using the gyrochronology relation of
+equation \ref{eqn:gyro} with age, and color.
 % Uncertainties.
-We then performed cuts on these simulated stars to remove evolved stars and
-stars that are too hot.
-The rotation periods of evolved stars, defined here to be those with \logg\ >
-4.5 begin to increase as soon as they turn off the MS and their radii start to
-enlarge and cannot be modeled with the gyrochronology relation of equation
-\ref{eqn:gyro_age}.
-In addition, hot stars (defined as 6250 K < \teff) cannot be modeled using
-equation \ref{eqn:gyro_age} because their convective envelopes are extremely
-shallow and their magnetic fields are weaker, leading to a lack of magnetic
-braking.
-The rotation periods of these stars do not increase substantially during their
-time on the MS.
-After performing these cuts, 649 \racomment{update} stars remained in the
-sample of simulated stars.
-% We attempted to measure the ages of the stars in this sample using the method
-% outlined in section \ref{sec:method}.
-We took two approaches to inferred the ages of these simulated stars: firstly
-using {\it only} a stellar evolution model, and secondly using a stellar
-evolution model {\it combined with} a gyrochronology model.
-For all stars, our initial guesses for the parameters are $M = 1M_\odot$, $A =
-1$ Gyr, $F = 0$, $D = 500$ pc and $A_V = 0.1$.
-
-% The simulation figures
-
-% iso only
-\begin{figure}
-  \caption{
-The results of a test in which we simulated observable properties of stars
-    with the same model we used to infer their properties.
-In this experiment we used {\it only} stellar evolution models to infer ages;
-we did not use rotation periods.
-    For results where we used {\it both} stellar evolution models {\it and}
-    gyrochronology, see figure \ref{fig:iso_and_gyro}.
-The true age, used to produce associated observables is shown on the x-axis,
-    and the ages we inferred are shown on the y-axos.
-This figure shows the posterior PDFs over stellar age for each of the
-    simulated stars as a `violin plot', where samples from the posterior are
-    plotted vertically as a smooth, symmetric function.
-The widths of these functions indicates the probability over age: wider
-    regions represent more probable ages.
-The median values of the posterior PDFs are plotted as solid horizontal lines.
-This figure demonstrates that when only stellar evolution models are used to
-    infer ages for field MS stars, the resulting predicted ages are extremely
-    imprecise.
-}
-  \centering
-    \includegraphics[width=1\textwidth]{../plots/iso_only_violin.pdf}
-\label{fig:iso_only}
-\end{figure}
-
-\begin{figure}
-  \caption{
-The results of a test in which we simulated observable properties of stars
-    with the same model we used to infer their properties.
-    In this experiment we used {\it both} stellar evolution models to {\and}
-    rotation periods to infer ages.
-For results where we used stellar evolution models {\it only}, see the
-    previous figure (figure \ref{fig:iso_only}).
-The true age, used to produce associated observables is shown on the x-axis,
-    and the ages we inferred are shown on the y-axis.
-This figure shows the posterior PDFs over stellar age for each of the
-    simulated stars as a `violin plot', where samples from the posterior are
-    plotted vertically as a smooth, symmetric function.
-The widths of these functions indicates the probability over age: wider
-    regions represent more probable ages.
-The median values of the posterior PDFs are plotted as solid horizontal lines.
-    This figure demonstrates that when rotation periods (gyrochronoloy) {\it
-    and} stellar evolution models are used to infer the ages of field MS
-    stars, the resulting predicted ages relatively precise; much more precise
-    than when using stellar evolution models alone.
-}
-  \centering
-    \includegraphics[width=1\textwidth]{../plots/iso_and_gyro_violin.pdf}
-\label{fig:iso_and_gyro}
-\end{figure}
+% We then performed cuts on these simulated stars to remove evolved and hot
+% stars.
+% The rotation periods of evolved stars, defined here to be those with \logg\
+% $>$ 4.5 begin to increase as soon as they turn off the MS and their radii
+% start to enlarge and cannot be modeled with the gyrochronology relation of
+% equation \ref{eqn:gyro}.
+% In addition, hot stars (defined as 6250 K $<$ \teff) cannot be modeled using
+% equation \ref{eqn:gyro} because their convective envelopes are extremely
+% shallow and their magnetic fields are weaker, leading to a lack of magnetic
+% braking.
+% The rotation periods of these stars do not increase substantially during their
+% time on the MS.
+% After performing these cuts, 649 \racomment{update} stars remained in the
+% sample of simulated stars.
+We took two approaches to inferring the ages of these simulated stars:
+firstly using isochrone fitting {\it only}, and secondly using isochrone
+fitting {\it combined with} a gyrochronology model.
+For all stars, our initial guesses for the parameters were $M = 1M_\odot$,
+$A = 1$ Gyr, $F = 0$, $D = 500$ pc and $A_V = 0.1$.
 
 %   - The results
-Figure \ref{fig:iso_only} shows the results of using a
-stellar evolution model model to estimate the posterior PDFs over the stellar
-ages of simulated stars.
-The rotation periods of stars have not been incorporated into this model:
-these posterior PDFs were obtained by isochrone fitting only, using the
-likelihood function in equation \ref{eqn:iso_likelihood}.
-In most cases ages are only weakly constrained by the stellar evolution
-models.
-In some cases there is no constraint on the stellar age: the age of the star
-is consistent with all ages from 0-14 Gyrs.
+Figure \ref{fig:iso_only} shows the results of using isochrone fitting
+model to estimate the posterior PDFs over the stellar ages of simulated stars.
+The rotation periods of stars were been incorporated into this model: these
+posterior PDFs were obtained by isochrone fitting only, using the likelihood
+function in equation \ref{eqn:iso_likelihood}.
+In most cases ages are only weakly constrained by the stellar evolution models
+and in some cases there is no constraint on the stellar age: the age of the
+star is consistent with all ages from 0-14 Gyrs.
 The reason for this is that the temperatures and luminosities of stars do not
 change very much on the main sequence.
 The isochrones are tightly spaced in the MS region of the HR-diagram and, as a
 result, even precisely measured temperatures and luminosities often do not
 yield precise ages.
-Figure \ref{fig:iso_and_gyro} shows the results of using a stellar evolution,
-combined with a gyrochronology model.
-These ages have been inferred using the likelihood of equation
+Figure \ref{fig:iso_and_gyro} shows the results of using isochrones {\it
+combined} with a gyrochronology model.
+These ages were inferred using the likelihood of equation
 \ref{eqn:both_likelihood}.
 Again, the true stellar ages are plotted on the $x$-axis and the posterior
 PDFs of the inferred ages are plotted on the $y$-axis.
-Here, unlike the case where only stellar evolution models were used, the
-recovered ages are precise.
-This is because gyrochronology isochrones (or gyrochrones) are more widely
-separated relative to the observational uncertainties than the isochrones used
-above.
+Here, unlike the isochrone only case, the recovered ages are precise.
+This is because there is more age information in stellar rotation periods than
+in effective temperatures and absolute magnitudes.
+Cyrochronology isochrones (or gyrochrones) are more widely separated relative
+to the observational uncertainties than the MIST isochrones.
 Put another way, the rotation periods of two stars of different ages and the
 same mass will have rotation periods that differ significantly -- almost
 certainly more than the observational uncertainty on rotation period.
@@ -166,10 +108,10 @@ between these properties are likely to be smaller than the observational
 uncertainties.
 
 % We're cheating here.
-Figure \ref{gyro_only} demonstrates the results of inferring ages using
-rotation periods only, and this illustrates why the combination of isochronal
-and gyrochronal ages is so precise: almost all this precision comes from
-rotation periods.
+% Figure \ref{gyro_only} demonstrates the results of inferring ages using
+% rotation periods only, and this illustrates why the combination of isochronal
+% and gyrochronal ages is so precise: almost all this precision comes from
+% rotation periods.
 This simulation experiment is unrealistic for two main reasons: firstly, we
 simulated data from the same gyrochronology model we used to infer ages and so
 the results will be perfectly accurate by design.
@@ -196,8 +138,8 @@ We showed that including gyrochronology in the stellar evolution model results
 in much more precise age predictions.
 We have not yet made any statement about accuracy however; the above
 experiment produces accurate ages by construction.
-In order to test the potential of this method to produce accurate results, we
-test our model on real data in the following section.
+In order to test the accuracy of this method, we also tested in on real data:
+the Praesepe open cluster.
 
 % TEST 4: with and without spectroscopy
 % Although inferred ages are likely to be more precise if spectroscopic
@@ -237,9 +179,9 @@ off can be identified.
 We compiled rotation periods and Gaia photometry and parallaxes for members of
 Praesepe, a 650 Myr cluster.
 We chose Praesepe because it is relatively tightly clustered on the sky and
-many of its members were therefore targeted in a single \ktwo\ campaign, from
-which it was possible to measure rotation periods via frequency analysis of
-member's light curves \citep{douglas2017}.
+many of its members were targeted in a single \ktwo\ campaign, from which it
+was possible to measure rotation periods via frequency analysis of member's
+light curves \citep{douglas2017}.
 % We compiled rotation periods and spectroscopic parameters for members of
 % the Pleiades which is 150 million years old, Praesepe, a 650 Myr cluster,
 % NGC 6811, 1.1 Myrs and NGC 6819, 2.5 Myrs.
@@ -254,12 +196,13 @@ The result was a sample of N stars with rotation periods, parallaxes and
 \gaia\ $G$, $G_{BP}$ and $G_{RP}$ -band photometry.
 Figure \ref{figure:praesepe} shows the rotation periods of Praesepe members as
 a function of their dust-corrected \gaia\ \gcolor\ colors.
-We used the {\tt dustmaps} {\tt python} package to calculate dust extinction
-along the line of sight to these stars.
-The filled blue circles show the FGK stars on the `rotational main sequence'
-that were used to calibrate a relation between rotation period and color for
-this cluster.
-% REDDENNING!!!!!
+We did not include extinction since Praesepe is relatively nearby (around 180
+parsecs) so reddening from dust is minimal.
+% We used the {\tt dustmaps} {\tt python} package to calculate dust extinction
+% along the line of sight to these stars.
+% The filled blue circles show the FGK stars on the `rotational main sequence'
+% that were used to calibrate a relation between rotation period and color for
+% this cluster.
 
 % Cutting outliers and limiting color range.
 In order to fit a period-color relation to these data we restricted the sample
@@ -306,27 +249,6 @@ were $P$ is period, $C_G$ is \Gaia \gcolor\ color, and A is age.
 % required that their RVs had to be consistent with the cluster RV of around 40
 % kms$^{-1}$.
 % Two stars with RVs $< 30$ kms$^{-1}$ were removed from the catalog.
-
-% The Cluster figure
-\begin{figure}
-  \caption{
-% The rotation periods of stars in open clusters, and the Sun, plotted against
-%     their \Gaia\ colors (\gcolor) in logarithmic space.
-% The result of this fit is plotted on top of the data at the ages of
-%     the cluster stars and the Sun.
-    The rotation periods of Praesepe members and the Sun, plotted against
-    their \Gaia\ colors (\gcolor) in logarithmic space.
-    We fit a linear model to these data in order to predict
-    rotation periods from \gaia\ colors and age.
-    This model consisted of a fourth-order polynomial in $\log_{10}$ color,
-    and a 1st order polynomial (a straight line) in $\log_{10}$ age.
-The result of this fit is plotted on top of the data at the ages of
-    Praesepe and the Sun.
-}
-  \centering
-    \includegraphics[width=1\textwidth]{clusters.pdf}
-\label{fig:clusters}
-\end{figure}
 
 % The age of each Praesepe member was inferred using both of these
 % gyrochronology models: the legacy model of equation \ref{eq:gyro} and the
@@ -418,3 +340,78 @@ demonstrates that using stellar evolution models {\it alone} to calculate the
 ages of cool MS dwarf stars results in extremely imprecise ages, however when
 gyrochonology is incorporated, the precision of age measurements increase
 significantly.
+
+% The simulation figures
+% iso only
+\begin{figure}
+  \caption{
+The results of a test in which we simulated observable properties of stars
+    with the same model we used to infer their properties.
+In this experiment we used {\it only} stellar evolution models to infer ages;
+we did not use rotation periods.
+    For results where we used {\it both} stellar evolution models {\it and}
+    gyrochronology, see figure \ref{fig:iso_and_gyro}.
+The true age, used to produce associated observables is shown on the x-axis,
+    and the ages we inferred are shown on the y-axos.
+This figure shows the posterior PDFs over stellar age for each of the
+    simulated stars as a `violin plot', where samples from the posterior are
+    plotted vertically as a smooth, symmetric function.
+The widths of these functions indicates the probability over age: wider
+    regions represent more probable ages.
+The median values of the posterior PDFs are plotted as solid horizontal lines.
+This figure demonstrates that when only stellar evolution models are used to
+    infer ages for field MS stars, the resulting predicted ages are extremely
+    imprecise.
+}
+  \centering
+    \includegraphics[width=1\textwidth]{../plots/iso_only_violin.pdf}
+\label{fig:iso_only}
+\end{figure}
+
+\begin{figure}
+  \caption{
+The results of a test in which we simulated observable properties of stars
+    with the same model we used to infer their properties.
+    In this experiment we used {\it both} stellar evolution models to {\and}
+    rotation periods to infer ages.
+For results where we used stellar evolution models {\it only}, see the
+    previous figure (figure \ref{fig:iso_only}).
+The true age, used to produce associated observables is shown on the x-axis,
+    and the ages we inferred are shown on the y-axis.
+This figure shows the posterior PDFs over stellar age for each of the
+    simulated stars as a `violin plot', where samples from the posterior are
+    plotted vertically as a smooth, symmetric function.
+The widths of these functions indicates the probability over age: wider
+    regions represent more probable ages.
+The median values of the posterior PDFs are plotted as solid horizontal lines.
+    This figure demonstrates that when rotation periods (gyrochronoloy) {\it
+    and} stellar evolution models are used to infer the ages of field MS
+    stars, the resulting predicted ages relatively precise; much more precise
+    than when using stellar evolution models alone.
+}
+  \centering
+    \includegraphics[width=1\textwidth]{../plots/iso_and_gyro_violin.pdf}
+\label{fig:iso_and_gyro}
+\end{figure}
+
+% The Cluster figure
+\begin{figure}
+  \caption{
+% The rotation periods of stars in open clusters, and the Sun, plotted against
+%     their \Gaia\ colors (\gcolor) in logarithmic space.
+% The result of this fit is plotted on top of the data at the ages of
+%     the cluster stars and the Sun.
+    The rotation periods of Praesepe members and the Sun, plotted against
+    their \Gaia\ colors (\gcolor) in logarithmic space.
+    We fit a linear model to these data in order to predict
+    rotation periods from \gaia\ colors and age.
+    This model consisted of a fourth-order polynomial in $\log_{10}$ color,
+    and a 1st order polynomial (a straight line) in $\log_{10}$ age.
+The result of this fit is plotted on top of the data at the ages of
+    Praesepe and the Sun.
+}
+  \centering
+    \includegraphics[width=1\textwidth]{clusters.pdf}
+\label{fig:clusters}
+\end{figure}
+

@@ -1,4 +1,5 @@
 \section{Combining isochrone fitting with Gyrochronology: Motivation}
+\label{section:motivation}
 
 In order to demonstrate why a combination of gyrochronology and isochrone
 fitting can provide more precise ages than either method used in isolation, we
@@ -7,8 +8,20 @@ diagram.
 The decrease in rotation period with time is roughly proportional to the
 inverse square root of age, $\frac{dP_{\mathrm{rot}}}{dt} \propto
 \mathrm{Age}^{-n}$, where n$\sim$0.5 \citep{skumanich1972}.
-This means that rotational isochrones, or `gyrochrones' are widely spaced and
-provide much more {\it information} about age than traditional isochrones.
+This is a large rate of change relative to typical rotation period measurement
+uncertainties.
+For example, the Sun's rotation period is currently decreasing at a rate of
+around 3 days per billion years \citep[unless it has already stopped spinning
+down][]{vansaders2016}, and the 1 billion year-old Sun spun down at a rate of
+around 6 days per billion years.
+These are relatively large changes compared with the average uncertainties on
+rotation period measurements: the median rotation period uncertainty in the
+\citet{mcquillan2014} catalog is around 0.1 days.
+In contrast, the temperature of a K dwarf changes by about 20 K every billion
+years which is small compared to typical observational uncertainties of 20-100
+K.
+Rotational isochrones, or `gyrochrones' are more widely spaced and provide
+much more {\it information} about age than traditional isochrones.
 The difference in information conveyed by rotation vs \teff\ and $L$ can be
 quantified by calculating the time derivatives of a star's observables.
 The rate of change of \teff\ and $L$ dictates the minimum theoretical
@@ -208,24 +221,6 @@ cool MS stars.
 % best-practises.
 % It also provides a discussion on the balance between accuracy and precision
 % within age-dating models.
-
-% Paper outline
-%-----------------------------------------------------------------------------
-This paper is laid out as follows.
-In section \ref{section:method} we describe our new age-dating model and its
-implementation, in section \ref{section:results} we test this model on
-simulated stars, cluster stars and asteroseismic stars, and in section
-\ref{section:discussion} we discuss the implications of these tests and future
-pathways for development.
-Throughout this paper we use the term {\it `observables'} to refer to the
-following observed properties of a star, \teff, \logg, observed bulk
-metallicity ($[\hat{\mathrm{Fe/H}}]$), parallax ($\bar{\omega}$), photometric
-colors in different passbands ($\bf{m_x}$) and rotation period
-($P_{\mathrm{rot}}$).
-The term {\it `parameters'} refers to the physical properties of that star:
-age ($A$), mass ($M$), true bulk metallicity (\feh), distance ($D$) and V-band
-extinction ($A_V$).
-These are the properties that generate the observables.
 
 \begin{figure}
   \caption{
