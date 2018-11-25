@@ -51,7 +51,7 @@ class star(object):
         self.savedir = savedir
         self.suffix = suffix
 
-    def fit(self, inits=[1., 9., 0., .5, .01], nwalkers=24, max_n=100000,
+    def fit(self, inits=[350, 9., 0., .5, .01], nwalkers=24, max_n=100000,
             iso_only=False):
         """
         params
