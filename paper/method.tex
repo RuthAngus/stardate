@@ -33,7 +33,7 @@ be multiplied together.
 
 The desired end product of this method is an estimate of the non-normalized
 posterior probability density function (PDF) over the age of a star,
-\begin{equation}
+\begin{equation} \label{eqn1}
     p(A|{\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
     P_{\mathrm{rot}}, \bar{\omega}),
 \end{equation}
@@ -45,29 +45,26 @@ parameters that relate to age, but are not of interest in this study: mass
 ($M$), distance ($D$), V-band extinction ($A_V$) and the {\it inferred} bulk
 metallicity, $F$.
 The marginalization involves integrating over these extra parameters,
-\begin{eqnarray}
+\begin{eqnarray} \label{eqn:bayes}
     & p(A|{\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
     P_{\mathrm{rot}}, \bar{\omega})
 \\ \nonumber
     & \propto \int p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
     P_\mathrm{rot}, \bar{\omega}|
     A, M, D, A_V, F)~p(A)p(M)p(D)p(A_V)p(F)dMdDdA_VdF.
-\label{eqn:bayes}
 \end{eqnarray}
 This equation is a form of Bayes' rule,
-\begin{equation}
+\begin{equation} \label{eqn2}
 \mathrm{Posterior} \propto \mathrm{Likelihood} \times \mathrm{Prior},
 \end{equation}
 where the likelihood of the data given the model is,
-\begin{equation}
+\begin{equation} \label{full_likelihood}
     p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega},
     P_{\mathrm{rot}}|A, M, D, A_V, F),
-\label{full_likelihood}
 \end{equation}
 and the prior PDF over parameters is,
-\begin{equation}
+\begin{equation} \label{eqn:prior}
     p(A)p(M)p(D)p(A_V)p(F).
-\label{eqn:prior}
 \end{equation}
 
 %   - Why iso and gyro are independent.
@@ -80,10 +77,9 @@ to factorize the likelihood.
 Instead of the likelihood of equation \ref{eqn:full_likelihood},
 where every observable depends on every parameter, our model can be factorized
 as,
-\begin{equation}
+\begin{equation} \label{eqn:factorized}
     p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega},
     C_{B-V}|A, M, D, A_V, F) ~p(P_\mathrm{rot}|A, C_{B-V}),
-\label{eqn:factorized}
 \end{equation}
 where we have introduced a new parameter, $C_{B-V}$, which is the $B-V$ color
 that is often used as a mass proxy in the literature.
@@ -130,7 +126,7 @@ the model parameters is a Gaussian and that the observables are identically
 and independently distributed.
 These assumptions allow us to use Gaussian likelihood functions.
 The isochronal likelihood function is,
-\begin{eqnarray}
+\begin{eqnarray} \label{eqn:isochrones_only_likelihood}
     & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x}, T_{\mathrm{eff}}, \log(g),
     \hat{F},
     \bar{\omega}, C_{B-V}|A, M, D,
@@ -138,7 +134,6 @@ The isochronal likelihood function is,
     & = \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}}
     \exp\left( -\frac{1}{2} ({\bf O_I} - {\bf I})^T \Sigma ^{-1}
     ({\bf O_I} - {\bf I})\right),
-\label{eqn:iso_likelihood}
 \end{eqnarray}
 where ${\bf O_I}$ is the n-dimensional vector of $n$ observables: \teff,
 \logg, \fhat, \pmega, ${\bf m_x}$ (where $n$ is $4 + $ the number of
@@ -150,7 +145,7 @@ We assume there is no covariance between these observables and so this
 covariance matrix consists of individual parameter variances along the
 diagonal with zeros everywhere else.
 The gyrochronal likelihood function is,
-\begin{eqnarray}
+\begin{eqnarray} \label{eqn:gyro_likelihood}
     & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |A, C_{B-V}) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi) \det(\Sigma_P)}}
     \exp\left( -\frac{1}{2} ({\bf P_O} - {\bf P_P})^T \Sigma ^{-1}
@@ -158,7 +153,6 @@ The gyrochronal likelihood function is,
     % = \prod_i \frac{1}{\sqrt{2\pi}\sigma_i} \exp
     % \left(-\frac{(P_{\mathrm{obs}, i} - P_{\mathrm{pred},
     % i})^2}{2\sigma_i^2}\right),
-\label{eqn:gyro_likelihood}
 \end{eqnarray}
 % where $P_{\mathrm{obs}, i}$ is the $i$th observed rotation period,
 % $P_{\mathrm{pred}, i}$ is the corresponding predicted rotation period,
@@ -170,7 +164,7 @@ vector of ages and $C_{B-V}$ values that correspond to the input parameters
 as predicted by the isochronal model.
 The full likelihood function used in our model is the product of these two
 likelihood functions,
-\begin{eqnarray}
+\begin{eqnarray} \label{eqn:full_likelihood}
     & \mathcal{L_{\mathrm{full}}} = \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}}
     \exp\left( -\frac{1}{2} [{\bf O_I} - {\bf I}]^T \Sigma ^{-1}
     [{\bf O_I} - {\bf I}]\right) \\ \nonumber
@@ -178,7 +172,6 @@ likelihood functions,
     \frac{1}{\sqrt{(2\pi) \det(\Sigma_P)}}
     \exp\left( -\frac{1}{2} [{\bf P_O} - {\bf P_P}]^T \Sigma ^{-1}
     [{\bf P_O} - {\bf P_P}]\right).
-\label{eqn:full_likelihood}
 \end{eqnarray}
 
 %   - Priors
@@ -237,10 +230,9 @@ to the gyrochronal likelhood function (equation \ref{eqn:gyro_likelihood}).
 The gyrochronal log-likelihood, $\ln(\mathcal{L}_{\mathrm{gyro}})$, is
 computed.
 The full log-likelihood is then calculated,
-\begin{equation}
+\begin{equation} \label{eqn:both_likelihood}
 \ln(\mathcal{L}_{\mathrm{full}})
 = \ln(\mathcal{L}_{\mathrm{iso}}) + \ln(\mathcal{L}_{\mathrm{gyro}}),
-\label{eqn:both_likelihood}
 \end{equation}
 and added to the log-prior to produce a single sample from the posterior PDF.
 

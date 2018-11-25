@@ -1,116 +1,100 @@
 \section{Discussion}
 \label{section:discussion}
 
-% Implications
-%-----------------------------------------------------------------------------
-%   - Summarize the results
-%   - Precision vs accuracy.
-%   - How will this be used/what will it be useful for?
-%   - Where is it not useful?
-%   - Caveats and gotchas -- isochrones aren't 100% accurate.
-%   - How including the rotation period improves precision of all parameters.
-
-% Future and improvements
-%-----------------------------------------------------------------------------
-%   - A more sophisticated gyrochronology model
-%   - Mixture model, etc.
-
-% Rolling out/future
-%   - Adding new datasets/dimensions/methods.
-%-----------------------------------------------------------------------------
-
-% What if you don't have a rotation period?
-% Future surveys
-%=============================================================================
-
-
-% Implications
-%-----------------------------------------------------------------------------
-%   - Summarize the results
-In the previous section we demonstrated that modeling the ages of stars using
+In the previous sections we demonstrated that modeling the ages of stars using
 isochrones {\it and} gyrochronology can result in more precise and accurate
-ages than using either isochrone fitting or gyrochronology alone.
-
-%   - Precision vs accuracy.
-Isochrone fitting and gyrochronology are extremely complementary because
-gyrochronology is more precise where isochrone fitting is less precise and
-vice versa.
+ages than using isochrone fitting alone.
+Isochrone fitting and gyrochronology are  complementary because gyrochronology
+is more precise where isochrone fitting is less precise (on the MS) and vice
+versa (at MS turn off).
 Age precision is determined by the spacing of isochrones or gyrochrones: in
 regions where iso/gyrochrones are more tightly spaced, ages will be less
 precise.
-Isochrones get less tightly spaced (and more precise) at larger stellar masses
-and gyrochrones get more tightly spaced (and less precise) at larger stellar
+Isochrones becone less tightly spaced (and more precise) at larger stellar
+masses and lower surface gravities.
+Gyrochrones become more tightly spaced (and less precise) at larger stellar
 masses.
-Figure \ref{fig:precision} shows our simulated star sample on an H-R diagram.
-Points are positioned by their true properties, not their inferred ones, and
-colored by their age {\it precision} as calculated using isochrones and
-gyrochronology.
-Paler stars have less precise inferred ages.
-% More words.
-% Figure \ref{fig:accuracy} shows the simulated star sample, now colored by
-% the {\it accuracy} of their inferred ages.
 
 %   - How will this be used/what will it be useful for?
-The method we present here will be useful for a large number of stars:
-tens-of-thousands \kepler\ stars already and many more from
-\tess, \lsst, \wfirst, \plato, \gaia, \panstarrs\ and more.
+The method we present here is available as a {\it python} package called \sd\
+which allows users to infer ages from their apparent magnitudes, parallaxes,
+rotation periods and spectroscopic propertes, if available, in just a few
+lines of code.
+This method is applicable to an extremely large number of stars: most stars
+with a rotation period and broad-band photometry, which already includes
+tens-of-thousands \kepler\ and \ktwo\ stars and could include millions from
+\tess, \lsst, \wfirst, \plato, \gaia, and others.
+Although this method is designed for combining isochrone fitting with
+gyrochronology, \sd\ can still be used {\it without} rotation periods, in
+which case it will predict an isochrone-only stellar age.
+\sd\ is therefore applicable to all stars covered by the MIST isochrones:
+masses from 0.1 to 300 M$_\odot$, ages ranging from 100,000 years to longer
+than the age of the Universe, and metallicities from -4 to 0.5, however it is
+{\it optimally applicable} to stars with rotation periods, otherwise the
+result will be identical to ages measured with {\tt isochrones.py}.
 %   - Where is it not useful?
-However, there are also several types of star for which gyrochronology is, in
-general, {\it not} useful.
-This list includes: stars with thin convective envelopes, more massive than
-around 1 $M_\odot$; fully convectives stars, less massive than around 0.3
-$M_\odot$; evolved stars with \logg\ less than around 4.5; stars that haven't
-converged onto the rotational main sequence, \ie\ those younger than around
-500 Myrs; stars who have ceased magnetic braking, \ie\ those with $Ro$ greater
-than around 2.1; synchronised binaries who's rotation periods are locked to
-their orbital periods; and other classes of gyrochronal outliers.
-Since many stars with measurable rotation periods do not have precise
-spectroscopic properties, it is not always possible to tell whether a star
-falls within these permissable ranges of masses, surface gravities and rossby
-numbers.
+However, there are some types of star for which our combined isochrone fitting
+and gyrochronology model should either be used with caution or should not be
+applied.
+This list includes: fully convective stars with \gcolor\ $>$ 2.4, or less
+massive than around 0.3 $M_\odot$, stars younger than around 500 Myrs where
+there is a significant number of rapidly rotating outliers, stars that have
+stopped magnetic braking, \ie\ those with $Ro$ greater than around 2.1; and
+synchronised binaries whose rotation periods are locked to their orbital
+periods.
+% Since many stars with measurable rotation periods do not have precise
+% spectroscopic properties, it is not always possible to tell whether a star
+% falls within these permissable ranges of masses, surface gravities and rossby
+% numbers.
 In addition, any given star, even if it does meet the criteria for mass,
-evolutionary stage, age, binarity, etc, may still be a rotational outlier.
+age, binarity, etc, may still be a rotational outlier.
 Rotational outliers are often seen in clusters \citep[see \eg][]{douglas2016,
 rebull2016, douglas2017, rebull2017}.
-In any case where a star's age is not truly represented by its rotation
-period, its isochronal age will be in tension with its gyrochronal one.
-However, given the precision of the gyrochronal technique, the gyrochronal
-age may dominate over the isochronal one.
-Figure \ref{fig:bimodal} shows the posterior PDF for a star with a
-misrepresentative rotation period.
-This star is rotating more rapidly than its age and mass indicate it should,
-so the gyrochronal age of this star is under-predicted.
-Situations like this are likely to arise relatively often, partly because
-rotational spin-down is not a perfect process and some unknown physical
-processes can produce outliers, and partly because misclassified giants, hot
-stars, M dwarfs or very young or very old stars will not have rotation periods
-that relate to their ages in the same way.
+When a star's age is not accurately represented by its rotation period, its
+isochronal age will be in tension with its gyrochronal one, however, given the
+precision of the gyrochronal technique, the gyrochronal age will dominate.
+% Figure \ref{fig:bimodal} shows the posterior PDF for a star with a
+% misrepresentative rotation period.
+% This star is rotating more rapidly than its age and mass indicate it should,
+% so the gyrochronal age of this star is under-predicted.
+% Situations like this are likely to arise relatively often, partly because
+% rotational spin-down is not a perfect process and some unknown physical
+% processes can produce outliers, and partly because misclassified giants, hot
+% stars, M dwarfs or very young or very old stars will not have rotation periods
+% that relate to their ages in the same way.
 In addition, measured rotation periods may not always be accurate and in many
 cases, due to aliasing, can be a harmonic of the true rotation period.
-One of the more common rotation period measurement failure modes is to measure
-half the true rotation period.
+A common rotation period measurement failure mode is to measure half the true
+rotation period.
 The best way to prevent an erroneous or outlying rotation period from
 resulting in an erroneous age measurement is to {\it allow} for outlying
 rotation periods using a mixture model.
+Finally, as shown in figure \ref{fig:praesepe} the gyrochronology model used
+here \citep{angus2015} does not provide a good fit to all available data.
+In future we intend to recalibrate this model so that it fits all available
+cluster and asteroseismic data.
+We also intend to build methods to account for and accommodate outliers,
+old stars and low-mass stars.
+For now however, we simply warn users of these caveats and suggest that ages
+calculated using \sd\ are treated with appropriate caution.
 
-%   - Caveats and gotchas -- e.g. isochrones aren't 100% accurate.
-Throughout this manuscript we have referred to the `accuracy' of the
-isochronal models.
-In reality though, stellar evolution models are not 100\% accurate and
-different stellar evolution models, \eg, MIST, Dartmouth, Yonsei-Yale, etc
-will predict slightly different ages.
-The disagreement between these models varies with position on the HR diagram,
-but in general, ages predicted using different stellar evolution models will
-vary by around 10\%.
-We use the MIST models in our code because they cover a broader range of ages,
-masses and metallicities than the Dartmouth models.
+% %   - Caveats and gotchas -- e.g. isochrones aren't 100% accurate.
+% Throughout this manuscript we have referred to the `accuracy' of the
+% isochronal models.
+% In reality though, stellar evolution models are not 100\% accurate and
+% different stellar evolution models, \eg, MIST, Dartmouth, Yonsei-Yale, etc
+% will predict slightly different ages.
+% The disagreement between these models varies with position on the HR diagram,
+% but in general, ages predicted using different stellar evolution models will
+% vary by around 10\%.
+% We use the MIST models in our code because they cover a broader range of ages,
+% masses and metallicities than the Dartmouth models.
 
-%   - How including the rotation period improves precision of all parameters.
-Our focus so far has been on stellar age because this is the most difficult
-stellar parameter to measure.
-However, if the age precision is improved, then the mass, \feh, distance and
-extinction precision must also be improved, since these parameters are
-strongly correlated and co-dependent in the isochronal model.
-Figure \ref{fig:mass_improvement} shows the improvement in relative precision
-of mass measurements from our simulated star sample.
-
+% %   - How including the rotation period improves precision of all parameters.
+% Our focus so far has been on stellar age because this is the most difficult
+% stellar parameter to measure.
+% However, if the age precision is improved, then the mass, \feh, distance and
+% extinction precision must also be improved, since these parameters are
+% strongly correlated and co-dependent in the isochronal model.
+% Figure \ref{fig:mass_improvement} shows the improvement in relative precision
+% of mass measurements from our simulated star sample.
