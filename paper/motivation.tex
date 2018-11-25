@@ -3,64 +3,67 @@
 
 In order to demonstrate why a combination of gyrochronology and isochrone
 fitting can provide more precise ages than either method used in isolation, we
-calculated the information provided by each method over the color-magnitude
-diagram.
-The decrease in rotation period with time is roughly proportional to the
-inverse square root of age, $\frac{dP_{\mathrm{rot}}}{dt} \propto
-\mathrm{Age}^{-n}$, where n$\sim$0.5 \citep{skumanich1972}.
-This is a large rate of change relative to typical rotation period measurement
-uncertainties.
+calculated the information provided by each method for a range of stellar
+masses, ages and evolutionary stages.
+
+According to observations of cluster stars and the Sun, the decrease in
+rotation period with time is roughly proportional to the inverse square root
+of age, $\frac{dP_{\mathrm{rot}}}{dt} \propto \mathrm{Age}^{-n}$, where
+n$\sim$0.5.
+This corresponds to a large rate of change relative to typical rotation
+period measurement uncertainties.
 For example, the Sun's rotation period is currently decreasing at a rate of
 around 3 days per billion years \citep[unless it has already stopped spinning
-down][]{vansaders2016}, and the 1 billion year-old Sun spun down at a rate of
-around 6 days per billion years.
+down, \eg][]{vansaders2016}, and the 1 billion year-old Sun
+spun down at a rate of around 6 days per billion years.
 These are relatively large changes compared with the average uncertainties on
 rotation period measurements: the median rotation period uncertainty in the
 \citet{mcquillan2014} catalog is around 0.1 days.
 In contrast, the temperature of a K dwarf changes by about 20 K every billion
 years which is small compared to typical observational uncertainties of 20-100
 K.
-Rotational isochrones, or `gyrochrones' are more widely spaced and provide
-much more {\it information} about age than traditional isochrones.
+Rotational isochrones, or `gyrochrones' provide much more {\it information}
+about age than traditional isochrones.
 The difference in information conveyed by rotation vs \teff\ and $L$ can be
 quantified by calculating the time derivatives of a star's observables.
-The rate of change of \teff\ and $L$ dictates the minimum theoretical
-uncertainty on an age calculated via isochrone fitting, given some
+The rate of change of \teff\ and $L$ dictates the minimum theoretically
+achievable uncertainty on an age inferred via isochrone fitting, given some
 observational uncertainties.
 Similarly, the rate of change of rotation period dictates the minimum
-uncertainty on an age inferred via gyrochronology.
+achievable uncertainty on an age inferred via gyrochronology.
 In order to quantify the minimum theoretical uncertainty on ages calculated
 via isochrone fitting and gyrochronology, we calculated the Fisher information
 for the MIST isochrones \citep{paxton2011, paxton2013, paxton2015, dotter2016,
-choi2016, paxton2018} and an empirical polynomial gyrochronology model, fit to
-the Praesepe cluster.
+choi2016, paxton2018} and an empirical polynomial gyrochronology model we fit
+to the Praesepe cluster.
 The Fisher information quantifies the amount of information that an observable
 imparts onto an unknown parameter.
-In the case of isochrone fitting, the observables are $G$ and \gcolor\ and the
-parameter is age, or time, $t$.
+In the case of isochrone fitting on a CMD using \Gaia\ data, the observables
+are \Gaia\ absolute magnitude $M_G$ and color, \gcolor\ and the parameter is
+age, or time, $t$.
 The Fisher information is the variance of the parameter, $t$, given the
 covariance of the observables and their derivatives with respect to $t$.
 The inverse covariance matrix of the parameters (in this case we have just one
-parameter, age or time, $t$), given the covariance matrix of the data, ${\bf y}
-= [G, G_{BP} - G_{RP}$, is given by the following equation,
+parameter, age or time, $t$), given the covariance matrix of the data,
+${\bf y} = [M_G, G_{BP} - G_{RP}]$, is given by the following equation,
 \begin{equation}
-    C_{t}^{-1} = \left[\frac{d{\bf y}}{dt}\right]^T
+    C_{\mathrm{Age}}^{-1} = \left[\frac{d{\bf y}}{dt}\right]^T
     C_{\bf y}^{-1} \left[\frac{d{\bf y}}{dt}\right].
 \end{equation}
-Since we just have one parameter, $C_t^{-1}$ is a scalar, the inverse variance
-of age, $\sigma_{\mathrm{Age}}^{-2}$.
-In order to calculate the age uncertainty from the MIST isochrones and
-gyrochronology model, we calculated numerical derivatives of $\frac{dG}{dt}$,
+Since we just have one parameter, $C_\mathrm{Age}^{-1}$ is a scalar, the
+inverse variance of age, $\sigma_{\mathrm{Age}}^{-2}$.
+In order to calculate the age uncertainty from the MIST isochrones, we
+calculated numerical derivatives of $\frac{dG}{dt}$,
 and $\frac{d(G_{BP} - G_{RP})}{dt}$ at every point on the MIST model grids.
-We then calculated the age uncertainty, $\sigma_{\mathrm{Age,~iso}}$ at every
-point on the grid.
+We then calculated the isochronal age uncertainty, $\sigma_{\mathrm{Age}}$ at
+every point on the grid.
 Figure \ref{fig:iso_fisher} shows Solar-metallicity MIST isochrones, colored
-by $\sigma_{\mathrm{Age,~iso}}$.
+by $\sigma_{\mathrm{Age}}$.
 
 Figure \ref{fig:iso_fisher} shows the minimum theoretical absolute age
-uncertainty, $\sigma_{\mathrm{Age,~iso}}$ (left panel), calculated using
-typical \Gaia\ $M_G$ and \gcolor\ uncertainties represented as black errorbars
-in the top right corner.
+uncertainty, $\sigma_{\mathrm{Age}}$ (left panel), calculated using typical
+uncertainties on \Gaia\ absolute magnitude, $M_G$, and color, \gcolor\,
+represented as black errorbars in the top right corner.
 The typical \Gaia\ uncertainties are $0.5$ in both $M_G$ and \gcolor.
 These estimates are based on a calculation of the median uncertainty on \Gaia\
 absolute G-magnitude of cool stars which is dominated by the parallax
@@ -68,83 +71,95 @@ uncertainty.
 We assumed the same uncertainty on \gcolor.
 The minimum uncertainty on isochronal age ranges from around 10 million years
 at MS turn off (upper left yellow area) to around the age of the Universe for
-K dwarfs.
+K dwarfs (middle to lower-right blue area).
 The minimum {\it relative} age uncertainty,
-$\sigma_{\mathrm{Age,~iso}}/\mathrm{Age} \times 100$, plotted in the right
-panel ranges from less than 1\% for old MS turn off stars which have ages
+$\sigma_{\mathrm{Age}}/\mathrm{Age} \times 100$, plotted in the right-hand
+panel ranges from less than 1\% for old MS turn off stars with ages
 around 13 Gyr and age uncertainties less than 0.1 Gyr, up to tens-of-thousands
 of percent for the youngest K and M dwarfs with unconstrained ages.
 
-We also calculated the Fisher information for a combined isochronal and
-gyrochronology model.
-In this case we effectively had four observables: $G$ and \gcolor, determined
-by the MIST isochrones; and $P_{\mathrm{rot}}$ (rotation period) and \gcolor\
-{\it again}, this time determined by the gyrochronology model.
+We also calculated the Fisher information for a {\it combined isochronal and
+gyrochronology model.}
+In this case we effectively had four observables: $M_G$ and \gcolor,
+determined by the MIST isochrones; and $P_{\mathrm{rot}}$ (rotation period)
+and \gcolor\ {\it again}, this time determined by the gyrochronology model.
 We used a simple gyrochronology model, calibrated by fitting a fourth-order
 polynomial in rotation period-\Gaia\ color space and a first order polynomical
-in rotation period-age space to the 625 Myr Praesepe cluster and the Sun,
+in rotation period-age space to the 650 Myr Praesepe cluster and the Sun,
 only.
-This model is described in more detail in section \ref{section:results}.
+This model is described in more detail later in this section.
 We calculated analytic derivatives for $\frac{dP_{\mathrm{rot}}}{dt}$ and
 $\left(\frac{d(G_{BP} - G_{RP})}{dt}\right)_{\mathrm{gyro}}$ and combined
 these with the numerical derivatives of $\frac{dG}{dt}$ and
 $\left(\frac{d(G_{BP} - G_{RP})}{dt}\right)_{\mathrm{iso}}$ in order to
-calculate the total age uncertainty, $\sigma_{\mathrm{Age,~(iso~\&~gyro)}}$.
-Figures \ref{fig:iso_fisher} and \ref{fig:gyro_fisher} show Solar-metallicity
-MIST isochrones, colored by $\sigma_{\mathrm{Age~(iso)}}$ and
-$\sigma_{\mathrm{Age~(iso~\&~gyro)}}$.
-
-Figure \ref{fig:gyro_fisher} shows the same results as figure
-\ref{fig:iso_fisher} where this time the age uncertainties are calculated
-using isochrones and a polynomial gyrochronology model.
-Here the age uncertainties were calculated using typical \Gaia\ $M_G$ and
-\gcolor\ uncertainties, represented as black errorbars in the top right
-corner, and rotation period uncertainties of 1 day.
-The minimum theoretical absolute age uncertainty,
-$\sigma_{\mathrm{Age,~(iso~\&~gyro)}}$ (left panel), ranges from tens of
-millions of years for stars at MS turn off to a few billion years (up to
-around 3 Gyr for old G dwarfs).
+calculate the total age uncertainty, $\sigma_{\mathrm{Age~(iso~\&~gyro)}}$.
+Figure \ref{fig:gyro_fisher} shows Solar-metallicity MIST isochrones, colored
+by $\sigma_{\mathrm{Age~(iso~\&~gyro)}}$.
+The results are presented the same way as figure \ref{fig:iso_fisher} however,
+figure \ref{fig:gyro_fisher} shows age uncertainties calculated using
+isochrones {\it and a polynomial gyrochronology model}.
+The age uncertainties were calculated using typical \Gaia\ $M_G$ and \gcolor\
+uncertainties, represented as black errorbars in the top right corner, and
+rotation period uncertainties of 1 day.
+The minimum theoretical absolute age uncertainty inferred using gyrochronology
+and isochrone fitting simultaneously, $\sigma_{\mathrm{Age~(iso~\&~gyro)}}$
+(left panel of figure \ref{fig:gyro_fisher}), ranges from tens of millions of
+years for stars at MS turn off to a few billion years (up to around 3 Gyr for
+old G dwarfs).
 The very precise ages at MS turn off are still provided by isochrone fitting
 -- the incredible precision achievable with isochrone fitting at MS turn off
 dominates over the precision provided by gyrochronology.
+On the MS however, gyrochronology provides extremely precise ages and its
+precision dominates over isochrone fitting.
 The gyrochronology model used to calculate the Fisher information is not
 appropriate for stars turning off the MS as it does not account for a rapid
 decrease in rotation period that may be caused by the stellar radius
 increasing \citep[see][]{vansaders2013}.
-However, it provides an upper limit on $\sigma_{\mathrm{Age,~gyro}}$ which is
-is, in any case, dominated by $\sigma_{\mathrm{Age,~iso}}$.
-The right-hand panel of figure \ref{fig:gyro_fisher} shows the relative age
-uncertainty achievable with joint isochronal and gyrochronal age inference.
+% However, it provides an upper limit on $\sigma_{\mathrm{Age,~gyro}}$ which is
+% is, in any case, dominated by $\sigma_{\mathrm{Age,~iso}}$.
+The right-hand panel of figure \ref{fig:gyro_fisher} shows the {\it relative}
+age uncertainty achievable with joint isochronal and gyrochronal age
+inference.
 Relative age uncertainty,
-$\mathrm{Age}/\sigma_{\mathrm{Age~(iso~\%~gyro)}}\times 100$ ranges from less
-than 1\% at MS turn off, where isochrones are widely spaced, to a maximum of
-around 30\% for young G dwarfs, where gyrochrones are most tightly spaced.
-The minimum relative age uncertainty on GKM stars on the MS is typically
-around 20\% because gyrochronology predicts precise ages for these kinds of
-stars.
-Gyrochronology contributes most of the precision on the MS because rotation
-period information dominates over $M_G$ information.
+$\mathrm{Age}/\sigma_{\mathrm{Age~(iso~\&~gyro)}}\times 100$ ranges from less
+than 1\% at MS turn off, where isochrones provide precise ages because they
+are widely spaced, to a maximum of around 30\% for young G dwarfs, where
+gyrochrones are at their most tightly spaced.
+The dramatic improvement in age precision seen across the MS when
+gyrochronology is used provides the motivation for combining isochrone fitting
+with gyrochronology.
+The minimum relative age uncertainty for GKM stars on the MS is typically
+around 20\% -- gyrochronology predicts precise ages for these kinds of stars.
+20\% age precision for gyrochronology was also predicted in previous studies.
+\citep{epstein2013}.
+Gyrochronology and isochrone fitting are extremely complementary:
+gyrochronology contributes most of the precision on the MS because rotation
+period information dominates over color and luminosity information, however
+it is not applicable to hot stars without deep convection zones
+and evolved stars.
+These are precisely the stars optimally fitted with isochrone models.
+
 An important caveat of this demonstration is that this is the minimum
 theoretical precision given the {\it adopted} gyrochronology model and, since
-the model used for this calculation does not include intrinsic scatter )which
+the model used for this calculation does not include intrinsic scatter (which
 is particularly large for young stars), these minimum age uncertainty
 calculations are over-optimistic, especially for young stars.
 Similarly, our model does not account for weakened magnetic braking at old
 ages \citep{vansaders2016} so is also optimistic for old dwarfs.
-Still, these figures provide an idea of gyrochronology's potential to deliver
-much more precise ages than are achievable with isochrone fitting alone for
-cool MS stars.
-
+Still, figures \ref{fig:iso_fisher} and \ref{fig:gyro_fisher} provide an idea
+of the improvement provided by gyrochronology over isochrone fitting alone.
 % The Praesepe model
+
 In order to calculate analytic derivatives of the gyrochronology model, we
-fit a linear model to the Praesepe open cluster and the Sun.
+fit a linear model to the Praesepe open cluster and the Sun (see figure
+\ref{fig:praesepe}.
 We used a three-dimensional polynomial model to predict age as a
 function of \gaia\ color and rotation period for Praesepe and the Sun.
 This model consists of a 4th order polynomial in logarithmic Gaia color:
-$G_{Bp} - G_{Rp}$, which we write as $C_G$ for simplicity, and a 1st order
-polynomial (a straight line) in logarithmic age.
+\gcolor, which we write as $C_G$ for simplicity, and a 1st order polynomial (a
+straight line) in logarithmic age.
 For this analysis, rotation periods for Praesepe were obtained from
-\citet{rebull2017} and their \gaia\ colors were obtained by crossmatching
+\citet{douglas2017} and their \gaia\ colors were obtained by crossmatching
 their sky-projected positions with the \gaia\ DR2 catalog.
 % We used \gcolor\ instead of (B-V) because, due to the $\sim$ billion stars
 % observed by \gaia, it is now the most abundant and widely available
@@ -153,10 +168,10 @@ their sky-projected positions with the \gaia\ DR2 catalog.
 % rotation period to predicted rotation period.
 % For this reason the gyrochronology model we used must predict rotation period
 % as a function of age and color.
-When {\it calibrating} the gyrochronology model, we chose to make {\it age}
-the dependent variable because the uncertainties on stellar age are much
-greater than the uncertainties on rotation period.
-We fitted the following model to Praesepe members:
+When fitting this gyrochronology model, we chose to make {\it age} the
+dependent variable because the uncertainties on stellar age are much greater
+than the uncertainties on rotation period.
+We fit the following model to Praesepe members:
 \begin{equation}
     \log_{10}(A) = a + b\log_{10}(C_G) + c\log_{10}^2(C_G) +
     d\log_{10}^3(C_G) + e\log_{10}^4(C_G) + f\log_{10}(P)
@@ -165,13 +180,22 @@ We fitted the following model to Praesepe members:
 where $P$ is rotation period in days, $C_G$ is Gaia color, $A$ is stellar age
 in years and the lower case letters are free parameters.
 We adopted an age for Praesepe of 650 $\pm$ 100 million years
-\citep{brandt2016, gossage2018}, a Solar age of 4.56 $\pm$ 0.01 Gyr
+\citep{fossati2008, gossage2018}, a Solar age of 4.56 $\pm$ 0.01 Gyr
 \citep{connelly2012}, and a Solar rotation period of 26 days \citep[][Morris
 \etal, in prep]{balthasar1986, howe2000}.
-The Sun's color in the Gaia color bandpasses, $G_{Bp} - G_{Rp}$, is 0.82
-\citep{casagrande2018}.
-We found best-fit values: $a = 7.37 \pm 0.03, b = -1.4 \pm 0.1, c = 5.0 \pm
-0.8, d = -34 \pm 3, e = 66 \pm 14$, and $f = 1.49 \pm 0.02$.
+The Sun's color in the Gaia color is 0.82 \citep{casagrande2018}.
+We found best-fit values: $a = 7.37 \pm 0.03,~b = -1.4 \pm 0.1,~c = 5.0 \pm
+0.8,~d = -34 \pm 3,~e = 66 \pm 14$, and $f = 1.49 \pm 0.02$.
+This model and the data it was fit to are plotted in figure
+\ref{fig:praesepe}.
+To be clear, this model was only used to calculate the Fisher information and
+produce figures \ref{fig:iso_fisher} and \ref{fig:gyro_fisher}, because it has
+simple analytic derivatives.
+Since it was only fit to a single cluster and the Sun it is not generally
+applicable and was not used in any other aspects of the analysis performed in
+this paper.
+The gyrochronology model used throughout the rest of the analysis is described
+in section \ref{section:method} and equation \ref{eqn:gyro}.
 % The $f$ parameter is the inverse of the slope of the rotation period and age
 % which was originally measured to be around 0.5.
 % Our Praesepe and Sun-only fit results in a slightly steeper age dependence of
