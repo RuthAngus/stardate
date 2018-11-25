@@ -9,9 +9,10 @@
 \usepackage{color}
 \usepackage{bm}
 
-\newcommand{\columbia}{3}
-\newcommand{\cca}{2}
-\newcommand{\amnh}{1}
+\newcommand{\ie}{{\it i.e.}}
+\newcommand{\eg}{{\it e.g.}}
+\newcommand{\etal}{{\it et al.}}
+
 \newcommand{\kepler}{{\it Kepler}}
 \newcommand{\corot}{{\it CoRoT}}
 \newcommand{\Ktwo}{{\it K2}}
@@ -28,24 +29,34 @@
 \newcommand{\Gaia}{{\it Gaia}}
 \newcommand{\gaia}{{\it Gaia}}
 \newcommand{\panstarrs}{{\it PanSTARRS}}
+
 \newcommand{\Teff}{$T_{\mathrm{eff}}$}
 \newcommand{\teff}{$T_{\mathrm{eff}}$}
 \newcommand{\FeH}{[Fe/H]}
 \newcommand{\feh}{[Fe/H]}
-\newcommand{\fhat}{$\hat{F}$}
 \newcommand{\prot}{$P_{\mathrm{rot}}$}
 \newcommand{\pmega}{$\bar{\omega}$}
 \newcommand{\mj}{$m_j$}
 \newcommand{\mh}{$m_h$}
 \newcommand{\mk}{$m_k$}
 \newcommand{\mx}{$m_x$}
-\newcommand{\ie}{{\it i.e.}}
-\newcommand{\eg}{{\it e.g.}}
-\newcommand{\etal}{{\it et al.}}
 \newcommand{\logg}{log(g)}
 \newcommand{\dnu}{$\Delta \nu$}
 \newcommand{\numax}{$\nu_{\mathrm{max}}$}
-\newcommand{\gcolor}{$G_{Bp} - G_{Rp}$}
+
+\newcommand{\amnh}{1}
+\newcommand{\cca}{2}
+\newcommand{\columbia}{3}
+\newcommand{\florida}{4}
+\newcommand{\riverside}{5}
+
+\newcommand{\sd}{{\tt stardate}}
+\newcommand{\MS}{main sequence}
+\newcommand{\ms}{main sequence}
+\newcommand{\Ms}{Main sequence}
+\newcommand{\gcolor}{$G_{BP} - G_{RP}$}
+\newcommand{\fhat}{$\hat{F}$}
+\newcommand{\cbv}{$C_{B-V}$}
 
 \newcommand{\racomment}[1]{{\color{red}#1}}
 
@@ -58,22 +69,23 @@ stellar evolution models with gyrochronology}
 % \title{A new age-dating model for cool main sequence stars that combines
 % stellar evolution models with gyrochronology}
 
-% \author{%
-%     Ruth Angus\altaffilmark{\amnh, }\altaffilmark{\cca, }\altaffilmark{\columbia},
-%    {\it et al.}
-% }
+\author{%
+    Ruth Angus\altaffilmark{\amnh, }\altaffilmark{\cca, }\altaffilmark{\columbia},
+    Timothy D. Morton\altaffilmark{\florida, }\altaffilmark{\cca, },
+    Stephen Kane\altaffilmark{\riverside},
+   \etal\ (TBD)
+}
 
-% \altaffiltext{\amnh}{American Museum of Natural History, Central Park West,
-% Manhattan, NY}
-% \altaffiltext{\cca}{Center for Computational Astrophysics, Flatiron Institute,
-% 162 5th Avenue, Manhattan, NY}
-% \altaffiltext{\columbia}{Department of Astronomy, Columbia
-% University, NY, NY}
-
-% This paper should not be a calibration exercise -- stick to your guns and
-% keep it simple!
-% Switch to a pure isochrone fitting approach for hot stars and evolved stars
-% for now.
+\altaffiltext{\amnh}{American Museum of Natural History, Central Park West,
+Manhattan, NY}
+\altaffiltext{\cca}{Center for Computational Astrophysics, Flatiron Institute,
+162 5th Avenue, Manhattan, NY}
+\altaffiltext{\columbia}{Department of Astronomy, Columbia
+University, NY, NY}
+\altaffiltext{\florida}{Department of Astronomy, University of Florida,
+Gainesville, FL}
+\altaffiltext{\riverside}{Department of Physics and Astronomy, UC Riverside,
+Riverside, CA}
 
 \begin{abstract}
     \include{abstract}
