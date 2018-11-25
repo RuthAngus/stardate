@@ -1,71 +1,34 @@
-% \newcommand{\Teff}{$T_{\mathrm{eff}}$}
-% \newcommand{\teff}{$T_{\mathrm{eff}}$}
-% \newcommand{\Kepler}{{\it Kepler}}
-% \newcommand{\kepler}{\Kepler}
-
-% Motivation
-% The ages of main sequence stars are difficult to infer because their outward
-% appearances change subtly and slowly during their hydrogen burning lifetimes.
-% % Goal
-% In the era of \gaia, where precise parallaxes are available for millions of
-% stars, isochrone fitting can be used to provide a constraint on stellar ages.
-% In addition, for those stars with observed rotation periods, gyrochronal ages
-% may also be available.
-
-% By combining two different stellar age-dating methods and their corresponding
-% observable properties that are sensitive to two different evolving processes
-% in stars: core hydrogen burning and magnetic braking; it is possible to infer
-% more precise and accurate ages than using either method in isolation.
-By combining two different sets of observable stellar properties and dating
-methods that are sensitive to two different evolving processes in stars, core
-hydrogen burning and magnetic braking, it is possible to infer more precise
-and accurate ages than using either method in isolation.
-% isochrone fitting and gyrochronology; Multiple pieces of age-sensitive
-% information may be combined to infer more precise and accurate ages than
-% using Method & data In this investigation, the isochronal observables of
-% main sequence stars
+Age is the most difficult fundamental stellar property to measure for cool
+stars on the main sequence, however rotation periods can be used to predict
+the ages of these stars precisely via gyrochronology.
+Classical stellar evolution models are not able to predict precise stellar
+ages on the main sequence, but they can provide precise ages at main sequence
+turn off.
+We present a method and {\it Python} package, called \sd, for inferring
+stellar ages by combining two different dating methods: gyrochronology and
+isochrone fitting.
+This method provides ages with uncertainties no more than 20\% across the MS
+and subgiant branch.
+This combination of two independent age-dating methods can be applied to a
+much broader range of stellar masses and evolutionary stages and provides ages
+that are more precise and accurate than either method in isolation.
 In this investigation, the observables of main sequence stars that are used to
 trace core hydrogen burning and stellar evolution on the Hertzprung-Russell
 diagram (\teff, \feh, \logg, parallax, apparent magnitude and photometric
-colors) are combined with their \kepler\ rotation periods, in a Bayesian
-framework, to infer stellar ages from both stellar evolution models/isochrone
+colors) are combined with \kepler\ rotation periods, in a Bayesian framework,
+to jointly infer stellar ages from both stellar evolution models/isochrone
 placement and gyrochronology.
-% The aim of this approach is to improve upon age measurements made with either
-% one of the two methods alone.
-% and reveal weaknesses in one or both.
-% Results
 We show that incorporating rotation periods into stellar evolution models
 significantly improves the precision of inferred ages on the main sequence.
 However, since ages predicted with gyrochronology are, in general, much more
-precise than isochronal ages but not necessarily more accurate, care must be
-taken to ensure either a) the gyrochronology relation being used {\it is}
-accurate, or b) its precision is relaxed by introducing a mixture model or
-some intrinsic scatter or similar.
-In this pilot study we do not aim to produce a new state-of-the-art dating
-model, or an improved gyrochronology model, our goal is simply to explore the
-process of combining two independent dating methods.
-% Combining methods like this can illuminate flaws in one or both, although
-% without ground truth it can be difficult to identify the cause of
-% inconsistencies.
-Although calibration is not the main purpose of this exploratory investigation
-and the parameters of our gyrochronology model are fixed, only a slight
-modification to our algorithm would be required to perform a calibration.
-Accompanying this publication is open source, packaged and documented code,
-for measuring stellar ages from spectroscopic parameters and/or apparent
-magnitudes, parallaxes and rotation periods.
-
-% Since spectroscopic properties provide relatively weak age information, our
-% model places greater weight on the rotation-ages of stars.
-% This means that inaccuracies in any gyrochronology model we use will
-% significantly propagate through to our final age inference.
-% Given that rotation-dating is still poorly understood and rotational spin-down
-% is a noisy process, we use a flexible gyrochronology model.
-
-% Interpretation
-
-
-% The ages of these stars are of interest because they are the most common
-% type of star in the Milky Way and would thus reveal the evolution of the local
-% galaxy, and because these stars are host to thousands of confirmed exoplanets.
-% The ages of main sequence stars would reveal the evolving properties of
-% planetary systems.
+precise than isochronal ages, care must be taken to ensure the gyrochronology
+relation being used is accurate.
+In this study we did not aim to recalibrate or improve upon existing
+gyrochronology models, our goal was to explore the process of combining two
+independent dating methods.
+However, only a slight modification to our algorithm would be required to
+perform a calibration and, since the code is modular, an updated
+gyrochronology model could easily replace the one used here in future.
+This publication is accompanied by open source code for inferring stellar ages
+for cool main sequence stars and subgiants from spectroscopic parameters
+and/or apparent magnitudes, parallaxes and rotation periods.
