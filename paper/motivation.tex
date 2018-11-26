@@ -60,7 +60,11 @@ every point on the grid.
 Figure \ref{fig:iso_fisher} shows Solar-metallicity MIST isochrones, colored
 by $\sigma_{\mathrm{Age}}$.
 
-Figure \ref{fig:iso_fisher} shows the minimum theoretical absolute age
+Figure \ref{fig:iso_fisher}\footnote{Figures \ref{fig:iso_fisher} and
+\ref{fig:gyro_fisher} were generated in a {\it Jupyter} notebook available at
+the following url:
+\url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fisher_information.ipynb}}
+shows the minimum theoretical absolute age
 uncertainty, $\sigma_{\mathrm{Age}}$ (left panel), calculated using typical
 uncertainties on \Gaia\ absolute magnitude, $M_G$, and color, \gcolor\,
 represented as black errorbars in the top right corner.
@@ -131,7 +135,7 @@ with gyrochronology.
 The minimum relative age uncertainty for GKM stars on the MS is typically
 around 20\% -- gyrochronology predicts precise ages for these kinds of stars.
 20\% age precision for gyrochronology was also predicted in previous studies.
-\citep{epstein2013}.
+\citep{epstein2014}.
 Gyrochronology and isochrone fitting are extremely complementary:
 gyrochronology contributes most of the precision on the MS because rotation
 period information dominates over color and luminosity information, however
@@ -245,10 +249,11 @@ in section \ref{section:method} and equation \ref{eqn:gyro}.
     per billion years.
     The precision with which an age can be measured is related to the
     separation between isochrones, which indicate epochs of rapid change
-    (steep gradients).\label{fig:fischer_iso}
+    (steep gradients).
+    \label{fig:fischer_iso}
 }
   \centering
-    \includegraphics[width=1\textwidth]{iso_fisher_temp.png}
+    \includegraphics[width=1\textwidth]{iso_fisher.pdf}
 \label{fig:iso_fisher}
 \end{figure}
 
@@ -271,6 +276,6 @@ in section \ref{section:method} and equation \ref{eqn:gyro}.
     \label{fig:fischer_gyro}
 }
   \centering
-    \includegraphics[width=1\textwidth]{gyro_fisher_temp.png}
+    \includegraphics[width=1\textwidth]{gyro_fisher.pdf}
 \label{fig:gyro_fisher}
 \end{figure}

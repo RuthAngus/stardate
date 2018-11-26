@@ -3,6 +3,7 @@
 \usepackage{cite, natbib}
 \usepackage{float}
 \usepackage{amsmath}
+\usepackage{hyperref}
 \usepackage{epsfig}
 \usepackage{cases}
 \usepackage[section]{placeins}
@@ -10,11 +11,14 @@
 \usepackage{color}
 \usepackage{bm}
 
+\AtBeginDocument{\let\textlabel\label}
+
 \newcommand{\ie}{{\it i.e.}}
 \newcommand{\eg}{{\it e.g.}}
 \newcommand{\etal}{{\it et al.}}
 
 \newcommand{\kepler}{{\it Kepler}}
+\newcommand{\Kepler}{{\it Kepler}}
 \newcommand{\corot}{{\it CoRoT}}
 \newcommand{\Ktwo}{{\it K2}}
 \newcommand{\ktwo}{\Ktwo}
@@ -58,6 +62,8 @@
 \newcommand{\gcolor}{$G_{BP} - G_{RP}$}
 \newcommand{\fhat}{$\hat{F}$}
 \newcommand{\cbv}{$C_{B-V}$}
+\newcommand{\eep}{equivalent evolutionary point}
+\newcommand{\Eep}{Equivalent evolutionary point}
 
 \newcommand{\racomment}[1]{{\color{red}#1}}
 
