@@ -123,17 +123,19 @@ def lnprob(lnparams, *args):
     if bv > .45:
         gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
                             /period_err)**2
+    else:
+        gyro_lnlike = 0
 
     # Account for rotation periods that might be NaNs
-    elif not np.isfinite(period):
+    if not np.isfinite(period):
         gyro_lnlike = 0
 
     # Account for rotation periods that might be None.
-    elif not period:
+    if not period:
         gyro_lnlike = 0
 
     # Account for rotation periods that might be zero.
-    elif period <= 0.:
+    if period <= 0.:
         gyro_lnlike = 0
 
     # If EEP is greater than 425, the star has started evolving up the
