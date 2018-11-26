@@ -1,18 +1,16 @@
-We present a method and {\it Python} package, \sd, for inferring stellar ages
-using a combination of two different dating methods: gyrochronology and
-isochrone fitting.
+We present a new method for inferring stellar ages that combines two different
+established age-dating methods: gyrochronology and isochrone fitting.
 This combined method provides ages with 20\% uncertainties across the MS and
 subgiant branch.
-The ages of cool field stars on the main sequence are difficult to measure
-with classical stellar evolution models, however rotation periods can provide
-precise ages for these stars via gyrochronology.
-Isochrone fitting cannot provide precise ages for main sequence field stars
-but it {\it can} provide precise ages near main sequence turn off.
-The combination of gyrochronology and isochrone fitting, two independent
-age-dating methods, each capable of providing extremely precise ages in
-certain areas of the Hertzsprung-Russell diagram, can be applied to a much
-broader range of stellar masses and evolutionary stages and provides ages that
-are more precise and accurate than either method in isolation.
+Gyrochronology and isochrone fitting are independent age-dating methods, each
+capable of providing extremely precise ages in certain areas of the
+Hertzsprung-Russell diagram.
+Combined, they can be applied to a much broader range of stellar masses and
+evolutionary stages and can provide ages that are more precise and accurate
+than either method in isolation.
+Rotation periods supply precise ages for cool stars on the main sequence via
+gyrochronology and isochrone fitting provides precise ages near main sequence
+turn off.
 In this investigation, the observables of main sequence stars that are used to
 trace core hydrogen burning and stellar evolution on the Hertzprung-Russell
 diagram (\teff, \feh, \logg, parallax, apparent magnitude and photometric
@@ -30,6 +28,7 @@ models.
 However, only a slight modification to our algorithm would be required to
 perform a calibration and, since the code is modular, an updated
 gyrochronology model could easily replace the one used here in future.
-This publication is accompanied by open source code for inferring stellar ages
-for cool main sequence stars and subgiants from spectroscopic parameters
-and/or apparent magnitudes, parallaxes and rotation periods.
+This publication is accompanied by open source code ({\it Python} package,
+\sd), for inferring stellar ages for cool main sequence stars and subgiants
+from rotation periods, spectroscopic parameters and/or apparent magnitudes and
+parallaxes.
