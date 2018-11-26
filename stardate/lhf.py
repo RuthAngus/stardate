@@ -132,6 +132,10 @@ def lnprob(lnparams, *args):
     elif not period:
         gyro_lnlike = 0
 
+    # Account for rotation periods that might be zero.
+    elif period <= 0.:
+        gyro_lnlike = 0
+
     # If EEP is greater than 425, the star has started evolving up the
     # subgiant branch, so it should have a precise isochronal age and an
     # unreliable gyro age -- shut gyrochronology off!
