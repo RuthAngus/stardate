@@ -100,12 +100,10 @@ def lnprob(lnparams, *args):
 
     # Transform mass and distance back to linear.
     params = lnparams*1
-    # params[0] = np.exp(lnparams[0])
     params[3] = np.exp(lnparams[3])
 
     mod, period, period_err, iso_only = args
 
-    # mag_pars = (params[0], params[1], params[2], params[3]*1e3, params[4])
     mag_pars = (params[0], params[1], params[2], params[3], params[4])
     B = mist.mag["B"](*mag_pars)
     V = mist.mag["V"](*mag_pars)
@@ -120,29 +118,17 @@ def lnprob(lnparams, *args):
     if iso_only:
         return mod.lnlike(params) + lnpr, lnpr
 
-    if bv > .45:
+    # Check that the star is cool, that the period is not None, NaN, zero or
+    # negative and that it is on the MS.
+    # If EEP is greater than 425, the star has started evolving up the
+    # subgiant branch, so it should have a precise isochronal age and an
+    # unreliable gyro age -- shut gyrochronology off!
+    if bv > .45 and period and np.isfinite(period) and 0. < period \
+            and params[0] < 425:
         gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
                             /period_err)**2
     else:
         gyro_lnlike = 0
-
-    # Account for rotation periods that might be NaNs
-    if not np.isfinite(period):
-        gyro_lnlike = 0
-
-    # Account for rotation periods that might be None.
-    if not period:
-        gyro_lnlike = 0
-
-    # Account for rotation periods that might be zero.
-    if period <= 0.:
-        gyro_lnlike = 0
-
-    # If EEP is greater than 425, the star has started evolving up the
-    # subgiant branch, so it should have a precise isochronal age and an
-    # unreliable gyro age -- shut gyrochronology off!
-    # if params[0] > 425:
-    #     gyro_lnlike = 0
 
     return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 
