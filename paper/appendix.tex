@@ -1,0 +1,61 @@
+\section{Appendix}
+\label{section:appendix}
+
+\subsection*{Priors}
+\label{section:priors}
+
+We use the default priors in the {\tt isochrones.py} {\it python} package.
+The prior over age is,
+\begin{equation}
+p(A) = \frac{\log(10) 10^{A}}{10^{10.5} - 10^8}, ~~~ 8 < A < 10.5.
+\end{equation}
+% where $A$, is $\log_{10}(\frac{\mathrm{Age}}{\mathrm{yrs}})$.
+where $A$, is $\log_{10}(\mathrm{Age~[yrs]})$.
+The prior over mass is uniform in natural-log between -20 and 20,
+\begin{equation}
+    p(M) = U(-20, 20)
+\end{equation}
+% where $M$ is $\ln(\frac{\mathrm{mass}}{M_\odot})$.
+where $M$ is $\ln(\mathrm{Mass}~[M_\odot])$.
+The prior over true bulk metallicity is based on the galactic metallicity
+distribution, as inferred using data from the Sloan Digital Sky Survey
+\racomment{citation}.
+% It is based on two double-Gaussian distribution, where the halo is described as
+% a broad Gaussian and the galactic disc as a narrow Gaussian.
+It is the product of a Gaussian that describes the metallicity distribution
+over halo stars and two Gaussians that describe the metallicity distribution
+in the thin and thick disks:
+\begin{eqnarray}
+    p(F) =
+    & H_F \frac{1}{\sqrt{2\pi\sigma_{\mathrm{halo}}^2}}
+    \exp\left(-\frac{(F-\mu_{\mathrm{halo}})^2}{2\sigma_{\mathrm{halo}}}\right)
+    \\ \nonumber
+    & \times (1-H_F)
+    \frac{1}{\xi}
+    \left[\frac{0.8}{0.15}\exp\left(-\frac{(F-0.016)^2}{2\times 0.15^2}\right)
+    + \frac{0.2}{0.22}\exp\left(-\frac{(F-0.15)^2}{2\times
+    0.22^2}\right)\right],
+\end{eqnarray}
+where $H_F = 0.001$ is the halo fraction, $\mu_\mathrm{halo}$ and
+$\sigma_{\mathrm{halo}}$ are the mean and standard deviation of a Gaussian
+that describes a probability distribution over metallicity in the halo, and
+take values -1.5 and 0.4 respectively.
+% $\mu_\mathrm{disk, 1}$, $\mu_\mathrm{disk, 2}$, $\sigma_\mathrm{disk, 1}$
+% and $\sigma_\mathrm{disk, 2}$ are the means and standard deviations of two
+The two Gaussians inside the square brackets describe probability
+distributions over metallicity in the thin and thick disks.
+The values of the means and standard deviations in these Gaussians are from
+\citet{casagrande2011}.
+$\xi$ is the integral of everything in the square brackets from $-\infty$ to
+$\infty$ and takes the value $\sim 2.507$.
+% D_F = 0.8 \sigma_{\mathrm{disk, 1}} = 0.15 \mu_{\mathrm{disk, 1}} = 0.016
+% \sigma_{\mathrm{disk, 2}} = 0.22 \mu_{\mathrm{disk, 2}} = 0.15
+The prior over distance is,
+\begin{equation}
+    p(D) = \frac{3}{3000^3} D^2, ~~~ 0 < D < 3000,
+\end{equation}
+where D is in kiloparsecs.
+Finally, the prior over extinction is uniform between zero and one,
+\begin{equation}
+    p(A_V) = U(0, 1).
+\end{equation}

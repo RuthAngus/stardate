@@ -15,9 +15,9 @@ or the one believed to be more accurate?
 The methodology described here provides an objective method for combining age
 estimates.
 There is, after all, only one age for each star.
-In Bayesian statistics, combining information from different models can be
-relatively simple, as long as the processes being modeled; those that
-generated the data, are independent.
+Combining information from different models can be relatively simple, as long
+as the processes being modeled; those that generated the data, are
+independent.
 In this case, we are combining information that relates to the burning of
 hydrogen in the core (this is the process that drives the slow increase in
 \teff\ and luminosity over time) with information about the magnetic braking
@@ -41,8 +41,8 @@ where $A$ is age, ${\bf m_x}$ is a vector of
 apparent magnitudes in various bandpasses, \fhat\ is the {\it observed} bulk
 metallicity, \prot\ is the rotation period and \pmega\ is parallax.
 In order to calculate a posterior PDF over age, we must marginalize over
-parameters that relate to age, but are not of interest in this study: \eep\
-($E$), distance ($D$), V-band extinction ($A_V$) and the {\it inferred} bulk
+parameters that relate to age, but are not of interest in this study: mass
+($M$), distance ($D$), V-band extinction ($A_V$) and the {\it inferred} bulk
 metallicity, $F$.
 The marginalization involves integrating over these extra parameters,
 \begin{eqnarray} \label{eqn:bayes}
@@ -51,7 +51,7 @@ The marginalization involves integrating over these extra parameters,
 \\ \nonumber
     & \propto \int p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
     P_\mathrm{rot}, \bar{\omega}|
-    A, E, D, A_V, F)~p(A)p(E)p(D)p(A_V)p(F)dEdDdA_VdF.
+    A, M, D, A_V, F)~p(A)p(M)p(D)p(A_V)p(F)dMdDdA_VdF.
 \end{eqnarray}
 This equation is a form of Bayes' rule,
 \begin{equation} \label{eqn:eqn2}
@@ -60,11 +60,11 @@ This equation is a form of Bayes' rule,
 where the likelihood of the data given the model is,
 \begin{equation} \label{eqn:full_likelihood}
     p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega},
-    P_{\mathrm{rot}}|A, E, D, A_V, F),
+    P_{\mathrm{rot}}|A, M, D, A_V, F),
 \end{equation}
 and the prior PDF over parameters is,
 \begin{equation} \label{eqn:prior}
-    p(A)p(E)p(D)p(A_V)p(F).
+    p(A)p(M)p(D)p(A_V)p(F).
 \end{equation}
 
 %   - Why iso and gyro are independent.
@@ -79,7 +79,7 @@ where every observable depends on every parameter, our model can be factorized
 as,
 \begin{equation} \label{eqn:factorized}
     p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega},
-    C_{B-V}|A, E, D, A_V, F) ~p(P_\mathrm{rot}|A, C_{B-V}),
+    C_{B-V}|A, M, D, A_V, F) ~p(P_\mathrm{rot}|A, C_{B-V}),
 \end{equation}
 where we have introduced a new parameter, $C_{B-V}$, which is the $B-V$ color
 that is often used as a mass proxy in the literature.
@@ -97,15 +97,15 @@ parameters and observables is shown in figure \ref{fig:PGM}.
 It describes the conditional dependencies between parameters (in white
 circles) and observables (in grey circles) with arrows leading from the causal
 processes to the dependent processes.
-For example, it is the \eep, age, metallicity, extinction and distance that
+For example, it is the mass, age, metallicity, extinction and distance that
 determines the observed spectroscopic properties (\teff, \logg, \feh)
 and apparant magnitudes, ${\bf m_x}$).
 These parameters also determine the \cbv\ color of a star.
 In turn, it is a star's age and \cbv\ color that determine its rotation
 period.
 Note that, written this way, stellar rotation periods do not directly depend
-on stellar mass or \eep.
-\eep, age and metallicity determine $C_{B-V}$, and $C_{B-V}$ along with age
+on stellar mass.
+Mass, age and metallicity determine $C_{B-V}$, and $C_{B-V}$ along with age
 determines rotation period.
 The purpose of this PGM is not to depict the physical realities of stellar
 evolution, it is only a visual description of the structure of the model we
@@ -129,7 +129,7 @@ The isochronal likelihood function is,
 \begin{eqnarray} \label{eqn:isochrones_only_likelihood}
     & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x}, T_{\mathrm{eff}}, \log(g),
     \hat{F},
-    \bar{\omega}, C_{B-V}|A, E, D,
+    \bar{\omega}, C_{B-V}|A, M, D,
     A_V, F) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}}
     \exp\left( -\frac{1}{2} ({\bf O_I} - {\bf I})^T \Sigma ^{-1}
@@ -140,7 +140,7 @@ where ${\bf O_I}$ is the n-dimensional vector of $n$ observables: \teff,
 apparant magnitudes in different pass-bands that are available) and $\Sigma$
 is the covariance matrix of that set of observables.
 ${\bf I}$ is the vector of {\it model} observables that correspond to a set of
-parameters: $A$, $E$, $F$, $D$ and $A_V$, calculated using an isochrone model.
+parameters: $A$, $M$, $F$, $D$ and $A_V$, calculated using an isochrone model.
 We assume there is no covariance between these observables and so this
 covariance matrix consists of individual parameter variances along the
 diagonal with zeros everywhere else.
@@ -175,7 +175,7 @@ likelihood functions,
 \end{eqnarray}
 
 %   - Priors
-We place priors over the model parameters $A$, $E$, $F$, $D$ and $A_V$.
+We place priors over the model parameters $A$, $M$, $F$, $D$ and $A_V$.
 These priors represent our `prior beliefs' about the values these parameters
 will take, before we use the data to update those beliefs via a likelihood and
 produce a `posterior' belief about their values.
@@ -214,8 +214,8 @@ equation \ref{eqn:gyro_likelihood}.
 %   - Step-by-step description
 The inference processes procedes as follows (as a reminder, we use {\it
 observables} to refer to the data: \teff, \logg, etc and {\it parameters} to
-refer to the model parameters: age, \eep, distance, etc).
-First, a set of parameters: age, \eep, true bulk metallicity, distance and
+refer to the model parameters: age, mass, distance, etc).
+First, a set of parameters: age, mass, true bulk metallicity, distance and
 extinction, as well as observables \teff, \logg, bulk metallicity, apparent
 magnitudes and parallax (${\bf O_I}$) for a single star are passed to the
 isochronal likelihood function, equation
@@ -239,7 +239,7 @@ and added to the log-prior to produce a single sample from the posterior PDF.
 
 %   - Emcee, including assessing convergence.
 When applying our model to infer the age of a star, we sampled the joint
-posterior PDF over age, \eep, metallicity, distance and extinction using the
+posterior PDF over age, mass, metallicity, distance and extinction using the
 affine invariant ensemble sampler, {\tt emcee} \citep{foreman-mackey2013} with
 24 walkers.
 Samples were drawn from the posterior PDF until 100 {\it independent} samples
@@ -267,11 +267,11 @@ stellar age in Myrs and $\eta$, $\alpha$, $\beta$ and $\delta$ take values
 This functional form was introduced by \citep{barnes2007} and the parameter
 values are adopted from the recalibration performed in \citet{angus2015},
 which is based on young cluster stars and old asteroseismic stars.
-Because this gyochronology is not calibrated to include stars turning off the
-main sequence whose rotation slows rapidly due to their increasing radius, we
-do not apply gyrochronology to stars with an \eep\ greater than
-425\footnote{This number was determined by investigating the correspondance
-between \eep\ and position on the HR diagram.
+Because this gyochronology model is not calibrated to include stars turning
+off the main sequence whose rotation slows rapidly due to their increasing
+radius, we do not apply gyrochronology to stars with a MIST model \eep\
+greater than 425\footnote{This number was determined by investigating the
+correspondance between \eep\ and position on the HR diagram.
 See the {\it Jupyter} notebook at
 \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/EEP_cutoff.ipynb}.
 In future, \eep\ could be used as a parameter in our gyrochronology model.
@@ -282,7 +282,7 @@ These stars have thin convective envelopes and do not spin down substantially
 over their \ms\ lifetimes so their rotation periods do not strongly predict
 their ages.
 However, isochrone fitting can provide relatively precise ages for these hot
-stars, as well as those with large \eep s.
+stars, as well as evolved stars with large \eep s.
 
 It was recently shown that a simple power law in age does not provide a good
 fit to old asteroseismic stars \citep{angus2015, vansaders2016}.
@@ -394,7 +394,7 @@ observables (gray nodes) in our model.
 %     parallax, $\bar{\omega}$.
 % determined by the mass, $M$, age, $A$, distance, $D$, extinction, $A_V$
 % and bulk metallicity, $F$, of a star.
-${\bf \theta}$ is a vector of {\it parameters}: \eep, observed bulk
+${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
     metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
     {\it observables}: apparent magnitudes, effective temperature, surface
     gravity, observed bulk metallicity, and parallax.
@@ -408,7 +408,7 @@ The dependencies of observables on parameters and parameters on parameters are
     indicated by arrows that start at a `parent' node and end at the dependent
     observable, or `child' node.
 In our model, rotation period does not directly depend on distance,
-extinction, metallicity or \eep, only age and B-V color.
+extinction, metallicity or mass, only age and B-V color.
 This PGM is a representation of the factorized joint PDF over parameters and
 observables of equation \ref{eqn:factorized}.
 }

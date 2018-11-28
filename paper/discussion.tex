@@ -7,14 +7,13 @@ ages than using isochrone fitting alone.
 Isochrone fitting and gyrochronology are  complementary because gyrochronology
 is more precise where isochrone fitting is less precise (on the MS) and vice
 versa (at MS turn off).
-Age precision is determined by the spacing of isochrones or gyrochrones: in
-regions where iso/gyrochrones are more tightly spaced, ages will be less
-precise.
-Isochrones becone less tightly spaced (and more precise) at larger stellar
-masses and lower surface gravities.
-Gyrochrones become more tightly spaced (and less precise) at larger stellar
-masses.
-
+% Age precision is determined by the spacing of isochrones or gyrochrones: in
+% regions where iso/gyrochrones are more tightly spaced, ages will be less
+% precise.
+% Isochrones becone less tightly spaced (and more precise) at larger stellar
+% masses and lower surface gravities.
+% Gyrochrones become more tightly spaced (and less precise) at larger stellar
+% masses.
 %   - How will this be used/what will it be useful for?
 The method we present here is available as a {\it python} package called \sd\
 which allows users to infer ages from their apparent magnitudes, parallaxes,
@@ -36,12 +35,11 @@ result will be identical to ages measured with {\tt isochrones.py}.
 However, there are some types of star for which our combined isochrone fitting
 and gyrochronology model should either be used with caution or should not be
 applied.
-This list includes: fully convective stars with \gcolor\ $>$ 2.4, or less
-massive than around 0.3 $M_\odot$, stars younger than around 500 Myrs where
-there is a significant number of rapidly rotating outliers, stars that have
-stopped magnetic braking, \ie\ those with $Ro$ greater than around 2.1; and
-synchronised binaries whose rotation periods are locked to their orbital
-periods.
+This list includes: fully convective stars with \gcolor\ $gtrsim$ 2.4, stars
+younger than around 500 Myrs where there is a significant number of rapidly
+rotating outliers, stars that have stopped magnetically braking, \ie\ those
+with $Ro$ greater than around 2.1; and synchronised binaries whose rotation
+periods are locked to their orbital periods.
 % Since many stars with measurable rotation periods do not have precise
 % spectroscopic properties, it is not always possible to tell whether a star
 % falls within these permissable ranges of masses, surface gravities and rossby
@@ -52,7 +50,8 @@ Rotational outliers are often seen in clusters \citep[see \eg][]{douglas2016,
 rebull2016, douglas2017, rebull2017}.
 When a star's age is not accurately represented by its rotation period, its
 isochronal age will be in tension with its gyrochronal one, however, given the
-precision of the gyrochronal technique, the gyrochronal age will dominate.
+precision of the gyrochronal technique, the gyrochronal age will dominate on
+the MS.
 % Figure \ref{fig:bimodal} shows the posterior PDF for a star with a
 % misrepresentative rotation period.
 % This star is rotating more rapidly than its age and mass indicate it should,

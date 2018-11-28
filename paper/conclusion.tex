@@ -1,0 +1,48 @@
+\section{Conclusion}
+\label{section:conclusion}
+
+We present a statistical framework for measuring precise ages of MS stars and
+subgiants by combining observables that relate, via different evolutionary
+processes, to stellar age.
+Specifically, we combine information used to place stars on an isochrone in an
+HR diagram or CMD (\teff, \logg, observed bulk metallicity, parallax and
+photometric colors) with rotation periods which are used to date stars via
+their magnetic braking history (gyrochronology).
+The two methods of isochrone fitting and gyrochronology are combined by taking
+the product of two likelihoods: one that contains an isochronal model and the
+other a gyrochronal one.
+We used the MIST stellar evolution models and computed isochronal ages and
+likelihoods using the {\tt isochrones.py} {\it Python} package.
+The gyrochronal model is a power-law relation between rotation period, B-V
+color and age, based on the functional form first introduced by
+\citet{barnes2003} and later recalibrated by \citet{angus2015}.
+We tested this age-dating model, called \sd, on simulated data and cluster
+stars with precisely measured ages.
+We found that gyrochronology predicts ages that are an order of magnitude more
+precise than isochrone fitting, confirming predictions made using information
+theory.
+Gyrochronology and isochrone fitting are also extremely complementary:
+gyrochronology supplies precise ages on the \MS\ and isochrone fitting
+provides precise ages near \MS\ turn off.
+\sd\ allows users to infer precise ages for MS stars and subgiants alike,
+without having to first identify the age-dating method that is best for any
+given star: \sd\ automatically infers the most precise possible age.
+In addition, \sd\ accepts apparent magnitudes in all pass-bands covered by the
+MIST isochrones which includes the Johnson-Cousins, {\it 2MASS}, \Kepler, {\it
+SDSS} and \Gaia\ photometric systems.
+However, we caution users that the gyrochronology model currently built into
+\sd\ does not provide a good fit to all data and is not suitable for low mass
+stars or those who may have ceased magnetic braking.
+In the future we hope to make several improvements to the gyrochronology
+relation implemented in \sd\ that will make it applicable to {\it all} MS and
+subgiant stars.
+
+The code used in this project is available as a documented {\it python}
+package called \sd.
+It is available for download via Github\footnote{git clone
+https://github.com/RuthAngus/stardate.git} or through
+PyPI\footnote{pip install stardate\_code}.
+Documentation is available at https://stardate.readthedocs.io/en/latest/.
+All code used to produce the figures in this paper is available at
+https://github.com/RuthAngus/stardate.
+\racomment{add github hash and Zenodo doi}.
