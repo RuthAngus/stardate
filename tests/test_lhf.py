@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from stardate.lhf import lnprob
+from stardate.lhf import convective_overturn_time
 import stardate
 from isochrones.mist import MIST_Isochrone
 from isochrones import StarModel
@@ -123,10 +124,65 @@ def test_likelihood_rotation():
     # These should be the same because gyro is switched off for giants.
     assert iso_giant_lnprob == gyro_giant_lnprob
 
+
+def test_rossby_switch():
+    """
+    Check that gyrochronology is switch off for stars with Ro > 2.16, ie.
+    with a mass greater than 1.13 at a rotation period of 26 days.
+    Or a rotation period greater than 31 for a mass of 1.
+    """
+
+    iso_params = pd.DataFrame(dict({"teff": (5777, 10),
+                                   "logg": (4.44, .05),
+                                   "feh": (0., .001),
+                                   "parallax": (1., .01)}))  # mas
+    # Set up the StarModel isochrones object.
+    mod = StarModel(mist, **iso_params)
+    lnparams = [355, np.log10(4.56*1e9), 0., np.log(1000), 0.]
+
+    args = [mod, 22., 1., False]  # the lnprob arguments]
+    low_rossby_lnprob = lnprob(lnparams, *args)
+
+    args = [mod, 32., 1., False]  # the lnprob arguments]
+    high_rossby_lnprob = lnprob(lnparams, *args)
+
+    # Make sure that the gyro lnlikelihood is being added for low Rossby
+    # numbers
+    print(low_rossby_lnprob, high_rossby_lnprob)
+    assert low_rossby_lnprob != high_rossby_lnprob
+
+    # Make sure the gyro lnlike is switched off for high rossby numbers
+    args = [mod, 32., 1., True]  # the lnprob arguments]
+    high_rossby_gyro_off_lnprob = lnprob(lnparams, *args)
+
+    print(high_rossby_gyro_off_lnprob, high_rossby_lnprob)
+    assert high_rossby_gyro_off_lnprob == high_rossby_lnprob
+
+
+def test_convective_overturn_timescale():
+    tau = convective_overturn_time(355, np.log10(4.56*1e9), 0.)
+    tau = convective_overturn_time(1)
+    solarRo = 2.16  # van Saders 2016 (2.08 in van Saders 2018)
+    solarProt = 26
+    solartau = solarProt / solarRo
+    # print(solartau)
+    # print(tau)
+    # print("Ro my sun = ", 26/tau, "Solar Ro = 2.16")
+    print(26/convective_overturn_time(1.))  # 1.8
+    print(31/convective_overturn_time(1.))  # 2.14
+    print(32/convective_overturn_time(1.))  # 2.21
+
+    # convective overturn time should go down with mass
+    assert convective_overturn_time(.8) > convective_overturn_time(1.2), \
+        "convective overturn time should go down with mass"
+
+
 if __name__ == "__main__":
-    test_lnprob_higher_likelihood_sun()
-    test_lnprob_higher_likelihood_real()
-    test_likelihood_rotation()
+    # test_lnprob_higher_likelihood_sun()
+    # test_lnprob_higher_likelihood_real()
+    # test_likelihood_rotation()
+    # test_convective_overturn_timescale()
+    test_rossby_switch()
 
     """
     More test ideas

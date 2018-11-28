@@ -47,7 +47,12 @@ def gyro_model(log10_age, bv):
 
 def lnprob(lnparams, *args):
     """
+    The ln-probability function.
     lnparams are [eep, log10(age [yrs]), [Fe/H], ln(distance [kpc]), A_v]
+    If EEP is greater than 425, the star has started evolving up the
+    subgiant branch, so it should have a precise isochronal age and an
+    unreliable gyro age -- shut gyrochronology off!
+    If the Rossby number is greater than 2.16, shut gyrochronology off.
     """
 
     # Transform mass and distance back to linear.
@@ -72,17 +77,46 @@ def lnprob(lnparams, *args):
 
     # Check that the star is cool, that the period is not None, NaN, zero or
     # negative and that it is on the MS.
-    # If EEP is greater than 425, the star has started evolving up the
-    # subgiant branch, so it should have a precise isochronal age and an
-    # unreliable gyro age -- shut gyrochronology off!
+    tau = convective_overturn_time(params[0], params[1], params[2])
     if bv > .45 and period and np.isfinite(period) and 0. < period \
-            and params[0] < 425:
+            and params[0] < 425 and period/tau < 2.16:
         gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
                             /period_err)**2
     else:
         gyro_lnlike = 0
 
     return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
+
+
+def convective_overturn_time(*args):
+    """
+    Estimate the convective overturn time using equation 11 in Wright et al.
+    (2011): https://arxiv.org/abs/1109.4634
+    log tau = 1.16 - 1.49log(M/M⊙) - 0.54log^2(M/M⊙)
+    (I assume log is log10)
+    params:
+    ------
+    EITHER:
+    mass: (float)
+        Mass in Solar units
+    OR
+    eep: (float)
+        The Equivalent evolutionary point of a star. 355 for the Sun.
+    age: (float)
+        The age of a star in log_10(years).
+    feh: (float)
+        The metallicity of a star.
+    """
+
+    if len(args) > 1:
+        # Convert eep, age and feh to mass (mass will be in Solar mass units)
+        eep, age, feh = args
+        M = mist.mass(eep, age, feh)
+    else:
+        M = args[0]
+
+    log_tau = 1.16 - 1.49*np.log10(M) - .54*(np.log10(M))**2
+    return 10**log_tau
 
 
 def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, max_n=100000):
