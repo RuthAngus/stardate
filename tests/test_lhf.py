@@ -7,6 +7,24 @@ from isochrones import StarModel
 mist = MIST_Isochrone()
 
 
+def good_vs_bad(good_lnprob, nsamps):
+    """
+    Compare the likelihood of nsamps random parameter values against the
+    likelihood of the true values.
+    The true values should be higher.
+    """
+    for i in range(nsamps):
+        bad_lnparams = good_lnparams*1
+        bad_lnparams[0] = np.random.randn(1) * 10 + good_lnparams[0]  # eep
+        bad_lnparams[1] = np.random.randn(1) * .5 + good_lnparams[1]  # age
+        bad_lnparams[2] = np.random.randn(1) * .05 + good_lnparams[2]  # feh
+        bad_lnparams[3] = np.random.randn(1) * .1 + good_lnparams[3]  # dist
+        bad_lnprob = lnprob(bad_lnparams, *args)
+        assert bad_lnprob[0] < good_lnprob[0], \
+            "True parameters values must give a higher likelihood than" \
+            " wrong values"
+
+
 def test_lnprob_higher_likelihood_sun():
     """
     Make sure the likelihood goes down when the parameters are a worse fit.
@@ -21,20 +39,16 @@ def test_lnprob_higher_likelihood_sun():
     mod = StarModel(mist, **iso_params)
     args = [mod, 26., 1., False]  # the lnprob arguments]
 
-    bad_lnparams = [355, np.log10(4.56*1e9), 0.2, np.log(1000), 0.]
     good_lnparams = [355, np.log10(4.56*1e9), 0., np.log(1000), 0.]
-
-    bad_lnprob = lnprob(bad_lnparams, *args)
     good_lnprob = lnprob(good_lnparams, *args)
+    good_vs_bad(good_lnprob, 10)
 
-    print(bad_lnprob, good_lnprob)
 
-    assert bad_lnprob[0] < good_lnprob[0], \
-        "True parameters values must give a higher likelihood than wrong"\
-        " values"
 
 def test_lnprob_higher_likelihood_real():
-    # Now test on real data
+    """
+    The same test as above but for simulated data.
+    """
     df = pd.read_csv("simulated_data.csv")
     teff_err = 25  # Kelvin
     logg_err = .05  # dex
@@ -47,28 +61,21 @@ def test_lnprob_higher_likelihood_real():
     BV_err = .01  # mags
 
     i = 0
-    iso_params = pd.DataFrame(dict({"teff": (df.teff[i], teff_err),
-                                    "logg": (df.logg[i], logg_err),
-                                    "feh": (df.feh[i], feh_err),
-                                    "jmag": (df.jmag[i], jmag_err),
-                                    "hmag": (df.hmag[i], hmag_err),
-                                    "kmag": (df.kmag[i], kmag_err),
-                                    "parallax": (df.parallax[i],
-                                                 parallax_err)}))
+    iso_params = pd.DataFrame(dict({"teff": (df.teff[i], 25),
+                                    "logg": (df.logg[i], .05),
+                                    "feh": (df.feh[i], .05),
+                                    "jmag": (df.jmag[i], .01),
+                                    "hmag": (df.hmag[i], .01),
+                                    "kmag": (df.kmag[i], .01),
+                                    "parallax": (df.parallax[i], .05)}))
 
     # Set up the StarModel isochrones object.
     mod = StarModel(mist, **iso_params)
     args = [mod, df.prot[i], 1, False]  # the lnprob arguments]
-
-    lnparams = [df.eep.values[i], df.age.values[i], df.feh.values[i],
-                np.log(df.d_kpc.values[i]*1e3) + .2, df.Av.values[i]]
-    bad_lnprob = lnprob(lnparams, *args)
-    lnparams = [df.eep.values[i], df.age.values[i], df.feh.values[i],
-                np.log(df.d_kpc.values[i]*1e3), df.Av.values[i]]
-    good_lnprob = lnprob(lnparams, *args)
-    assert bad_lnprob[0] < good_lnprob[0], \
-        "True parameters values must give a higher likelihood than wrong"\
-        " values"
+    good_lnparams = [df.eep.values[i], df.age.values[i], df.feh.values[i],
+                     np.log(df.d_kpc.values[i]*1e3), df.Av.values[i]]
+    good_lnprob = lnprob(good_lnparams, *args)
+    good_vs_bad(good_lnprob, 10)
 
 
 def test_likelihood_rotation():
@@ -120,3 +127,13 @@ if __name__ == "__main__":
     test_lnprob_higher_likelihood_sun()
     test_lnprob_higher_likelihood_real()
     test_likelihood_rotation()
+
+    """
+    More test ideas
+
+    1. test priors
+
+    2. Test the MCMC somehow
+
+    3. Test chronology somehow.
+    """
