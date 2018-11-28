@@ -26,54 +26,6 @@ import corner
 import h5py
 
 
-def setup(obs, gyro_only=False, iso_only=False):
-    """
-    DEPRECATED!!!!!
-    setup: (function)
-        Generates the StarModel object with observational inputs and the
-        arguments to pass to the log-probability function.
-    params:
-    -------
-    obs: (dataframe)
-        A single row of a pandas dataframe containing J-band, H-band and
-        K-band magnitudes, T_eff, logg, feh, parallax, rotation period and
-        precomputed B-V colors. It also contains observational uncertainties
-        for all these observables.
-        If T_eff, logg, feh or parallax are unavailable, obs may contain
-        "None" in their places.
-    gyro_only: (boolean)
-        True if only the gyrochronal likelihood is to be used.
-        Default = False.
-    iso_only: (boolean)
-        True if only the isochronal likelihood is to be used.
-        Default = False.
-    returns:
-    --------
-    mod: (starmodel object)
-        The starmodel object.
-    param_dict: (dictionary)
-        A dictionary of the observed parameters which must be passed to the
-        likelihood function.
-    args: (list)
-        A list of arguments that must be passed to the log-probability
-        function.
-    """
-
-    # Set up the StarModel object needed to calculate the likelihood.
-    param_dict = {"J": (obs.jmag, obs.jmag_err),
-                  "H": (obs.hmag, obs.hmag_err),
-                  "K": (obs.kmag, obs.kmag_err),
-                  "teff": (obs.teff, obs.teff_err),
-                  "logg": (obs.logg, obs.logg_err),
-                  "feh": (obs.feh, obs.feh_err),
-                  "parallax": (obs.parallax, obs.parallax_err)  # Isochrones.py takes milliarcseconds
-                  }
-
-    mod = StarModel(mist, **param_dict)  # Set up the StarModel isochrones object.
-    args = [mod, obs.prot, obs.prot_err, obs.BV, gyro_only, iso_only]  # the lnprob arguments
-    return mod, param_dict, args
-
-
 def gyro_model(log10_age, bv):
     """
     Given a B-V colour and an age, predict a rotation period.
