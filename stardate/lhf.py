@@ -79,7 +79,7 @@ def lnprob(lnparams, *args):
     # negative and that it is on the MS.
     tau = convective_overturn_time(params[0], params[1], params[2])
     if bv > .45 and period and np.isfinite(period) and 0. < period \
-            and params[0] < 425 and period/tau < 2.16:
+            and params[0] < 454 and period/tau < 2.16:
         gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
                             /period_err)**2
     else:
