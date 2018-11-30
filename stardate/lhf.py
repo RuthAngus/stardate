@@ -121,97 +121,97 @@ def convective_overturn_time(*args):
     return 10**log_tau
 
 
-def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, thin_by=100,
-             max_n=100000):
-    max_n /= thin_by
+# def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, thin_by=100,
+#              max_n=100000):
+#     max_n = int(max_n/thin_by)
 
-    p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
+#     p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
 
-    sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=args,
-                                    backend=backend)
+#     sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=args,
+#                                     backend=backend)
 
-    # Copied from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
-    # ======================================================================
+#     # Copied from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
+#     # ======================================================================
 
-    # We'll track how the average autocorrelation time estimate changes
-    index = 0
-    autocorr = np.empty(max_n)
+#     # We'll track how the average autocorrelation time estimate changes
+#     index = 0
+#     autocorr = np.empty(max_n)
 
-    # This will be useful to testing convergence
-    old_tau = np.inf
+#     # This will be useful to testing convergence
+#     old_tau = np.inf
 
-    # Now we'll sample for up to max_n steps
-    for sample in sampler.sample(p0, iterations=max_n, thin_by=thin_by,
-                                 store=True, progress=True):
-        # Only check convergence every 100 steps
-        if sampler.iteration % 100:
-            continue
+#     # Now we'll sample for up to max_n steps
+#     for sample in sampler.sample(p0, iterations=max_n, thin_by=thin_by,
+#                                  store=True, progress=True):
+#         # Only check convergence every 100 steps
+#         if sampler.iteration % 100:
+#             continue
 
-        # Compute the autocorrelation time so far
-        # Using tol=0 means that we'll always get an estimate even
-        # if it isn't trustworthy
-        tau = sampler.get_autocorr_time(tol=0) * thin_by
-        autocorr[index] = np.mean(tau)
-        index += 1
+#         # Compute the autocorrelation time so far
+#         # Using tol=0 means that we'll always get an estimate even
+#         # if it isn't trustworthy
+#         tau = sampler.get_autocorr_time(tol=0) * thin_by
+#         autocorr[index] = np.mean(tau)
+#         index += 1
 
-        # print("autocorrelation time = ", tau, "steps = ", sampler.iteration)
-        # # Check convergence
-        converged = np.all(tau * 100 < sampler.iteration)
-        converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
-        if converged:
-            break
-        old_tau = tau
-    # ======================================================================
+#         # print("autocorrelation time = ", tau, "steps = ", sampler.iteration)
+#         # # Check convergence
+#         converged = np.all(tau * 100 < sampler.iteration)
+#         converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
+#         if converged:
+#             break
+#         old_tau = tau
+#     # ======================================================================
 
-    return sampler
+#     return sampler
 
 
-def make_plots(sampler, i, truths, savedir, burnin=10000):
+# def make_plots(sampler, i, truths, savedir, burnin=10000):
 
-    nwalkers, nsteps, ndim = np.shape(sampler.chain)
-    assert burnin < nsteps, "The number of burn in samples to throw away" \
-        "can't exceed the total number of samples."
+#     nwalkers, nsteps, ndim = np.shape(sampler.chain)
+#     assert burnin < nsteps, "The number of burn in samples to throw away" \
+#         "can't exceed the total number of samples."
 
-    samples = sampler.flatchain
+#     samples = sampler.flatchain
 
-    print("Plotting age posterior")
-    age_gyr = (10**samples[burnin:, 1])*1e-9
-    plt.hist(age_gyr)
-    plt.xlabel("Age [Gyr]")
-    med, std = np.median(age_gyr), np.std(age_gyr)
-    if truths[1]:
-        plt.axvline(10**(truths[1])*1e-9, color="tab:orange",
-                    label="$\mathrm{True~age~[Gyr]}$")
-    plt.axvline(med, color="k", label="$\mathrm{Median~age~[Gyr]}$")
-    plt.axvline(med - std, color="k", linestyle="--")
-    plt.axvline(med + std, color="k", linestyle="--")
-    plt.savefig("{0}/{1}_marginal_age".format(savedir, str(i).zfill(4)))
-    plt.close()
+#     print("Plotting age posterior")
+#     age_gyr = (10**samples[burnin:, 1])*1e-9
+#     plt.hist(age_gyr)
+#     plt.xlabel("Age [Gyr]")
+#     med, std = np.median(age_gyr), np.std(age_gyr)
+#     if truths[1]:
+#         plt.axvline(10**(truths[1])*1e-9, color="tab:orange",
+#                     label="$\mathrm{True~age~[Gyr]}$")
+#     plt.axvline(med, color="k", label="$\mathrm{Median~age~[Gyr]}$")
+#     plt.axvline(med - std, color="k", linestyle="--")
+#     plt.axvline(med + std, color="k", linestyle="--")
+#     plt.savefig("{0}/{1}_marginal_age".format(savedir, str(i).zfill(4)))
+#     plt.close()
 
-    print("Plotting production chains...")
-    plt.figure(figsize=(16, 9))
-    for j in range(ndim):
-        plt.subplot(ndim, 1, j+1)
-        plt.plot(sampler.chain[:, burnin:, j].T, "k", alpha=.1)
-    plt.savefig("{0}/{1}_chains".format(savedir, str(i).zfill(4)))
-    plt.close()
+#     print("Plotting production chains...")
+#     plt.figure(figsize=(16, 9))
+#     for j in range(ndim):
+#         plt.subplot(ndim, 1, j+1)
+#         plt.plot(sampler.chain[:, burnin:, j].T, "k", alpha=.1)
+#     plt.savefig("{0}/{1}_chains".format(savedir, str(i).zfill(4)))
+#     plt.close()
 
-    print("Making corner plot...")
-    labels = ["$\mathrm{EEP}$",
-              "$\log_{10}(\mathrm{Age~[yr]})$",
-              "$\mathrm{[Fe/H]}$",
-              "$\ln(\mathrm{Distance~[Kpc])}$",
-              "$A_v$"]
-    corner.corner(samples[burnin:, :], labels=labels, truths=truths);
-    plt.savefig("{0}/{1}_corner".format(savedir, str(i).zfill(4)))
-    plt.close()
+#     print("Making corner plot...")
+#     labels = ["$\mathrm{EEP}$",
+#               "$\log_{10}(\mathrm{Age~[yr]})$",
+#               "$\mathrm{[Fe/H]}$",
+#               "$\ln(\mathrm{Distance~[Kpc])}$",
+#               "$A_v$"]
+#     corner.corner(samples[burnin:, :], labels=labels, truths=truths);
+#     plt.savefig("{0}/{1}_corner".format(savedir, str(i).zfill(4)))
+#     plt.close()
 
-    # Make mass histogram
-    samples = sampler.flatchain
-    mass_samps = mist.mass(samples[:, 0], samples[:, 1], samples[:, 2])
-    plt.hist(mass_samps, 50);
-    if truths[0]:
-            plt.axvline(truths[0], color="tab:orange",
-                        label="$\mathrm{True~mass~}[M_\odot]$")
-    plt.savefig("{0}/{1}_marginal_mass".format(savedir, str(i).zfill(4)))
-    plt.close()
+#     # Make mass histogram
+#     samples = sampler.flatchain
+#     mass_samps = mist.mass(samples[:, 0], samples[:, 1], samples[:, 2])
+#     plt.hist(mass_samps, 50);
+#     if truths[0]:
+#             plt.axvline(truths[0], color="tab:orange",
+#                         label="$\mathrm{True~mass~}[M_\odot]$")
+#     plt.savefig("{0}/{1}_marginal_mass".format(savedir, str(i).zfill(4)))
+#     plt.close()
