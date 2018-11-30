@@ -75,8 +75,8 @@ def lnprob(lnparams, *args):
     if iso_only:
         return mod.lnlike(params) + lnpr, lnpr
 
-    # Check that the star is cool, that the period is not None, NaN, zero or
-    # negative and that it is on the MS.
+    # Check that the star is cool, but not too cool, that the period is a
+    # positive, finite number, it's on the MS, and its Rossby number is low.
     tau = convective_overturn_time(params[0], params[1], params[2])
     if bv > .45 and period and np.isfinite(period) and 0. < period \
             and params[0] < 454 and period/tau < 2.16:
