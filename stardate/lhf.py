@@ -77,9 +77,11 @@ def lnprob(lnparams, *args):
 
     # Check that the star is cool, but not too cool, that the period is a
     # positive, finite number, it's on the MS, and its Rossby number is low.
-    tau = convective_overturn_time(params[0], params[1], params[2])
+    # tau = convective_overturn_time(params[0], params[1], params[2])
+    # if bv > .45 and period and np.isfinite(period) and 0. < period \
+    #         and params[0] < 454 and period/tau < 2.16:
     if bv > .45 and period and np.isfinite(period) and 0. < period \
-            and params[0] < 454 and period/tau < 2.16:
+            and params[0] < 454:
         gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
                             /period_err)**2
     else:
