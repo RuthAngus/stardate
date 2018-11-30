@@ -142,7 +142,7 @@ def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, thin_by=100,
 
     # Now we'll sample for up to max_n steps
     for sample in sampler.sample(p0, iterations=max_n, thin_by=thin_by,
-                                 progress=True):
+                                 store=True, progress=True):
         # Only check convergence every 100 steps
         if sampler.iteration % 100:
             continue
