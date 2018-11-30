@@ -76,7 +76,7 @@ def lnprob(lnparams, *args):
     # subgiant branch, so it should have a precise isochronal age and an
     # unreliable gyro age -- shut gyrochronology off!
     if bv > .45 and period and np.isfinite(period) and 0. < period \
-            and params[0] < 425:
+            and params[0] < 454:
         gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
                             /period_err)**2
     else:
