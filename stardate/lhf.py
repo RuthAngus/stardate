@@ -121,7 +121,9 @@ def convective_overturn_time(*args):
     return 10**log_tau
 
 
-def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, max_n=100000):
+def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, thin_by=100,
+             max_n=100000):
+    max_n /= thin_by
 
     p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
 
@@ -139,7 +141,8 @@ def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, max_n=100000):
     old_tau = np.inf
 
     # Now we'll sample for up to max_n steps
-    for sample in sampler.sample(p0, iterations=max_n, progress=True):
+    for sample in sampler.sample(p0, iterations=max_n, thin_by=thin_by,
+                                 progress=True):
         # Only check convergence every 100 steps
         if sampler.iteration % 100:
             continue
@@ -147,7 +150,7 @@ def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, max_n=100000):
         # Compute the autocorrelation time so far
         # Using tol=0 means that we'll always get an estimate even
         # if it isn't trustworthy
-        tau = sampler.get_autocorr_time(tol=0)
+        tau = sampler.get_autocorr_time(tol=0) * thin_by
         autocorr[index] = np.mean(tau)
         index += 1
 
