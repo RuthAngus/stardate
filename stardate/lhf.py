@@ -84,6 +84,8 @@ def lnprob(lnparams, *args):
             and params[0] < 454:
         gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
                             /period_err)**2
+        print(period, gyro_model(params[1], bv), period_err)
+        assert 0
     else:
         gyro_lnlike = 0
 

@@ -5,10 +5,10 @@
 #
 #
 #Coosys	J2000:	eq_FK5 J2000
-#INFO	votable-version=1.99+ (14-Oct-2013)	
-#INFO	-ref=VIZ5b9ada5a1421	
-#INFO	-out.max=unlimited	
-#INFO	queryParameters=28	
+#INFO	votable-version=1.99+ (14-Oct-2013)
+#INFO	-ref=VIZ5b9ada5a1421
+#INFO	-out.max=unlimited
+#INFO	queryParameters=28
 #-oc.form=dec
 #-out.max=unlimited
 #-nav=cat:J/MNRAS/413/2218&tab:{J/MNRAS/413/2218/praesepe}&key:source=J/MNRAS/413/2218/praesepe&HTTPPRM:&
@@ -64,9 +64,9 @@
 #Column	SimbadName	(A19)	Simbad column added by the CDS	[ucd=meta.id]
 #Column	_RA	(F9.5)	Position from SWASP name (right ascension part)	[ucd=pos.eq.ra;meta.main]
 #Column	_DE	(F9.5)	Position from SWASP name (declination part)	[ucd=pos.eq.dec;meta.main]
-SWASP;X;Per;J-Ks;Ksmag;Vmag;Dist;pmRA;e_pmRA;pmDE;e_pmDE;Mmb;SpType;Vmagl;B-Vl;Ref;SimbadName;_RA;_DE
  ; ;d;mag;mag;mag;deg;mas/yr;mas/yr;mas/yr;mas/yr; ; ;mag;mag; ; ;deg;deg
 -------------------;---;------;------;-----;-----;----;-----;----;-----;----;------;----;-----;-----;--;-------------------;---------;---------
+SWASP;X;Per;J-Ks;Ksmag;Vmag;Dist;pmRA;e_pmRA;pmDE;e_pmDE;Mmb;SpType;Vmagl;B-Vl;Ref;SimbadName;_RA;_DE
 J083141.93+260641.0;   ;13.160; 0.738;10.79;13.70; 6.7;-42.8; 5.6;-16.5; 5.6; 1.000;    ;     ;     ;  ;                   ;127.92471;+26.11139
 J083554.98+224611.3;   ; 9.310; 0.532;10.23;12.70; 3.3;-29.5; 5.2;-19.5; 5.2; 0.928;    ;     ;     ;  ;                   ;128.97908;+22.76981
 J083622.69+191129.3;   ; 9.830; 0.506;10.25;12.40; 1.1;-39.9; 6.0;-13.6; 6.1; 0.998;K2  ;12.41; 1.11;12;Cl* NGC 2632 JS 127;129.09454;+19.19147

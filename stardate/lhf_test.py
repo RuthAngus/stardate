@@ -8,7 +8,7 @@ from isochrones import StarModel
 mist = MIST_Isochrone()
 
 
-def good_vs_bad(good_lnprob, nsamps):
+def good_vs_bad(good_lnprob, good_lnparams, args, nsamps):
     """
     Compare the likelihood of nsamps random parameter values against the
     likelihood of the true values.
@@ -42,15 +42,14 @@ def test_lnprob_higher_likelihood_sun():
 
     good_lnparams = [355, np.log10(4.56*1e9), 0., np.log(1000), 0.]
     good_lnprob = lnprob(good_lnparams, *args)
-    good_vs_bad(good_lnprob, 10)
-
+    good_vs_bad(good_lnprob, good_lnparams, args, 10)
 
 
 def test_lnprob_higher_likelihood_real():
     """
     The same test as above but for simulated data.
     """
-    df = pd.read_csv("simulated_data.csv")
+    df = pd.read_csv("../paper/code/data/simulated_data.csv")
     teff_err = 25  # Kelvin
     logg_err = .05  # dex
     feh_err = .05  # dex
@@ -76,13 +75,14 @@ def test_lnprob_higher_likelihood_real():
     good_lnparams = [df.eep.values[i], df.age.values[i], df.feh.values[i],
                      np.log(df.d_kpc.values[i]*1e3), df.Av.values[i]]
     good_lnprob = lnprob(good_lnparams, *args)
-    good_vs_bad(good_lnprob, 10)
+    good_vs_bad(good_lnprob, good_lnparams, args, 10)
 
 
-def test_likelihood_rotation():
+def test_likelihood_rotation_giant():
     """
     Make sure that the lhf can cope with zeros, NaNs and None values for the
     rotation period.
+    Also, check that gyro is switched off for giants.
     """
     iso_params = pd.DataFrame(dict({"teff": (5777, 10),
                                 "logg": (4.44, .05),
@@ -115,7 +115,7 @@ def test_likelihood_rotation():
     # check that gyro on gives different lnprob
     assert gyro_lnprob != iso_lnprob
 
-    giant_params = [450, np.log10(4.56*1e9), 0., np.log(1000), 0.]
+    giant_params = [455, np.log10(4.56*1e9), 0., np.log(1000), 0.]
     args = [mod, 26., 1., True]
     iso_giant_lnprob = lnprob(giant_params, *args)
     args = [mod, 26., 1., False]
@@ -125,38 +125,38 @@ def test_likelihood_rotation():
     assert iso_giant_lnprob == gyro_giant_lnprob
 
 
-def test_rossby_switch():
-    """
-    Check that gyrochronology is switch off for stars with Ro > 2.16, ie.
-    with a mass greater than 1.13 at a rotation period of 26 days.
-    Or a rotation period greater than 31 for a mass of 1.
-    """
+# def test_rossby_switch():
+#     """
+#     Check that gyrochronology is switch off for stars with Ro > 2.16, ie.
+#     with a mass greater than 1.13 at a rotation period of 26 days.
+#     Or a rotation period greater than 31 for a mass of 1.
+#     """
 
-    iso_params = pd.DataFrame(dict({"teff": (5777, 10),
-                                   "logg": (4.44, .05),
-                                   "feh": (0., .001),
-                                   "parallax": (1., .01)}))  # mas
-    # Set up the StarModel isochrones object.
-    mod = StarModel(mist, **iso_params)
-    lnparams = [355, np.log10(4.56*1e9), 0., np.log(1000), 0.]
+#     iso_params = pd.DataFrame(dict({"teff": (5777, 10),
+#                                    "logg": (4.44, .05),
+#                                    "feh": (0., .001),
+#                                    "parallax": (1., .01)}))  # mas
+#     # Set up the StarModel isochrones object.
+#     mod = StarModel(mist, **iso_params)
+#     lnparams = [355, np.log10(4.56*1e9), 0., np.log(1000), 0.]
 
-    args = [mod, 22., 1., False]  # the lnprob arguments]
-    low_rossby_lnprob = lnprob(lnparams, *args)
+#     args = [mod, 22., 1., False]  # the lnprob arguments]
+#     low_rossby_lnprob = lnprob(lnparams, *args)
 
-    args = [mod, 32., 1., False]  # the lnprob arguments]
-    high_rossby_lnprob = lnprob(lnparams, *args)
+#     args = [mod, 32., 1., False]  # the lnprob arguments]
+#     high_rossby_lnprob = lnprob(lnparams, *args)
 
-    # Make sure that the gyro lnlikelihood is being added for low Rossby
-    # numbers
-    print(low_rossby_lnprob, high_rossby_lnprob)
-    assert low_rossby_lnprob != high_rossby_lnprob
+#     # Make sure that the gyro lnlikelihood is being added for low Rossby
+#     # numbers
+#     print(low_rossby_lnprob, high_rossby_lnprob)
+#     assert low_rossby_lnprob != high_rossby_lnprob
 
-    # Make sure the gyro lnlike is switched off for high rossby numbers
-    args = [mod, 32., 1., True]  # the lnprob arguments]
-    high_rossby_gyro_off_lnprob = lnprob(lnparams, *args)
+#     # Make sure the gyro lnlike is switched off for high rossby numbers
+#     args = [mod, 32., 1., True]  # the lnprob arguments]
+#     high_rossby_gyro_off_lnprob = lnprob(lnparams, *args)
 
-    print(high_rossby_gyro_off_lnprob, high_rossby_lnprob)
-    assert high_rossby_gyro_off_lnprob == high_rossby_lnprob
+#     print(high_rossby_gyro_off_lnprob, high_rossby_lnprob)
+#     assert high_rossby_gyro_off_lnprob == high_rossby_lnprob
 
 
 def test_convective_overturn_timescale():
@@ -165,9 +165,6 @@ def test_convective_overturn_timescale():
     solarRo = 2.16  # van Saders 2016 (2.08 in van Saders 2018)
     solarProt = 26
     solartau = solarProt / solarRo
-    # print(solartau)
-    # print(tau)
-    # print("Ro my sun = ", 26/tau, "Solar Ro = 2.16")
     print(26/convective_overturn_time(1.))  # 1.8
     print(31/convective_overturn_time(1.))  # 2.14
     print(32/convective_overturn_time(1.))  # 2.21
@@ -177,19 +174,19 @@ def test_convective_overturn_timescale():
         "convective overturn time should go down with mass"
 
 
+def test_gyro_model():
+    """
+    Check that the gyrochronology model in the lhf gives the Solar rotation
+    period for Solar age and b-v.
+    """
+    prot = stardate.lhf.gyro_model(np.log10(4.56*1e9), .65)
+    assert 24.5 < prot < 27.5
+
+
 if __name__ == "__main__":
-    # test_lnprob_higher_likelihood_sun()
-    # test_lnprob_higher_likelihood_real()
-    # test_likelihood_rotation()
-    # test_convective_overturn_timescale()
-    test_rossby_switch()
-
-    """
-    More test ideas
-
-    1. test priors
-
-    2. Test the MCMC somehow
-
-    3. Test chronology somehow.
-    """
+    test_gyro_model()
+    test_lnprob_higher_likelihood_sun()
+    test_lnprob_higher_likelihood_real()
+    test_likelihood_rotation()
+    test_convective_overturn_timescale()
+    # test_rossby_switch()
