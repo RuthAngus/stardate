@@ -29,7 +29,6 @@ import h5py
 def gyro_model(log10_age, bv):
     """
     Given a B-V colour and an age, predict a rotation period.
-    Returns log(age) in Myr.
     parameters:
     ----------
     log10_age: (array)
@@ -42,6 +41,26 @@ def gyro_model(log10_age, bv):
     a, b, c, n = [.4, .31, .45, .55]
 
     log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c)
+    return 10**log_P
+
+
+def gyro_model_praesepe(log10_age, bprp):
+    """
+    Given a G_BP-G_RP colour and an age, predict a rotation period.
+    parameters:
+    ----------
+    log10_age: (array)
+        The log age of a star: log10(age) in years.
+    bprp: (array)
+        The Bp-rp colour of a star.
+    """
+    age_gyr = (10**log10_age)*1e-9
+    log_age_gyr = np.log10(age_gyr)
+    log_c = np.log10(bprp)
+    params = [1.10469903, 0.6183025, -4.452133, 31.02877576, -47.76497323,
+              0.63604919]
+    log_P = params[0] + params[1]*log_c + params[2]*log_c**2 \
+        + params[3]*log_c**3 + params[4]*log_c**4 + params[5]*log_age_gyr
     return 10**log_P
 
 
@@ -65,6 +84,10 @@ def lnprob(lnparams, *args):
     B = mist.mag["B"](*mag_pars)
     V = mist.mag["V"](*mag_pars)
     bv = B-V
+    # bp = mist.mag["bp"](*mag_pars)
+    # rp = mist.mag["rp"](*mag_pars)
+    # bprp = bp - rp
+    # print(bprp)
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -82,12 +105,14 @@ def lnprob(lnparams, *args):
     #         and params[0] < 454 and period/tau < 2.16:
     if bv > .45 and period and np.isfinite(period) and 0. < period \
             and params[0] < 454:
+    # if bv > .45:
         gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
                             /period_err)**2
-        print(period, gyro_model(params[1], bv), period_err)
-        assert 0
     else:
-        gyro_lnlike = 0
+        gyro_lnlike = 0.
+
+    # gyro_lnlike = -.5*((period - gyro_model_praesepe(params[1], bprp))
+    #                    /period_err)**2
 
     return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 

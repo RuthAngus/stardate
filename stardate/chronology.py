@@ -13,11 +13,11 @@ import corner
 from isochrones.mist import MIST_Isochrone
 mist = MIST_Isochrone()
 
-plotpar = {'axes.labelsize': 25,
-           'font.size': 25,
-           'legend.fontsize': 25,
-           'xtick.labelsize': 25,
-           'ytick.labelsize': 25,
+plotpar = {'axes.labelsize': 18,
+           'font.size': 18,
+           'legend.fontsize': 18,
+           'xtick.labelsize': 18,
+           'ytick.labelsize': 18,
            'text.usetex': True}
 plt.rcParams.update(plotpar)
 
@@ -51,30 +51,24 @@ class star(object):
         self.savedir = savedir
         self.suffix = suffix
 
-    def fit(self, inits=[1., 9., 0., .5, .01], nwalkers=24, max_n=100000,
-            iso_only=False):
+    def fit(self, inits=[355, np.log10(4.56*1e9), 0., 1000., .01],
+            nwalkers=24, max_n=100000, iso_only=False):
         """
         params
         ------
-        inits: list
-            A list of default initial values to use for eep, age, feh,
-            distance and Av, if alternatives are not provided.
-        nwalkers: int
+        inits: (list, optional)
+            A list of default initial values to use for eep, age (in
+            log10[yrs]), feh, distance (in pc) and Av, if alternatives are not
+            provided.
+        nwalkers: (int, optional)
             The number of walkers to use with emcee.
-        max_n: int
+        max_n: (int, optional)
             The maximum number of samples to obtain.
-        iso_only: boolean
+        iso_only: (boolean, optional)
             If true only the isochronal likelihood function will be used.
         """
 
-        # Set the initial values
-        mass_init, age_init, feh_init, distance_init, Av_init = inits
-        eep_init = mist.eep_from_mass(mass_init, age_init, feh_init)
-
-        # sample in linear eep, log10(age), linear feh, ln(distance) and
-        # linear Av.
-        p_init = np.array([eep_init, age_init, feh_init,
-                           np.log(distance_init), Av_init])
+        p_init = [inits[0], inits[1], inits[2], np.log(inits[3]), inits[4]]
 
         np.random.seed(42)
 
@@ -100,50 +94,6 @@ class star(object):
 
         self.sampler = sampler
         return sampler
-
-    # def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24,
-    #              thin_by=100, max_n=100000):
-    #     max_n = int(max_n/thin_by)
-
-    #     p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
-
-    #     sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=args,
-    #                                     backend=backend)
-
-    #     # Copied from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
-    #     # ====================================================================
-
-    #     # We'll track how the average autocorrelation time estimate changes
-    #     index = 0
-    #     autocorr = np.empty(max_n)
-
-    #     # This will be useful to testing convergence
-    #     old_tau = np.inf
-
-    #     # Now we'll sample for up to max_n steps
-    #     for sample in sampler.sample(p0, iterations=max_n, thin_by=thin_by,
-    #                                 store=True, progress=True):
-    #         # Only check convergence every 100 steps
-    #         if sampler.iteration % 100:
-    #             continue
-
-    #         # Compute the autocorrelation time so far
-    #         # Using tol=0 means that we'll always get an estimate even
-    #         # if it isn't trustworthy
-    #         tau = sampler.get_autocorr_time(tol=0) * thin_by
-    #         autocorr[index] = np.mean(tau)
-    #         index += 1
-
-    #         # print("autocorrelation time = ", tau, "steps = ", sampler.iteration)
-    #         # # Check convergence
-    #         converged = np.all(tau * 100 < sampler.iteration)
-    #         converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
-    #         if converged:
-    #             break
-    #         old_tau = tau
-    #     # ====================================================================
-
-    #     return sampler
 
     def age(self, burnin=10000):
         """
@@ -278,8 +228,8 @@ class star(object):
         plt.hist(age_gyr)
         plt.xlabel("Age [Gyr]")
         med, std = np.median(age_gyr), np.std(age_gyr)
-        if truths[1]:
-            plt.axvline(10**(truths[1])*1e-9, color="tab:orange",
+        if truths[2]:
+            plt.axvline(10**(truths[2])*1e-9, color="tab:orange",
                         label="$\mathrm{True~age~[Gyr]}$")
         plt.axvline(med, color="k", label="$\mathrm{Median~age~[Gyr]}$")
         plt.axvline(med - std, color="k", linestyle="--")
@@ -298,24 +248,28 @@ class star(object):
         plt.close()
 
         print("Making corner plot...")
-        labels = ["$\mathrm{EEP}$",
+        labels = ["$\mathrm{Mass~}[M_\odot]$", "$\mathrm{EEP}$",
                   "$\log_{10}(\mathrm{Age~[yr]})$",
                   "$\mathrm{[Fe/H]}$",
                   "$\ln(\mathrm{Distance~[Kpc])}$",
                   "$A_v$"]
-        corner.corner(samples[burnin:, :], labels=labels, truths=truths);
+        mass_samples = np.zeros((nwalkers*nsteps, ndim+1))
+        mass_samples[:, 1:] = samples[:, :]
+        mass_samples[:, 0] = mist.mass(samples[:, 0], samples[:, 1],
+                                       samples[:, 2])
+        corner.corner(mass_samples[:, :], labels=labels, truths=truths);
         plt.savefig("{0}/{1}_corner".format(self.savedir,
                                             str(self.suffix).zfill(4)))
         plt.close()
 
-        # Make mass histogram
-        samples = self.sampler.flatchain
-        mass_samps = mist.mass(samples[:, 0], samples[:, 1], samples[:, 2])
-        plt.hist(mass_samps, 50);
-        if truths[0]:
-                plt.axvline(mist.mass(truths[0], truths[1], truths[2]),
-                                      color="tab:orange",
-                            label="$\mathrm{True~mass~}[M_\odot]$")
-        plt.savefig("{0}/{1}_marginal_mass".format(self.savedir,
-                                                   str(self.suffix).zfill(4)))
-        plt.close()
+        # # Make mass histogram
+        # samples = self.sampler.flatchain
+        # mass_samps = mist.mass(samples[:, 0], samples[:, 1], samples[:, 2])
+        # plt.hist(mass_samps, 50);
+        # if truths[0]:
+        #         plt.axvline(mist.mass(truths[0], truths[1], truths[2]),
+        #                               color="tab:orange",
+        #                     label="$\mathrm{True~mass~}[M_\odot]$")
+        # plt.savefig("{0}/{1}_marginal_mass".format(self.savedir,
+        #                                            str(self.suffix).zfill(4)))
+        # plt.close()
