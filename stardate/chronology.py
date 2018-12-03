@@ -52,7 +52,7 @@ class star(object):
         self.suffix = suffix
 
     def fit(self, inits=[355, np.log10(4.56*1e9), 0., 1000., .01],
-            nwalkers=24, max_n=100000, iso_only=False):
+            nwalkers=24, max_n=100000, thin_by=100, iso_only=False):
         """
         params
         ------
@@ -90,7 +90,7 @@ class star(object):
 
         # Run the MCMC
         sampler = run_mcmc(self.iso_params, args, p_init, backend, ndim=ndim,
-                           nwalkers=nwalkers, max_n=max_n)
+                           nwalkers=nwalkers, max_n=max_n, thin_by=thin_by)
 
         self.sampler = sampler
         return sampler
@@ -221,10 +221,12 @@ class star(object):
         assert burnin < nsteps, "The number of burn in samples to throw" \
             "away can't exceed the number of steps."
 
-        samples = self.sampler.flatchain
+        # samples = self.sampler.flatchain
+        samples = np.reshape(self.sampler.chain[:, burnin:, :],
+                             (nwalkers*(nsteps - burnin), ndim))
 
         print("Plotting age posterior")
-        age_gyr = (10**samples[burnin:, 1])*1e-9
+        age_gyr = (10**samples[:, 1])*1e-9
         plt.hist(age_gyr)
         plt.xlabel("Age [Gyr]")
         med, std = np.median(age_gyr), np.std(age_gyr)
@@ -242,7 +244,7 @@ class star(object):
         plt.figure(figsize=(16, 9))
         for j in range(ndim):
             plt.subplot(ndim, 1, j+1)
-            plt.plot(self.sampler.chain[:, burnin:, j].T, "k", alpha=.1)
+            plt.plot(self.sampler.chain[:, :, j].T, "k", alpha=.1)
         plt.savefig("{0}/{1}_chains".format(self.savedir,
                                             str(self.suffix).zfill(4)))
         plt.close()
@@ -253,7 +255,7 @@ class star(object):
                   "$\mathrm{[Fe/H]}$",
                   "$\ln(\mathrm{Distance~[Kpc])}$",
                   "$A_v$"]
-        mass_samples = np.zeros((nwalkers*nsteps, ndim+1))
+        mass_samples = np.zeros((nwalkers*(nsteps-burnin), ndim+1))
         mass_samples[:, 1:] = samples[:, :]
         mass_samples[:, 0] = mist.mass(samples[:, 0], samples[:, 1],
                                        samples[:, 2])

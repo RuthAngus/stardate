@@ -84,10 +84,6 @@ def lnprob(lnparams, *args):
     B = mist.mag["B"](*mag_pars)
     V = mist.mag["V"](*mag_pars)
     bv = B-V
-    # bp = mist.mag["bp"](*mag_pars)
-    # rp = mist.mag["rp"](*mag_pars)
-    # bprp = bp - rp
-    # print(bprp)
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -103,16 +99,20 @@ def lnprob(lnparams, *args):
     # tau = convective_overturn_time(params[0], params[1], params[2])
     # if bv > .45 and period and np.isfinite(period) and 0. < period \
     #         and params[0] < 454 and period/tau < 2.16:
+
+    # If cool and MS:
     if bv > .45 and period and np.isfinite(period) and 0. < period \
             and params[0] < 454:
-    # if bv > .45:
         gyro_lnlike = -.5*((period - gyro_model(params[1], bv))
                             /period_err)**2
+
+    # If hot and MS:
+    # elif bv < .45 and period and np.isfinite(period) and 0. < period \
+    #         and params[0] < 454:
+        # gyro_lnlike = -.5*((period - hot_star_model(1))/period_err)**2
+
     else:
         gyro_lnlike = 0.
-
-    # gyro_lnlike = -.5*((period - gyro_model_praesepe(params[1], bprp))
-    #                    /period_err)**2
 
     return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 
