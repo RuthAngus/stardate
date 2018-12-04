@@ -158,7 +158,7 @@ def lnprob(lnparams, *args):
     # If evolved or hot, use a broad gaussian model for rotation.
     else:
 #         gyro_lnlike = -.5*((period - .5/.55)**2)
-        gyro_lnlike = -.5*((period - 5/(period_err*20.))**2) \
+        gyro_lnlike = -.5*((period - 5)/(period_err*20.))**2) \
             - np.log(20.*period_err)
 #         gyro_lnlike = -.5*((period - .5)/(period_err*100))**2 \
 #            - np.log(100*period_err)
