@@ -93,7 +93,7 @@ def gyro_model_rossby(log10_age, bv, mass, rossby=True, Ro_cutoff=2.16):
 
     # Otherwise the Rossby model is switched on.
     # Calculate the maximum theoretical rotation period for this mass.
-    pmax = Ro_cutoff * convective_turnover_time(mass)
+    pmax = Ro_cutoff * convective_overturn_time(mass)
 
     # Calculate the age this star reaches pmax, based on its B-V color.
     age_thresh_myr = (pmax/(a*(bv-c)**b))**(1./n)
@@ -107,6 +107,13 @@ def gyro_model_rossby(log10_age, bv, mass, rossby=True, Ro_cutoff=2.16):
     else:
         log_P = np.log10(pmax)
     return 10**log_P
+
+
+def calc_bv(mag_pars):
+    # Calculate B-V
+    B = mist.mag["B"](*mag_pars)
+    V = mist.mag["V"](*mag_pars)
+    return B-V
 
 
 def lnprob(lnparams, *args):
@@ -124,6 +131,7 @@ def lnprob(lnparams, *args):
     params[3] = np.exp(lnparams[3])
 
     mod, period, period_err, iso_only, rossby = args
+    bv = calc_bv(params)
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -134,12 +142,6 @@ def lnprob(lnparams, *args):
     # If isochrones only, just return the isochronal lhf.
     if iso_only:
         return mod.lnlike(params) + lnpr, lnpr
-
-    # Calculate B-V
-    mag_pars = (params[0], params[1], params[2], params[3], params[4])
-    B = mist.mag["B"](*mag_pars)
-    V = mist.mag["V"](*mag_pars)
-    bv = B-V
 
     # Check that the period is a positive, finite number. It doesn't matter
     # too much what the lhf is here, as long as it is constant.
