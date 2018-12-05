@@ -158,7 +158,7 @@ def lnprob(lnparams, *args):
     # If evolved or hot, use a broad gaussian model for rotation.
     else:
 #         gyro_lnlike = -.5*((period - .5/.55)**2)
-        gyro_lnlike = -.5*((period - 5)/(period_err*20.))**2) \
+        gyro_lnlike = -.5*((period - 5)/(period_err*20.))**2 \
             - np.log(20.*period_err)
 #         gyro_lnlike = -.5*((period - .5)/(period_err*100))**2 \
 #            - np.log(100*period_err)
@@ -199,7 +199,10 @@ def convective_overturn_time(*args):
 
 def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, thin_by=100,
              max_n=100000):
-    max_n = int(max_n)
+    # thin_by = 1
+    # max_n = 200000
+    max_n = max_n//thin_by
+    # print("max_n", max_n)
 
     p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
 
@@ -217,23 +220,32 @@ def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, thin_by=100,
     old_tau = np.inf
 
     # Now we'll sample for up to max_n steps
+    # for sample in sampler.sample(p0, iterations=max_n, thin_by=thin_by,
+    #                              store=True, progress=True):
     for sample in sampler.sample(p0, iterations=max_n, thin_by=thin_by,
                                  store=True, progress=True):
         # Only check convergence every 100 steps
-        if sampler.iteration % 100:
-            continue
+        # if sampler.iteration % 100:
+        #     continue
+
+        # print(sampler.iteration*thin_by)
 
         # Compute the autocorrelation time so far
         # Using tol=0 means that we'll always get an estimate even
         # if it isn't trustworthy
         tau = sampler.get_autocorr_time(tol=0) * thin_by
+        # print("100*tau = ", 100*max(tau))
         autocorr[index] = np.mean(tau)
         index += 1
 
         # print("autocorrelation time = ", tau, "steps = ", sampler.iteration)
         # # Check convergence
         converged = np.all(tau * 100 < sampler.iteration)
+        # print("converged = ", converged)
         converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
+        # print("min(dtau) = ", min(np.abs(old_tau - tau) / tau), "0.01")
+        # partconverged = np.all(np.abs(old_tau - tau) / tau < 0.01)
+        # print("converged = ", partconverged, "\n")
         if converged:
             break
         old_tau = tau
