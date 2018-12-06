@@ -205,7 +205,8 @@ if __name__ == "__main__":
     # print("\nTesting likelihood function behaviour...")
     # test_likelihood_rotation_giant()
 
-    print("\nTesting B-V calculation...")
+    print("\nTesting B-V calculation... (this could take a while if you're"
+          " running for the first time!")
     test_calc_bv()
 
     print("\nTesting the Praesepe gyro model...")
