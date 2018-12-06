@@ -146,7 +146,7 @@ def test_likelihood_rotation_giant():
 def test_calc_bv():
     sun = [355, np.log10(4.56*1e9), 0., np.log(1000), 0.]
     bv_sun = calc_bv(sun)
-    assert .6 < bv_sun
+    assert .6 < bv_sun, "Are you sure you're on the isochrones eep branch?"
     assert bv_sun < .7
 
 
