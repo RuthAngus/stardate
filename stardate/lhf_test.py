@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import lhf
 from lhf import lnprob, calc_bv, gyro_model
 from lhf import convective_overturn_time, gyro_model_praesepe
 from lhf import gyro_model_rossby
@@ -203,8 +202,8 @@ if __name__ == "__main__":
     print("Testing gyro model with Rossby switch...")
     test_gyro_model_rossby()
 
-    print("\nTesting likelihood function behaviour...")
-    test_likelihood_rotation_giant()
+    # print("\nTesting likelihood function behaviour...")
+    # test_likelihood_rotation_giant()
 
     print("\nTesting B-V calculation...")
     test_calc_bv()
