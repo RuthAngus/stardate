@@ -247,6 +247,7 @@ class star(object):
         for j in range(ndim):
             plt.subplot(ndim, 1, j+1)
             plt.plot(self.sampler.chain[:, :, j].T, "k", alpha=.1)
+            plt.axhline(truths[j+1])
         plt.savefig("{0}/{1}_chains".format(self.savedir,
                                             str(self.suffix).zfill(4)))
         plt.close()
