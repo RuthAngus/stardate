@@ -22,8 +22,7 @@ from multiprocessing import Pool
 
 # Necessary to add cwd to path when script run
 # by SLURM (since it executes a copy)
-sys.path.append(os.getcwd()
-
+sys.path.append(os.getcwd())
 
 def infer_stellar_age(i):
 
@@ -57,7 +56,7 @@ def infer_stellar_age(i):
     # Infer an age with isochrones and gyrochronology.
 
     # Set up the star object
-    star = sd.star(iso_params, df.prot[i], .01, suffix="{0}_gyro",format(i))
+    star = sd.star(iso_params, df.prot[i], .01, suffix="{0}_gyro".format(i))
 
     # Run the MCMC
     sampler = star.fit(max_n=200000)
@@ -76,4 +75,5 @@ if __name__ == "__main__":
     df = pd.read_csv("data/simulated_data.csv")
     N = len(df)
 
-    pool.map(infer_stellar_age, range(N))
+    p = Pool(24)
+    p.map(infer_stellar_age, range(N))
