@@ -157,9 +157,12 @@ def lnprob(lnparams, *args):
 
     # If evolved or hot, use a broad gaussian model for rotation.
     else:
-#         gyro_lnlike = -.5*((period - .5/.55)**2)
-        gyro_lnlike = -.5*((period - 5)/(period_err*20.))**2 \
-            - np.log(20.*period_err)
+        # gyro_lnlike = -.5*(((np.log10(period) - .5)/.55)**2) \
+        #     - np.log(.55)
+        gyro_lnlike = -.5*(((np.log10(period) - .5)/.55)**2) \
+            - np.log(.55)
+        # gyro_lnlike = -.5*((period - 5)/(period_err*20.))**2 \
+        #     - np.log(20.*period_err)
 #         gyro_lnlike = -.5*((period - .5)/(period_err*100))**2 \
 #            - np.log(100*period_err)
 
@@ -201,7 +204,16 @@ def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, thin_by=100,
              max_n=100000):
     max_n = max_n//thin_by
 
-    p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
+    # p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
+
+    # Broader gaussian for EEP initialization
+    p0 = np.empty((nwalkers, ndim))
+    p0[:, 0] = np.random.randn(nwalkers)*10 + p_init[0]
+    p0[:, 1] = np.random.randn(nwalkers)*1e-4 + p_init[1]
+    p0[:, 2] = np.random.randn(nwalkers)*1e-4 + p_init[2]
+    p0[:, 3] = np.random.randn(nwalkers)*1e-4 + p_init[3]
+    p0[:, 4] = np.random.randn(nwalkers)*1e-4 + p_init[4]
+    p0 = list(p0)
 
     sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=args,
                                     backend=backend)
