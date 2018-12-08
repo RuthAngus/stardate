@@ -166,7 +166,8 @@ def lnprob(lnparams, *args):
 #         gyro_lnlike = -.5*((period - .5)/(period_err*100))**2 \
 #            - np.log(100*period_err)
 
-    return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
+    return lnpr, lnpr
+    # return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 
 
 def convective_overturn_time(*args):
