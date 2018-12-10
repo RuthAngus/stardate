@@ -30,9 +30,7 @@ def distance_prior(distance, bounds=(0,3000)):
     """
     min_distance, max_distance = bounds
     if distance.any() <= min_distance or distance.any() > max_distance:
-        print("out of bounds", distance)
         return 0
-    print(distance, "distance")
     return 3/max_distance**3 * distance**2
 
 
