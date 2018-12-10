@@ -14,9 +14,6 @@ def test_lnprior():
     probs = []
     for i in range(len(distances)):
         probs.append(distance_prior(distances[i]))
-    # probs = distance_prior(distances)
-    # plt.plot(distances, probs)
-    # plt.savefig("test")
     diffs = np.diff(probs)
     assert diffs.all() > 0
 
