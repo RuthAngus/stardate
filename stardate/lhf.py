@@ -24,6 +24,7 @@ from isochrones import StarModel
 import emcee
 import corner
 import h5py
+from . import priors
 
 
 def gyro_model(log10_age, bv):
@@ -116,6 +117,32 @@ def calc_bv(mag_pars):
     return B-V
 
 
+def lnprior(params):
+    """
+    lnprior on all parameters.
+    params need to be linear except age which is log10(age [yr]).
+    """
+
+    # log Priors over age, metallicity and distance.
+    # (The priors in priors.py are not in log)
+    age_prior = np.log(priors.age_prior(params[1]))
+    feh_prior = np.log(priors.feh_prior(params[2]))
+    distance_prior = np.log(priors.distance_prior(params[3]))
+
+    # Uniform prior on extinction.
+    mAv = (0 <= params[4]) * (params[4] < 1)  # Prior on A_v
+    mAv = mAv == 1
+
+    # Uniform prior on EEP
+    m = (0 < params[0]) * (params[0]) < 10000  # Broad bounds on mass.
+
+    if mAv and m and np.isfinite(age_prior) and np.isfinite(distance_prior):
+        return age_prior + feh_prior + distance_prior
+
+    else:
+        return -np.inf
+
+
 def lnprob(lnparams, *args):
     """
     The ln-probability function.
@@ -135,7 +162,8 @@ def lnprob(lnparams, *args):
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
-    lnpr = mod.lnprior(params)
+    # lnpr = mod.lnprior(params)
+    lnpr = lnprior(params)
     if not np.isfinite(lnpr):
         return lnpr, lnpr
 
