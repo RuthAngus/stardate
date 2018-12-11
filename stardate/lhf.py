@@ -123,9 +123,9 @@ def lnprior(params):
     params need to be linear except age which is log10(age [yr]).
     """
 
-    finite_mask = np.isfinite(params)
-    if sum(finite_mask) < len(params):
-        print(params, "non-finite parameter")
+    # finite_mask = np.isfinite(params)
+    # if sum(finite_mask) < len(params):
+    #     print(params, "non-finite parameter")
 
     # log Priors over age, metallicity and distance.
     # (The priors in priors.py are not in log)
@@ -142,11 +142,16 @@ def lnprior(params):
     m = (0 < params[0]) * (params[0] < 10000)  # Broad bounds on EEP.
     m &= np.isfinite(params[0])
 
+
     if mAv and m and np.isfinite(age_prior) and np.isfinite(distance_prior) \
             and np.isfinite(feh_prior):
         return age_prior + feh_prior + distance_prior
 
     else:
+        # print(age_prior, "age_prior")
+        # print(distance_prior, "distanec_prior")
+        # print(feh_prior, "feh_prior")
+        # print(mAv, m)
         return -np.inf
 
 
@@ -172,6 +177,7 @@ def lnprob(lnparams, *args):
     # lnpr = mod.lnprior(params)
     lnpr = lnprior(params)
     if not np.isfinite(lnpr):
+        # print(params, "inf params", "\n")
         return lnpr, lnpr
 
     # If isochrones only, just return the isochronal lhf.
@@ -202,7 +208,33 @@ def lnprob(lnparams, *args):
 #            - np.log(100*period_err)
 
     # return lnpr, lnpr
-    return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
+    return gyro_lnlike + lnpr, lnpr
+    # return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
+
+
+def nll(lnparams, *args):
+    """
+    The negative log likelihood.
+    lnparams are [eep, log10(age [yrs]), [Fe/H], ln(distance [kpc]), A_v]
+    """
+
+    # Transform mass and distance back to linear.
+    params = lnparams*1
+    params[3] = np.exp(lnparams[3])
+
+    mod, period, period_err, iso_only, rossby = args
+    bv = calc_bv(params)
+
+    # If isochrones only, just return the isochronal lhf.
+    if iso_only:
+        return - mod.lnlike(params)
+
+    mass = mist.mass(params[0], params[1], params[2])
+    gyro_lnlike = -.5*((period - gyro_model_rossby(params[1], bv, mass,
+                                                   rossby)) / period_err)**2 \
+        - np.log(period_err)
+
+    return - mod.lnlike(params) - gyro_lnlike
 
 
 def convective_overturn_time(*args):
@@ -281,6 +313,11 @@ def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, thin_by=100,
         # # Check convergence
         converged = np.all(tau * 100 < sampler.iteration)
         converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
+        converged &= np.all(tau) > 1
+        # print("100 samples?", np.all(tau * 100 < sampler.iteration))
+        # print(tau, tau*100, sampler.iteration)
+        # print("Small delta tau?", np.all(np.abs(old_tau - tau) / tau < 0.01))
+        # print(np.abs(old_tau - tau))
         if converged:
             break
         old_tau = tau
