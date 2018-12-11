@@ -24,7 +24,8 @@ plt.rcParams.update(plotpar)
 
 class star(object):
 
-    def __init__(self, iso_params, prot, prot_err, savedir=".", suffix=""):
+    def __init__(self, iso_params, prot, prot_err, bv=None, mass=None,
+                 savedir=".", suffix=""):
         """
         params
         -------
@@ -50,6 +51,8 @@ class star(object):
         self.prot_err = prot_err
         self.savedir = savedir
         self.suffix = suffix
+        self.bv = bv
+        self.mass = mass
 
     def fit(self, inits=[355, np.log10(4.56*1e9), 0., 1000., .01],
             nwalkers=24, max_n=100000, thin_by=100, iso_only=False,
@@ -88,7 +91,7 @@ class star(object):
         # Set up the StarModel object needed to calculate the likelihood.
         mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
 
-        args = [mod, self.prot, self.prot_err, iso_only, rossby]  # lnprob arguments
+        args = [mod, self.prot, self.prot_err, self.bv, self.mass, iso_only, rossby]  # lnprob arguments
 
         # Run the MCMC
         sampler = run_mcmc(self.iso_params, args, p_init, backend, ndim=ndim,
