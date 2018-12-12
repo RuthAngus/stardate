@@ -177,8 +177,7 @@ def lnprob(lnparams, *args):
     # likelihood.
     # lnpr = mod.lnprior(params)
     lnpr = lnprior(params)
-    if not np.isfinite(lnpr):
-        # print(params, "inf params", "\n")
+    if not np.isfinite(lnpr) or not np.isfinite(bv):
         return lnpr, lnpr
 
     # If isochrones only, just return the isochronal lhf.
@@ -194,29 +193,30 @@ def lnprob(lnparams, *args):
     elif bv > .45 and params[0] < 454:
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
-        gyro_lnlike = -.5*((period
-                            - gyro_model_rossby(params[1], bv, mass, rossby))
-                            / period_err)**2 - np.log(period_err)
+        period_model = gyro_model_rossby(params[1], bv, mass, rossby)
+        # period_model = gyro_model(params[1], bv)
+        gyro_lnlike = -.5*((period - period_model) / (period_err+2))**2 \
+            - np.log(period_err+2)
 
-    # If evolved or hot, use a broad gaussian model for rotation.
-    else:
+    # If hot, use a broad gaussian model with a mean of 1 for rotation.
+    elif bv < .45:
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
-        # gyro_lnlike = -.5*(((np.log10(period) - .5)/.55)**2) \
-        #     - np.log(.55)
-        # gyro_lnlike = -.5*(((np.log10(period) - .5)/.55)**2) \
-        #     - np.log(.55)
-        gyro_lnlike = -.5*((period
-                            - gyro_model_rossby(params[1], bv, mass, rossby))
+        period_model = 1
+        gyro_lnlike = -.5*((period - period_model)
                             / (period_err+10))**2 - np.log(period_err+10)
-        # gyro_lnlike = -.5*((period - 5)/(period_err*20.))**2 \
-        #     - np.log(20.*period_err)
-#         gyro_lnlike = -.5*((period - .5)/(period_err*100))**2 \
-#            - np.log(100*period_err)
 
-    # return lnpr, lnpr
-    # return gyro_lnlike + lnpr, lnpr
+    # If evolved, use a broad gaussian model for rotation.
+    elif bv > .45 and params[0] >= 454:
+        if not mass:
+            mass = mist.mass(params[0], params[1], params[2])
+        period_model = gyro_model_rossby(params[1], bv, mass, rossby)
+        # period_model = gyro_model(params[1], bv)
+        gyro_lnlike = -.5*((period - period_model) / (period_err+10))**2 \
+            - np.log(period_err+10)
+
     return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
+    # return gyro_lnlike + lnpr, lnpr
 
 
 def nll(lnparams, *args):
