@@ -148,10 +148,6 @@ def lnprior(params):
         return age_prior + feh_prior + distance_prior
 
     else:
-        # print(age_prior, "age_prior")
-        # print(distance_prior, "distanec_prior")
-        # print(feh_prior, "feh_prior")
-        # print(mAv, m)
         return -np.inf
 
 
@@ -177,7 +173,11 @@ def lnprob(lnparams, *args):
     # likelihood.
     # lnpr = mod.lnprior(params)
     lnpr = lnprior(params)
-    if not np.isfinite(lnpr) or not np.isfinite(bv):
+    if not np.isfinite(lnpr):
+        return lnpr, lnpr
+
+    # If the B-V value calculated is nan, return the prior.
+    if not np.isfinite(bv):
         return lnpr, lnpr
 
     # If isochrones only, just return the isochronal lhf.
@@ -193,10 +193,10 @@ def lnprob(lnparams, *args):
     elif bv > .45 and params[0] < 454:
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
-        period_model = gyro_model_rossby(params[1], bv, mass, rossby)
-        # period_model = gyro_model(params[1], bv)
-        gyro_lnlike = -.5*((period - period_model) / (period_err+2))**2 \
-            - np.log(period_err+2)
+        # period_model = gyro_model_rossby(params[1], bv, mass, rossby)
+        period_model = gyro_model(params[1], bv)
+        gyro_lnlike = -.5*((period - period_model) / (period_err))**2 \
+            - np.log(period_err)
 
     # If hot, use a broad gaussian model with a mean of 1 for rotation.
     elif bv < .45:
@@ -210,13 +210,12 @@ def lnprob(lnparams, *args):
     elif bv > .45 and params[0] >= 454:
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
-        period_model = gyro_model_rossby(params[1], bv, mass, rossby)
-        # period_model = gyro_model(params[1], bv)
+        # period_model = gyro_model_rossby(params[1], bv, mass, rossby)
+        period_model = gyro_model(params[1], bv)
         gyro_lnlike = -.5*((period - period_model) / (period_err+10))**2 \
             - np.log(period_err+10)
 
     return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
-    # return gyro_lnlike + lnpr, lnpr
 
 
 def nll(lnparams, *args):
