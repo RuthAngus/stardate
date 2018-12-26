@@ -15,10 +15,16 @@ Example useage
 
     import stardate as sd
 
-    iso_params = {"G": (.82, 10),   # Gaia G magnitude with uncertainty
-                  "bp": (.4, .01),  # Gaia G_BP with uncertainty
-                  "rp": (.4, .01),  # Gaia G_RP with uncertainty
-                  "parallax": (10, .01)}  # in milliarcseconds
+    .. iso_params = {"G": (.82, 10),   # Gaia G magnitude with uncertainty
+    ..               "bp": (.4, .01),  # Gaia G_BP with uncertainty
+    ..               "rp": (.4, .01),  # Gaia G_RP with uncertainty
+    ..               "parallax": (10, .01)}  # in milliarcseconds
+
+    iso_params = {"teff": (5777, 10),     # Teff with uncertainty.
+                  "logg": (4.44, .05),    # logg with uncertainty.
+                  "feh": (0., .001),      # Metallicity with uncertainty.
+                  "parallax": (1., .01),  # Parallax in milliarcseconds.
+                  "maxAV": .1}            # Maximum extinction
 
     prot, prot_err = 26, 1
     star = sd.star(iso_params, prot, prot_err)
