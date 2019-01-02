@@ -24,8 +24,8 @@ plt.rcParams.update(plotpar)
 
 class star(object):
 
-    def __init__(self, iso_params, prot, prot_err, bv=None, mass=None,
-                 savedir=".", suffix=""):
+    def __init__(self, iso_params, prot, prot_err, savedir=".",
+                 filename="samples", bv=None, mass=None):
         """
         params
         -------
@@ -41,12 +41,14 @@ class star(object):
             The uncertainty on the stellar rotation period in days.
         savedir: str
             (optional) The name of the directory where the samples will be
-            saved.
-        suffix: str
-            (optional) The id or name of the star to use in the filename.
+            saved. Default is the current working directory.
+        filename: str
+            (optional) The name of the h5 file which the posterior samples
+            will be saved in.
         """
 
         self.iso_params = iso_params
+        print(type(iso_params))
         self.prot = prot
         self.prot_err = prot_err
         self.savedir = savedir
