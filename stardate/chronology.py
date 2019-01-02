@@ -57,8 +57,8 @@ class star(object):
         self.mass = mass
 
     def fit(self, inits=[355, np.log10(4.56*1e9), 0., 1000., .01],
-            nwalkers=24, max_n=100000, thin_by=100, iso_only=False,
-            rossby=True):
+            nwalkers=24, max_n=100000, thin_by=100, burnin=10000,
+            iso_only=False, gyro_only=False):
         """
         params
         ------
@@ -73,6 +73,9 @@ class star(object):
         iso_only: (boolean, optional)
             If true only the isochronal likelihood function will be used.
         """
+        if iso_only:
+            assert gyro_only == False, "You cannot set both iso_only and "\
+                "gyro_only to be True."
 
         p_init = [inits[0], inits[1], inits[2], np.log(inits[3]), inits[4]]
 
@@ -92,17 +95,21 @@ class star(object):
         # Set up the StarModel object needed to calculate the likelihood.
         mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
 
-        args = [mod, self.prot, self.prot_err, self.bv, self.mass, iso_only, rossby]  # lnprob arguments
+        # lnprob arguments
+        args = [mod, self.prot, self.prot_err, self.bv, self.mass, iso_only,
+                gyro_only]
 
         # Run the MCMC
         sampler = run_mcmc(self.iso_params, args, p_init, backend, ndim=ndim,
                            nwalkers=nwalkers, max_n=max_n, thin_by=thin_by)
 
         self.sampler = sampler
-        self.samples = sampler.flatchain
+        nwalkers, nsteps, ndim = np.shape(sampler.chain)
+        self.samples = np.reshape(sampler.chain[:, burnin:, :],
+                                  (nwalkers*(nsteps-burnin), ndim))
         return sampler
 
-    def age(self, burnin=10000):
+    def age_results(self, burnin=10000):
         """
         params
         ------
@@ -112,35 +119,40 @@ class star(object):
         Returns the median age and lower and upper uncertainties.
         Age is log10(Age/yrs).
         """
+        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+        assert nsteps > burnin, "The number of burn in samples to throw "\
+            "away cannot exceed the number of steps taken. Try setting the "\
+            "burnin keyword argument."
         samples = self.sampler.chain[:, burnin:, 1]
-        nwalkers, nsteps = np.shape(samples)
-        samps = np.reshape(samples, (nwalkers*nsteps))
+        samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
         a = np.median(samps)
         errp = np.percentile(samps, 84) - a
         errm = a - np.percentile(samps, 16)
         return a, errm, errp, samps
 
 
-    def eep(self, burnin=10000):
+    def eep_results(self, burnin=10000):
         """
         params
         ------
         burnin: int
             The number of samples to cut off at the beginning of the MCMC
             when calculating the posterior percentiles.
-        Returns the median mass and lower and upper uncertainties in units of
-        solar mass.
+        Returns the median EEP and lower and upper uncertainties.
         """
+        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+        assert nsteps > burnin, "The number of burn in samples to throw "\
+            "away cannot exceed the number of steps taken. Try setting the "\
+            "burnin keyword argument."
         samples = self.sampler.chain[:, burnin:, 0]
-        nwalkers, nsteps = np.shape(samples)
-        samps = np.reshape(samples, (nwalkers*nsteps))
+        samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
         e = np.median(samps)
         errp = np.percentile(samps, 84) - e
         errm = e - np.percentile(samps, 16)
         return e, errm, errp, samps
 
 
-    def mass(self, burnin=10000):
+    def mass_results(self, burnin=10000):
         """
         params
         ------
@@ -150,17 +162,21 @@ class star(object):
         Returns the median mass and lower and upper uncertainties in units of
         solar mass.
         """
+        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+        assert nsteps > burnin, "The number of burn in samples to throw "\
+            "away cannot exceed the number of steps taken. Try setting the "\
+            "burnin keyword argument."
         samples = self.sampler.chain[:, burnin:, :]
         nwalkers, nsteps, ndim = np.shape(samples)
         samps = np.reshape(samples, (nwalkers*nsteps, ndim))
         msamps = mist.mass(samps[:, 0], samps[:, 1], samps[:, 2])
         m = np.median(msamps)
         errp = np.percentile(msamps, 84) - m
-        errm = m - np.percentile(esamps, 16)
+        errm = m - np.percentile(msamps, 16)
         return m, errm, errp, msamps
 
 
-    def feh(self, burnin=10000):
+    def feh_results(self, burnin=10000):
         """
         params
         ------
@@ -169,16 +185,19 @@ class star(object):
             when calculating the posterior percentiles.
         Returns the median metallicity and lower and upper uncertainties.
         """
+        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+        assert nsteps > burnin, "The number of burn in samples to throw "\
+            "away cannot exceed the number of steps taken. Try setting the "\
+            "burnin keyword argument."
         samples = self.sampler.chain[:, burnin:, 2]
-        nwalkers, nsteps = np.shape(samples)
-        samps = np.reshape(samples, (nwalkers*nsteps))
+        samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
         f = np.median(samps)
         errp = np.percentile(samps, 84) - f
         errm = f - np.percentile(samps, 16)
         return f, errm, errp, samps
 
 
-    def distance(self, burnin=10000):
+    def distance_results(self, burnin=10000):
         """
         params
         ------
@@ -188,16 +207,19 @@ class star(object):
         Returns the median distance and lower and upper uncertainties in
         parsecs.
         """
+        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+        assert nsteps > burnin, "The number of burn in samples to throw "\
+            "away cannot exceed the number of steps taken. Try setting the "\
+            "burnin keyword argument."
         samples = self.sampler.chain[:, burnin:, 3]
-        nwalkers, nsteps = np.shape(samples)
-        samps = np.reshape(samples, (nwalkers*nsteps))
+        samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
         d = np.median(samps)
         errp = np.percentile(samps, 84) - d
         errm = d - np.percentile(samps, 16)
         return d, errm, errp, samps
 
 
-    def Av(self, burnin=10000):
+    def Av_results(self, burnin=10000):
         """
         params
         ------
@@ -207,9 +229,12 @@ class star(object):
         Returns the median distance and lower and upper uncertainties in
         parsecs.
         """
+        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+        assert nsteps > burnin, "The number of burn in samples to throw "\
+            "away cannot exceed the number of steps taken. Try setting the "\
+            "burnin keyword argument."
         samples = self.sampler.chain[:, burnin:, 4]
-        nwalkers, nsteps = np.shape(samples)
-        samps = np.reshape(samples, (nwalkers*nsteps))
+        samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
         a_v = np.median(samps)
         errp = np.percentile(samps, 84) - a_v
         errm = a_v - np.percentile(samps, 16)
