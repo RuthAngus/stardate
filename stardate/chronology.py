@@ -100,6 +100,7 @@ class star(object):
                            nwalkers=nwalkers, max_n=max_n, thin_by=thin_by)
 
         self.sampler = sampler
+        self.samples = sampler.flatchain
         return sampler
 
     def age(self, burnin=10000):
