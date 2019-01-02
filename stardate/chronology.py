@@ -77,6 +77,12 @@ class star(object):
             assert gyro_only == False, "You cannot set both iso_only and "\
                 "gyro_only to be True."
 
+        if gyro_only:
+            assert bv not None, "If gyro_only is set to True, you must " \
+                "provide a B-V colour and a mass."
+            assert mass not None, "If gyro_only is set to True, you must " \
+                "provide a B-V colour and a mass."
+
         p_init = [inits[0], inits[1], inits[2], np.log(inits[3]), inits[4]]
 
         np.random.seed(42)
