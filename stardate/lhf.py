@@ -165,7 +165,7 @@ def lnprob(lnparams, *args):
     params = lnparams*1
     params[3] = np.exp(lnparams[3])
 
-    mod, period, period_err, bv, mass, iso_only, rossby = args
+    mod, period, period_err, bv, mass, iso_only,  = args
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -194,8 +194,8 @@ def lnprob(lnparams, *args):
     elif bv > .45 and params[0] < 454:
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
-        # period_model = gyro_model_rossby(params[1], bv, mass, rossby)
-        period_model = gyro_model(params[1], bv)
+        period_model = gyro_model_rossby(params[1], bv, mass)
+        # period_model = gyro_model(params[1], bv)
         gyro_lnlike = -.5*((period - period_model) / (period_err))**2 \
             - np.log(period_err)
 
@@ -213,10 +213,13 @@ def lnprob(lnparams, *args):
     elif bv > .45 and params[0] >= 454:
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
-        # period_model = gyro_model_rossby(params[1], bv, mass, rossby)
-        period_model = gyro_model(params[1], bv)
+        period_model = gyro_model_rossby(params[1], bv, mass)
+        # period_model = gyro_model(params[1], bv)
         gyro_lnlike = -.5*((period - period_model) / (period_err+10))**2 \
             - np.log(period_err+10)
+
+    if gyro_only:
+        return gyro_lnlike + lnpr, lnpr
 
     return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 
