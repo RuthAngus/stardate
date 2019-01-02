@@ -113,12 +113,13 @@ class star(object):
         Returns the median age and lower and upper uncertainties.
         Age is log10(Age/yrs).
         """
-        samples = self.sampler.flatchain
-        asamps = samples[burnin:, 1]
-        a = np.median(asamps)
-        errp = np.percentile(asamps, 84) - a
-        errm = a - np.percentile(asamps, 16)
-        return a, errm, errp, asamps
+        samples = self.sampler.chain[:, burnin:, 1]
+        nwalkers, nsteps = np.shape(samples)
+        samps = np.reshape(samples, (nwalkers*nsteps))
+        a = np.median(samps)
+        errp = np.percentile(samps, 84) - a
+        errm = a - np.percentile(samps, 16)
+        return a, errm, errp, samps
 
 
     def eep(self, burnin=10000):
@@ -131,12 +132,13 @@ class star(object):
         Returns the median mass and lower and upper uncertainties in units of
         solar mass.
         """
-        samples = self.sampler.flatchain
-        esamps = samples[burnin:, 0]
-        e = np.median(esamps)
-        errp = np.percentile(esamps, 84) - e
-        errm = e - np.percentile(esamps, 16)
-        return e, errm, errp, esamps
+        samples = self.sampler.chain[:, burnin:, 0]
+        nwalkers, nsteps = np.shape(samples)
+        samps = np.reshape(samples, (nwalkers*nsteps))
+        e = np.median(samps)
+        errp = np.percentile(samps, 84) - e
+        errm = e - np.percentile(samps, 16)
+        return e, errm, errp, samps
 
 
     def mass(self, burnin=10000):
@@ -149,9 +151,10 @@ class star(object):
         Returns the median mass and lower and upper uncertainties in units of
         solar mass.
         """
-        samples = self.sampler.flatchain
-        msamps = mist.mass(samples[burnin:, 0], samples[burnin:, 1],
-                           samples[burnin:, 2])
+        samples = self.sampler.chain[:, burnin:, :]
+        nwalkers, nsteps, ndim = np.shape(samples)
+        samps = np.reshape(samples, (nwalkers*nsteps, ndim))
+        msamps = mist.mass(samps[:, 0], samps[:, 1], samps[:, 2])
         m = np.median(msamps)
         errp = np.percentile(msamps, 84) - m
         errm = m - np.percentile(esamps, 16)
@@ -167,12 +170,13 @@ class star(object):
             when calculating the posterior percentiles.
         Returns the median metallicity and lower and upper uncertainties.
         """
-        samples = self.sampler.flatchain
-        fsamps = samples[burnin:, 2]
-        f = np.median(fsamps)
-        errp = np.percentile(fsamps, 84) - f
-        errm = f - np.percentile(fsamps, 16)
-        return f, errm, errp, fsamps
+        samples = self.sampler.chain[:, burnin:, 2]
+        nwalkers, nsteps = np.shape(samples)
+        samps = np.reshape(samples, (nwalkers*nsteps))
+        f = np.median(samps)
+        errp = np.percentile(samps, 84) - f
+        errm = f - np.percentile(samps, 16)
+        return f, errm, errp, samps
 
 
     def distance(self, burnin=10000):
@@ -185,12 +189,13 @@ class star(object):
         Returns the median distance and lower and upper uncertainties in
         parsecs.
         """
-        samples = self.sampler.flatchain
-        dsamps = np.exp(samples[burnin:, 3])
-        d = np.median(dsamps)
-        errp = np.percentile(dsamps, 84) - d
-        errm = d - np.percentile(dsamps, 16)
-        return d, errm, errp, dsamps
+        samples = self.sampler.chain[:, burnin:, 3]
+        nwalkers, nsteps = np.shape(samples)
+        samps = np.reshape(samples, (nwalkers*nsteps))
+        d = np.median(samps)
+        errp = np.percentile(samps, 84) - d
+        errm = d - np.percentile(samps, 16)
+        return d, errm, errp, samps
 
 
     def Av(self, burnin=10000):
@@ -203,12 +208,13 @@ class star(object):
         Returns the median distance and lower and upper uncertainties in
         parsecs.
         """
-        samples = self.sampler.flatchain
-        avsamps = samples[burnin:, 4]
-        a_v = np.median(avsamps)
-        errp = np.percentile(avsamps, 84) - a_v
-        errm = a_v - np.percentile(avsamps, 16)
-        return a_v, errm, errp, avsamps
+        samples = self.sampler.chain[:, burnin:, 4]
+        nwalkers, nsteps = np.shape(samples)
+        samps = np.reshape(samples, (nwalkers*nsteps))
+        a_v = np.median(samps)
+        errp = np.percentile(samps, 84) - a_v
+        errm = a_v - np.percentile(samps, 16)
+        return a_v, errm, errp, samps
 
 
     def make_plots(self, truths=[None, None, None, None, None], burnin=10000):
