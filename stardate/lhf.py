@@ -1,5 +1,5 @@
 """
-CHRONOLOGY
+STARDATE
 =====================
 This package produces posterior PDFs over age, mass, bulk metalicity,
 distance and V-band extinction for stars from their spectroscopic parameters
@@ -166,30 +166,31 @@ def lnprob(lnparams, *args):
     params[3] = np.exp(lnparams[3])
 
     mod, period, period_err, bv, mass, iso_only, rossby = args
-    if not bv:
-        bv = calc_bv(params)
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
-    # lnpr = mod.lnprior(params)
-    lnpr = lnprior(params)
+    lnpr = mod.lnprior(params)
+    # lnpr = lnprior(params)
     if not np.isfinite(lnpr):
-        return lnpr, lnpr
-
-    # If the B-V value calculated is nan, return the prior.
-    if not np.isfinite(bv):
         return lnpr, lnpr
 
     # If isochrones only, just return the isochronal lhf.
     if iso_only:
         return mod.lnlike(params) + lnpr, lnpr
 
+    if not bv:
+        bv = calc_bv(params)
+
+    # If the B-V value calculated is nan, return the prior.
+    if not np.isfinite(bv):
+        return lnpr, lnpr
+
     # Check that the period is a positive, finite number. It doesn't matter
     # too much what the lhf is here, as long as it is constant.
     if not period or not np.isfinite(period) or period <= 0.:
         gyro_lnlike = -.5*((5/(20.))**2) - np.log(20.)
 
-    # If cool and MS:
+    # If FGK and MS:
     elif bv > .45 and params[0] < 454:
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
@@ -202,11 +203,13 @@ def lnprob(lnparams, *args):
     elif bv < .45:
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
-        period_model = 1
-        gyro_lnlike = -.5*((period - period_model)
-                            / (period_err+10))**2 - np.log(period_err+10)
+        period_model = .5  # 1
+        # gyro_lnlike = -.5*((period - period_model)
+        #                     / (period_err+10))**2 - np.log(period_err+10)
+        gyro_lnlike = -.5*((np.log10(period) - period_model)
+                            / (.55))**2 - np.log(.55)
 
-    # If evolved, use a broad gaussian model for rotation.
+    # If evolved, use a gyrochronology relation with inflated uncertainties.
     elif bv > .45 and params[0] >= 454:
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
