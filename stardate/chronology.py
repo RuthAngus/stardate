@@ -1,6 +1,5 @@
 import os
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 import h5py
 import tqdm
@@ -8,18 +7,9 @@ from stardate.lhf import run_mcmc#, make_plots
 from isochrones import StarModel
 import pandas as pd
 import emcee
-import corner
 
 from isochrones.mist import MIST_Isochrone
 mist = MIST_Isochrone()
-
-plotpar = {'axes.labelsize': 18,
-           'font.size': 18,
-           'legend.fontsize': 18,
-           'xtick.labelsize': 18,
-           'ytick.labelsize': 18,
-           'text.usetex': True}
-plt.rcParams.update(plotpar)
 
 
 class star(object):
@@ -48,7 +38,6 @@ class star(object):
         """
 
         self.iso_params = iso_params
-        print(type(iso_params))
         self.prot = prot
         self.prot_err = prot_err
         self.savedir = savedir
@@ -78,9 +67,7 @@ class star(object):
                 "gyro_only to be True."
 
         if gyro_only:
-            assert bv not None, "If gyro_only is set to True, you must " \
-                "provide a B-V colour and a mass."
-            assert mass not None, "If gyro_only is set to True, you must " \
+            assert mass, "If gyro_only is set to True, you must " \
                 "provide a B-V colour and a mass."
 
         p_init = [inits[0], inits[1], inits[2], np.log(inits[3]), inits[4]]
@@ -127,8 +114,9 @@ class star(object):
         """
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away cannot exceed the number of steps taken. Try setting the "\
-            "burnin keyword argument."
+            "away ({0}) cannot exceed the number of steps that were saved "\
+            "({1}). Try setting the burnin keyword argument.".format(burnin,
+                                                                     nsteps)
         samples = self.sampler.chain[:, burnin:, 1]
         samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
         a = np.median(samps)
@@ -148,8 +136,9 @@ class star(object):
         """
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away cannot exceed the number of steps taken. Try setting the "\
-            "burnin keyword argument."
+            "away ({0}) cannot exceed the number of steps that were saved "\
+            "({1}). Try setting the burnin keyword argument.".format(burnin,
+                                                                     nsteps)
         samples = self.sampler.chain[:, burnin:, 0]
         samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
         e = np.median(samps)
@@ -170,8 +159,9 @@ class star(object):
         """
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away cannot exceed the number of steps taken. Try setting the "\
-            "burnin keyword argument."
+            "away ({0}) cannot exceed the number of steps that were saved "\
+            "({1}). Try setting the burnin keyword argument.".format(burnin,
+                                                                     nsteps)
         samples = self.sampler.chain[:, burnin:, :]
         nwalkers, nsteps, ndim = np.shape(samples)
         samps = np.reshape(samples, (nwalkers*nsteps, ndim))
@@ -193,8 +183,9 @@ class star(object):
         """
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away cannot exceed the number of steps taken. Try setting the "\
-            "burnin keyword argument."
+            "away ({0}) cannot exceed the number of steps that were saved "\
+            "({1}). Try setting the burnin keyword argument.".format(burnin,
+                                                                     nsteps)
         samples = self.sampler.chain[:, burnin:, 2]
         samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
         f = np.median(samps)
@@ -215,8 +206,9 @@ class star(object):
         """
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away cannot exceed the number of steps taken. Try setting the "\
-            "burnin keyword argument."
+            "away ({0}) cannot exceed the number of steps that were saved "\
+            "({1}). Try setting the burnin keyword argument.".format(burnin,
+                                                                     nsteps)
         samples = self.sampler.chain[:, burnin:, 3]
         samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
         d = np.median(samps)
@@ -237,86 +229,12 @@ class star(object):
         """
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away cannot exceed the number of steps taken. Try setting the "\
-            "burnin keyword argument."
+            "away ({0}) cannot exceed the number of steps that were saved "\
+            "({1}). Try setting the burnin keyword argument.".format(burnin,
+                                                                     nsteps)
         samples = self.sampler.chain[:, burnin:, 4]
         samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
         a_v = np.median(samps)
         errp = np.percentile(samps, 84) - a_v
         errm = a_v - np.percentile(samps, 16)
         return a_v, errm, errp, samps
-
-
-    # def make_plots(self, truths=[None, None, None, None, None], burnin=10000):
-    #     """
-    #     params
-    #     ------
-    #     truths: list
-    #         A list of true values to give to corner.py that will be plotted
-    #         in corner plots. If an entry is "None", no line will be plotted.
-    #         Default = [None, None, None, None, None]
-    #     burnin: int
-    #         The number of burn in samples at the beginning of the MCMC to
-    #         throw away. The default is 100000.
-    #     """
-
-    #     nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
-    #     print("nsteps = ", nsteps, "burnin = ", burnin)
-    #     assert burnin < nsteps, "The number of burn in samples to throw" \
-    #         "away can't exceed the number of steps."
-
-    #     # samples = self.sampler.flatchain
-    #     samples = np.reshape(self.sampler.chain[:, burnin:, :],
-    #                          (nwalkers*(nsteps - burnin), ndim))
-
-    #     print("Plotting age posterior")
-    #     age_gyr = (10**samples[:, 1])*1e-9
-    #     plt.hist(age_gyr)
-    #     plt.xlabel("Age [Gyr]")
-    #     med, std = np.median(age_gyr), np.std(age_gyr)
-    #     if truths[2]:
-    #         plt.axvline(10**(truths[2])*1e-9, color="tab:orange",
-    #                     label="$\mathrm{True~age~[Gyr]}$")
-    #     plt.axvline(med, color="k", label="$\mathrm{Median~age~[Gyr]}$")
-    #     plt.axvline(med - std, color="k", linestyle="--")
-    #     plt.axvline(med + std, color="k", linestyle="--")
-    #     plt.savefig("{0}/{1}_marginal_age".format(self.savedir,
-    #                                               str(self.suffix).zfill(4)))
-    #     plt.close()
-
-    #     print("Plotting production chains...")
-    #     plt.figure(figsize=(16, 9))
-    #     for j in range(ndim):
-    #         plt.subplot(ndim, 1, j+1)
-    #         plt.plot(self.sampler.chain[:, :, j].T, "k", alpha=.1)
-    #         plt.axhline(truths[j+1])
-    #     plt.savefig("{0}/{1}_chains".format(self.savedir,
-    #                                         str(self.suffix).zfill(4)))
-    #     plt.close()
-
-    #     print("Making corner plot...")
-    #     labels = ["$\mathrm{Mass~}[M_\odot]$", "$\mathrm{EEP}$",
-    #               "$\log_{10}(\mathrm{Age~[yr]})$",
-    #               "$\mathrm{[Fe/H]}$",
-    #               "$\ln(\mathrm{Distance~[Kpc])}$",
-    #               "$A_v$"]
-    #     mass_samples = np.zeros((nwalkers*(nsteps-burnin), ndim+1))
-    #     mass_samples[:, 1:] = samples[:, :]
-    #     mass_samples[:, 0] = mist.mass(samples[:, 0], samples[:, 1],
-    #                                    samples[:, 2])
-    #     corner.corner(mass_samples[:, :], labels=labels, truths=truths);
-    #     plt.savefig("{0}/{1}_corner".format(self.savedir,
-    #                                         str(self.suffix).zfill(4)))
-    #     plt.close()
-
-    #     # # Make mass histogram
-    #     # samples = self.sampler.flatchain
-    #     # mass_samps = mist.mass(samples[:, 0], samples[:, 1], samples[:, 2])
-    #     # plt.hist(mass_samps, 50);
-    #     # if truths[0]:
-    #     #         plt.axvline(mist.mass(truths[0], truths[1], truths[2]),
-    #     #                               color="tab:orange",
-    #     #                     label="$\mathrm{True~mass~}[M_\odot]$")
-    #     # plt.savefig("{0}/{1}_marginal_mass".format(self.savedir,
-    #     #                                            str(self.suffix).zfill(4)))
-    #     # plt.close()
