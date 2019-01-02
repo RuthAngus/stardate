@@ -16,13 +16,11 @@ package on its own.
 
 
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 from isochrones.mist import MIST_Isochrone
 mist = MIST_Isochrone()
 from isochrones import StarModel
 import emcee
-import corner
 import h5py
 from . import priors
 
@@ -165,7 +163,7 @@ def lnprob(lnparams, *args):
     params = lnparams*1
     params[3] = np.exp(lnparams[3])
 
-    mod, period, period_err, bv, mass, iso_only,  = args
+    mod, period, period_err, bv, mass, iso_only, gyro_only = args
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -336,54 +334,3 @@ def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, thin_by=100,
     # ======================================================================
 
     return sampler
-
-
-# def make_plots(sampler, i, truths, savedir, burnin=10000):
-
-#     nwalkers, nsteps, ndim = np.shape(sampler.chain)
-#     assert burnin < nsteps, "The number of burn in samples to throw away" \
-#         "can't exceed the total number of samples."
-
-#     samples = sampler.flatchain
-
-#     print("Plotting age posterior")
-#     age_gyr = (10**samples[burnin:, 1])*1e-9
-#     plt.hist(age_gyr)
-#     plt.xlabel("Age [Gyr]")
-#     med, std = np.median(age_gyr), np.std(age_gyr)
-#     if truths[1]:
-#         plt.axvline(10**(truths[1])*1e-9, color="tab:orange",
-#                     label="$\mathrm{True~age~[Gyr]}$")
-#     plt.axvline(med, color="k", label="$\mathrm{Median~age~[Gyr]}$")
-#     plt.axvline(med - std, color="k", linestyle="--")
-#     plt.axvline(med + std, color="k", linestyle="--")
-#     plt.savefig("{0}/{1}_marginal_age".format(savedir, str(i).zfill(4)))
-#     plt.close()
-
-#     print("Plotting production chains...")
-#     plt.figure(figsize=(16, 9))
-#     for j in range(ndim):
-#         plt.subplot(ndim, 1, j+1)
-#         plt.plot(sampler.chain[:, burnin:, j].T, "k", alpha=.1)
-#     plt.savefig("{0}/{1}_chains".format(savedir, str(i).zfill(4)))
-#     plt.close()
-
-#     print("Making corner plot...")
-#     labels = ["$\mathrm{EEP}$",
-#               "$\log_{10}(\mathrm{Age~[yr]})$",
-#               "$\mathrm{[Fe/H]}$",
-#               "$\ln(\mathrm{Distance~[Kpc])}$",
-#               "$A_v$"]
-#     corner.corner(samples[burnin:, :], labels=labels, truths=truths);
-#     plt.savefig("{0}/{1}_corner".format(savedir, str(i).zfill(4)))
-#     plt.close()
-
-#     # Make mass histogram
-#     samples = sampler.flatchain
-#     mass_samps = mist.mass(samples[:, 0], samples[:, 1], samples[:, 2])
-#     plt.hist(mass_samps, 50);
-#     if truths[0]:
-#             plt.axvline(truths[0], color="tab:orange",
-#                         label="$\mathrm{True~mass~}[M_\odot]$")
-#     plt.savefig("{0}/{1}_marginal_mass".format(savedir, str(i).zfill(4)))
-#     plt.close()
