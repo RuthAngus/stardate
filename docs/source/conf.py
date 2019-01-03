@@ -23,6 +23,20 @@
 
 # -- General configuration ------------------------------------------------
 
+# Convert the tutorials
+import subprocess
+import glob
+
+for fn in glob.glob("_static/notebooks/*.ipynb"):
+    name = os.path.splitext(os.path.split(fn)[1])[0]
+    outfn = os.path.join("tutorials", name + ".rst")
+    print("Building {0}...".format(name))
+    subprocess.check_call(
+        "jupyter nbconvert --template tutorials/tutorial_rst --to rst "
+        + fn + " --output-dir tutorials", shell=True)
+    subprocess.check_call(
+        "python fix_internal_links.py " + outfn, shell=True)
+
 # If your documentation needs a minimal Sphinx version, state it here.
 #
 # needs_sphinx = '1.0'
@@ -124,7 +138,14 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+# html_theme = 'alabaster'
+# Readthedocs.
+import os
+on_rtd = os.environ.get("READTHEDOCS", None) == "True"
+if not on_rtd:
+    import sphinx_rtd_theme
+    html_theme = "sphinx_rtd_theme"
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
