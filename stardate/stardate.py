@@ -12,7 +12,7 @@ from isochrones.mist import MIST_Isochrone
 mist = MIST_Isochrone()
 
 
-class star(object):
+class Star(object):
 
     def __init__(self, iso_params, prot, prot_err, savedir=".",
                  filename="samples", bv=None, mass=None):
