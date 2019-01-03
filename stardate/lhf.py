@@ -28,12 +28,15 @@ from . import priors
 def gyro_model(log10_age, bv):
     """
     Given a B-V colour and an age, predict a rotation period.
-    parameters:
-    ----------
+    params:
+    -------
     log10_age: (array)
         The log age of a star: log10(age) in years.
     bv: (array)
         The B-V colour of a star.
+    returns:
+    --------
+    Rotation period in days.
     """
     age_myr = (10**log10_age)*1e-6
 
@@ -46,7 +49,7 @@ def gyro_model(log10_age, bv):
 def gyro_model_praesepe(log10_age, bprp):
     """
     Given a G_BP-G_RP colour and an age, predict a rotation period.
-    parameters:
+    parameters using a model fit to Praesepe:
     ----------
     log10_age: (array)
         The log age of a star: log10(age) in years.
@@ -63,22 +66,23 @@ def gyro_model_praesepe(log10_age, bprp):
     return 10**log_P
 
 
-def gyro_model_rossby(log10_age, bv, mass, rossby=True, Ro_cutoff=2.16):
+def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16):
     """
-    Predict a rotation period from an age and color (and mass if the rossby
-    cutoff model is used).
+    Predict a rotation period from an age, color and mass using a combination
+    of the Angus et al. (2015) gyrochronology model with the
+    van Saders et al. (2016) weakened magnetic braking correction.
     params:
     -------
-    args: (list)
-        Either containing [log10_age, bv] in which case the standard gyro
-        model will be used.
-        Or [mass, log10_age, bv] in which case the Rossby number cutoff model
-        will be used.
+    log10_age: (float)
+        The log10_age of a star in years.
+    bv: (float)
+        The B-V color of a star.
+    mass: (float)
+        The mass of a star in Solar masses.
     Ro_cutoff: (float, optional)
         The critical Rossby number after which stars retain their rotation
-        period.
-        This is 2.16 in van Saders et al. (2016) and 2.08 in van Saders et al.
-        (2018).
+        period. This is 2.16 in van Saders et al. (2016) and 2.08 in van
+        Saders et al. (2018). We adopt 2.16.
     """
     # Angus et al. (2015) parameters.
     a, b, c, n = [.4, .31, .45, .55]
@@ -109,7 +113,16 @@ def gyro_model_rossby(log10_age, bv, mass, rossby=True, Ro_cutoff=2.16):
 
 
 def calc_bv(mag_pars):
-    # Calculate B-V
+    """
+    Calculate B-V colour from stellar parameters using the MIST isochrones.
+    params:
+    ------
+    mag_pars: (list)
+        A list containing EEP, age, feh, distance, Av for a star.
+    returns:
+    -------
+        B-V color. (float)
+    """
     B = mist.mag["B"](*mag_pars)
     V = mist.mag["V"](*mag_pars)
     return B-V
@@ -119,6 +132,13 @@ def lnprior(params):
     """
     lnprior on all parameters.
     params need to be linear except age which is log10(age [yr]).
+    params:
+    -------
+    params: (array)
+        An array of EEP, age, feh, distance and extinction.
+    returns:
+    -------
+    The prior probability for these parameters.
     """
 
     # finite_mask = np.isfinite(params)
@@ -152,11 +172,18 @@ def lnprior(params):
 def lnprob(lnparams, *args):
     """
     The ln-probability function.
-    lnparams are [eep, log10(age [yrs]), [Fe/H], ln(distance [kpc]), A_v]
-    If EEP is greater than 425, the star has started evolving up the
-    subgiant branch, so it should have a precise isochronal age and an
-    unreliable gyro age -- shut gyrochronology off!
-    If the Rossby number is greater than 2.16, shut gyrochronology off.
+    params:
+    ------
+    lnparams: (array)
+        The parameter array: [EEP, log10(age [yrs]), [Fe/H], ln(distance [kpc]), A_v]
+    *args: (list)
+        The arguments. A list containing
+        [mod, period, period_err, bv, mass, iso_only, gyro_only].
+        mod is the isochrones starmodel object which is set up in stardate.py.
+        period, period_err, bv and mass are the rotation period and rotation
+        period uncertainty (in days), B-V color and mass [M_sun].
+        bv and mass should both be None unless gyrochronology only is being
+        used.
     """
 
     # Transform mass and distance back to linear.
