@@ -111,7 +111,7 @@ class Star(object):
 
         # Set up the backend
         # Don't forget to clear it in case the file already exists
-        filename = "{0}/{1}_samples.h5".format(self.savedir, self.filename)
+        filename = "{0}/{1}.h5".format(self.savedir, self.filename)
         backend = emcee.backends.HDFBackend(filename)
         nwalkers, ndim = 24, 5
         backend.reset(nwalkers, ndim)
