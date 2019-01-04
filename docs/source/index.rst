@@ -44,7 +44,7 @@ Example usage
     prot, prot_err = 26, 1
 
     # Set up the star object.
-    star = sd.star(iso_params, prot, prot_err)  # Here's where you add a rotation period
+    star = sd.Star(iso_params, prot, prot_err)  # Here's where you add a rotation period
 
     # Run the MCMC
     star.fit()
@@ -71,6 +71,8 @@ Tutorials
 
 .. toctree::
    :maxdepth: 2
+
+   tutorials/Tutorial
 
 
 License & attribution
