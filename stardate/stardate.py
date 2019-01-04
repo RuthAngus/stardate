@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import h5py
 import tqdm
-from stardate.lhf import lnprob
+from lhf import lnprob
 from isochrones import StarModel
 import pandas as pd
 import emcee
@@ -55,6 +55,8 @@ class Star(object):
             nwalkers=24, max_n=100000, thin_by=100, burnin=0,
             iso_only=False, gyro_only=False):
         """
+        Explore the posterior PDFs of the stellar parameters using MCMC
+        (with emcee).
         params
         ------
         inits: (list, optional)
@@ -64,11 +66,12 @@ class Star(object):
         nwalkers: (int, optional)
             The number of walkers to use with emcee. The default is 24.
         max_n: (int, optional)
-            The maximum number of samples to obtain, the default in 100000.
+            The maximum number of samples to obtain (although not necessarily
+            to save -- see thin_by). The default is 100000.
         thin_by: (int, optional)
             Only one in every thin_by samples will be saved. The default is
             100. Set = 1 to save every sample (note -- this substantially
-            slows down the IO.
+            slows down the MCMC process because of the additional IO time.
         burnin: (int, optional)
             Default = 0.
             The number of SAVED samples to throw away when accessing the
@@ -136,22 +139,6 @@ class Star(object):
     def run_mcmc(self):
         """
         Runs the MCMC.
-        params:
-        -------
-        args: (list)
-            A list of arguments passed to the lnprob function.
-            [mod, period, period_err, bv, mass, iso_only, gyro_only].
-            mod is the isochrones starmodel object which is set up in stardate.py.
-            period, period_err, bv and mass are the rotation period and rotation
-            period uncertainty (in days), B-V color and mass [M_sun].
-            bv and mass should both be None unless gyrochronology only is being
-            used.
-        p_init: (array)
-            The initial parameter guesses.
-        backend:
-            The emcee backend used to iteratively save progress.
-        nwalkers: (int, optional)
-            The number of walkers. Default is 24.
         """
 
         max_n = self.max_n//self.thin_by
@@ -176,13 +163,13 @@ class Star(object):
 
         # We'll track how the average autocorrelation time estimate changes
         index = 0
-        autocorr = np.empty(self.max_n)
+        autocorr = np.empty(max_n)
 
         # This will be useful to testing convergence
         old_tau = np.inf
 
         # Now we'll sample for up to max_n steps
-        for sample in sampler.sample(p0, iterations=self.max_n,
+        for sample in sampler.sample(p0, iterations=max_n,
                                      thin_by=self.thin_by, store=True,
                                      progress=True):
             # Only check convergence every 100 steps
