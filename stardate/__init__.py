@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 
 from .lhf import *
-from .chronology import *
+from .stardate import *

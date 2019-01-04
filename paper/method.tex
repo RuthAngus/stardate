@@ -270,12 +270,17 @@ which is based on young cluster stars and old asteroseismic stars.
 Because this gyochronology model is not calibrated to include stars turning
 off the main sequence whose rotation slows rapidly due to their increasing
 radius, we do not apply gyrochronology to stars with a MIST model \eep\
-greater than 425\footnote{This number was determined by investigating the
-correspondance between \eep\ and position on the HR diagram.
-See the {\it Jupyter} notebook at
-\url{https://github.com/RuthAngus/stardate/blob/master/paper/code/EEP_cutoff.ipynb}.
-In future, \eep\ could be used as a parameter in our gyrochronology model.
-}.
+greater than 454 as this corresponds to terminal age \ms\ \citep{dotter2016,
+choi2016}.
+In future, rather than switch gyrochronology off at a certain \eep, we could
+include it as an additional dimension and model rotation periods as a function
+of it.
+% \footnote{This number was determined by investigating the
+% correspondance between \eep\ and position on the HR diagram.
+% See the {\it Jupyter} notebook at
+% \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/EEP_cutoff.ipynb}.
+% In future, \eep\ could be used as a parameter in our gyrochronology model.
+% }.
 In addition, stars with \cbv $>$ 0.45, corresponding to a temperature around
 6250 K are only modeled using isochrones, not gyrochronology.
 These stars have thin convective envelopes and do not spin down substantially
