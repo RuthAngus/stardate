@@ -87,6 +87,7 @@ def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
         will be implemented. If false, the Angus et al. (2015) gyrochronology
         relation will be used unmodified.
     """
+
     # Angus et al. (2015) parameters.
     a, b, c, n = [.4, .31, .45, .55]
 
@@ -306,61 +307,3 @@ def convective_overturn_time(*args):
 
     log_tau = 1.16 - 1.49*np.log10(M) - .54*(np.log10(M))**2
     return 10**log_tau
-
-
-def run_mcmc(obs, args, p_init, backend, ndim=5, nwalkers=24, thin_by=100,
-             max_n=100000):
-    max_n = max_n//thin_by
-
-    # p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
-
-    # Broader gaussian for EEP initialization
-    p0 = np.empty((nwalkers, ndim))
-    p0[:, 0] = np.random.randn(nwalkers)*10 + p_init[0]
-    p0[:, 1] = np.random.randn(nwalkers)*1e-4 + p_init[1]
-    p0[:, 2] = np.random.randn(nwalkers)*1e-4 + p_init[2]
-    p0[:, 3] = np.random.randn(nwalkers)*1e-4 + p_init[3]
-    p0[:, 4] = np.random.randn(nwalkers)*1e-4 + p_init[4]
-    p0 = list(p0)
-
-    sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=args,
-                                    backend=backend)
-
-    # Copied from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
-    # ======================================================================
-
-    # We'll track how the average autocorrelation time estimate changes
-    index = 0
-    autocorr = np.empty(max_n)
-
-    # This will be useful to testing convergence
-    old_tau = np.inf
-
-    # Now we'll sample for up to max_n steps
-    for sample in sampler.sample(p0, iterations=max_n, thin_by=thin_by,
-                                 store=True, progress=True):
-        # Only check convergence every 100 steps
-        # if sampler.iteration % 100:
-        #     continue
-
-        # Compute the autocorrelation time so far
-        # Using tol=0 means that we'll always get an estimate even
-        # if it isn't trustworthy
-        tau = sampler.get_autocorr_time(tol=0) * thin_by
-        autocorr[index] = np.mean(tau)
-        index += 1
-
-        # # Check convergence
-        converged = np.all(tau * 100 < sampler.iteration)
-        converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
-        converged &= np.all(tau) > 1
-        # print("100 samples?", np.all(tau * 100 < sampler.iteration))
-        # print(tau, tau*100, sampler.iteration)
-        # print("Small delta tau?", np.all(np.abs(old_tau - tau) / tau < 0.01))
-        # print(np.abs(old_tau - tau))
-        if converged:
-            break
-        old_tau = tau
-    # ======================================================================
-
-    return sampler
