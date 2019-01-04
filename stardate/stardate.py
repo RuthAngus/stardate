@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import h5py
 import tqdm
-from stardate.lhf import run_mcmc
+from stardate.lhf import lnprob
 from isochrones import StarModel
 import pandas as pd
 import emcee
@@ -80,6 +80,11 @@ class Star(object):
             If true only the gyrochronal likelihood function will be used.
             Cannot be true if iso_only is true.
         """
+
+        self.max_n = max_n
+        self.nwalkers = nwalkers
+        self.thin_by = thin_by
+
         if iso_only:
             assert gyro_only == False, "You cannot set both iso_only and "\
                 "gyro_only to be True."
@@ -93,6 +98,7 @@ class Star(object):
             print("Automatically setting burn in to {}".format(burnin))
 
         p_init = [inits[0], inits[1], inits[2], np.log(inits[3]), inits[4]]
+        self.p_init = p_init
 
         np.random.seed(42)
 
@@ -106,6 +112,7 @@ class Star(object):
         backend = emcee.backends.HDFBackend(filename)
         nwalkers, ndim = 24, 5
         backend.reset(nwalkers, ndim)
+        self.backend = backend
 
         # Set up the StarModel object needed to calculate the likelihood.
         mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
@@ -113,15 +120,97 @@ class Star(object):
         # lnprob arguments
         args = [mod, self.prot, self.prot_err, self.bv, self.mass, iso_only,
                 gyro_only]
+        self.args = args
 
         # Run the MCMC
-        sampler = run_mcmc(self.iso_params, args, p_init, backend, ndim=ndim,
-                           nwalkers=nwalkers, max_n=max_n, thin_by=thin_by)
+        # sampler = run_mcmc(args, p_init, backend, nwalkers=nwalkers,
+        #                    max_n=max_n, thin_by=thin_by)
+        sampler = self.run_mcmc()
 
         self.sampler = sampler
         nwalkers, nsteps, ndim = np.shape(sampler.chain)
         self.samples = np.reshape(sampler.chain[:, burnin:, :],
                                   (nwalkers*(nsteps-burnin), ndim))
+
+
+    def run_mcmc(self):
+        """
+        Runs the MCMC.
+        params:
+        -------
+        args: (list)
+            A list of arguments passed to the lnprob function.
+            [mod, period, period_err, bv, mass, iso_only, gyro_only].
+            mod is the isochrones starmodel object which is set up in stardate.py.
+            period, period_err, bv and mass are the rotation period and rotation
+            period uncertainty (in days), B-V color and mass [M_sun].
+            bv and mass should both be None unless gyrochronology only is being
+            used.
+        p_init: (array)
+            The initial parameter guesses.
+        backend:
+            The emcee backend used to iteratively save progress.
+        nwalkers: (int, optional)
+            The number of walkers. Default is 24.
+        """
+
+        max_n = self.max_n//self.thin_by
+
+        # p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
+
+        # Broader gaussian for EEP initialization
+        ndim = len(self.p_init)  # Should always be 5. Hard code it?
+        p0 = np.empty((self.nwalkers, ndim))
+        p0[:, 0] = np.random.randn(self.nwalkers)*10 + self.p_init[0]
+        p0[:, 1] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[1]
+        p0[:, 2] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[2]
+        p0[:, 3] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[3]
+        p0[:, 4] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[4]
+        p0 = list(p0)
+
+        sampler = emcee.EnsembleSampler(self.nwalkers, ndim, lnprob,
+                                        args=self.args, backend=self.backend)
+
+        # Copied from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
+        # ======================================================================
+
+        # We'll track how the average autocorrelation time estimate changes
+        index = 0
+        autocorr = np.empty(self.max_n)
+
+        # This will be useful to testing convergence
+        old_tau = np.inf
+
+        # Now we'll sample for up to max_n steps
+        for sample in sampler.sample(p0, iterations=self.max_n,
+                                     thin_by=self.thin_by, store=True,
+                                     progress=True):
+            # Only check convergence every 100 steps
+            # if sampler.iteration % 100:
+            #     continue
+
+            # Compute the autocorrelation time so far
+            # Using tol=0 means that we'll always get an estimate even
+            # if it isn't trustworthy
+            tau = sampler.get_autocorr_time(tol=0) * self.thin_by
+            autocorr[index] = np.mean(tau)
+            index += 1
+
+            # # Check convergence
+            converged = np.all(tau * 100 < sampler.iteration)
+            converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
+            converged &= np.all(tau) > 1
+            # print("100 samples?", np.all(tau * 100 < sampler.iteration))
+            # print(tau, tau*100, sampler.iteration)
+            # print("Small delta tau?", np.all(np.abs(old_tau - tau) / tau < 0.01))
+            # print(np.abs(old_tau - tau))
+            if converged:
+                break
+            old_tau = tau
+        # ======================================================================
+
+        return sampler
+
 
     def age_results(self, burnin=0):
         """
