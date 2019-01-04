@@ -22,7 +22,6 @@ mist = MIST_Isochrone()
 from isochrones import StarModel
 import emcee
 import h5py
-from . import priors
 
 
 def gyro_model(log10_age, bv):
