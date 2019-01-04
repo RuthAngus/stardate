@@ -65,7 +65,7 @@ def gyro_model_praesepe(log10_age, bprp):
     return 10**log_P
 
 
-def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16):
+def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
     """
     Predict a rotation period from an age, color and mass using a combination
     of the Angus et al. (2015) gyrochronology model with the
@@ -82,6 +82,10 @@ def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16):
         The critical Rossby number after which stars retain their rotation
         period. This is 2.16 in van Saders et al. (2016) and 2.08 in van
         Saders et al. (2018). We adopt 2.16.
+    rossby: (bool, optional)
+        If True (default), the van Saders (2016) weakened magnetic braking law
+        will be implemented. If false, the Angus et al. (2015) gyrochronology
+        relation will be used unmodified.
     """
     # Angus et al. (2015) parameters.
     a, b, c, n = [.4, .31, .45, .55]
