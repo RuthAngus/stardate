@@ -136,6 +136,10 @@ class Star(object):
         """
         Provides the posterior samples and allows the user to specify the
         number of samples to throw away as burn in.
+        params:
+        ------
+        burnin: (int, optional)
+            The number of samples to throw away as burn in. Default = 0.
         """
         return np.reshape(self.sampler.chain[:, burnin:, :],
                           (nwalkers*(nsteps-burnin), ndim))
