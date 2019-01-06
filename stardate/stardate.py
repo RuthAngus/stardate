@@ -140,7 +140,7 @@ class Star(object):
         burnin: (int, optional)
             The number of samples to throw away as burn in. Default = 0.
         """
-        nwalkers, nsteps, ndim = np.shape(sampler.chain)
+        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         return np.reshape(self.sampler.chain[:, burnin:, :],
                           (nwalkers*(nsteps-burnin), ndim))
 
