@@ -6,7 +6,7 @@
 stardate
 ====================================
 
-Checkout [the documentation](https://stardate.readthedocs.io/en/latest/).
+Checkout `the documentation https://stardate.readthedocs.io/en/latest/>`_.
 
 *stardate* is a tool for measuring precise stellar ages.
 it combines isochrone fitting with gyrochronology (rotation-based ages) to
@@ -15,7 +15,7 @@ the best possible ages provided by *stardate* will be for stars with rotation
 periods, although ages can be predicted for stars without rotation periods
 too.
 if you don't have rotation periods for any of your stars, you might consider
-using `isochrones.py <https://github.com/timothydmorton/isochrones>`_ as
+using `isochrones <https://github.com/timothydmorton/isochrones>`_ as
 *stardate* is simply an extension to *isochrones* that incorporates
 gyrochronology.
 *stardate* reverts back to *isochrones* when no rotation period is provided.
