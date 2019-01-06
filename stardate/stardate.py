@@ -252,7 +252,7 @@ class Star(object):
         return e, errm, errp, samps
 
 
-    def mass_results(self, burnin=100):
+    def mass_results(self, burnin=0):
         """
         params
         ------
@@ -319,7 +319,7 @@ class Star(object):
         return d, errm, errp, samps
 
 
-    def Av_results(self, burnin=100):
+    def Av_results(self, burnin=0):
         """
         params
         ------
