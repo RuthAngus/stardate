@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import h5py
 import tqdm
-from lhf import lnprob
+from .lhf import lnprob
 from isochrones import StarModel
 import pandas as pd
 import emcee
@@ -71,7 +71,7 @@ class Star(object):
         thin_by: (int, optional)
             Only one in every thin_by samples will be saved. The default is
             100. Set = 1 to save every sample (note -- this substantially
-            slows down the MCMC process because of the additional IO time.
+            slows down the MCMC process because of the additional I/O time.
         burnin: (int, optional)
             Default = 0.
             The number of SAVED samples to throw away when accessing the
