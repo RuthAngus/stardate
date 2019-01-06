@@ -129,11 +129,16 @@ class Star(object):
         # sampler = run_mcmc(args, p_init, backend, nwalkers=nwalkers,
         #                    max_n=max_n, thin_by=thin_by)
         sampler = self.run_mcmc()
-
         self.sampler = sampler
         nwalkers, nsteps, ndim = np.shape(sampler.chain)
-        self.samples = np.reshape(sampler.chain[:, burnin:, :],
-                                  (nwalkers*(nsteps-burnin), ndim))
+
+    def samples(self, burnin=0):
+        """
+        Provides the posterior samples and allows the user to specify the
+        number of samples to throw away as burn in.
+        """
+        return np.reshape(self.sampler.chain[:, burnin:, :],
+                          (nwalkers*(nsteps-burnin), ndim))
 
 
     def run_mcmc(self):
