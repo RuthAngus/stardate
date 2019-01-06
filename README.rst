@@ -21,7 +21,7 @@ gyrochronology.
 Installation
 ============
 
-.. code-block:: bash
+::
     >> git clone https://github.com/RuthAngus/stardate.git
     >> cd stardate
     >> python setup.py install
