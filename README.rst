@@ -6,7 +6,7 @@
 stardate
 ====================================
 
-Checkout `the documentation https://stardate.readthedocs.io/en/latest/>`_.
+Checkout `the documentation <https://stardate.readthedocs.io/en/latest/>`_.
 
 *stardate* is a tool for measuring precise stellar ages.
 it combines isochrone fitting with gyrochronology (rotation-based ages) to
