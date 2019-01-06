@@ -21,18 +21,18 @@ gyrochronology.
 Installation
 ============
 
-::
-    >> git clone https://github.com/RuthAngus/stardate.git
-    >> cd stardate
-    >> python setup.py install
+.. code-block:: bash
+    git clone https://github.com/RuthAngus/stardate.git
+    cd stardate
+    python setup.py install
 
 You'll also need to download isochrones and switch to the eep branch:
 
 .. code-block:: bash
-    >> git clone https://github.com/timothydmorton/isochrones
-    >> cd isochrones
-    >> git checkout eep
-    >> python setup.py install
+    git clone https://github.com/timothydmorton/isochrones
+    cd isochrones
+    git checkout eep
+    python setup.py install
 
 In order to get started you can create a dictionary containing the observables
 you have for your star.
