@@ -194,12 +194,12 @@ def lnprob(lnparams, *args):
     params = lnparams*1
     params[3] = np.exp(lnparams[3])
 
+    # Unpack the args.
     mod, period, period_err, bv, mass, iso_only, gyro_only = args
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
     lnpr = mod.lnprior(params)
-    # lnpr = lnprior(params)
     if not np.isfinite(lnpr):
         return lnpr, lnpr
 
@@ -207,7 +207,10 @@ def lnprob(lnparams, *args):
     if iso_only:
         return mod.lnlike(params) + lnpr, lnpr
 
-    if not bv:
+    # If a B-V is not provided, calculate it.
+    if bv == None:
+        assert gyro_only == False, "You must provide a B-V colour if you "\
+            "want to calculate an age using gyrochronology only."
         bv = calc_bv(params)
 
     # If the B-V value calculated is nan, return the prior.
@@ -221,14 +224,18 @@ def lnprob(lnparams, *args):
 
     # If FGK and MS:
     elif bv > .45 and params[0] < 454:
-        if not mass:
+
+        if not mass:  # If a mass is not provided, calculate it.
             mass = mist.mass(params[0], params[1], params[2])
+
+        # Calculate a period using the gyrochronology model
         period_model = gyro_model_rossby(params[1], bv, mass)
-        # period_model = gyro_model(params[1], bv)
+
+        # Calculate the gyrochronology likelihood.
         gyro_lnlike = -.5*((period - period_model) / (period_err))**2 \
             - np.log(period_err)
 
-    # If hot, use a broad gaussian model with a mean of 1 for rotation.
+    # If hot, use a broad log-gaussian model with a mean of .5 for rotation.
     elif bv < .45:
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
@@ -243,7 +250,6 @@ def lnprob(lnparams, *args):
         if not mass:
             mass = mist.mass(params[0], params[1], params[2])
         period_model = gyro_model_rossby(params[1], bv, mass)
-        # period_model = gyro_model(params[1], bv)
         gyro_lnlike = -.5*((period - period_model) / (period_err+10))**2 \
             - np.log(period_err+10)
 
