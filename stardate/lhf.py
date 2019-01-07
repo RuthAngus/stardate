@@ -259,39 +259,16 @@ def lnprob(lnparams, *args):
     return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
 
 
-def nll(lnparams, *args):
-    """
-    The negative log likelihood.
-    lnparams are [eep, log10(age [yrs]), [Fe/H], ln(distance [kpc]), A_v]
-    """
-
-    # Transform mass and distance back to linear.
-    params = lnparams*1
-    params[3] = np.exp(lnparams[3])
-
-    mod, period, period_err, iso_only, rossby = args
-    bv = calc_bv(params)
-
-    # If isochrones only, just return the isochronal lhf.
-    if iso_only:
-        return - mod.lnlike(params)
-
-    mass = mist.mass(params[0], params[1], params[2])
-    gyro_lnlike = -.5*((period - gyro_model_rossby(params[1], bv, mass,
-                                                   rossby)) / period_err)**2 \
-        - np.log(period_err)
-
-    return - mod.lnlike(params) - gyro_lnlike
-
-
 def convective_overturn_time(*args):
-    """
+    """Estimate the convective overturn time.
+
     Estimate the convective overturn time using equation 11 in Wright et al.
     (2011): https://arxiv.org/abs/1109.4634
+
     log tau = 1.16 - 1.49log(M/M⊙) - 0.54log^2(M/M⊙)
-    (I assume log is log10)
-    params:
-    ------
+
+    Args:
+        args:
     EITHER:
     mass: (float)
         Mass in Solar units
