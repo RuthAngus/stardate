@@ -1,7 +1,7 @@
 Installation
 ============
 
-You can either install *stardate* from source or using pip.
+Currently the best way to install *stardate* is from github.
 
 From source:
 
@@ -10,12 +10,6 @@ From source:
     git clone https://github.com/RuthAngus/stardate.git
     cd stardate
     python setup.py install
-
-or
-
-.. code-block:: bash
-
-    pip install stardate_code
 
 Dependencies
 ------------
