@@ -8,10 +8,10 @@ API documentation
 .. autoclass:: stardate.Star
    :inherited-members:
 
-.. autofunc:: stardate.lhf.lnprob
+.. autofunction:: stardate.lhf.lnprob
 
-.. autofunc:: stardate.lhf.gyro_model_rossby
+.. autofunction:: stardate.lhf.gyro_model_rossby
 
-.. autofunc:: stardate.lhf.calc_bv
+.. autofunction:: stardate.lhf.calc_bv
 
-.. autofunc:: stardate.lhf.convective_overturn_time
+.. autofunction:: stardate.lhf.convective_overturn_time
