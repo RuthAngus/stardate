@@ -51,7 +51,7 @@ Example usage
 
     # Print the median age with the 16th and 84th percentile uncertainties.
     age, errp, errm, samples = star.age_results
-    print("stellar age = {0} + {1} + {2}".format(age, errp, errm)
+    print("stellar age = {0} + {1} + {2}".format(age, errp, errm))
 
     >> stellar age = 4.5 + 2.1 - 1.3
 
