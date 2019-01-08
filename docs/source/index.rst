@@ -25,7 +25,7 @@ for the Sun), or just photometric colors, like those from *2MASS*, *SDSS* or
 *Gaia*.
 If you have a parallax, asteroseismic parameters, or an idea of the
 maximum V-band extinction you should throw those in too.
-Set up the star object and :func:`chronology.star.fit` will run Markov Chain
+Set up the star object and :func:`stardate.Star.fit` will run Markov Chain
 Monte Carlo (using *emcee*) in order to infer a Bayesian age for your star.
 
 Example usage
@@ -50,7 +50,8 @@ Example usage
     star.fit()
 
     # Print the median age with the 16th and 84th percentile uncertainties.
-    print("stellar age = {0} + {1} + {2}".format(star.age[0], star.age[2], star.age[1])
+    age, errp, errm, samples = star.age_results
+    print("stellar age = {0} + {1} + {2}".format(age, errp, errm)
 
     >> stellar age = 4.5 + 2.1 - 1.3
 
