@@ -17,9 +17,21 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+dn = os.path.dirname
+sys.path.insert(0, dn(dn(dn(os.path.abspath(__file__)))))
+
+autodoc_mock_imports = [
+    "numpy",
+    "scipy",
+    "pandas",
+    "astropy",
+    "isochrones",
+    "isochrones.mist",
+    "h5py",
+    "tqdm",
+]
 
 # -- General configuration ------------------------------------------------
 
@@ -49,6 +61,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
+    'sphinx.ext.napoleon',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
