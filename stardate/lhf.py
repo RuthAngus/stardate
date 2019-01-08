@@ -25,17 +25,19 @@ import h5py
 
 
 def gyro_model(log10_age, bv):
-    """
-    Given a B-V colour and an age, predict a rotation period.
-    params:
-    -------
-    log10_age: (array)
-        The log age of a star: log10(age) in years.
-    bv: (array)
-        The B-V colour of a star.
-    returns:
-    --------
-    Rotation period in days.
+    """Predict a rotation period from an age and B-V colour.
+
+    Given a B-V colour and an age, predict a rotation period using the Angus
+    et al. (2015) gyrochronology model.
+
+    Args:
+        log10_age (float or array): The logarithmic age of a star or stars,
+            log10(age), in years.
+        bv (float or array): The B-V colour of a star or stars.
+
+    Returns:
+        Rotation period in days.
+
     """
     age_myr = (10**log10_age)*1e-6
 
@@ -46,15 +48,22 @@ def gyro_model(log10_age, bv):
 
 
 def gyro_model_praesepe(log10_age, bprp):
+    """Predict a rotation period from an age and G_BP - G_RP colour.
+
+    Given a Gaia G_BP - G_RP colour and an age, predict a rotation period
+    using a model fit to the Praesepe cluster alone.
+
+    Args:
+        log10_age (float or array): The logarithmic age of a star or stars,
+            log10(age), in years.
+        bprp: (float or array): The Gaia G_BP - G_RP colour of a star or
+            stars.
+
+    Returns:
+        The rotation period in days.
+
     """
-    Given a G_BP-G_RP colour and an age, predict a rotation period.
-    parameters using a model fit to Praesepe:
-    ----------
-    log10_age: (array)
-        The log age of a star: log10(age) in years.
-    bprp: (array)
-        The Bp-rp colour of a star.
-    """
+
     age_gyr = (10**log10_age)*1e-9
     log_age_gyr = np.log10(age_gyr)
     log_c = np.log10(bprp)
@@ -66,26 +75,27 @@ def gyro_model_praesepe(log10_age, bprp):
 
 
 def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
-    """
-    Predict a rotation period from an age, color and mass using a combination
-    of the Angus et al. (2015) gyrochronology model with the
-    van Saders et al. (2016) weakened magnetic braking correction.
-    params:
-    -------
-    log10_age: (float)
-        The log10_age of a star in years.
-    bv: (float)
-        The B-V color of a star.
-    mass: (float)
-        The mass of a star in Solar masses.
-    Ro_cutoff: (float, optional)
-        The critical Rossby number after which stars retain their rotation
-        period. This is 2.16 in van Saders et al. (2016) and 2.08 in van
-        Saders et al. (2018). We adopt 2.16.
-    rossby: (bool, optional)
-        If True (default), the van Saders (2016) weakened magnetic braking law
-        will be implemented. If false, the Angus et al. (2015) gyrochronology
-        relation will be used unmodified.
+    """Predict a rotation period from an age, B-V colour and mass.
+
+    Predict a rotation period from an age, B-V color and mass using the Angus
+    et al. (2015) gyrochronology model with the van Saders et al. (2016)
+    weakened magnetic braking correction.
+
+    Args:
+        log10_age (float): The log10_age of a star in years.
+        bv (float or array): The B-V color of a star.
+        mass (float or array): The mass of a star in Solar masses.
+        Ro_cutoff (float, optional): The critical Rossby number after which
+            stars retain their rotation period. This is 2.16 in van Saders et
+            al. (2016) and 2.08 in van Saders et al. (2018). We adopt a
+            default value of 2.16.
+        rossby (Optional[bool]): If True (default), the van Saders (2016)
+            weakened magnetic braking law will be implemented. If false, the
+            Angus et al. (2015) gyrochronology relation will be used
+            unmodified.
+
+    Returns:
+        The rotation period in days.
     """
 
     # Angus et al. (2015) parameters.
@@ -117,32 +127,39 @@ def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
 
 
 def calc_bv(mag_pars):
+    """Calculate a B-V colour from stellar parameters.
+
+    Calculate B-V colour from stellar parameters [EEP, log10(age, yrs), feh,
+    distance (in parsecs) and extinction] using MIST isochrones.
+
+    Args:
+        mag_pars (list): A list containing EEP, log10(age) in years,
+            metallicity, distance in parsecs and V-band extinction, Av, for a
+            star.
+
+    Returns:
+        B-V color.
+
     """
-    Calculate B-V colour from stellar parameters using the MIST isochrones.
-    params:
-    ------
-    mag_pars: (list)
-        A list containing EEP, age, feh, distance, Av for a star.
-    returns:
-    -------
-        B-V color. (float)
-    """
+
     B = mist.mag["B"](*mag_pars)
     V = mist.mag["V"](*mag_pars)
     return B-V
 
 
 def lnprior(params):
-    """
-    lnprior on all parameters.
-    params need to be linear except age which is log10(age [yr]).
-    params:
-    -------
-    params: (array)
-        An array of EEP, age, feh, distance and extinction.
-    returns:
-    -------
-    The prior probability for these parameters.
+    """ logarithmic prior on parameters.
+
+    The (natural log) prior on the parameters. Takes EEP, log10(age) in years,
+    metallicity (feh), distance in parsecs and V-band extinction (Av).
+
+    Args:
+        params (array-like): An array of EEP, age, feh, distance and
+            extinction.
+
+    Returns:
+        The prior probability for the parameters.
+
     """
 
     # finite_mask = np.isfinite(params)
@@ -174,20 +191,27 @@ def lnprior(params):
 
 
 def lnprob(lnparams, *args):
-    """
-    The ln-probability function.
-    params:
-    ------
-    lnparams: (array)
-        The parameter array: [EEP, log10(age [yrs]), [Fe/H], ln(distance [kpc]), A_v]
-    *args: (list)
-        The arguments. A list containing
-        [mod, period, period_err, bv, mass, iso_only, gyro_only].
-        mod is the isochrones starmodel object which is set up in stardate.py.
-        period, period_err, bv and mass are the rotation period and rotation
-        period uncertainty (in days), B-V color and mass [M_sun].
-        bv and mass should both be None unless gyrochronology only is being
-        used.
+    """ The ln-probability function.
+
+    Calculates the logarithmic posterior probability (likelihood times prior)
+    of the model given the data.
+
+    Args:
+        lnparams (array): The parameter array containing Equivalent
+            Evolutionary Point (EEP), age in log10(yrs), metallicity, distance
+            in ln(pc) and V-band extinction. [EEP, log10(age [yrs]), [Fe/H],
+            ln(distance [pc]), A_v].
+        *args:
+            The arguments -- mod, period, period_err, bv, mass, iso_only and
+            gyro_only. mod is the isochrones starmodel object which is set up
+            in stardate.py. period, period_err, bv and mass are the rotation
+            period and rotation period uncertainty (in days), B-V color and
+            mass [M_sun]. bv and mass should both be None unless only
+            gyrochronology is being used.
+
+    Returns:
+        The log-posterior probability of the model given the data.
+
     """
 
     # Transform mass and distance back to linear.
@@ -264,21 +288,17 @@ def convective_overturn_time(*args):
 
     Estimate the convective overturn time using equation 11 in Wright et al.
     (2011): https://arxiv.org/abs/1109.4634
-
     log tau = 1.16 - 1.49log(M/M⊙) - 0.54log^2(M/M⊙)
 
     Args:
-        args:
-    EITHER:
-    mass: (float)
-        Mass in Solar units
-    OR
-    eep: (float)
-        The Equivalent evolutionary point of a star. 355 for the Sun.
-    age: (float)
-        The age of a star in log_10(years).
-    feh: (float)
-        The metallicity of a star.
+        args: EITHER mass (float): Mass in Solar units OR eep (float):
+            The Equivalent evolutionary point of a star (355 for the Sun),
+            age (float): The age of a star in log_10(years) and feh (float):
+            the metallicity of a star.
+
+    Returns:
+        The convective overturn time in days.
+
     """
 
     if len(args) > 1:
