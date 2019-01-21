@@ -54,6 +54,11 @@
 \newcommand{\columbia}{3}
 \newcommand{\florida}{4}
 \newcommand{\riverside}{5}
+\newcommand{\hawaii}{6}
+\newcommand{\cuny}{7}
+\newcommand{\nyu}{8}
+\newcommand{\mpia}{9}
+\newcommand{\yale}{10}
 
 \newcommand{\sd}{{\tt stardate}}
 \newcommand{\MS}{main sequence}
@@ -82,129 +87,53 @@ gyrochronology}
     Timothy D. Morton\altaffilmark{\florida, }\altaffilmark{\cca, },
     Stephen Kane\altaffilmark{\riverside},
     Megan Bedell\altaffilmark{\cca},
+    Jen van Saders\altaffilmark{\hawaii}
     Dan Foreman-Mackey\altaffilmark{\cca},
-    Rocio Kiman\altaffilmark{}
+    Rocio Kiman\altaffilmark{\cuny},
     Jason Curtis\altaffilmark{\columbia},
-    John Brewer\altaffilmark{\yale}
+    David W. Hogg\altaffilmark{\nyu, }\altaffilmark{\cca, }\altaffilmark{\mpia}
+    \& John Brewer\altaffilmark{\yale}
 }
 
 \altaffiltext{\amnh}{American Museum of Natural History, Central Park West,
-Manhattan, NY}
+Manhattan, NY, USA}
 \altaffiltext{\cca}{Center for Computational Astrophysics, Flatiron Institute,
-162 5th Avenue, Manhattan, NY}
+162 5th Avenue, Manhattan, NY, USA}
 \altaffiltext{\columbia}{Department of Astronomy, Columbia
-University, NY, NY}
+University, Manhattan, NY, USA}
 \altaffiltext{\florida}{Department of Astronomy, University of Florida,
-Gainesville, FL}
+Gainesville, FL, USA}
 \altaffiltext{\riverside}{Department of Physics and Astronomy, UC Riverside,
-Riverside, CA}
+Riverside, CA, USA}
+\altaffiltext{\hawaii}{Institute for Astronomy, University of Hawai'i at
+M\={a}noa, Honolulu, HI, USA}
+\altaffiltext{\cuny}{Department of physics, CUNY Graduate Center, City
+University of New York, Manhattan, NY, USA}
+\altaffiltext{\nyu}{Center for Cosmology and Particle Physics, New York
+University, Manhattan, NY, USA}
+\altaffiltext{\mpia}{Max-Planck Institute for Astronomy,
+K{\"o}nigstuhl, Heidelberg, Germany}
 \altaffiltext{\yale}{Yale center for astronomy and astrophysics, Yale
-University, New Haven, CT}
+University, New Haven, CT, USA}
 
 \begin{abstract}
     \include{abstract}
 \end{abstract}
 
-% \label{section:intro}
-% Motivation and context
-%-----------------------------------------------------------------------------
-%   - The need for better stellar ages.
-%   - Why are MS ages harder than red giant ages?
-%   - Introduce gyrochronology
-%   - How does gyrochronology work?
-%   - Theoretical vs empirical gyro models
-%   - Motivation for improvements to gyrochronology relations
-%   - Describe the project presented here.
-%   - Sum up
-%   - Paper outline
 \include{intro}
 
 \include{motivation}
 
-% \section{Method}
-% \label{section:method}
-% The model
-%-----------------------------------------------------------------------------
-%   - Introduction
-%   - Why iso and gyro are independent
-%   - A description of the PGM
-%   - The PGM
-%   - The formulas
-%   - A description and reiteration in words.
-%   - Priors
-%   - The gyrochronology models
-%   - The Praesepe model
-% Practicalities: sampling, etc.
-%-----------------------------------------------------------------------------
-%   - isochrones.py - readthedocs
-%   - Step-by-step description
-%   - Emcee, including assessing convergence.
 \include{method}
 
-% \section{Results}
-% \label{section:results}
-% Intro
-% TEST 1: simulations
-%-----------------------------------------------------------------------------
-%   - The simulated data
-%   - The simulation figures
-%   - The results
-%   - We're cheating here.
-%   - Summarize and discuss the experiment.
-% TEST 2: Clusters
-%-----------------------------------------------------------------------------
-%   - The cluster data
-%   - Praesepe results: ages
-%   - Praesepe results: metallicity, mass, distance
-%   - Praesepe results: the Praesepe gyro relation
-
-%   - Summary
-
-% TEST 3: Asteroseismology
-%-----------------------------------------------------------------------------
-%   - The asteroseismic data
-%   - The results
-
-% TEST 4: with and without spectroscopy on simulated data.
 \include{results}
 
-% \section{Discussion}
-% \label{section:discussion}
-% Implications
-%-----------------------------------------------------------------------------
-%   - Summarize the results
-%   - How including the rotation period improves precision of all parameters.
-%   - How will this be used/what will it be useful for?
-%   - Where is it not useful?
-
-% Future and improvements
-%-----------------------------------------------------------------------------
-%   - A more sophisticated gyrochronology model
-%   - Mixture model, etc.
-
-% Rolling out/future
-%   - Adding new datasets/dimensions/methods.
-%-----------------------------------------------------------------------------
-
-% What if you don't have a rotation period?
-% Future surveys
 \include{discussion}
 
-% Conclusion
-% \label{section:conclusion}
-% Summarize. the. paper.
-%-----------------------------------------------------------------------------
-%   - The model
-%   - The tests
-%   - The results
-%   - The discussion
-%   - The future
 \include{conclusion}
 
 \include{acknowledgements}
 
-% \section{Appendix}
-% \label{section:appendix}
 \include{appendix}
 
 \bibliographystyle{plainnat}

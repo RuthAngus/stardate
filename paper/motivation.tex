@@ -64,10 +64,13 @@ Figure \ref{fig:iso_fisher}\footnote{Figures \ref{fig:iso_fisher} and
 \ref{fig:gyro_fisher} were generated in a {\it Jupyter} notebook available at
 the following url:
 \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fisher_information.ipynb}}
-shows the minimum theoretical absolute age
-uncertainty, $\sigma_{\mathrm{Age}}$ (left panel), calculated using typical
-uncertainties on \Gaia\ absolute magnitude, $M_G$, and color, \gcolor\,
-represented as black errorbars in the top right corner.
+shows the minimum theoretical absolute age uncertainty,
+$\sigma_{\mathrm{Age}}$ (left panel), calculated using typical uncertainties
+on \Gaia\ absolute magnitude, $M_G$, of $\pm$0.05 and a color spread of 0.05
+that (conservatively) accounts for scatter induced by metallicities ranging
+from -0.25 to +0.25 dex.
+These uncertainties are represented as black errorbars in the top right
+corner.
 The typical \Gaia\ uncertainties are $0.5$ in both $M_G$ and \gcolor.
 These estimates are based on a calculation of the median uncertainty on \Gaia\
 absolute G-magnitude of cool stars which is dominated by the parallax
@@ -163,7 +166,7 @@ Modelling stars with isochrones/stellar evolution tracks is required in order
 to know whether gyrochronology is applicable or not.
 Secondly, most gyrochronology models are calibrated to either $B-V$ color
 (most commonly) or mass.
-Mass is usually not directly observable, so must be inferred via models, and
+Mass is usually not directly observable, so must be inferred via modelsj and
 $B-V$ is {\it also} not directly observed for every star.
 For example, the most widely available colors are now \gaia\ \gcolor\ colors,
 and most \Gaia\ stars do not have $B-V$ colors.
@@ -251,8 +254,11 @@ in section \ref{section:method} and equation \ref{eqn:gyro}.
     G-band magnitude and Gaia $G_{BP} - G_{RP}$ color.
     In the left panel the isochrones are colored by the minimum absolute age
     uncertainty at each point on the CMD, calculated using the Fisher
-    information, based on the typical uncertainties of \Gaia\ photometry
-    (represented by black errorbars in the upper right).
+    information.
+    This calculation is based on the typical uncertainties of
+    \Gaia\ $G$-band photometry, and a color spread that covers metallicities
+    ranging from -0.25 to 0.25 dex (represented by black errorbars in the
+    upper right).
     The Sun's position \citep{casagrande2018} is indicated with the Solar\
     symbol.
     The purple color in the top left corresponds to small age uncertainties,
@@ -278,6 +284,8 @@ in section \ref{section:method} and equation \ref{eqn:gyro}.
     The precision with which an age can be measured is related to the
     separation between isochrones, which indicate epochs of rapid change
     (steep gradients).
+    This figure was created using the following Jupyter notebook:
+    \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fisher_information.ipynb}
     \label{fig:fischer_iso}
 }
   \centering
@@ -291,8 +299,12 @@ in section \ref{section:method} and equation \ref{eqn:gyro}.
     uncertainties are calculated based on isochrone fitting and gyrochronology
     {\it combined}.
     The isochrones are colored by the minimum relative age uncertainty at each
-    point on the CMD, based on the typical uncertainties of Gaia photometry
-    and Kepler rotation period uncertainties (assumed to be around 1 day).
+    point on the CMD, calculated using the Fisher information.
+    This calculation is based on the typical uncertainties of
+    \Gaia\ $G$-band photometry, a color spread that covers metallicities
+    ranging from -0.25 to 0.25 dex (represented by black errorbars in the
+    upper right), and Kepler rotation period uncertainties (conservatively
+    estimated at around 1 day).
     In contrast to figure \ref{fig:iso_fisher}, here the left panel shows the
     {\it logarithmic} absolute age and the right panel shows the linear
     relative age.
@@ -301,6 +313,8 @@ in section \ref{section:method} and equation \ref{eqn:gyro}.
     relative precision).
     Gyrochronology and isochrone fitting complement each other and when used
     together, all subgiants and MS stars can have ages more precise than 30\%.
+    This figure was created using the following Jupyter notebook:
+    \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fisher_information.ipynb}
     \label{fig:fischer_gyro}
 }
   \centering

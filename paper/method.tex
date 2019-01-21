@@ -237,28 +237,14 @@ The full log-likelihood is then calculated,
 \end{equation}
 and added to the log-prior to produce a single sample from the posterior PDF.
 
-%   - Emcee, including assessing convergence.
-When applying our model to infer the age of a star, we sampled the joint
-posterior PDF over age, mass, metallicity, distance and extinction using the
-affine invariant ensemble sampler, {\tt emcee} \citep{foreman-mackey2013} with
-24 walkers.
-Samples were drawn from the posterior PDF until 100 {\it independent} samples
-are obtained.
-We actively estimated the autocorrelation length, which indicates how many
-steps are taken per independent sample, after every 100 steps using the
-autocorrelation tool built into {\tt emcee}.
-The MCMC concluded when {\it either} 100 times the autocorrelation length was
-reached and the change in autocorrelation length over 100 samples was less
-than 0.01, {\it or} the maximum of 100,000 samples was obtained.
-This method is trivially parallelizable, since the inference process for each
-star can be performed on a separate core.
-The age of a single star can be inferred in around one hour on a laptop
-computer.
-
 %   - The gyrochronology models
-The gyrochronology model we used to predict $P_P$ is, % $P_{\mathrm{pred}, i}$ is,
+For cool ($B-V < 0.45$), main sequence (EEP$<454$) stars, the gyrochronology
+model used to predict $\bf{P_P}$ was,
 \begin{equation}
-    P_\mathrm{rot} = A^\eta \alpha (C_{B-V} - \delta)^\beta,
+    P_\mathrm{rot} =\begin{cases}
+        A^\eta \alpha (C_{B-V} - \delta)^\beta, & \text{if $Ro < 2.16$}. \\
+        P_{\mathrm{max}}, & \text{if $Ro \geq 2.16$}.
+    \end{cases}
 \label{eqn:gyro}
 \end{equation}
 where \prot\ is rotation period in days, \cbv\ is a star's $B-V$ color, $A$ is
@@ -267,54 +253,106 @@ stellar age in Myrs and $\eta$, $\alpha$, $\beta$ and $\delta$ take values
 This functional form was introduced by \citep{barnes2007} and the parameter
 values are adopted from the recalibration performed in \citet{angus2015},
 which is based on young cluster stars and old asteroseismic stars.
-Because this gyochronology model is not calibrated to include stars turning
-off the main sequence whose rotation slows rapidly due to their increasing
-radius, we do not apply gyrochronology to stars with a MIST model \eep\
-greater than 454 as this corresponds to terminal age \ms\ \citep{dotter2016,
-choi2016}.
-In future, rather than switch gyrochronology off at a certain \eep, we could
-include it as an additional dimension and model rotation periods as a function
-of it.
+We adapted this classical gyrochronology model to incorporate the new
+observations showing that magnetic braking ceases at a critical Rossby number
+\citep{vansaders2016}.
+The Rossby number, $Ro$, is the ratio of rotation period to convective
+overturn time $P_{\mathrm{rot}}/\tau$ and determines whether a star is still
+undergoing magnetic braking ($Ro < 2.16$) or has stopped spinning down and
+retains its terminal rotation period, $P_\mathrm{max}$, which is the period it
+had as it reached the critical Rossby number of 2.16 \citep{vansaders2016}.
+The convective overturn time, $\tau$, was estimated using equation 11 of
+\citet{wright2011}.
+The rotation periods of evolved stars (EEP $>454$ were modelled with equation
+\ref{eqn:gyro}, however the uncertainties were artificially increased, by 10
+days, to account for the large amount of scatter expected in the rotation
+periods of these stars.
+The resulting rotation period model for evolved stars is a stochastic version
+of the above equation for MS stars where rotation periods are drawn from a
+broad Gaussian with equation \ref{eqn:gyro} as the mean function and the
+(rotation period uncertainty + 10)$^2$ as the variance.
+The number ten was chosen somewhat arbitrarily but we found that the resulting
+age estimates were relatively insensitive to this choice as long as the
+rotation periods were uncertain enough to allow isochrone fitting to dominate
+the age information.
+Hot stars ($B-V < 0.45$) and late M dwarfs ($B-V \gsim 1.25$) were treated
+differently again.
+Hot stars retain their primordial rapid rotation periods since they do not
+have the deep convective envelope needed to generate strong magnetic fields.
+Very cool stars have not yet begun to spin down and also retain
+rotation periods that is similar to their primordial distribution \citep[see
+\eg][]{matt2012}.
+The rotation periods of these stars were modeled with a Gaussian in log-space,
+with parameters based on the distribution of M dwarf rotation periods in the
+Praesepe cluster: a mean of 0.5 and variance of 0.55,
+\begin{equation}
+    \log_{10}(P_\mathrm{rot})\sim\mathcal{N}(0.5, 0.55).
+\end{equation}
+
+% Because this gyochronology model is not calibrated to include stars turning
+% off the main sequence whose rotation slows rapidly due to their increasing
+% radius, we do not apply gyrochronology to stars with a MIST model \eep\
+% greater than 454 as this corresponds to terminal age \ms\ \citep{dotter2016,
+% choi2016}.
+% In future, rather than switch gyrochronology off at a certain \eep, we could
+% include it as an additional dimension and model rotation periods as a function
+% of it.
 % \footnote{This number was determined by investigating the
 % correspondance between \eep\ and position on the HR diagram.
 % See the {\it Jupyter} notebook at
 % \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/EEP_cutoff.ipynb}.
 % In future, \eep\ could be used as a parameter in our gyrochronology model.
 % }.
-In addition, stars with \cbv $>$ 0.45, corresponding to a temperature around
-6250 K are only modeled using isochrones, not gyrochronology.
-These stars have thin convective envelopes and do not spin down substantially
-over their \ms\ lifetimes so their rotation periods do not strongly predict
-their ages.
-However, isochrone fitting can provide relatively precise ages for these hot
-stars, as well as evolved stars with large \eep s.
+% In addition, stars with \cbv $>$ 0.45, corresponding to a temperature around
+% 6250 K  only modeled using isochrones, not gyrochronology.
+% These stars have thin convective envelopes and do not spin down substantially
+% over their \ms\ lifetimes so their rotation periods do not strongly predict
+% their ages.
+% However, isochrone fitting can provide relatively precise ages for these hot
+% stars, as well as evolved stars with large \eep s.
 
-It was recently shown that a simple power law in age does not provide a good
-fit to old asteroseismic stars \citep{angus2015, vansaders2016}.
-It is hypothesized that the magnetic braking of these old stars has ceased and
-cannot be modeled with a Skumanich-like spin-down law \citep{vansaders2016}.
-In future, the above model could and should be updated to include a more
-flexible treatment of rotation period as a function of age in order to account
-for the change of slope in the relation.
-Until then, this method should only be used for stars with Rossby number below
-2.1 \citep{vansaders2016}, \ie\ their ratio of rotation period to convection
-overturn time ($P/\tau = Ro$) does not exceed 2.1.
-In this work we are chiefly concerned with introducing a new framework where
-rotation periods are modeled {\it simultaneously} with isochronal features.
-Although the gyrochronology models used here do not provide a good fit to all
-the available data, we reiterate that no single model {\it is} able to
-reproduce all the data, and that there is utility in using such a simple,
-linear, empirical model like this.
-Again, we are not attempting to improve gyrochronology models in this work: in
-this paper we are more concerned with introducing a new approach to modeling
-stellar ages, however, our method is highly flexible and modular and an
-improved gyrochronology model could easily be swapped in for this one in
-future.
-Our model would allow a linear combination of other, {\it physical} parameters
-to be used to predict age from rotation period, like $\log g$, metallicity and
-mass.
-In future, it may be better to model stars in physical rather than observable
-parameter space.
+% It was recently shown that a simple power law in age does not provide a good
+% fit to old asteroseismic stars \citep{angus2015, vansaders2016}.
+% It is hypothesized that the magnetic braking of these old stars has ceased and
+% cannot be modeled with a Skumanich-like spin-down law \citep{vansaders2016}.
+% In future, the above model could and should be updated to include a more
+% flexible treatment of rotation period as a function of age in order to account
+% for the change of slope in the relation.
+% Until then, this method should only be used for stars with Rossby number below
+% 2.1 \citep{vansaders2016}, \ie\ their ratio of rotation period to convection
+% overturn time ($P/\tau = Ro$) does not exceed 2.1.
+% In this work we are chiefly concerned with introducing a new framework where
+% rotation periods are modeled {\it simultaneously} with isochronal features.
+% Although the gyrochronology models used here do not provide a good fit to all
+% the available data, we reiterate that no single model {\it is} able to
+% reproduce all the data, and that there is utility in using such a simple,
+% linear, empirical model like this.
+% Again, we are not attempting to improve gyrochronology models in this work:
+% in this paper we are more concerned with introducing a new approach to
+% modeling
+% This method is highly flexible and modular and an improved gyrochronology
+% model could easily be swapped in for this one in future.
+% For example, a linear combination of {\it physical} parameters such as \logg,
+% \feh, and mass or \teff\ could be to be used to predict an age from a rotation
+% period.
+
+%   - Emcee, including assessing convergence.
+When applying our model to infer the age of a star, we sampled the joint
+posterior PDF over age, mass, metallicity, distance and extinction using the
+affine invariant ensemble sampler, {\tt emcee} \citep{foreman-mackey2013} with
+24 walkers.
+Samples were drawn from the posterior PDF until 100 {\it independent} samples
+were obtained.
+We actively estimated the autocorrelation length, which indicates how many
+steps were taken per independent sample, after every 100 steps using the
+autocorrelation tool built into {\tt emcee}.
+The MCMC concluded when {\it either} 100 times the autocorrelation length was
+reached and the change in autocorrelation length over 100 samples was less
+than 0.01, {\it or} the maximum of 100,000 samples was obtained.
+This method is trivially parallelizable, since the inference process for each
+star can be performed on a separate core.
+The age of a single star can be inferred in around one hour on a laptop
+computer.
 
 % Although the gyrochronology model described above \citep[equation
 % \ref{eqn:gyro},][]{angus2015} has been calibrated using a number of cluster
