@@ -232,7 +232,7 @@ def lnprob(lnparams, *args):
         return mod.lnlike(params) + lnpr, lnpr
 
     # If a B-V is not provided, calculate it.
-    if bv == None:
+    if bv is None:
         assert gyro_only == False, "You must provide a B-V colour if you "\
             "want to calculate an age using gyrochronology only."
         bv = calc_bv(params)
@@ -249,7 +249,7 @@ def lnprob(lnparams, *args):
     # If FGK and MS:
     elif bv > .45 and params[0] < 454:
 
-        if not mass:  # If a mass is not provided, calculate it.
+        if mass is None:  # If a mass is not provided, calculate it.
             mass = mist.mass(params[0], params[1], params[2])
 
         # Calculate a period using the gyrochronology model
@@ -260,8 +260,8 @@ def lnprob(lnparams, *args):
             - np.log(period_err)
 
     # If hot, use a broad log-gaussian model with a mean of .5 for rotation.
-    elif bv < .45:
-        if not mass:
+    elif bv < .45 or bv > 1.25:
+        if mass is None:
             mass = mist.mass(params[0], params[1], params[2])
         period_model = .5  # 1
         # gyro_lnlike = -.5*((period - period_model)
@@ -271,7 +271,7 @@ def lnprob(lnparams, *args):
 
     # If evolved, use a gyrochronology relation with inflated uncertainties.
     elif bv > .45 and params[0] >= 454:
-        if not mass:
+        if mass is None:
             mass = mist.mass(params[0], params[1], params[2])
         period_model = gyro_model_rossby(params[1], bv, mass)
         gyro_lnlike = -.5*((period - period_model) / (period_err+10))**2 \
@@ -280,7 +280,14 @@ def lnprob(lnparams, *args):
     if gyro_only:
         return gyro_lnlike + lnpr, lnpr
 
-    return mod.lnlike(params) + gyro_lnlike + lnpr, lnpr
+    # Catch those pesky NaNs.
+    iso_lnlike = mod.lnlike(params)
+        if iso_lnlike == np.nan:
+            iso_lnlike = -np.inf
+        if gyro_lnlike == np.nan:
+            gyro_lnlike = -np.inf
+
+    return iso_lnlike + gyro_lnlike + lnpr, lnpr
 
 
 def convective_overturn_time(*args):
