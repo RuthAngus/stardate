@@ -284,7 +284,12 @@ def lnprob(lnparams, *args):
     if gyro_only:
         return gyro_lnlike + lnpr, lnpr
 
-    return iso_lnlike + gyro_lnlike + lnpr, lnpr
+    prob = mod.lnlike(params) + gyro_lnlike + lnpr
+    if np.isnan(prob):
+        print("nan prob for parameters", params)
+        prob = -np.inf
+
+    return prob, lnpr
 
 
 def convective_overturn_time(*args):
