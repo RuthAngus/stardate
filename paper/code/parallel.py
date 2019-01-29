@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-#SBATCH -N1 --exclusive
-
 import os
 import sys
 import numpy as np
@@ -24,7 +22,8 @@ from multiprocessing import Pool
 # by SLURM (since it executes a copy)
 sys.path.append(os.getcwd())
 
-def infer_stellar_age(i):
+def infer_stellar_age(row):
+    df = row[1]
 
     # Small observational uncertainties are needed (even though the stars
     # weren't simulated with any) in order to get a good fit.
@@ -45,29 +44,29 @@ def infer_stellar_age(i):
     #  Infer ages of the simulated stars.
 
     # Set up the parameter dictionary.
-    iso_params = {"teff": (df.teff[i], teff_err),
-                "logg": (df.logg[i], logg_err),
-                "feh": (df.feh[i], feh_err),
-                "jmag": (df.jmag[i], jmag_err),
-                "hmag": (df.hmag[i], hmag_err),
-                "kmag": (df.kmag[i], kmag_err),
-                "parallax": (df.parallax[i], parallax_err)}
+    iso_params = {"teff": (df.teff, teff_err),
+                "logg": (df.logg, logg_err),
+                "feh": (df.feh, feh_err),
+                "jmag": (df.jmag, jmag_err),
+                "hmag": (df.hmag, hmag_err),
+                "kmag": (df.kmag, kmag_err),
+                "parallax": (df.parallax, parallax_err)}
 
     # Infer an age with isochrones and gyrochronology.
 
     # Set up the star object
-    star = sd.star(iso_params, df.prot[i], .01, suffix="{0}_gyro".format(i))
+    star = sd.star(iso_params, df.prot, .01, filename="{}".format(df.ID))
 
     # Run the MCMC
-    sampler = star.fit(max_n=200000)
+    sampler = star.fit(max_n=2000)
 
     # Now infer an age with isochrones only.
 
     # Set up the star object
-    star_iso = sd.star(iso_params, df.prot[i], .01, suffix="{0}_iso".format(i))
+    star_iso = sd.star(iso_params, df.prot, .01)
 
     # Run the MCMC
-    sampler = star_iso.fit(max_n=200000, iso_only=True)
+    sampler = star_iso.fit(max_n=2000, iso_only=True)
 
 
 if __name__ == "__main__":
@@ -76,4 +75,4 @@ if __name__ == "__main__":
     N = len(df)
 
     p = Pool(24)
-    p.map(infer_stellar_age, range(N))
+    p.map(infer_stellar_age, df.iterrows())
