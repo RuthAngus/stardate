@@ -282,10 +282,10 @@ def lnprob(lnparams, *args):
 
     # Catch those pesky NaNs.
     iso_lnlike = mod.lnlike(params)
-        if iso_lnlike == np.nan:
-            iso_lnlike = -np.inf
-        if gyro_lnlike == np.nan:
-            gyro_lnlike = -np.inf
+    if iso_lnlike == np.nan:
+        iso_lnlike = -np.inf
+    if gyro_lnlike == np.nan:
+        gyro_lnlike = -np.inf
 
     return iso_lnlike + gyro_lnlike + lnpr, lnpr
 
