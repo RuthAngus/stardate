@@ -13,35 +13,35 @@ mist = MIST_Isochrone()
 
 
 class Star(object):
+    """The star object.
 
-    def __init__(self, iso_params, prot, prot_err, savedir=".",
-                 filename="samples", bv=None, mass=None):
-        """
-        params
-        -------
-        iso_params: dictionary
-            A dictionary containing all available photometric and
-            spectroscopic parameters for a star, as well as its parallax.
+    Creates the star object which will be set up with stellar parameters and
+    instructions for saving the MCMC results.
+
+    Args:
+        iso_params (dict): A dictionary containing all available photometric
+            and spectroscopic parameters for a star, as well as its parallax.
             All parameters should also have associated uncertainties.
             This dictionary should be similar to the standard one created for
             isochrones.py.
-        prot: float
-            The rotation period of the star in days.
-        prot_err: float
-            The uncertainty on the stellar rotation period in days.
-        savedir: str (optional)
-            The name of the directory where the samples will be
-            saved. Default is the current working directory.
-        filename: str (optional)
-            The name of the h5 file which the posterior samples
-            will be saved in.
-        bv: float (optional)
-            B-V color. In order to infer an age with only gyrochronology, a
-            B-V color must be provided.
-        mass: float (optional)
-            In order to infer an age with only gyrochronology, a mass
-            must be provided (units of Solar masses).
-        """
+        prot (float): The rotation period of the star in days.
+        prot_err (float): The uncertainty on the stellar rotation period in
+            days.
+        bv (Optional[float]): B-V color. In order to infer an age with only
+            gyrochronology, a B-V color must be provided. Only include this if
+            you want to use gyrochronology only!
+        mass (Optional[float]): In order to infer an age with only
+            gyrochronology, a mass must be provided (units of Solar masses).
+            Only include this if you want to use gyrochronology only!
+        savedir (Optional[str]): The name of the directory where the samples
+            will be saved. Default is the current working directory.
+        filename (Optional[str]): The name of the h5 file which the posterior
+            samples will be saved in.
+
+    """
+
+    def __init__(self, iso_params, prot, prot_err, bv=None, mass=None,
+                 savedir=".", filename="samples"):
 
         self.iso_params = iso_params
         self.prot = prot
@@ -51,37 +51,36 @@ class Star(object):
         self.bv = bv
         self.mass = mass
 
-    def fit(self, inits=[355, np.log10(4.56*1e9), 0., 1000., .01],
-            nwalkers=24, max_n=100000, thin_by=100, burnin=0,
-            iso_only=False, gyro_only=False):
-        """
-        Explore the posterior PDFs of the stellar parameters using MCMC
-        (with emcee).
-        params
-        ------
-        inits: (list, optional)
-            A list of initial values to use for eep, age (in
-            log10[yrs]), feh, distance (in pc) and Av. The defaults are Solar
-            values at 1000 pc with a small extinction.
-        nwalkers: (int, optional)
-            The number of walkers to use with emcee. The default is 24.
-        max_n: (int, optional)
-            The maximum number of samples to obtain (although not necessarily
-            to save -- see thin_by). The default is 100000.
-        thin_by: (int, optional)
-            Only one in every thin_by samples will be saved. The default is
-            100. Set = 1 to save every sample (note -- this substantially
-            slows down the MCMC process because of the additional I/O time.
-        burnin: (int, optional)
-            Default = 0.
-            The number of SAVED samples to throw away when accessing the
-            results. This number cannot exceed the number of saved samples
-            (which is max_n/thin_by).
-        iso_only: (boolean, optional)
-            If true only the isochronal likelihood function will be used.
-        gyro_only: (boolean, optional)
-            If true only the gyrochronal likelihood function will be used.
-            Cannot be true if iso_only is true.
+    def fit(self, inits=[355, 9.659, 0., 1000., .01], nwalkers=24,
+            max_n=100000, thin_by=100, burnin=0, iso_only=False,
+            gyro_only=False):
+        """Run MCMC on a star.
+
+        Explore the posterior probability density function of the stellar
+        parameters using MCMC (via emcee).
+
+        Args:
+            inits (Optional[array-like]): A list of initial values to use for
+            EEP, age (in log10[yrs]), feh, distance (in pc) and Av. The
+            defaults are Solar values at 1000 pc with .01 extinction.
+            nwalkers (Optional[int]): The number of walkers to use with emcee.
+            The default is 24.
+            max_n (Optional[int]): The maximum number of samples to obtain
+                (although not necessarily to save -- see thin_by). The default
+                is 100000.
+            thin_by (Optional[int]): Only one in every thin_by samples will be
+                saved. The default is 100. Set = 1 to save every sample (note
+                this substantially slows down the MCMC process because of the
+                additional I/O time.
+            burnin (Optional[int]): The number of SAVED samples to throw away
+                when accessing the results. This number cannot exceed the
+                number of saved samples (which is max_n/thin_by). Default = 0.
+            iso_only (Optional[bool]): If true only the isochronal likelihood
+                function will be used.
+            gyro_only (Optional[bool]): If true only the gyrochronal
+                likelihood function will be used. Cannot be true if iso_only
+                is true.
+
         """
 
         self.max_n = max_n
@@ -132,22 +131,39 @@ class Star(object):
         self.sampler = sampler
 
     def samples(self, burnin=0):
-        """
+        """Provides posterior samples.
+
         Provides the posterior samples and allows the user to specify the
         number of samples to throw away as burn in.
-        params:
-        ------
-        burnin: (int, optional)
-            The number of samples to throw away as burn in. Default = 0.
+
+        Args:
+            burnin (Optional[int]):
+                The number of samples to throw away as burn in. Default = 0.
+
+        Returns:
+            samples (array):
+                An array containing posterior samples with shape =
+                (nwalkers*(nsteps - burnin), ndim).
         """
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         return np.reshape(self.sampler.chain[:, burnin:, :],
                           (nwalkers*(nsteps-burnin), ndim))
 
-
     def run_mcmc(self):
-        """
-        Runs the MCMC.
+        """Runs the MCMC.
+
+        Runs the MCMC using emcee. Saves progress to the file specified as
+        <filename.h5> in the <savedir> directory. Samples are saved to this
+        file after every <thin_by> samples are obtained. And only one sample
+        in every <thin_by> is saved. Sampling continues until either max_n
+        samples are obtained or convergence is acheived (this usually takes
+        much more than the default 100,000 maximum number of samples.
+        Convergence is achieved if both 1) the change in autocorrelation time
+        is extremely small (less than 0.01) and 2) if 100 or more independent
+        samples have been obtained.
+
+        Returns:
+            sampler: the emcee sampler object.
         """
 
         max_n = self.max_n//self.thin_by
@@ -188,36 +204,43 @@ class Star(object):
             # Compute the autocorrelation time so far
             # Using tol=0 means that we'll always get an estimate even
             # if it isn't trustworthy
-            tau = sampler.get_autocorr_time(tol=0) * self.thin_by
-            autocorr[index] = np.mean(tau)
-            index += 1
+            if sampler.iteration > 100:
+                tau = sampler.get_autocorr_time(tol=0) * self.thin_by
+                autocorr[index] = np.mean(tau)
+                index += 1
 
-            # # Check convergence
-            converged = np.all(tau * 100 < sampler.iteration)
-            converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
-            converged &= np.all(tau) > 1
-            # print("100 samples?", np.all(tau * 100 < sampler.iteration))
-            # print(tau, tau*100, sampler.iteration)
-            # print("Small delta tau?", np.all(np.abs(old_tau - tau) / tau < 0.01))
-            # print(np.abs(old_tau - tau))
-            if converged:
-                break
-            old_tau = tau
+                # Check convergence
+                converged = np.all(tau * 100 < sampler.iteration)
+                converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
+                converged &= np.all(tau) > 1
+                # print("100 samples?", np.all(tau * 100 < sampler.iteration))
+                # print(tau, tau*100, sampler.iteration)
+                # print("Small delta tau?", np.all(np.abs(old_tau - tau) / tau < 0.01))
+                # print(np.abs(old_tau - tau))
+                if converged:
+                    break
+                old_tau = tau
         # ======================================================================
 
         return sampler
 
 
     def age_results(self, burnin=0):
+        """The age samples.
+
+        The posterior samples for age, optionally with a specified number of
+        burn in steps thrown away.
+
+        Args:
+            burnin (Optional[int]): The number of samples to throw away.
+                Default is 0.
+
+        Returns:
+            The median age, its 16th and 84th percentile lower and upper
+            uncertainties and the age samples. Age is log10(Age/yrs).
+
         """
-        Returns the median age, the upper age uncertainty, the lower age
-        uncertainty and the age samples.
-        Age is log10(Age/yrs).
-        params
-        ------
-        burnin: (int, optional)
-            The number of samples to throw away. Default is 0.
-        """
+
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
             "away ({0}) cannot exceed the number of steps that were saved "\
@@ -232,13 +255,21 @@ class Star(object):
 
 
     def eep_results(self, burnin=0):
+        """The EEP samples.
+
+        The posterior samples for Equivalent Evolutionary Point, optionally
+        with a specified number of burn in steps thrown away.
+
+        Args:
+            burnin (Optional[int]): The number of samples to throw away.
+                Default is 0.
+
+        Returns:
+            The median EEP, its 16th and 84th percentile lower and upper
+            uncertainties and the EEP samples.
+
         """
-        params
-        ------
-        burnin: (int, optional)
-            The number of samples to throw away. Default is 0.
-        Returns the median EEP and lower and upper uncertainties.
-        """
+
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
             "away ({0}) cannot exceed the number of steps that were saved "\
@@ -253,14 +284,22 @@ class Star(object):
 
 
     def mass_results(self, burnin=0):
+        """The mass samples.
+
+        The posterior samples for mass, calculated from the EEP, age and feh
+        samples, optionally with a specified number of burn in steps thrown
+        away.
+
+        Args:
+            burnin (Optional[int]): The number of samples to throw away.
+                Default is 0.
+
+        Returns:
+            The median mass, its 16th and 84th percentile lower and upper
+            uncertainties and the mass 'samples' in units of Solar masses.
+
         """
-        params
-        ------
-        burnin: (int, optional)
-            The number of samples to throw away. Default is 0.
-        Returns the median mass and lower and upper uncertainties in units of
-        solar mass.
-        """
+
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
             "away ({0}) cannot exceed the number of steps that were saved "\
@@ -277,13 +316,21 @@ class Star(object):
 
 
     def feh_results(self, burnin=0):
+        """The metallicity samples.
+
+        The posterior samples for metallicity, optionally with a specified
+        number of burn in steps thrown away.
+
+        Args:
+            burnin (Optional[int]): The number of samples to throw away.
+                Default is 0.
+
+        Returns:
+            The median metallicity, its 16th and 84th percentile lower and
+            upper uncertainties and the metallicity samples.
+
         """
-        params
-        ------
-        burnin: (int, optional)
-            The number of samples to throw away. Default is 0.
-        Returns the median metallicity and lower and upper uncertainties.
-        """
+
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
             "away ({0}) cannot exceed the number of steps that were saved "\
@@ -298,14 +345,21 @@ class Star(object):
 
 
     def distance_results(self, burnin=0):
+        """The ln(distance) samples.
+
+        The posterior samples for distance (in natural log, parsecs),
+        optionally with a specified number of burn in steps thrown away.
+
+        Args:
+            burnin (Optional[int]): The number of samples to throw away.
+                Default is 0.
+
+        Returns:
+            The median ln(distance), its 16th and 84th percentile lower and
+            upper uncertainties and the ln(distance) samples.
+
         """
-        params
-        ------
-        burnin: (int, optional)
-            The number of samples to throw away. Default is 0.
-        Returns the median distance and lower and upper uncertainties in
-        parsecs.
-        """
+
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
             "away ({0}) cannot exceed the number of steps that were saved "\
@@ -320,14 +374,21 @@ class Star(object):
 
 
     def Av_results(self, burnin=0):
+        """The Av samples.
+
+        The posterior samples for V-band extinction, optionally with
+        a specified number of burn in steps thrown away.
+
+        Args:
+            burnin (Optional[int]): The number of samples to throw away.
+                Default is 0.
+
+        Returns:
+            The median Av, its 16th and 84th percentile lower and upper
+            uncertainties and the Av samples.
+
         """
-        params
-        ------
-        burnin: (int, optional)
-            The number of samples to throw away. Default is 0.
-        Returns the median distance and lower and upper uncertainties in
-        parsecs.
-        """
+
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
         assert nsteps > burnin, "The number of burn in samples to throw "\
             "away ({0}) cannot exceed the number of steps that were saved "\

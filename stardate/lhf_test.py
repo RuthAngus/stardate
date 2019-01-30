@@ -6,6 +6,7 @@ from lhf import gyro_model_rossby
 from isochrones.mist import MIST_Isochrone
 from isochrones import StarModel
 mist = MIST_Isochrone()
+from tqdm import trange
 
 
 def good_vs_bad(good_lnprob, good_lnparams, args, nsamps):
@@ -78,6 +79,39 @@ def test_lnprob_higher_likelihood_real():
     good_vs_bad(good_lnprob, good_lnparams, args, 10)
 
 
+def test_for_nans():
+    """
+    Something is causing the lhf to return NaN. Get to the bottom of it!
+    """
+    df = pd.read_csv("../paper/code/data/simulated_data.csv")
+    for i in range(len(df)):
+        print(i, "of", len(df))
+        iso_params = pd.DataFrame(dict({"teff": (df.teff[i], 10),
+                                "logg": (df.logg[i], .05),
+                                "feh": (df.feh[i], .001),
+                                "parallax": (df.parallax[i], .01)}))  # mas
+
+        mod = StarModel(mist, **iso_params)
+
+        N = 10000
+        eeps = np.random.uniform(-100, 2000, N)
+        lnages = np.random.uniform(0, 11, N)
+        fehs = np.random.uniform(-5, 5, N)
+        Ds = np.log(np.random.uniform(0, 10000, N))
+        Avs = np.random.uniform(-.2, 1.2, N)
+        # periods = 10**np.random.uniform(-1, 3, N)
+        probs, priors = [np.empty(N) for i in range(2)]
+
+        for j in trange(N):
+            lnparams = [eeps[j], lnages[j], fehs[j], Ds[j], Avs[j]]
+            args = [mod, df.prot[i], 1., None, None, False, False]
+            probs[j] = lnprob(lnparams, *args)[0]
+            priors[j] = lnprob(lnparams, *args)[1]
+
+        print(len(probs), len(probs[np.isnan(probs)]))
+        assert sum(np.isnan(probs)) == 0
+
+
 def test_likelihood_rotation_giant():
     """
     Make sure that the lhf can cope with zeros, NaNs and None values for the
@@ -92,19 +126,19 @@ def test_likelihood_rotation_giant():
     mod = StarModel(mist, **iso_params)
     lnparams = [355, np.log10(4.56*1e9), 0., np.log(1000), 0.]
 
-    args = [mod, None, None, False, True]  # the lnprob arguments]
+    args = [mod, None, None, .65, 1., False, False]  # the lnprob arguments]
     none_lnprob = lnprob(lnparams, *args)
 
-    args = [mod, np.nan, np.nan, False, True]  # the lnprob arguments]
+    args = [mod, np.nan, np.nan, .65, 1., False, False]  # the lnprob arguments]
     nan_lnprob = lnprob(lnparams, *args)
 
-    args = [mod, 0., 0., False, True]  # the lnprob arguments]
+    args = [mod, 0., 0., .65, 1., False, False]  # the lnprob arguments]
     zero_lnprob = lnprob(lnparams, *args)
 
-    args = [mod, 26., 1., True, True]  # the lnprob arguments]
+    args = [mod, 26., 1., .65, 1., True, False]  # the lnprob arguments]
     iso_lnprob = lnprob(lnparams, *args)
 
-    args = [mod, 26., 1., False, True]  # the lnprob arguments]
+    args = [mod, 26., 1., .65, 1., False, True]  # the lnprob arguments]
     gyro_lnprob = lnprob(lnparams, *args)
 
     # check that gyro is switched off for all of these.
@@ -118,10 +152,10 @@ def test_likelihood_rotation_giant():
     # Gaussian for giants.
     giant_params = [455, np.log10(4.56*1e9), 0., np.log(1000), 0.]
     dwarf_params = [453, np.log10(4.56*1e9), 0., np.log(1000), 0.]
-    args = [mod, 26., 1., False, True]
+    args = [mod, 26., 1., None, None, False, False]
     giant_lnprob = lnprob(giant_params, *args)
     dwarf_lnprob = lnprob(dwarf_params, *args)
-    assert giant_lnprob < dwarf_lnprob
+    assert giant_lnprob[0] < dwarf_lnprob[0]
 
     # Likelihood should be greater for cool stars because gyro lnlike is a
     # broad Gaussian for giants.
@@ -133,8 +167,8 @@ def test_likelihood_rotation_giant():
                                   mist.mass(ceep, cage, cfeh))
     hot_prot = gyro_model_rossby(hage, calc_bv(hot_params),
                                   mist.mass(heep, hage, hfeh))
-    cool_args = [mod, cool_prot, 1., False, True]
-    hot_args = [mod, hot_prot, 1., False, True]
+    cool_args = [mod, cool_prot, 1., None, None, False, False]
+    hot_args = [mod, hot_prot, 1., None, None, False, False]
 
     hot_lnprob = lnprob(hot_params, *args)
     cool_lnprob = lnprob(cool_params, *args)
@@ -201,27 +235,30 @@ def test_gyro_model_rossby():
 
 
 if __name__ == "__main__":
-    print("Testing gyro model...")
-    test_gyro_model_rossby()
+    # print("Testing gyro model...")
+    # test_gyro_model_rossby()
 
-    print("\nTesting the Praesepe gyro model...")
-    test_praesepe_gyro_model()
+    # print("\nTesting the Praesepe gyro model...")
+    # test_praesepe_gyro_model()
 
-    print("\nTesting original gyro model...")
-    test_gyro_model()
+    # print("\nTesting original gyro model...")
+    # test_gyro_model()
 
     # print("\nTesting likelihood function behaviour...")
     # test_likelihood_rotation_giant()
 
-    print("\nTesting B-V calculation... (this could take a while if you're"
-          " running for the first time!)")
-    test_calc_bv()
+    # print("\nTesting B-V calculation... (this could take a while if you're"
+    #       " running for the first time!)")
+    # test_calc_bv()
 
-    print("\nTesting likelihood function on the Sun...")
-    test_lnprob_higher_likelihood_sun()
+    # print("\nTesting likelihood function on the Sun...")
+    # test_lnprob_higher_likelihood_sun()
 
-    print("\nTesting likelihood function on data...")
-    test_lnprob_higher_likelihood_real()
+    # print("\nTesting likelihood function on data...")
+    # test_lnprob_higher_likelihood_real()
 
-    print("\nTesting convective overturn timescale calculation...")
-    test_convective_overturn_timescale()
+    # print("\nTesting convective overturn timescale calculation...")
+    # test_convective_overturn_timescale()
+
+    print("\n Test for NaNs")
+    test_for_nans()
