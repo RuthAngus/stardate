@@ -225,7 +225,7 @@ def lnprob(lnparams, *args):
     # likelihood.
     lnpr = mod.lnprior(params)
     if not np.isfinite(lnpr):
-        return lnpr, lnpr
+        return -np.inf, -np.inf
 
     # More prior. Put some reasonable limits on things
     if params[0] < 0 or params[4] < 0 or 1 < params[4]:
