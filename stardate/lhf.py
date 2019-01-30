@@ -289,6 +289,9 @@ def lnprob(lnparams, *args):
         print("nan prob for parameters", params)
         prob = -np.inf
 
+    if not np.isfinite(prob):
+        prob = -np.inf
+
     return prob, lnpr
 
 
