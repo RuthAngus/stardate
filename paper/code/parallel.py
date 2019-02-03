@@ -3,7 +3,6 @@
 import os
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 import h5py
 import tqdm
@@ -50,25 +49,39 @@ def infer_stellar_age(row):
 
     # Infer an age with isochrones and gyrochronology.
 
-    # Set up the star object
-    star = sd.Star(iso_params, df.prot, .01, filename="{}_stardate".format(str(int(df.ID)).zfill(4)))
+    try:
+        sd_fn = "{}_stardate".format(str(int(df.ID)).zfill(4))
+        iso_fn = "{}_isochrones".format(str(int(df.ID)).zfill(4))
+        if not os.path.exists(sd_fn):
+            # Set up the star object
+            star = sd.Star(iso_params, df.prot, .01, filename=sd_fn)
 
-    # Run the MCMC
-    sampler = star.fit(max_n=500)
+            # Run the MCMC
+            sampler = star.fit(max_n=200000)
 
-    # Now infer an age with isochrones only.
+        else:
+            print("failed to save file for star. File exists: ", sd_fn)
 
-    # Set up the star object
-    star_iso = sd.Star(iso_params, df.prot, .01, filename="{}_isochrones".format(str(int(df.ID)).zfill(4)))
+            # Now infer an age with isochrones only.
 
-    # Run the MCMC
-    sampler = star_iso.fit(max_n=500, iso_only=True)
+        if not os.path.exists(iso_fn):
+            # Set up the star object
+            star_iso = sd.Star(iso_params, df.prot, .01, filename=iso_fn)
+
+            # Run the MCMC
+            sampler = star_iso.fit(max_n=200000, iso_only=True)
+
+        else:
+            print("failed to save file for star. File exists: ", iso_fn)
+
+    except:
+        print("failed to save file for star ", str(int(df.ID)).zfill(4))
 
 
 if __name__ == "__main__":
     #  Load the simulated data file.
     df = pd.read_csv("data/simulated_data.csv")
-    N = len(df)
+    df = df.iloc[:24]
     assert len(df.ID) == len(np.unique(df.ID))
 
     p = Pool(24)
