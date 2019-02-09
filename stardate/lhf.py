@@ -227,9 +227,9 @@ def lnprob(lnparams, *args):
     if not np.isfinite(lnpr):
         return -np.inf, -np.inf
 
-    # More prior. Put some reasonable limits on things
-    if params[0] < 0 or params[4] < 0 or 1 < params[4]:
-        return -np.inf, -np.inf
+    # # More prior. Put some reasonable limits on things
+    # if params[0] < 0 or params[4] < 0 or 1 < params[4]:
+    #     return -np.inf, -np.inf
 
     # If isochrones only, just return the isochronal lhf.
     if iso_only:
@@ -264,7 +264,7 @@ def lnprob(lnparams, *args):
             - np.log(period_err)
 
     # If hot, use a broad log-gaussian model with a mean of .5 for rotation.
-    elif bv < .45 or bv > 1.25:
+    elif bv < .45:# or bv > 1.25:
         if mass is None:
             mass = mist.mass(params[0], params[1], params[2])
         period_model = .5  # 1
