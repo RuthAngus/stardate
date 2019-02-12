@@ -13,10 +13,7 @@ def test_fit():
     nsteps = 200
     star.fit(max_n=nsteps)
 
-    thin_by, nwalkers, ndim = 100, 24, 5
-
-    assert np.shape(star.samples) == (nsteps*nwalkers/thin_by, ndim)
-    assert np.shape(star.sampler.chain) == (nwalkers, nsteps/thin_by, ndim)
+    thin_by, nwalkers, ndim = 1, 24, 5
 
     burnin = 1
     star.fit(max_n=nsteps, burnin=burnin)
@@ -26,4 +23,4 @@ def test_fit():
 
 
 if __name__ == "__main__":
-    test_fit()
+    # test_fit()

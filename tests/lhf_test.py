@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
-from lhf import lnprob, calc_bv, gyro_model
-from lhf import convective_overturn_time, gyro_model_praesepe
-from lhf import gyro_model_rossby
+from stardate.lhf import lnprob, calc_bv, gyro_model
+from stardate.lhf import convective_overturn_time, gyro_model_praesepe
+from stardate.lhf import gyro_model_rossby
 from isochrones.mist import MIST_Isochrone
 from isochrones import StarModel
 mist = MIST_Isochrone()
@@ -39,7 +39,7 @@ def test_lnprob_higher_likelihood_sun():
 
     # Set up the StarModel isochrones object.
     mod = StarModel(mist, **iso_params)
-    args = [mod, 26., 1., None, None, False, True]  # the lnprob arguments]
+    args = [mod, 26., 1., None, None, False, False]  # the lnprob arguments]
 
     good_lnparams = [346, np.log10(4.56*1e9), 0., np.log(1000), 0.]
     good_lnprob = lnprob(good_lnparams, *args)
@@ -72,7 +72,7 @@ def test_lnprob_higher_likelihood_real():
 
     # Set up the StarModel isochrones object.
     mod = StarModel(mist, **iso_params)
-    args = [mod, df.prot[i], 1, None, None, False, True]  # lnprob arguments
+    args = [mod, df.prot[i], 1, None, None, False, False]  # lnprob arguments
     good_lnparams = [df.eep.values[i], df.age.values[i], df.feh.values[i],
                      np.log(df.d_kpc.values[i]*1e3), df.Av.values[i]]
     good_lnprob = lnprob(good_lnparams, *args)
@@ -235,30 +235,29 @@ def test_gyro_model_rossby():
 
 
 if __name__ == "__main__":
-    # print("Testing gyro model...")
-    # test_gyro_model_rossby()
+    print("Testing gyro model...")
+    test_gyro_model_rossby()
 
-    # print("\nTesting the Praesepe gyro model...")
-    # test_praesepe_gyro_model()
+    print("\nTesting the Praesepe gyro model...")
+    test_praesepe_gyro_model()
 
-    # print("\nTesting original gyro model...")
-    # test_gyro_model()
+    print("\nTesting original gyro model...")
+    test_gyro_model()
 
     # print("\nTesting likelihood function behaviour...")
     # test_likelihood_rotation_giant()
 
-    # print("\nTesting B-V calculation... (this could take a while if you're"
-    #       " running for the first time!)")
-    # test_calc_bv()
+    print("\nTesting B-V calculation...")
+    test_calc_bv()
 
-    # print("\nTesting likelihood function on the Sun...")
-    # test_lnprob_higher_likelihood_sun()
+    print("\nTesting likelihood function on the Sun...")
+    test_lnprob_higher_likelihood_sun()
 
-    # print("\nTesting likelihood function on data...")
-    # test_lnprob_higher_likelihood_real()
+    print("\nTesting likelihood function on data...")
+    test_lnprob_higher_likelihood_real()
 
-    # print("\nTesting convective overturn timescale calculation...")
-    # test_convective_overturn_timescale()
+    print("\nTesting convective overturn timescale calculation...")
+    test_convective_overturn_timescale()
 
-    print("\n Test for NaNs")
-    test_for_nans()
+    # print("\n Test for NaNs")
+    # test_for_nans()
