@@ -9,7 +9,8 @@ import pandas as pd
 import emcee
 
 from isochrones.mist import MIST_Isochrone
-mist = MIST_Isochrone()
+bands = ["B", "V", "J", "H", "K"]
+mist = MIST_Isochrone(bands)
 
 
 class Star(object):
@@ -308,7 +309,8 @@ class Star(object):
         samples = self.sampler.chain[:, burnin:, :]
         nwalkers, nsteps, ndim = np.shape(samples)
         samps = np.reshape(samples, (nwalkers*nsteps, ndim))
-        msamps = mist.mass(samps[:, 0], samps[:, 1], samps[:, 2])
+        msamps = mist.interp_value([samps[:, 0], samps[:, 1], samps[:, 2]],
+                                   ["mass"])
         m = np.median(msamps)
         errp = np.percentile(msamps, 84) - m
         errm = m - np.percentile(msamps, 16)

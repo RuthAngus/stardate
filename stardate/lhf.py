@@ -18,7 +18,8 @@ package on its own.
 import numpy as np
 import pandas as pd
 from isochrones.mist import MIST_Isochrone
-mist = MIST_Isochrone()
+bands = ["B", "V", "J", "H", "K"]
+mist = MIST_Isochrone(bands)
 from isochrones import StarModel
 import emcee
 import h5py
@@ -142,8 +143,8 @@ def calc_bv(mag_pars):
 
     """
 
-    B = mist.mag["B"](*mag_pars)
-    V = mist.mag["V"](*mag_pars)
+    _, _, _, bands = mist.interp_value(*mag_pars, ["B", "V"])
+    B, V = bands
     return B-V
 
 
@@ -254,7 +255,8 @@ def lnprob(lnparams, *args):
     elif bv > .45 and params[0] < 454:
 
         if mass is None:  # If a mass is not provided, calculate it.
-            mass = mist.mass(params[0], params[1], params[2])
+            mass = mist.interp_value([params[0], params[1], params[2]],
+                                     ["mass"])
 
         # Calculate a period using the gyrochronology model
         period_model = gyro_model_rossby(params[1], bv, mass)
@@ -266,7 +268,8 @@ def lnprob(lnparams, *args):
     # If hot, use a broad log-gaussian model with a mean of .5 for rotation.
     elif bv < .45:# or bv > 1.25:
         if mass is None:
-            mass = mist.mass(params[0], params[1], params[2])
+            mass = mist.interp_value([params[0], params[1], params[2]],
+                                     ["mass"])
         period_model = .5  # 1
         # gyro_lnlike = -.5*((period - period_model)
         #                     / (period_err+10))**2 - np.log(period_err+10)
@@ -276,7 +279,8 @@ def lnprob(lnparams, *args):
     # If evolved, use a gyrochronology relation with inflated uncertainties.
     elif bv > .45 and params[0] >= 454:
         if mass is None:
-            mass = mist.mass(params[0], params[1], params[2])
+            mass = mist.interp_value([params[0], params[1], params[2]],
+                                     ["mass"])
         period_model = gyro_model_rossby(params[1], bv, mass)
         gyro_lnlike = -.5*((period - period_model) / (period_err+10))**2 \
             - np.log(period_err+10)
@@ -316,7 +320,7 @@ def convective_overturn_time(*args):
     if len(args) > 1:
         # Convert eep, age and feh to mass (mass will be in Solar mass units)
         eep, age, feh = args
-        M = mist.mass(eep, age, feh)
+        M = mist.interp_value([eep, age, feh], ["mass"])
     else:
         M = args[0]
 
