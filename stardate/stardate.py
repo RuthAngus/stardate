@@ -4,13 +4,14 @@ import pandas as pd
 import h5py
 import tqdm
 from .lhf import lnprob
-from isochrones import StarModel
+from isochrones import StarModel, get_ichrone
 import pandas as pd
 import emcee
 
 from isochrones.mist import MIST_Isochrone
 bands = ["B", "V", "J", "H", "K"]
-mist = MIST_Isochrone(bands)
+# mist = MIST_Isochrone(bands)
+mist = get_ichrone("mist", bands=bands)
 
 
 class Star(object):

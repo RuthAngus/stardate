@@ -18,9 +18,10 @@ package on its own.
 import numpy as np
 import pandas as pd
 from isochrones.mist import MIST_Isochrone
+from isochrones import StarModel, get_ichrone
+# mist = MIST_Isochrone(bands)
 bands = ["B", "V", "J", "H", "K"]
-mist = MIST_Isochrone(bands)
-from isochrones import StarModel
+mist = get_ichrone("mist", bands=bands)
 import emcee
 import h5py
 
@@ -143,7 +144,7 @@ def calc_bv(mag_pars):
 
     """
 
-    _, _, _, bands = mist.interp_value(*mag_pars, ["B", "V"])
+    _, _, _, bands = mist.interp_mag([*mag_pars], ["B", "V"])
     B, V = bands
     return B-V
 

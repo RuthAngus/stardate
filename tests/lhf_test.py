@@ -3,10 +3,13 @@ import pandas as pd
 from stardate.lhf import lnprob, calc_bv, gyro_model
 from stardate.lhf import convective_overturn_time, gyro_model_praesepe
 from stardate.lhf import gyro_model_rossby
-from isochrones.mist import MIST_Isochrone
-from isochrones import StarModel
-mist = MIST_Isochrone()
 from tqdm import trange
+
+from isochrones.mist import MIST_Isochrone
+from isochrones import StarModel, get_ichrone
+bands = ["B", "V", "J", "H", "K"]
+# mist = MIST_Isochrone(bands)
+mist = get_ichrone("mist", bands=bands)
 
 
 def good_vs_bad(good_lnprob, good_lnparams, args, nsamps):
@@ -163,10 +166,12 @@ def test_likelihood_rotation_giant():
     ceep, cage, cfeh = 355, np.log10(4.56*1e9), 0.
     hot_params = [heep, hage, hfeh, np.log(1000), 0.]
     cool_params = [ceep, cage, cfeh, np.log(1000), 0.]
-    cool_prot = gyro_model_rossby(cage, calc_bv(cool_params),
-                                  mist.mass(ceep, cage, cfeh))
-    hot_prot = gyro_model_rossby(hage, calc_bv(hot_params),
-                                  mist.mass(heep, hage, hfeh))
+    cool_prot = gyro_model_rossby(
+        cage, calc_bv(cool_params),
+        mist.interp_value([ceep, cage, cfeh], ["mass"]))
+    hot_prot = gyro_model_rossby(
+        hage, calc_bv(hot_params),
+        mist.interp_value([heep, hage, hfeh], ["mass"]))
     cool_args = [mod, cool_prot, 1., None, None, False, False]
     hot_args = [mod, hot_prot, 1., None, None, False, False]
 
