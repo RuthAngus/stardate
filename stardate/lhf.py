@@ -219,6 +219,7 @@ def lnprob(lnparams, *args):
     # Transform mass and distance back to linear.
     params = lnparams*1
     params[3] = np.exp(lnparams[3])
+    params = [float(p) for p in params]  # ensure proper format
 
     # Unpack the args.
     mod, period, period_err, bv, mass, iso_only, gyro_only = args
