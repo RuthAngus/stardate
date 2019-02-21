@@ -38,7 +38,8 @@ def test_lnprob_higher_likelihood_sun():
     iso_params = pd.DataFrame(dict({"teff": (5777, 10),
                                 "logg": (4.44, .05),
                                 "feh": (0., .001),
-                                "parallax": (1., .01)}))  # mas
+                                "parallax": (1., .01), # mas
+                                "B": (15, 0.02)}))
 
     # Set up the StarModel isochrones object.
     mod = StarModel(mist, **iso_params)
