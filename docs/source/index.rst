@@ -39,6 +39,7 @@ Example usage
                   "logg": (4.44, .05),    # logg with uncertainty.
                   "feh": (0., .001),      # Metallicity with uncertainty.
                   "parallax": (1., .01),  # Parallax in milliarcseconds.
+                  "B": (15.48, 0.02),     # You must provide at least one magnitude.
                   "maxAV": .1}            # Maximum extinction
 
     prot, prot_err = 26, 1
