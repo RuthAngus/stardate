@@ -5,10 +5,10 @@ from stardate.lhf import convective_overturn_time, gyro_model_praesepe
 from stardate.lhf import gyro_model_rossby
 from tqdm import trange
 
-from isochrones.mist import MIST_Isochrone
+# from isochrones.mist import MIST_Isochrone
+# mist = MIST_Isochrone(bands)
 from isochrones import StarModel, get_ichrone
 bands = ["B", "V", "J", "H", "K"]
-# mist = MIST_Isochrone(bands)
 mist = get_ichrone("mist", bands=bands)
 
 
@@ -35,10 +35,12 @@ def test_lnprob_higher_likelihood_sun():
     Make sure the likelihood goes down when the parameters are a worse fit.
     Test on Solar values.
     """
-    iso_params = pd.DataFrame(dict({"teff": (5777, 10),
-                                "logg": (4.44, .05),
-                                "feh": (0., .001),
-                                "parallax": (1., .01)}))  # mas
+
+    iso_params = {"teff": (5777, 10),
+                  "logg": (4.44, .05),
+                  "feh": (0., .001),
+                  "parallax": (1., .01),  # milliarcseconds
+                  "B": (15.48, 0.02)}
 
     # Set up the StarModel isochrones object.
     mod = StarModel(mist, **iso_params)
@@ -53,7 +55,7 @@ def test_lnprob_higher_likelihood_real():
     """
     The same test as above but for simulated data.
     """
-    df = pd.read_csv("../paper/code/data/simulated_data.csv")
+    df = pd.read_csv("../../paper/code/data/simulated_data.csv")
     teff_err = 25  # Kelvin
     logg_err = .05  # dex
     feh_err = .05  # dex
@@ -240,20 +242,41 @@ def test_gyro_model_rossby():
 
 
 if __name__ == "__main__":
-    print("Testing gyro model...")
-    test_gyro_model_rossby()
 
-    print("\nTesting the Praesepe gyro model...")
-    test_praesepe_gyro_model()
+    # from isochrones.mist import MIST_Isochrone
+    # from isochrones import StarModel, get_ichrone
+    # bands = ["B", "V", "J", "H", "K"]
+    # mist = get_ichrone("mist", bands=bands)
 
-    print("\nTesting original gyro model...")
-    test_gyro_model()
+    # mod = StarModel(mist, B=(10, 0.02), V=(9.6, 0.02))
 
-    # print("\nTesting likelihood function behaviour...")
-    # test_likelihood_rotation_giant()
+    # pars = [300, 9.7, 0.0, 200, 0.1]
+    # mod.lnlike(pars)
 
-    print("\nTesting B-V calculation...")
-    test_calc_bv()
+    # from isochrones.mist import MIST_Isochrone
+    # from isochrones import StarModel, get_ichrone
+    # bands = ["B", "V", "J", "H", "K"]
+    # mist = get_ichrone("mist", bands=bands)
+    # mod = StarModel(mist, B=(10, 0.02), V=(9.6, 0.02))
+    # pars = [300, 9.7, 0.0, 200, 0.1]
+    # print(mod.lnlike(pars))
+
+    # assert 0
+
+    # print("Testing gyro model...")
+    # test_gyro_model_rossby()
+
+    # print("\nTesting the Praesepe gyro model...")
+    # test_praesepe_gyro_model()
+
+    # print("\nTesting original gyro model...")
+    # test_gyro_model()
+
+    # # print("\nTesting likelihood function behaviour...")
+    # # test_likelihood_rotation_giant()
+
+    # print("\nTesting B-V calculation...")
+    # test_calc_bv()
 
     print("\nTesting likelihood function on the Sun...")
     test_lnprob_higher_likelihood_sun()
