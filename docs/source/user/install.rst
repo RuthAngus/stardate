@@ -41,3 +41,5 @@ You'll also need to download isochrones and switch to the bolo branch:
     cd isochrones
     git checkout bolo
     python setup.py install
+    
+Note that the bolo branch is currently the development branch for the upcoming release of isochrones v2.0, so stay tuned for updates.
