@@ -8,9 +8,11 @@ import h5py
 import tqdm
 import emcee
 
-from isochrones.mist import MIST_Isochrone
-from isochrones import StarModel
-mist = MIST_Isochrone()
+# from isochrones.mist import MIST_Isochrone
+# mist = MIST_Isochrone()
+# from isochrones import StarModel, get_ichrone
+# bands = ["B", "V", "J", "H", "K"]
+# mist = get_ichrone("mist", bands=bands)
 
 import stardate as sd
 from stardate.lhf import lnprob
@@ -46,7 +48,8 @@ def infer_stellar_age(df):
                   "jmag": (df["jmag"], jmag_err),
                   "hmag": (df["hmag"], hmag_err),
                   "kmag": (df["kmag"], kmag_err),
-                  "parallax": (df["parallax"], parallax_err)}
+                  "parallax": (df["parallax"], parallax_err)
+                  "maxAV": .1}
 
     # Infer an age with isochrones and gyrochronology.
 
@@ -82,14 +85,16 @@ def infer_stellar_age(df):
 if __name__ == "__main__":
     #  Load the simulated data file.
     df = pd.read_csv("data/simulated_data.csv")
-    df = df.iloc[:24]
+    df = df.iloc[5:6]
     assert len(df.ID) == len(np.unique(df.ID))
 
     list_of_dicts = []
     for i in range(len(df)):
         list_of_dicts.append(df.iloc[i].to_dict())
 
-    p = Pool(24)
+    print(list_of_dicts[0])
+
+    p = Pool(1)
     # list(p.map(infer_stellar_age, list_of_dicts))
     list(map(infer_stellar_age, list_of_dicts))
     # p.map(infer_stellar_age, df.iterrows())
