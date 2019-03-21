@@ -94,7 +94,7 @@ class Star(object):
                 "gyro_only to be True."
 
         if gyro_only:
-            assert mass, "If gyro_only is set to True, you must " \
+            assert self.mass, "If gyro_only is set to True, you must " \
                 "provide a B-V colour and a mass."
 
         if burnin > max_n/thin_by:
