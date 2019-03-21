@@ -29,8 +29,8 @@ def infer_stellar_age(df):
     # Infer an age with isochrones and gyrochronology.
 
     try:
-        sd_fn = "praesepe/{}_stardate".format(str(int(df["ID"])).zfill(4))
-        iso_fn = "praesepe/{}_isochrones".format(str(int(df["ID"])).zfill(4))
+        sd_fn = "praesepe/{}_stardate".format(str(int(df["EPIC"]))
+        iso_fn = "praesepe/{}_isochrones".format(str(int(df["EPIC"])))
         if not os.path.exists(sd_fn):
             # Set up the star object
             star = sd.Star(iso_params, df["Prot1"], 1., filename=sd_fn)
@@ -54,7 +54,7 @@ def infer_stellar_age(df):
             print("failed to save file for star. File exists: ", iso_fn)
 
     except:
-        print("failed to save file for star ", str(int(df["ID"])).zfill(4))
+        print("failed to save file for star ", str(int(df["EPIC"]))
 
 
 if __name__ == "__main__":
