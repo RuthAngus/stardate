@@ -45,11 +45,11 @@ def infer_stellar_age(df):
     iso_params = {"teff": (df["teff"], teff_err),
                   "logg": (df["logg"], logg_err),
                   "feh": (df["feh"], feh_err),
-                  "jmag": (df["jmag"], jmag_err),
-                  "hmag": (df["hmag"], hmag_err),
-                  "kmag": (df["kmag"], kmag_err),
-                  "parallax": (df["parallax"], parallax_err)
-                  "maxAV": .1}
+                  "J": (df["jmag"], jmag_err),
+                  "H": (df["hmag"], hmag_err),
+                  "K": (df["kmag"], kmag_err),
+                  "parallax": (df["parallax"], parallax_err)}
+                  # "maxAV": .1}
 
     # Infer an age with isochrones and gyrochronology.
 
@@ -61,7 +61,8 @@ def infer_stellar_age(df):
             star = sd.Star(iso_params, df["prot"], .01, filename=sd_fn)
 
             # Run the MCMC
-            sampler = star.fit(max_n=200000)
+            sampler = star.fit(max_n=2000)
+            # sampler = star.fit(max_n=200000)
 
         else:
             print("failed to save file for star. File exists: ", sd_fn)
@@ -73,7 +74,8 @@ def infer_stellar_age(df):
             star_iso = sd.Star(iso_params, df["prot"], .01, filename=iso_fn)
 
             # Run the MCMC
-            sampler = star_iso.fit(max_n=200000, iso_only=True)
+            sampler = star_iso.fit(max_n=2000, iso_only=True)
+            # sampler = star_iso.fit(max_n=200000, iso_only=True)
 
         else:
             print("failed to save file for star. File exists: ", iso_fn)
@@ -85,7 +87,7 @@ def infer_stellar_age(df):
 if __name__ == "__main__":
     #  Load the simulated data file.
     df = pd.read_csv("data/simulated_data.csv")
-    df = df.iloc[5:6]
+    # df = df.iloc[5:6]
     assert len(df.ID) == len(np.unique(df.ID))
 
     list_of_dicts = []
@@ -93,8 +95,9 @@ if __name__ == "__main__":
         list_of_dicts.append(df.iloc[i].to_dict())
 
     print(list_of_dicts[0])
+    print(len(list_of_dicts))
 
-    p = Pool(1)
+    p = Pool(24)
     # list(p.map(infer_stellar_age, list_of_dicts))
-    list(map(infer_stellar_age, list_of_dicts))
+    list(p.map(infer_stellar_age, list_of_dicts))
     # p.map(infer_stellar_age, df.iterrows())
