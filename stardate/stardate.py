@@ -29,9 +29,9 @@ class Star(object):
         prot (float): The rotation period of the star in days.
         prot_err (float): The uncertainty on the stellar rotation period in
             days.
-        bv (Optional[float]): B-V color. In order to infer an age with only
-            gyrochronology, a B-V color must be provided. Only include this if
-            you want to use gyrochronology only!
+        bprp (Optional[float]): G_BP - G_RP color. In order to infer an age
+            with only gyrochronology, a BP-RP color must be provided.
+            Only include this if you want to use gyrochronology only!
         mass (Optional[float]): In order to infer an age with only
             gyrochronology, a mass must be provided (units of Solar masses).
             Only include this if you want to use gyrochronology only!
@@ -42,7 +42,7 @@ class Star(object):
 
     """
 
-    def __init__(self, iso_params, prot=None, prot_err=None, bv=None,
+    def __init__(self, iso_params, prot=None, prot_err=None, bprp=None,
                  mass=None, savedir=".", filename="samples"):
 
         self.iso_params = iso_params
@@ -50,8 +50,9 @@ class Star(object):
         self.prot_err = prot_err
         self.savedir = savedir
         self.filename = filename
-        self.bv = bv
+        self.bprp = bprp
         self.mass = mass
+
 
     def fit(self, inits=[355, 9.659, 0., 1000., .01], nwalkers=24,
             max_n=100000, thin_by=100, burnin=0, iso_only=False,
@@ -94,8 +95,8 @@ class Star(object):
                 "gyro_only to be True."
 
         if gyro_only:
-            assert self.mass, "If gyro_only is set to True, you must " \
-                "provide a B-V colour and a mass."
+            assert self.mass, "If gyro_only is set to True, you " \
+                "must provide a BP-RP colour and a mass."
 
         if burnin > max_n/thin_by:
             burnin = int(max_n/thin_by/3)
@@ -122,7 +123,7 @@ class Star(object):
         mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
 
         # lnprob arguments
-        args = [mod, self.prot, self.prot_err, self.bv, self.mass, iso_only,
+        args = [mod, self.prot, self.prot_err, self.bprp, self.mass, iso_only,
                 gyro_only]
         self.args = args
 

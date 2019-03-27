@@ -264,6 +264,7 @@ def lnprob(lnparams, *args):
 
     # If isochrones only, just return the isochronal lhf.
     if iso_only:
+        # print(mod.lnlike(params) + lnpr)
         return mod.lnlike(params) + lnpr, lnpr
 
     # If a G_BP-G_RP color is not provided, calculate it.
@@ -294,7 +295,7 @@ def lnprob(lnparams, *args):
     log10_period_model = gyro_model_rossby(p, params[1], log10_bprp, mass)
 
     # TODO: Check variance is correct
-    var = (period_err/period)**2 + variance(p, log10_bprp, params[0])
+    var = (period_err/period + np.sqrt(variance(p, log10_bprp, params[0])))**2
 
     # Calculate the gyrochronology likelihood.
     gyro_lnlike = np.sum(
@@ -302,6 +303,7 @@ def lnprob(lnparams, *args):
         - .5*np.log(2*np.pi*var))
 
     if gyro_only:
+        # print(gyro_lnlike + lnpr)
         return gyro_lnlike + lnpr, lnpr
 
     prob = mod.lnlike(params) + gyro_lnlike + lnpr
