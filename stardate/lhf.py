@@ -26,7 +26,7 @@ import emcee
 import h5py
 
 
-def angus15_gyro_model(log10_age, bv):
+def angus15_gyro_model(log10_age, log10_bv):
     """Predict a rotation period from an age and B-V colour.
 
     Given a B-V colour and an age, predict a rotation period using the Angus
@@ -42,24 +42,31 @@ def angus15_gyro_model(log10_age, bv):
 
     """
     age_myr = (10**log10_age)*1e-6
+    bv = 10**log10_bv
 
     a, b, c, n = [.4, .31, .45, .55]
 
     log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c)
-    return 10**log_P
+    return log_P
 
 
-def gyro_model(p, log10_bprp, log10_age):
+def gyro_model(log10_age, log10_bprp):
     """
     Predicts log10 rotation period from log10 color and log10 age.
 
     Args:
         params (list): The list of model parameters.
-        log10_bprp (array): The (log10) G_bp - G_rp color array.
         log10_age (array): The (log10) age array.
+        log10_bprp (array): The (log10) G_bp - G_rp color array.
     Returns:
         log10_period (array): The (log10) period array.
     """
+
+    # Hard-code the gyro parameters :-)
+    p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
+         0.7161114835620975, -4.716819674578521, 0.6470950862322454,
+         -13.558898318835137, 0.9359250478865809]
+
     cool = log10_bprp >= .43
     hot = log10_bprp < -.25
     warm = (log10_bprp > -.25) * (log10_bprp <= .43)
@@ -73,6 +80,13 @@ def gyro_model(p, log10_bprp, log10_age):
                 + p[5]*log10_age[cool]
             logp[hot] = np.ones(len(log10_bprp[hot]))*0
             return logp
+        elif len(log10_bprp) == 1:
+            if cool[0]:
+                return np.polyval(p[6:], log10_bprp) + p[5]*log10_age
+            elif hot[0]:
+                return 0
+            elif warm[0]:
+                return np.polyval(p[:5], log10_bprp) + p[5]*log10_age
 
     else:
         if cool:
@@ -83,7 +97,7 @@ def gyro_model(p, log10_bprp, log10_age):
             return np.polyval(p[:5], log10_bprp) + p[5]*log10_age
 
 
-def age_model(p, log10_bprp, log10_period):
+def age_model(log10_bprp, log10_period, model):
     """
     Predicts log10 age from log10 color and log10 period.
 
@@ -94,22 +108,74 @@ def age_model(p, log10_bprp, log10_period):
     Returns:
         log10_age (array): The (log10) age  array.
     """
-    return (log10_period - np.polyval(p[:5], log10_bprp))/p[5]
+
+    if model == "praesepe":
+        # Hard-code the gyro parameters :-)
+        p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
+            0.7161114835620975, -4.716819674578521, 0.6470950862322454,
+            -13.558898318835137, 0.9359250478865809]
+        return (log10_period - np.polyval(p[:5], log10_bprp))/p[5]
+
+    elif model == "angus15":
+        # Angus et al. (2015) parameters.
+        a, b, c, n = [.4, .31, .45, .55]
+        age_myr = (pmax/(a*(bv-c)**b))**(1./n)
+        return np.log10(age_thresh_myr*1e6)
 
 
 def sigmoid(k, x0, L, x):
+    """
+    Computes a sigmoid function.
+
+    Args:
+        k (float): The logistic growth rate (steepness).
+        x0 (float): The location of 1/2 max.
+        L (float): The maximum value.
+        x, (array): The x-array.
+
+    Returns:
+        y (array): The logistic function.
+    """
     return L/(np.exp(-k*(x - x0)) + 1)
 
 
-def variance(p, log10_bprp, eep):
-    sigma_bprp = sigmoid(100, .4, 1., log10_bprp) + sigmoid(100, .25, 1.,
-                                                            -log10_bprp)
-    sigma_eep = sigma_eep = sigmoid(.2, 454, 2., eep)
-    return (sigma_bprp + sigma_eep)**2
+def sigma(log10_bprp, eep):
+    """
+    The standard deviation of the rotation period distribution.
+
+    Currently comprised of two three logistic functions that 'blow up' the
+    variance at hot colours, cool colours and large EEPs. The FGK dwarf part
+    of the model has zero variance.
+
+    Args:
+        log10_bprp (float or array): The log10 G_BP - G_RP colour.
+        eep (float or array): The equivalent evolutionary point.
+    """
+    kcool, khot, keep = 100, 100, .2
+    x0cool, x0hot, x0eep = .4, .25, 454
+    Lcool, Lhot, Leep = .5, .5, .5
+    sigma_bprp = sigmoid(kcool, x0cool, Lcool, log10_bprp) \
+        + sigmoid(khot, x0hot, Lhot, -log10_bprp)
+    sigma_eep = sigma_eep = sigmoid(keep, x0eep, Leep, eep)
+    return sigma_bprp + sigma_eep
 
 
-def gyro_model_rossby(params, log10_age, log10_bprp, mass, Ro_cutoff=2,
-                      rossby=True):
+def calc_rossby_number(prot, mass):
+    """
+    Calculate the Rossby number of a star.
+
+    Args:
+        prot (float or array): The rotation period in days.
+        mass (float or array): The mass in Solar masses.
+
+    Returns:
+        Ro (float or array): The Rossby number.
+    """
+    return prot/convective_overturn_time(mass)
+
+
+def gyro_model_rossby(log10_age, log10_bprp, mass, Ro_cutoff=1.5,
+                      rossby=True, model="praesepe"):
     """Predict a rotation period from an age, B-V colour and mass.
 
     Predict a rotation period from an age, B-V color and mass using a
@@ -131,7 +197,10 @@ def gyro_model_rossby(params, log10_age, log10_bprp, mass, Ro_cutoff=2,
         prot (array): The rotation periods in days.
     """
 
-    log_P = gyro_model(params, log10_bprp, log10_age)
+    if model == "praesepe":
+        log_P = gyro_model(log10_age, log10_bprp)
+    elif model == "angus":
+        log_P = angus15_gyro_model(log10_age, log10_bprp)
 
     if not rossby:  # If Rossby model is switched off
         return log_P
@@ -141,7 +210,7 @@ def gyro_model_rossby(params, log10_age, log10_bprp, mass, Ro_cutoff=2,
     pmax = Ro_cutoff * convective_overturn_time(mass)
 
     # Calculate the age at which star reaches pmax, based on its bp-rp color.
-    log10_age_thresh = age_model(params, log10_bprp, np.log10(pmax))
+    log10_age_thresh = age_model(log10_bprp, np.log10(pmax), model)
 
     # If star older than this age, return maximum possible rotation period.
     old = log10_age > log10_age_thresh
@@ -286,16 +355,11 @@ def lnprob(lnparams, *args):
     if mass is None:  # If a mass is not provided, calculate it.
         mass = mist.interp_value([params[0], params[1], params[2]], ["mass"])
 
-    # Hard-code the gyro parameters :-)
-    p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
-         0.7161114835620975, -4.716819674578521, 0.6470950862322454,
-         -13.558898318835137, 0.9359250478865809]
-
     # Calculate the mean model.
     log10_period_model = gyro_model_rossby(p, params[1], log10_bprp, mass)
 
     # TODO: Check variance is correct
-    var = (period_err/period + np.sqrt(variance(p, log10_bprp, params[0])))**2
+    var = (period_err/period + sigma(log10_bprp, params[0]))**2
 
     # Calculate the gyrochronology likelihood.
     gyro_lnlike = np.sum(
