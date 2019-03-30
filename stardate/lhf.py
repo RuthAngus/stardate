@@ -419,9 +419,21 @@ def sigma(bv, eep):
         eep (float or array): The equivalent evolutionary point.
     """
     kcool, khot, keep = 100, 100, .2
-    x0cool, x0hot, x0eep = 1.25, .45, 454
+    x0cool, x0hot, x0eep = 1.4, .45, 454
     Lcool, Lhot, Leep = .5, .5, .5
     sigma_bv = sigmoid(kcool, x0cool, Lcool, bv) \
         + sigmoid(khot, -x0hot, Lhot, -bv)
     sigma_eep = sigma_eep = sigmoid(keep, x0eep, Leep, eep)
     return sigma_bv + sigma_eep
+
+
+def calc_rossby_number(prot, mass):
+    """
+    Calculate the Rossby number of a star.
+    Args:
+        prot (float or array): The rotation period in days.
+        mass (float or array): The mass in Solar masses.
+    Returns:
+        Ro (float or array): The Rossby number.
+    """
+    return prot/convective_overturn_time(mass)
