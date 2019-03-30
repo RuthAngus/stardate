@@ -43,7 +43,8 @@ class Star(object):
     """
 
     def __init__(self, iso_params, prot=None, prot_err=None, bprp=None,
-                 mass=None, savedir=".", filename="samples"):
+                 mass=None, savedir=".",
+                 filename="samples"):
 
         self.iso_params = iso_params
         self.prot = prot

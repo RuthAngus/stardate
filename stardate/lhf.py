@@ -97,7 +97,7 @@ def gyro_model(log10_age, log10_bprp):
             return np.polyval(p[:5], log10_bprp) + p[5]*log10_age
 
 
-def age_model(log10_bprp, log10_period, model):
+def age_model(log10_bprp, log10_period):
     """
     Predicts log10 age from log10 color and log10 period.
 
@@ -109,18 +109,29 @@ def age_model(log10_bprp, log10_period, model):
         log10_age (array): The (log10) age  array.
     """
 
-    if model == "praesepe":
-        # Hard-code the gyro parameters :-)
-        p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
-            0.7161114835620975, -4.716819674578521, 0.6470950862322454,
-            -13.558898318835137, 0.9359250478865809]
-        return (log10_period - np.polyval(p[:5], log10_bprp))/p[5]
+    # Hard-code the gyro parameters :-)
+    p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
+        0.7161114835620975, -4.716819674578521, 0.6470950862322454,
+        -13.558898318835137, 0.9359250478865809]
+    return (log10_period - np.polyval(p[:5], log10_bprp))/p[5]
 
-    elif model == "angus15":
-        # Angus et al. (2015) parameters.
-        a, b, c, n = [.4, .31, .45, .55]
-        age_myr = (pmax/(a*(bv-c)**b))**(1./n)
-        return np.log10(age_thresh_myr*1e6)
+
+def age_model_angus15(log10_bprp, log10_period):
+    """
+    Predicts log10 age from log10 color and log10 period using the Angus +
+    (2015) gyro model.
+
+    Args:
+        params (list): The list of model parameters.
+        log10_bprp (array): The (log10) G_bp - G_rp color array.
+        log10_period (array): The (log10) period array.
+    Returns:
+        log10_age (array): The (log10) age  array.
+    """
+    # Angus et al. (2015) parameters.
+    a, b, c, n = [.4, .31, .45, .55]
+    age_myr = ((10**log10_period)/(a*(bv-c)**b))**(1./n)
+    return np.log10(age_thresh_myr*1e6)
 
 
 def sigmoid(k, x0, L, x):
@@ -174,8 +185,8 @@ def calc_rossby_number(prot, mass):
     return prot/convective_overturn_time(mass)
 
 
-def gyro_model_rossby(log10_age, log10_bprp, mass, Ro_cutoff=1.5,
-                      rossby=True, model="praesepe"):
+def gyro_model_rossby(log10_age, log10_bprp, mass, Ro_cutoff=1.8,
+                      rossby=True):
     """Predict a rotation period from an age, B-V colour and mass.
 
     Predict a rotation period from an age, B-V color and mass using a
@@ -197,10 +208,7 @@ def gyro_model_rossby(log10_age, log10_bprp, mass, Ro_cutoff=1.5,
         prot (array): The rotation periods in days.
     """
 
-    if model == "praesepe":
-        log_P = gyro_model(log10_age, log10_bprp)
-    elif model == "angus":
-        log_P = angus15_gyro_model(log10_age, log10_bprp)
+    log_P = gyro_model(log10_age, log10_bprp)
 
     if not rossby:  # If Rossby model is switched off
         return log_P
@@ -210,7 +218,7 @@ def gyro_model_rossby(log10_age, log10_bprp, mass, Ro_cutoff=1.5,
     pmax = Ro_cutoff * convective_overturn_time(mass)
 
     # Calculate the age at which star reaches pmax, based on its bp-rp color.
-    log10_age_thresh = age_model(log10_bprp, np.log10(pmax), model)
+    log10_age_thresh = age_model(log10_bprp, np.log10(pmax))
 
     # If star older than this age, return maximum possible rotation period.
     old = log10_age > log10_age_thresh
