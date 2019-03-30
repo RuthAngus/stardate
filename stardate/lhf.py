@@ -288,6 +288,10 @@ def lnprob(lnparams, *args):
     return prob, lnpr
 
 
+def nll(lnparams, *args):
+    return - lnprob(lnparams, *args)[0]
+
+
 def convective_overturn_time(*args):
     """Estimate the convective overturn time.
 

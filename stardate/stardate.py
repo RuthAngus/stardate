@@ -3,10 +3,11 @@ import numpy as np
 import pandas as pd
 import h5py
 import tqdm
-from .lhf import lnprob
+from .lhf import lnprob, nll
 from isochrones import StarModel, get_ichrone
 import pandas as pd
 import emcee
+import scipy.optimize as spo
 
 from isochrones.mist import MIST_Isochrone
 bands = ["B", "V", "J", "H", "K"]
@@ -102,7 +103,7 @@ class Star(object):
             print("Automatically setting burn in to {}".format(burnin))
 
         p_init = [inits[0], inits[1], inits[2], np.log(inits[3]), inits[4]]
-        self.p_init = p_init
+        # self.p_init = p_init
 
         np.random.seed(42)
 
@@ -125,6 +126,10 @@ class Star(object):
         args = [mod, self.prot, self.prot_err, self.bv, self.mass, iso_only,
                 gyro_only]
         self.args = args
+
+        # optimize
+        results = spo.minimize(-nll, p_init, args=args)
+        self.p_init = results.x
 
         # Run the MCMC
         # sampler = run_mcmc(args, p_init, backend, nwalkers=nwalkers,
