@@ -8,7 +8,7 @@ from tqdm import trange
 # from isochrones.mist import MIST_Isochrone
 # mist = MIST_Isochrone(bands)
 from isochrones import StarModel, get_ichrone
-bands = ["B", "V", "J", "H", "K"]
+bands = ["B", "V", "J", "H", "K", "BP", "RP"]
 mist = get_ichrone("mist", bands=bands)
 
 
@@ -18,16 +18,15 @@ def good_vs_bad(good_lnprob, good_lnparams, args, nsamps):
     likelihood of the true values.
     The true values should be higher.
     """
-    for i in range(nsamps):
-        bad_lnparams = good_lnparams*1
-        bad_lnparams[0] = np.random.randn(1) * 10 + good_lnparams[0]  # eep
-        bad_lnparams[1] = np.random.randn(1) * .5 + good_lnparams[1]  # age
-        bad_lnparams[2] = np.random.randn(1) * .05 + good_lnparams[2]  # feh
-        bad_lnparams[3] = np.random.randn(1) * .1 + good_lnparams[3]  # dist
-        bad_lnprob = lnprob(bad_lnparams, *args)
-        assert bad_lnprob[0] < good_lnprob[0], \
-            "True parameters values must give a higher likelihood than" \
-            " wrong values"
+    bad_lnparams = good_lnparams*1
+    bad_lnparams[0] = 10 + good_lnparams[0]  # eep
+    bad_lnparams[1] = .5 + good_lnparams[1]  # age
+    bad_lnparams[2] = .05 + good_lnparams[2]  # feh
+    bad_lnparams[3] = .1 + good_lnparams[3]  # dist
+    bad_lnprob = lnprob(bad_lnparams, *args)
+    assert bad_lnprob[0] < good_lnprob[0], \
+        "True parameters values must give a higher likelihood than" \
+        " wrong values"
 
 
 def test_lnprob_higher_likelihood_sun():

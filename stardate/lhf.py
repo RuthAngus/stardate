@@ -245,10 +245,6 @@ def lnprob(lnparams, *args):
     if not np.isfinite(lnpr):
         return -np.inf, -np.inf
 
-    # # More prior. Put some reasonable limits on things
-    # if params[0] < 0 or params[4] < 0 or 1 < params[4]:
-    #     return -np.inf, -np.inf
-
     # If isochrones only, just return the isochronal lhf.
     if iso_only:
         return mod.lnlike(params) + lnpr, lnpr
@@ -285,9 +281,6 @@ def lnprob(lnparams, *args):
         return gyro_lnlike + lnpr, lnpr
 
     prob = mod.lnlike(params) + gyro_lnlike + lnpr
-    if np.isnan(prob):
-        print("nan prob for parameters", params)
-        prob = -np.inf
 
     if not np.isfinite(prob):
         prob = -np.inf
