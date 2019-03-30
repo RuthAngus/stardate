@@ -282,7 +282,7 @@ if __name__ == "__main__":
     # # print("\nTesting likelihood function behaviour...")
     # # test_likelihood_rotation_giant()
 
-    print("\nTesting B-V calculation...")
+    print("\nTesting G_BP-G_RP calculation...")
     test_calc_bprp()
 
     print("\nTesting likelihood function on the Sun...")

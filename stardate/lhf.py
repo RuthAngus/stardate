@@ -364,7 +364,7 @@ def lnprob(lnparams, *args):
         mass = mist.interp_value([params[0], params[1], params[2]], ["mass"])
 
     # Calculate the mean model.
-    log10_period_model = gyro_model_rossby(p, params[1], log10_bprp, mass)
+    log10_period_model = gyro_model_rossby(params[1], log10_bprp, mass)
 
     # TODO: Check variance is correct
     var = (period_err/period + sigma(log10_bprp, params[0]))**2
