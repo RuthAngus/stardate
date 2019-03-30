@@ -128,7 +128,7 @@ class Star(object):
         self.args = args
 
         # optimize
-        results = spo.minimize(-nll, p_init, args=args)
+        results = spo.minimize(nll, p_init, args=args)
         self.p_init = results.x
 
         # Run the MCMC

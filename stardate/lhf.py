@@ -288,8 +288,81 @@ def lnprob(lnparams, *args):
     return prob, lnpr
 
 
-def nll(lnparams, *args):
-    return - lnprob(lnparams, *args)[0]
+def nll(lnparams, args):
+    """ The negative ln-probability function.
+
+    Calculates the logarithmic posterior probability (likelihood times prior)
+    of the model given the data.
+
+    Args:
+        lnparams (array): The parameter array containing Equivalent
+            Evolutionary Point (EEP), age in log10(yrs), metallicity, distance
+            in ln(pc) and V-band extinction. [EEP, log10(age [yrs]), [Fe/H],
+            ln(distance [pc]), A_v].
+        *args:
+            The arguments -- mod, period, period_err, bv, mass, iso_only and
+            gyro_only. mod is the isochrones starmodel object which is set up
+            in stardate.py. period, period_err, bv and mass are the rotation
+            period and rotation period uncertainty (in days), B-V color and
+            mass [M_sun]. bv and mass should both be None unless only
+            gyrochronology is being used.
+
+    Returns:
+        The log-posterior probability of the model given the data.
+
+    """
+
+    # Transform mass and distance back to linear.
+    params = lnparams*1
+    params[3] = np.exp(lnparams[3])
+
+    # Unpack the args.
+    mod, period, period_err, bv, mass, iso_only, gyro_only = args
+
+    # If the prior is -inf, don't even try to calculate the isochronal
+    # likelihood.
+    lnpr = mod.lnprior(params)
+    if not np.isfinite(lnpr):
+        return np.inf
+
+    # If isochrones only, just return the isochronal lhf.
+    if iso_only:
+        return -mod.lnlike(params) + lnpr
+
+    # If a B-V is not provided, calculate it.
+    if bv is None:
+        assert gyro_only == False, "You must provide a B-V colour if you "\
+            "want to calculate an age using gyrochronology only."
+        bv = calc_bv(params)
+
+    # If the B-V value calculated is nan, return the prior.
+    if not np.isfinite(bv):
+        return -lnpr
+
+    # Check that the period is a positive, finite number. It doesn't matter
+    # too much what the lhf is here, as long as it is constant.
+    if not period or not np.isfinite(period) or period <= 0.:
+        gyro_lnlike = -.5*((5/(20.))**2) - np.log(20.)
+
+    if mass is None:  # If a mass is not provided, calculate it.
+        mass = mist.interp_value([params[0], params[1], params[2]],
+                                    ["mass"])
+
+    # Calculate a period using the gyrochronology model
+    log10_period_model = gyro_model_rossby(params[1], bv, mass)
+
+    var = (period_err/period + sigma(bv, params[0]))**2
+
+    # Calculate the gyrochronology likelihood.
+    gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
+        - .5*np.log(2*np.pi*var)
+
+    if gyro_only:
+        return -gyro_lnlike + lnpr
+    prob = mod.lnlike(params) + gyro_lnlike + lnpr
+    if not np.isfinite(prob):
+        prob = -np.inf
+    return -prob
 
 
 def convective_overturn_time(*args):
