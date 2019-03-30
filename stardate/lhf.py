@@ -20,7 +20,7 @@ import pandas as pd
 from isochrones.mist import MIST_Isochrone
 from isochrones import StarModel, get_ichrone
 # mist = MIST_Isochrone(bands)
-bands = ["B", "V", "J", "H", "K"]
+bands = ["B", "V", "J", "H", "K", "BP", "RP"]
 mist = get_ichrone("mist", bands=bands)
 import emcee
 import h5py
@@ -42,11 +42,12 @@ def gyro_model(log10_age, bv):
 
     """
     age_myr = (10**log10_age)*1e-6
-
     a, b, c, n = [.4, .31, .45, .55]
-
-    log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c)
-    return 10**log_P
+    hot = bv < .45
+    if hot:
+        return 0
+    else:
+        return (n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c))
 
 
 def gyro_model_praesepe(log10_age, bprp):
@@ -102,13 +103,12 @@ def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
 
     # Angus et al. (2015) parameters.
     a, b, c, n = [.4, .31, .45, .55]
-
     age_myr = (10**log10_age)*1e-6
 
     if not rossby:  # If Rossby model is switched off
         # Standard gyro model
-        log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c)
-        return 10**log_P
+        log_P = gyro_model(log10_age, bv)
+        return log_P
 
     # Otherwise the Rossby model is switched on.
     # Calculate the maximum theoretical rotation period for this mass.
@@ -125,7 +125,7 @@ def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
     # If star older than this age, return maximum possible rotation period.
     else:
         log_P = np.log10(pmax)
-    return 10**log_P
+    return log_P
 
 
 def calc_bv(mag_pars):
@@ -147,6 +147,22 @@ def calc_bv(mag_pars):
     _, _, _, bands = mist.interp_mag([*mag_pars], ["B", "V"])
     B, V = bands
     return B-V
+
+
+def calc_bprp(mag_pars):
+    """Calculate a G_bp-G_rp colour from stellar parameters.
+    Calculate bp-rp colour from stellar parameters [EEP, log10(age, yrs), feh,
+    distance (in parsecs) and extinction] using MIST isochrones.
+    Args:
+        mag_pars (list): A list containing EEP, log10(age) in years,
+            metallicity, distance in parsecs and V-band extinction, Av, for a
+            star.
+    Returns:
+        G_bp - G_rp color.
+    """
+    _, _, _, bands = mist.interp_mag([*mag_pars], ["BP", "RP"])
+    bp, rp = bands
+    return bp - rp
 
 
 def lnprior(params):
@@ -252,39 +268,18 @@ def lnprob(lnparams, *args):
     if not period or not np.isfinite(period) or period <= 0.:
         gyro_lnlike = -.5*((5/(20.))**2) - np.log(20.)
 
-    # If FGK and MS:
-    elif bv > .45 and params[0] < 454:
+    if mass is None:  # If a mass is not provided, calculate it.
+        mass = mist.interp_value([params[0], params[1], params[2]],
+                                    ["mass"])
 
-        if mass is None:  # If a mass is not provided, calculate it.
-            mass = mist.interp_value([params[0], params[1], params[2]],
-                                     ["mass"])
+    # Calculate a period using the gyrochronology model
+    log10_period_model = gyro_model_rossby(params[1], bv, mass)
 
-        # Calculate a period using the gyrochronology model
-        period_model = gyro_model_rossby(params[1], bv, mass)
+    var = (period_err/period)**2 # + sigma(log10_bprp, params[0]))**2
 
-        # Calculate the gyrochronology likelihood.
-        gyro_lnlike = -.5*((period - period_model) / (period_err))**2 \
-            - np.log(period_err)
-
-    # If hot, use a broad log-gaussian model with a mean of .5 for rotation.
-    elif bv < .45:# or bv > 1.25:
-        if mass is None:
-            mass = mist.interp_value([params[0], params[1], params[2]],
-                                     ["mass"])
-        period_model = .5  # 1
-        # gyro_lnlike = -.5*((period - period_model)
-        #                     / (period_err+10))**2 - np.log(period_err+10)
-        gyro_lnlike = -.5*((np.log10(period) - period_model)
-                            / (.55))**2 - np.log(.55)
-
-    # If evolved, use a gyrochronology relation with inflated uncertainties.
-    elif bv > .45 and params[0] >= 454:
-        if mass is None:
-            mass = mist.interp_value([params[0], params[1], params[2]],
-                                     ["mass"])
-        period_model = gyro_model_rossby(params[1], bv, mass)
-        gyro_lnlike = -.5*((period - period_model) / (period_err+10))**2 \
-            - np.log(period_err+10)
+    # Calculate the gyrochronology likelihood.
+    gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
+        - .5*np.log(2*np.pi*var)
 
     if gyro_only:
         return gyro_lnlike + lnpr, lnpr
@@ -327,3 +322,36 @@ def convective_overturn_time(*args):
 
     log_tau = 1.16 - 1.49*np.log10(M) - .54*(np.log10(M))**2
     return 10**log_tau
+
+
+def sigmoid(k, x0, L, x):
+    """
+    Computes a sigmoid function.
+    Args:
+        k (float): The logistic growth rate (steepness).
+        x0 (float): The location of 1/2 max.
+        L (float): The maximum value.
+        x, (array): The x-array.
+    Returns:
+        y (array): The logistic function.
+    """
+    return L/(np.exp(-k*(x - x0)) + 1)
+
+
+def sigma(log10_bprp, eep):
+    """
+    The standard deviation of the rotation period distribution.
+    Currently comprised of two three logistic functions that 'blow up' the
+    variance at hot colours, cool colours and large EEPs. The FGK dwarf part
+    of the model has zero variance.
+    Args:
+        log10_bprp (float or array): The log10 G_BP - G_RP colour.
+        eep (float or array): The equivalent evolutionary point.
+    """
+    kcool, khot, keep = 100, 100, .2
+    x0cool, x0hot, x0eep = .4, .25, 454
+    Lcool, Lhot, Leep = .5, .5, .5
+    sigma_bprp = sigmoid(kcool, x0cool, Lcool, log10_bprp) \
+        + sigmoid(khot, x0hot, Lhot, -log10_bprp)
+    sigma_eep = sigma_eep = sigmoid(keep, x0eep, Leep, eep)
+    return sigma_bprp + sigma_eep
