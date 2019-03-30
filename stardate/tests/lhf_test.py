@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from stardate.lhf import lnprob,  gyro_model
 from stardate.lhf import convective_overturn_time
-from stardate.lhf import gyro_model_rossby
+from stardate.lhf import gyro_model_rossby, calc_bprp
 from tqdm import trange
 
 # from isochrones.mist import MIST_Isochrone
@@ -283,7 +283,7 @@ if __name__ == "__main__":
     # # test_likelihood_rotation_giant()
 
     print("\nTesting B-V calculation...")
-    test_calc_bv()
+    test_calc_bprp()
 
     print("\nTesting likelihood function on the Sun...")
     test_lnprob_higher_likelihood_sun()
