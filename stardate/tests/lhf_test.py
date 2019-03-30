@@ -189,11 +189,12 @@ def test_likelihood_rotation_giant():
         " higher than hot star likelihood"
 
 
-def test_calc_bv():
+def test_calc_bprp():
     sun = [355, np.log10(4.56*1e9), 0., np.log(1000), 0.]
-    bv_sun = calc_bv(sun)
-    assert .6 < bv_sun, "Are you sure you're on the isochrones eep branch?"
-    assert bv_sun < .7
+    bprp_sun = calc_bprp(sun)
+    print(bprp_sun)
+    assert .7 < bprp_sun, "Are you sure you're on the isochrones eep branch?"
+    assert bprp_sun < .9
 
 
 def test_convective_overturn_timescale():
@@ -281,8 +282,8 @@ if __name__ == "__main__":
     # # print("\nTesting likelihood function behaviour...")
     # # test_likelihood_rotation_giant()
 
-    # print("\nTesting B-V calculation...")
-    # test_calc_bv()
+    print("\nTesting B-V calculation...")
+    test_calc_bv()
 
     print("\nTesting likelihood function on the Sun...")
     test_lnprob_higher_likelihood_sun()
