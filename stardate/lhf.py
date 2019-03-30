@@ -271,7 +271,7 @@ def lnprob(lnparams, *args):
     # Calculate a period using the gyrochronology model
     log10_period_model = gyro_model_rossby(params[1], bv, mass)
 
-    var = (period_err/period)**2 # + sigma(log10_bprp, params[0]))**2
+    var = (period_err/period + sigma(bv, params[0]))**2
 
     # Calculate the gyrochronology likelihood.
     gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
@@ -331,20 +331,20 @@ def sigmoid(k, x0, L, x):
     return L/(np.exp(-k*(x - x0)) + 1)
 
 
-def sigma(log10_bprp, eep):
+def sigma(bv, eep):
     """
     The standard deviation of the rotation period distribution.
     Currently comprised of two three logistic functions that 'blow up' the
     variance at hot colours, cool colours and large EEPs. The FGK dwarf part
     of the model has zero variance.
     Args:
-        log10_bprp (float or array): The log10 G_BP - G_RP colour.
+        bv (float or array): The B-V colour.
         eep (float or array): The equivalent evolutionary point.
     """
     kcool, khot, keep = 100, 100, .2
-    x0cool, x0hot, x0eep = .4, .25, 454
+    x0cool, x0hot, x0eep = 1.25, .45, 454
     Lcool, Lhot, Leep = .5, .5, .5
-    sigma_bprp = sigmoid(kcool, x0cool, Lcool, log10_bprp) \
-        + sigmoid(khot, x0hot, Lhot, -log10_bprp)
+    sigma_bv = sigmoid(kcool, x0cool, Lcool, bv) \
+        + sigmoid(khot, -x0hot, Lhot, -bv)
     sigma_eep = sigma_eep = sigmoid(keep, x0eep, Leep, eep)
-    return sigma_bprp + sigma_eep
+    return sigma_bv + sigma_eep

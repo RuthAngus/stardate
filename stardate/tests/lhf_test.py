@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from stardate.lhf import lnprob, calc_bv, gyro_model
 from stardate.lhf import convective_overturn_time, gyro_model_praesepe
-from stardate.lhf import gyro_model_rossby
+from stardate.lhf import gyro_model_rossby, sigma
 from tqdm import trange
 
 # from isochrones.mist import MIST_Isochrone
@@ -240,42 +240,21 @@ def test_gyro_model_rossby():
     assert prot_10_sun == prot_8_sun
 
 
+def test_sigma():
+    assert sigma(.3, 355) > .49  # Low BV (hot star) high variance
+    assert sigma(2, 355) > .49  # high BV (hot star) high variance
+    assert sigma(.65, 355) < .01  # low variance for FGK dwarfs
+    assert sigma(.65, 355) < .01  # low variance for dwarfs
+    assert sigma(.65, 500) > .49  # high variance for giants
+
+
 if __name__ == "__main__":
 
-    # from isochrones.mist import MIST_Isochrone
-    # from isochrones import StarModel, get_ichrone
-    # bands = ["B", "V", "J", "H", "K"]
-    # mist = get_ichrone("mist", bands=bands)
+    print("\nTesting sigma...")
+    test_sigma()
 
-    # mod = StarModel(mist, B=(10, 0.02), V=(9.6, 0.02))
-
-    # pars = [300, 9.7, 0.0, 200, 0.1]
-    # mod.lnlike(pars)
-
-    # from isochrones.mist import MIST_Isochrone
-    # from isochrones import StarModel, get_ichrone
-    # bands = ["B", "V", "J", "H", "K"]
-    # mist = get_ichrone("mist", bands=bands)
-    # mod = StarModel(mist, B=(10, 0.02), V=(9.6, 0.02))
-    # pars = [300, 9.7, 0.0, 200, 0.1]
-    # print(mod.lnlike(pars))
-
-    # assert 0
-
-    # print("Testing gyro model...")
-    # test_gyro_model_rossby()
-
-    # print("\nTesting the Praesepe gyro model...")
-    # test_praesepe_gyro_model()
-
-    # print("\nTesting original gyro model...")
-    # test_gyro_model()
-
-    # # print("\nTesting likelihood function behaviour...")
-    # # test_likelihood_rotation_giant()
-
-    # print("\nTesting B-V calculation...")
-    # test_calc_bv()
+    print("\nTesting B-V calculation...")
+    test_calc_bv()
 
     print("\nTesting likelihood function on the Sun...")
     test_lnprob_higher_likelihood_sun()
