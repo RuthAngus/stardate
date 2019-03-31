@@ -278,14 +278,14 @@ def lnprob(lnparams, *args):
         - .5*np.log(2*np.pi*var)
 
     if gyro_only:
-        return gyro_lnlike + lnpr, lnpr
+        return float(gyro_lnlike) + lnpr, lnpr
 
     prob = mod.lnlike(params) + gyro_lnlike + lnpr
 
     if not np.isfinite(prob):
         prob = -np.inf
 
-    return prob, lnpr
+    return float(prob), lnpr
 
 
 def nll(lnparams, args):
