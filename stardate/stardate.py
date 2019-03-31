@@ -115,7 +115,7 @@ class Star(object):
         # Don't forget to clear it in case the file already exists
         fn = "{0}/{1}.h5".format(self.savedir, self.filename)
         backend = emcee.backends.HDFBackend(fn)
-        nwalkers, ndim = 24, 5
+        ndim = 5
         backend.reset(nwalkers, ndim)
         self.backend = backend
 
@@ -129,6 +129,15 @@ class Star(object):
 
         # optimize
         results = spo.minimize(nll, p_init, args=args)
+        # print(results.x[0], (10**results.x[1])*1e-9, results.x[2],
+        #       np.exp(results.x[3]), results.x[4])
+        # print("MAP", lnprob(results.x, *args))
+        # self.p_init = [329.581254, 9.559616, -0.047832, np.log(0.260571*1e3),
+        #                0.004500]
+        # print("true", lnprob(self.p_init, *args))
+        # ptest = [435.86302719738467, 10.129230606760292, 0.33392289021605404, 6.017036543283973, 0.09557288239428978]
+        # print("MCMC", lnprob(ptest, *args))
+        # # assert 0
         self.p_init = results.x
 
         # Run the MCMC
@@ -181,10 +190,10 @@ class Star(object):
         ndim = len(self.p_init)  # Should always be 5. Hard code it?
         p0 = np.empty((self.nwalkers, ndim))
         p0[:, 0] = np.random.randn(self.nwalkers)*10 + self.p_init[0]
-        p0[:, 1] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[1]
-        p0[:, 2] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[2]
-        p0[:, 3] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[3]
-        p0[:, 4] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[4]
+        p0[:, 1] = np.random.randn(self.nwalkers)*1e-1 + self.p_init[1]
+        p0[:, 2] = np.random.randn(self.nwalkers)*1e-2 + self.p_init[2]
+        p0[:, 3] = np.random.randn(self.nwalkers)*1e-1 + self.p_init[3]
+        p0[:, 4] = np.random.randn(self.nwalkers)*1e-2 + self.p_init[4]
         p0 = list(p0)
 
         sampler = emcee.EnsembleSampler(self.nwalkers, ndim, lnprob,
