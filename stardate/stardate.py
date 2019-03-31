@@ -10,7 +10,7 @@ import emcee
 import scipy.optimize as spo
 
 from isochrones.mist import MIST_Isochrone
-bands = ["B", "V", "J", "H", "K"]
+bands = ["B", "V", "J", "H", "K", "BP", "RP", "G"]
 # mist = MIST_Isochrone(bands)
 mist = get_ichrone("mist", bands=bands)
 

@@ -20,7 +20,7 @@ import pandas as pd
 from isochrones.mist import MIST_Isochrone
 from isochrones import StarModel, get_ichrone
 # mist = MIST_Isochrone(bands)
-bands = ["B", "V", "J", "H", "K", "BP", "RP"]
+bands = ["B", "V", "J", "H", "K", "BP", "RP", "G"]
 mist = get_ichrone("mist", bands=bands)
 import emcee
 import h5py
