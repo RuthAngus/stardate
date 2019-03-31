@@ -190,9 +190,9 @@ class Star(object):
         ndim = len(self.p_init)  # Should always be 5. Hard code it?
         p0 = np.empty((self.nwalkers, ndim))
         p0[:, 0] = np.random.randn(self.nwalkers)*10 + self.p_init[0]
-        p0[:, 1] = np.random.randn(self.nwalkers)*1e-1 + self.p_init[1]
+        p0[:, 1] = np.random.randn(self.nwalkers)*1e-2 + self.p_init[1]
         p0[:, 2] = np.random.randn(self.nwalkers)*1e-2 + self.p_init[2]
-        p0[:, 3] = np.random.randn(self.nwalkers)*1e-1 + self.p_init[3]
+        p0[:, 3] = np.random.randn(self.nwalkers)*1e-2 + self.p_init[3]
         p0[:, 4] = np.random.randn(self.nwalkers)*1e-2 + self.p_init[4]
         p0 = list(p0)
 
