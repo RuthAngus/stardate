@@ -127,18 +127,20 @@ class Star(object):
                 gyro_only]
         self.args = args
 
-        # optimize
-        results = spo.minimize(nll, p_init, args=args)
-        # print(results.x[0], (10**results.x[1])*1e-9, results.x[2],
-        #       np.exp(results.x[3]), results.x[4])
-        # print("MAP", lnprob(results.x, *args))
-        # self.p_init = [329.581254, 9.559616, -0.047832, np.log(0.260571*1e3),
-        #                0.004500]
-        # print("true", lnprob(self.p_init, *args))
-        # ptest = [435.86302719738467, 10.129230606760292, 0.33392289021605404, 6.017036543283973, 0.09557288239428978]
-        # print("MCMC", lnprob(ptest, *args))
-        # # assert 0
-        self.p_init = results.x
+        # Optimize. Try a few inits and pick the best.
+        inits2 = [366.317778, 9.587769, 0., np.log(1000.), .01]
+        inits3 = [396.800685, 9.851701, 0., np.log(1000.), .01]
+        inits4 = [432.246153, 10.122045, 0., np.log(1000.), .01]
+        inits5 = [255.516647, 9.013790, 0., np.log(1000.), .01]
+        init_list = np.array([p_init, inits2, inits3, inits4, inits5])
+        likes = np.zeros(len(init_list))
+        result_list = np.zeros((len(init_list), 5))
+        for i, inits in enumerate(init_list):
+            results = spo.minimize(nll, inits, args=args)
+            likes[i] = lnprob(results.x, *args)[0]
+            result_list[i, :] = results.x
+        select = likes == max(likes)
+        self.p_init = result_list[select, :][0]
 
         # Run the MCMC
         # sampler = run_mcmc(args, p_init, backend, nwalkers=nwalkers,
