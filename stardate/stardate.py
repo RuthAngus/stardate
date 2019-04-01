@@ -127,28 +127,30 @@ class Star(object):
                 gyro_only]
         self.args = args
 
-        # Optimize. Try a few inits and pick the best.
-        inits2 = [366.317778, 9.587769, 0., np.log(1000.), .01]
-        inits3 = [396.800685, 9.851701, 0., np.log(1000.), .01]
-        inits4 = [432.246153, 10.122045, 0., np.log(1000.), .01]
-        inits5 = [255.516647, 9.013790, 0., np.log(1000.), .01]
-        init_list = np.array([p_init, inits2, inits3, inits4, inits5])
-        likes = np.zeros(len(init_list))
-        result_list = np.zeros((len(init_list), 5))
-        for i, inits in enumerate(init_list):
-            results = spo.minimize(nll, inits, args=args)
-            likes[i] = lnprob(results.x, *args)[0]
-            result_list[i, :] = results.x
-        select = likes == max(likes)
-        self.p_init = result_list[select, :][0]
+        # # Optimize. Try a few inits and pick the best.
+        # inits2 = [366.317778, 9.587769, 0., np.log(1000.), .01]
+        # inits3 = [396.800685, 9.851701, 0., np.log(1000.), .01]
+        # inits4 = [432.246153, 10.122045, 0., np.log(1000.), .01]
+        # inits5 = [255.516647, 9.013790, 0., np.log(1000.), .01]
+        # init_list = np.array([p_init, inits2, inits3, inits4, inits5])
+        # likes = np.zeros(len(init_list))
+        # result_list = np.zeros((len(init_list), 5))
+        # for i, inits in enumerate(init_list):
+        #     results = spo.minimize(nll, inits, args=args)
+        #     likes[i] = lnprob(results.x, *args)[0]
+        #     result_list[i, :] = results.x
+        # select = likes == max(likes)
+        # self.p_init = result_list[select, :][0]
 
-        print("ML p_init = ", self.p_init)
+        # # print("ML p_init = ", self.p_init)
 
-        p_init = [329.58125367115554, 9.559615558434267,
-                       -0.047831996996975074, 5.562873549267391,
-                       0.004499682123542436]
-        # p_init[0] = 396.796187
-        p_init[1] = 9.93576695
+        # # p_init = [329.58125367115554, 9.559615558434267,
+        # #                -0.047831996996975074, 5.562873549267391,
+        # #                0.004499682123542436]
+        # p_init[0] = 301.74
+        # p_init[1] = 9.477
+        p_init = [329.58, 9.5596, -0.0478, 5.56287, 0.00449968]
+
         self.p_init = p_init
 
         # Run the MCMC
@@ -201,10 +203,10 @@ class Star(object):
         ndim = len(self.p_init)  # Should always be 5. Hard code it?
         p0 = np.empty((self.nwalkers, ndim))
         p0[:, 0] = np.random.randn(self.nwalkers)*10 + self.p_init[0]
-        p0[:, 1] = np.random.randn(self.nwalkers)*1e-2 + self.p_init[1]
-        p0[:, 2] = np.random.randn(self.nwalkers)*1e-2 + self.p_init[2]
-        p0[:, 3] = np.random.randn(self.nwalkers)*1e-2 + self.p_init[3]
-        p0[:, 4] = np.random.randn(self.nwalkers)*1e-2 + self.p_init[4]
+        p0[:, 1] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[1]
+        p0[:, 2] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[2]
+        p0[:, 3] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[3]
+        p0[:, 4] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[4]
         p0 = list(p0)
 
         sampler = emcee.EnsembleSampler(self.nwalkers, ndim, lnprob,
