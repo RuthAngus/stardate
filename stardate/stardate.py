@@ -142,6 +142,15 @@ class Star(object):
         select = likes == max(likes)
         self.p_init = result_list[select, :][0]
 
+        print("ML p_init = ", self.p_init)
+
+        p_init = [329.58125367115554, 9.559615558434267,
+                       -0.047831996996975074, 5.562873549267391,
+                       0.004499682123542436]
+        # p_init[0] = 396.796187
+        p_init[1] = 9.93576695
+        self.p_init = p_init
+
         # Run the MCMC
         # sampler = run_mcmc(args, p_init, backend, nwalkers=nwalkers,
         #                    max_n=max_n, thin_by=thin_by)
