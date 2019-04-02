@@ -128,26 +128,26 @@ class Star(object):
         self.args = args
 
         # # Optimize. Try a few inits and pick the best.
-        neep, nage = 5, 5
-        likes1, likes2 = np.zeros(nage), np.zeros(neep)
-        likes = np.zeros((neep, nage))
-        inds = np.zeros(nage)
-        result_list = np.zeros((neep, nage, 5))
-        EEPS, AGES = np.meshgrid(np.linspace(200, 500, neep),
-                                 np.linspace(7, 10., nage), indexing="ij")
+        # neep, nage = 5, 5
+        # likes1, likes2 = np.zeros(nage), np.zeros(neep)
+        # likes = np.zeros((neep, nage))
+        # inds = np.zeros(nage)
+        # result_list = np.zeros((neep, nage, 5))
+        # EEPS, AGES = np.meshgrid(np.linspace(200, 500, neep),
+        #                          np.linspace(7, 10., nage), indexing="ij")
 
-        for i in range(neep):
-            for j in range(nage):
-                inits = [EEPS[i, j], AGES[i, j], 0., np.log(1000.), .01]
-                results = spo.minimize(nll, inits, args=args)
-                likes1[j] = lnprob(results.x, *args)[0]
-                likes[i, j] = likes1[j]
-                result_list[i, j, :] = results.x
-            inds[i] = np.argmax(likes1)
-            likes2[i] = max(likes1)
-        eep_ind = np.argmax(likes2)
-        age_ind = int(inds[eep_ind])
-        p_init = result_list[eep_ind, age_ind, :]
+        # for i in range(neep):
+        #     for j in range(nage):
+        #         inits = [EEPS[i, j], AGES[i, j], 0., np.log(1000.), .01]
+        #         results = spo.minimize(nll, inits, args=args)
+        #         likes1[j] = lnprob(results.x, *args)[0]
+        #         likes[i, j] = likes1[j]
+        #         result_list[i, j, :] = results.x
+        #     inds[i] = np.argmax(likes1)
+        #     likes2[i] = max(likes1)
+        # eep_ind = np.argmax(likes2)
+        # age_ind = int(inds[eep_ind])
+        # p_init = result_list[eep_ind, age_ind, :]
 
         # select = likes == max(likes)
         # inits2 = [366.317778, 9.587769, 0., np.log(1000.), .01]
@@ -164,8 +164,7 @@ class Star(object):
         # select = likes == max(likes)
         # self.p_init = result_list[select, :][0]
 
-        # p_init = [329.58, 9.5596, -0.0478, 5.56287, 0.00449968]
-
+        p_init = [329.58, 9.5596, -0.0478, 5.56287, 0.00449968]
         self.p_init = p_init
 
         # Run the MCMC
