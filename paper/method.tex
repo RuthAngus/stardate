@@ -144,18 +144,16 @@ affect the ages that we infer.
 
 %   - The formulas
 The factorization of the likelihood described in equation \ref{eqn:factorized}
-and depicted in figure \ref{fig:PGM} allows us to multiply two separate
-likelihood functions together: one computed using an isochronal model and one
-computed using a gyrochronal model.
+allows us to multiply two separate likelihood functions together: one computed
+using an isochronal model and one computed using a gyrochronal model.
 We assume that the probability of observing the measured observables, given
 the model parameters is a Gaussian and that the observables are identically
-and independently distributed.
-These assumptions allow us to use Gaussian likelihood functions.
+and independently distributed, so we use Gaussian likelihood functions.
 The isochronal likelihood function is,
 \begin{eqnarray} \label{eqn:isochrones_only_likelihood}
     & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x}, T_{\mathrm{eff}}, \log(g),
     \hat{F},
-    \bar{\omega}, C_{B-V}|A, EEP, D,
+    \bar{\omega}, C_{B-V}|A, \mathrm{EEP}, D,
     A_V, F) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}}
     \exp\left( -\frac{1}{2} ({\bf O_I} - {\bf I})^T \Sigma ^{-1}
@@ -166,7 +164,7 @@ where ${\bf O_I}$ is the n-dimensional vector of $n$ observables: \teff,
 apparant magnitudes in different pass-bands that are available) and $\Sigma$
 is the covariance matrix of that set of observables.
 ${\bf I}$ is the vector of {\it model} observables that correspond to a set of
-parameters: $A$, $EEP$, $F$, $D$ and $A_V$, calculated using an isochrone model.
+parameters: $A$, EEP, $F$, $D$ and $A_V$, calculated using an isochrone model.
 We assume there is no covariance between these observables and so this
 covariance matrix consists of individual parameter variances, added in
 quadrature to an additional variance that depends on B-V color and
@@ -174,7 +172,7 @@ evolutionary stage, along the diagonal with zeros everywhere else.
 The additional variance is described in more detail later in this section.
 The gyrochronal likelihood function is,
 \begin{eqnarray} \label{eqn:gyro_likelihood}
-    & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |A, C_{B-V}) \\ \nonumber
+    & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |A, C_{B-V}, M) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi) \det(\Sigma_P)}}
     \exp\left( -\frac{1}{2} ({\bf P_O} - {\bf P_P})^T \Sigma ^{-1}
     ({\bf P_O} - {\bf P_P})\right),
@@ -203,10 +201,10 @@ likelihood functions,
 \end{eqnarray}
 
 %   - Priors
-We placed priors over the model parameters $A$, $EEP$, $F$, $D$ and $A_V$.
-These distributions, described in the appendix, represent our `prior beliefs'
+We placed priors over the model parameters $A$, EEP, $F$, $D$ and $A_V$.
+These distributions, described in the appendix, represent our prior beliefs
 about the values these parameters will take, before using the data to update
-those beliefs via a likelihood and produce a `posterior' belief about their
+those beliefs via a likelihood and produce a posterior belief about their
 values.
 
 % Practicalities: sampling, etc.
@@ -265,8 +263,7 @@ The full log-likelihood is then calculated,
 and added to the log-prior to produce a single sample from the posterior PDF.
 
 %   - The gyrochronology models
-For cool ($B-V < 0.45$), main sequence (EEP$<454$) stars, the gyrochronology
-model used to predict $\bf{P_P}$ was,
+The gyrochronology model used to predict $\bf{P_P}$ was,
 \begin{equation}
     P_\mathrm{rot} =\begin{cases}
         A^\eta \alpha (C_{B-V} - \delta)^\beta, & \text{if $Ro < 2$}. \\
@@ -285,21 +282,21 @@ observations showing that magnetic braking ceases at a critical Rossby number
 \citep{vansaders2016}.
 The Rossby number, $Ro$, is the ratio of rotation period to convective
 overturn time $P_{\mathrm{rot}}/\tau$ and determines whether a star is still
-undergoing magnetic braking ($Ro < 2.16$) or has stopped spinning down and
+undergoing magnetic braking ($Ro < 2$) or has stopped spinning down and
 retains its terminal rotation period, $P_\mathrm{max}$, which is the period it
-had as it reached the critical Rossby number of 2.16 \citep{vansaders2016}.
+had as it reached the critical Rossby number of 2 \citep{vansaders2016}.
 The convective overturn time, $\tau$, was estimated using equation 11 of
 \citet{wright2011}.
 
 The rotation periods of hot stars, cool stars, subgiants and giants evolve
 differently to FGK and early M dwarfs.
-Stars more massive than around 1.25 M$_\odot$, with a temperature around 6250
-K and a $B-V$ color around 0.45 do not spin down appreciably over their main
-sequence lifetimes since they do not have the deep convective envelope needed
-to generate strong magnetic fields.
-Late M dwarfs with masses less than $\sim$0.3 M$_\odot$, temperatures less
-than $\sim$3500 and $B-V$ greater than $\sim$1.4 do not start magnetic braking
-until at least after the age of Praesepe ($\sim$650 million years).
+Stars more massive than around 1.25 M$_\odot$, with a temperature $\gtrsim$
+6250 K and a $B-V$ color $\lesssim$ 0.45 do not spin down appreciably over
+their main sequence lifetimes since they do not have the deep convective
+envelope needed to generate strong magnetic fields.
+Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures $\lesssim$
+3500 and $B-V$ $\gtrsim$ 1.4 do not start magnetic braking until at least
+after the age of Praesepe ($\sim$650 million years).
 Both hot and cool stars retain rotation periods that are similar to their
 primordial distribution \citep[see \eg][]{matt2012}.
 Finally, the rotation periods of evolved stars slow dramatically as their
@@ -322,8 +319,8 @@ in figure \ref{fig:variance}.
 This additional variance is zero where gyrochronology works well: FGK and
 early M dwarfs and 0.25 ($\sigma = 0.5$) for hot, cool and evolved stars.
 The logistic functions shown in figure \ref{fig:variance} reach half their
-maximum values at $x0 =$ 0.45, 1.4 and 454 for hot stars, cool stars and
-subgiants, respectively.
+maximum values at 0.45, 1.4 and 454 for hot stars, cool stars and subgiants,
+respectively.
 The maximum standard deviation value of all three groups (hot, cool and
 evolved) is 0.5 and the logistic growth rate, or steepness, of the three
 sigmoids are 100, 100 and .2 for hot, cool and evolved stars respectively.
@@ -333,24 +330,24 @@ sequence so this will not apply to the cool stars).
 The (log) rotation periods of hot stars are modelled as a broad Gaussian with
 a mean of 0 (1 day in linear rotation period) and a standard deviation of
 0.5.
-The (log) rotation periods of cool and evolved stars are modelled as a
-Gaussian with mean given by equation \ref{eqn:gyro} and standard deviations of
-0.5.
+The (log) rotation periods of cool and evolved stars were modelled as a
+Gaussian with mean given by the log of equation \ref{eqn:gyro} and standard
+deviations of 0.5.
 \begin{figure}
   \caption{
     The additional standard deviation in rotation period added to the
     observational period uncertainties in our model.
-    The standard deviation is artificially increased for early F stars ($B-V <
-    0.45$), late M dwarfs ($B-V > 1.4$) and evolved stars (EEP $>$ 454) in
+    The standard deviation was artificially increased for early F stars ($B-V
+    < 0.45$), late M dwarfs ($B-V > 1.4$) and evolved stars (EEP $>$ 454) in
     order to down-weight the age-information supplied by rotation periods.
     The rotation periods of these stars do not follow the deterministic
     gyrochronology relation and their ages should mostly be inferred via
     isochrone fitting.
     Down-weighting the gyrochronal likelihood by the inverse variance
-    ($1/\sigma^2$) allows the ages of these stars to be dominantly inferred
+    ($1/\sigma^2$) allows the ages of these stars to be mostly inferred
     via isochrone fitting.
     The ages of hot and evolved stars can be relatively precisely constrained
-    with isochrone fitting along since their position on the CMD changes
+    with isochrone fitting since their position on the CMD changes
     rapidly with time, however isochrone fitting cannot constrain the ages of
     late M dwarfs, so the age of any star with $B-V > 1.4$ will not be
     precisely constrained with \sd.
@@ -522,38 +519,38 @@ computer.
 % Praesepe stars from their rotation periods and apparent magnitudes in section
 % \ref{section:results}.
 
-% The PGM
-\begin{figure}
-  \caption{
-A probabilistic graphical model (PGM) showing the conditional
-dependencies between the parameters (white nodes) and
-observables (gray nodes) in our model.
+% % The PGM
+% \begin{figure}
+%   \caption{
+% A probabilistic graphical model (PGM) showing the conditional
+% dependencies between the parameters (white nodes) and
+% observables (gray nodes) in our model.
+% % ${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
+% %     metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
+% %     {\it observables}: apparent magnitudes, $m_x$, effective temperature,
+% %     \teff, surface gravity, \logg, observed bulk metallicity, $\hat{F}$, and
+% %     parallax, $\bar{\omega}$.
+% % determined by the mass, $M$, age, $A$, distance, $D$, extinction, $A_V$
+% % and bulk metallicity, $F$, of a star.
 % ${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
 %     metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
-%     {\it observables}: apparent magnitudes, $m_x$, effective temperature,
-%     \teff, surface gravity, \logg, observed bulk metallicity, $\hat{F}$, and
-%     parallax, $\bar{\omega}$.
-% determined by the mass, $M$, age, $A$, distance, $D$, extinction, $A_V$
-% and bulk metallicity, $F$, of a star.
-${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
-    metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
-    {\it observables}: apparent magnitudes, effective temperature, surface
-    gravity, observed bulk metallicity, and parallax.
-    The observables, ${\bf O}$, are determined by the parameters, $A$ and
-    ${\bf \theta}$.
-    $C_{B-V}$ is a latent parameter that is also determined by the parameters
-    $A$ and ${\bf \theta}$.
-    In our model, the rotation period observable, $P$, is determined {\it
-    only} by the age, $A$, and color ${C_{B-V}}$ parameters.
-The dependencies of observables on parameters and parameters on parameters are
-    indicated by arrows that start at a `parent' node and end at the dependent
-    observable, or `child' node.
-In our model, rotation period does not directly depend on distance,
-extinction, metallicity or mass, only age and B-V color.
-This PGM is a representation of the factorized joint PDF over parameters and
-observables of equation \ref{eqn:factorized}.
-}
-  \centering
-    \includegraphics[width=.7\textwidth]{PGM}
-\label{fig:PGM}
-\end{figure}
+%     {\it observables}: apparent magnitudes, effective temperature, surface
+%     gravity, observed bulk metallicity, and parallax.
+%     The observables, ${\bf O}$, are determined by the parameters, $A$ and
+%     ${\bf \theta}$.
+%     $C_{B-V}$ is a latent parameter that is also determined by the parameters
+%     $A$ and ${\bf \theta}$.
+%     In our model, the rotation period observable, $P$, is determined {\it
+%     only} by the age, $A$, and color ${C_{B-V}}$ parameters.
+% The dependencies of observables on parameters and parameters on parameters are
+%     indicated by arrows that start at a `parent' node and end at the dependent
+%     observable, or `child' node.
+% In our model, rotation period does not directly depend on distance,
+% extinction, metallicity or mass, only age and B-V color.
+% This PGM is a representation of the factorized joint PDF over parameters and
+% observables of equation \ref{eqn:factorized}.
+% }
+%   \centering
+%     \includegraphics[width=.7\textwidth]{PGM}
+% \label{fig:PGM}
+% \end{figure}
