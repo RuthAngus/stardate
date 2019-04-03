@@ -4,30 +4,31 @@
 %   - Introduction
 In this section we describe our combined isochrone fitting and gyrochronology
 model.
-A common approach to stellar age-dating is to make separate age predictions
-using separate sets of observables.
-For example, if a star's rotation period, parallax, and apparent magnitudes in
-a range of bandpasses are available, it is possible to predict its age from
-both gyrochronology and isochrone fitting separately.
-How these two age predictions are later combined is then a difficult choice.
-Is it best to average these predictions, to use the more precise of the two,
-or the one believed to be more accurate?
-The methodology described here provides an objective method for combining age
-estimates.
-There is, after all, only one age for each star.
+% A common approach to stellar age-dating is to make separate age predictions
+% using separate sets of observables.
+% For example, if a star's rotation period, parallax, and apparent magnitudes in
+% a range of bandpasses are available, it is possible to predict its age from
+% both gyrochronology and isochrone fitting separately.
+% How these two age predictions are later combined is then a difficult choice.
+% Is it best to average these predictions, to use the more precise of the two,
+% or the one believed to be more accurate?
+% The methodology described here provides an objective method for combining age
+% estimates.
+% There is, after all, only one age for each star.
 Combining information from different models can be relatively simple, as long
 as the processes being modeled; those that generated the data, are
 independent.
 In this case, we are combining information that relates to the burning of
-hydrogen in the core (this is the process that drives the slow increase in
-\teff\ and luminosity over time) with information about the magnetic braking
-history of a star (the current rotation period).
+hydrogen in the core, which translates to CMD position,
+% (this is the process that drives the slow increase in \teff\ and luminosity
+% over time)
+with information about the magnetic braking history of a star (the current
+rotation period).
 We can assume that, to first order, these two processes are independent: the
 hydrogen fraction in the core does not affect a star's rotation period and
-vice versa.
-In practise,  we can never be entirely sure that two such processes are
-independent but, at least within the uncertainties, any dependence here is
-unlikely to affect our results.
+vice versa.  In practise,  we can never be entirely sure that two such
+processes are independent but, at least within the uncertainties, any
+dependence here is unlikely to affect our results.
 If this assumption is valid, the likelihoods calculated using each model can
 be multiplied together.
 
@@ -41,9 +42,14 @@ where $A$ is age, ${\bf m_x}$ is a vector of
 apparent magnitudes in various bandpasses, \fhat\ is the {\it observed} bulk
 metallicity, \prot\ is the rotation period and \pmega\ is parallax.
 In order to calculate a posterior PDF over age, we must marginalize over
-parameters that relate to age, but are not of interest in this study: mass
-($M$), distance ($D$), V-band extinction ($A_V$) and the {\it inferred} bulk
-metallicity, $F$.
+parameters that relate to age, but are not of interest in this study.
+These parameters include equivalent evolutionary point ($EEP$), which is a
+dimensionless number ranging from around 200 for M dwarfs up to around 500 for
+subgiants and is 355 for the Sun \citep[see][]{dotter2016, choi2016}.
+Stars are defined as subgiants when their EEP exceeds 454.
+Mass can be calculated from EEP, age and metallicity.
+The other parameters are distance ($D$), V-band extinction ($A_V$) and the
+{\it inferred} bulk metallicity, $F$.
 The marginalization involves integrating over these extra parameters,
 \begin{eqnarray} \label{eqn:bayes}
     & p(A|{\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
@@ -51,7 +57,7 @@ The marginalization involves integrating over these extra parameters,
 \\ \nonumber
     & \propto \int p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
     P_\mathrm{rot}, \bar{\omega}|
-    A, M, D, A_V, F)~p(A)p(M)p(D)p(A_V)p(F)dMdDdA_VdF.
+    A, EEP, D, A_V, F)~p(A)p(EEP)p(D)p(A_V)p(F)dEEPdDdA_VdF.
 \end{eqnarray}
 This equation is a form of Bayes' rule,
 \begin{equation} \label{eqn:eqn2}
@@ -60,11 +66,11 @@ This equation is a form of Bayes' rule,
 where the likelihood of the data given the model is,
 \begin{equation} \label{eqn:full_likelihood}
     p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega},
-    P_{\mathrm{rot}}|A, M, D, A_V, F),
+    P_{\mathrm{rot}}|A, EEP, D, A_V, F),
 \end{equation}
 and the prior PDF over parameters is,
 \begin{equation} \label{eqn:prior}
-    p(A)p(M)p(D)p(A_V)p(F).
+    p(A)p(EEP)p(D)p(A_V)p(F).
 \end{equation}
 
 %   - Why iso and gyro are independent.
@@ -78,43 +84,63 @@ Instead of the likelihood of equation \ref{eqn:full_likelihood},
 where every observable depends on every parameter, our model can be factorized
 as,
 \begin{equation} \label{eqn:factorized}
-    p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega},
-    C_{B-V}|A, M, D, A_V, F) ~p(P_\mathrm{rot}|A, C_{B-V}),
+    p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega}
+    |A, EEP, D, A_V, F, C_{B-V}, M) ~p(P_\mathrm{rot}|A, C_{B-V}, M),
 \end{equation}
-where we have introduced a new parameter, $C_{B-V}$, which is the $B-V$ color
-that is often used as a mass proxy in the literature.
-In our model $C_{B-V}$ is not measured but {\it inferred}: it is a latent
-parameter.
-We infer $C_{B-V}$ because many stars do not have a directly measured $B-V$
-color.
-For example, most \kepler\ stars have {\it 2MASS} photometry in J, H and K
-bands and \Gaia\ photometry in $G$, $G_{BP}$ and $G_{RP}$, but do not all have
-B and V band colors.
-However, the gyrochronology model we use is calibrated to B-V color, not J-K
-or otherwise \citep{barnes2007, mamajek2008, angus2015}.
-A probabilistic graphical model (PGM) depicting the joint probability over
-parameters and observables is shown in figure \ref{fig:PGM}.
-It describes the conditional dependencies between parameters (in white
-circles) and observables (in grey circles) with arrows leading from the causal
-processes to the dependent processes.
-For example, it is the mass, age, metallicity, extinction and distance that
-determines the observed spectroscopic properties (\teff, \logg, \feh)
-and apparant magnitudes, ${\bf m_x}$).
-These parameters also determine the \cbv\ color of a star.
-In turn, it is a star's age and \cbv\ color that determine its rotation
+where we have introduced two new parameters, $C_{B-V}$, which is the $B-V$
+color that is often used as a mass proxy in the literature and mass itself
+($M$), which is used in our gyrochronology model.
+The above factorization of the likelihood describes the fact that, in our
+model, rotation period does not depend directly on \teff, distance, etc, but
+on $C_{B-V}$, mass and age.
+It is the EEP, age, metallicity, extinction and distance that determines the
+observed spectroscopic properties (\teff, \logg, \feh) and apparant
+magnitudes, ${\bf m_x}$).
+These parameters also determine the \cbv\ color and mass of a star.
+In turn, it is a star's age \cbv\ color and mass that determine its rotation
 period.
-Note that, written this way, stellar rotation periods do not directly depend
+Written this way, stellar rotation periods do not directly depend
 on stellar mass.
-Mass, age and metallicity determine $C_{B-V}$, and $C_{B-V}$ along with age
-determines rotation period.
-The purpose of this PGM is not to depict the physical realities of stellar
-evolution, it is only a visual description of the structure of the model we
-use here.
-Breaking up the problem this way allows us to efficiently join isochronology
-and gyrochronology and infer the joint age of a star from all its observables.
-It may well be that rotation period depends directly on mass and metallicity
-in reality, but it is more practical for us to assume that these dependencies
-are weak enough not to significantly affect the ages that we ultimately infer.
+This likelihood function does not necessarily represent the physical realities
+of stellar evolution, however breaking up the problem this way allows us to
+easily combine isochronology and gyrochronology and infer the joint age of a
+star from all its observables.
+While true that rotation period also depends on EEP and metallicity at some
+level, we assume that these dependencies are weak enough not to significantly
+affect the ages that we infer.
+
+% $C_{B-V}$ and $M$ are not measured but {\it inferred}: they are latent
+% parameters.
+% We infer $C_{B-V}$ because many stars do not have a directly measured $B-V$
+% color.
+% For example, most \kepler\ stars have {\it 2MASS} photometry in J, H and K
+% bands and \Gaia\ photometry in $G$, $G_{BP}$ and $G_{RP}$, but do not all have
+% B and V band colors.
+% However, the gyrochronology model we use is calibrated to B-V color, not J-K
+% or otherwise \citep{barnes2007, mamajek2008, angus2015}.
+% % A probabilistic graphical model (PGM) depicting the joint probability over
+% % parameters and observables is shown in figure \ref{fig:PGM}.
+% % It describes the conditional dependencies between parameters (in white
+% % circles) and observables (in grey circles) with arrows leading from the causal
+% % processes to the dependent processes.
+% For example, it is the mass, age, metallicity, extinction and distance that
+% determines the observed spectroscopic properties (\teff, \logg, \feh)
+% and apparant magnitudes, ${\bf m_x}$).
+% These parameters also determine the \cbv\ color of a star.
+% In turn, it is a star's age and \cbv\ color that determine its rotation
+% period.
+% Note that, written this way, stellar rotation periods do not directly depend
+% on stellar mass.
+% Mass, age and metallicity determine $C_{B-V}$, and $C_{B-V}$ along with age
+% determines rotation period.
+% The purpose of this PGM is not to depict the physical realities of stellar
+% evolution, it is only a visual description of the structure of the model we
+% use here.
+% Breaking up the problem this way allows us to efficiently join isochronology
+% and gyrochronology and infer the joint age of a star from all its observables.
+% It may well be that rotation period depends directly on mass and metallicity
+% in reality, but it is more practical for us to assume that these dependencies
+% are weak enough not to significantly affect the ages that we ultimately infer.
 
 %   - The formulas
 The factorization of the likelihood described in equation \ref{eqn:factorized}
@@ -129,21 +155,23 @@ The isochronal likelihood function is,
 \begin{eqnarray} \label{eqn:isochrones_only_likelihood}
     & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x}, T_{\mathrm{eff}}, \log(g),
     \hat{F},
-    \bar{\omega}, C_{B-V}|A, M, D,
+    \bar{\omega}, C_{B-V}|A, EEP, D,
     A_V, F) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}}
     \exp\left( -\frac{1}{2} ({\bf O_I} - {\bf I})^T \Sigma ^{-1}
     ({\bf O_I} - {\bf I})\right),
 \end{eqnarray}
 where ${\bf O_I}$ is the n-dimensional vector of $n$ observables: \teff,
-\logg, \fhat, \pmega, ${\bf m_x}$ (where $n$ is $4 + $ the number of
+\logg, \fhat, \pmega, ${\bf m_x}$ (where $n$ is 4 plus the number of
 apparant magnitudes in different pass-bands that are available) and $\Sigma$
 is the covariance matrix of that set of observables.
 ${\bf I}$ is the vector of {\it model} observables that correspond to a set of
-parameters: $A$, $M$, $F$, $D$ and $A_V$, calculated using an isochrone model.
+parameters: $A$, $EEP$, $F$, $D$ and $A_V$, calculated using an isochrone model.
 We assume there is no covariance between these observables and so this
-covariance matrix consists of individual parameter variances along the
-diagonal with zeros everywhere else.
+covariance matrix consists of individual parameter variances, added in
+quadrature to an additional variance that depends on B-V color and
+evolutionary stage, along the diagonal with zeros everywhere else.
+The additional variance is described in more detail later in this section.
 The gyrochronal likelihood function is,
 \begin{eqnarray} \label{eqn:gyro_likelihood}
     & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |A, C_{B-V}) \\ \nonumber
@@ -158,10 +186,10 @@ The gyrochronal likelihood function is,
 % $P_{\mathrm{pred}, i}$ is the corresponding predicted rotation period,
 % calculated from the $i$th age and $C_{B-V}$ values predicted by the isochronal
 % model.
-where ${\bf P_O}$ is a 1-D vector of observed rotation periods, ${\bf P_P}$ is
-the vector of corresponding predicted rotation periods, calculated using the
-vector of ages and $C_{B-V}$ values that correspond to the input parameters
-as predicted by the isochronal model.
+where ${\bf P_O}$ is a 1-D vector of observed log-rotation periods, ${\bf
+P_P}$ is the vector of corresponding predicted log-rotation periods,
+calculated using the vector of ages and $C_{B-V}$ values that correspond to
+the input parameters as predicted by the isochronal model.
 The full likelihood function used in our model is the product of these two
 likelihood functions,
 \begin{eqnarray} \label{eqn:full_likelihood}
@@ -175,19 +203,19 @@ likelihood functions,
 \end{eqnarray}
 
 %   - Priors
-We place priors over the model parameters $A$, $M$, $F$, $D$ and $A_V$.
-These priors represent our `prior beliefs' about the values these parameters
-will take, before we use the data to update those beliefs via a likelihood and
-produce a `posterior' belief about their values.
-These priors are described in the appendix.
+We placed priors over the model parameters $A$, $EEP$, $F$, $D$ and $A_V$.
+These distributions, described in the appendix, represent our `prior beliefs'
+about the values these parameters will take, before using the data to update
+those beliefs via a likelihood and produce a `posterior' belief about their
+values.
 
 % Practicalities: sampling, etc.
 %-----------------------------------------------------------------------------
 %- isochrones.py
-To calculate ${\bf I}$, the vector of predicted isochronal observables, we use
-the {\tt isochrones.py} {\it python} package which has a range of
+To calculate ${\bf I}$, the vector of predicted isochronal observables, we
+used the {\tt isochrones.py} {\it python} package which has a range of
 functionalities relating to isochrone fitting.
-The first of the {\tt isochrones.py} functions we use is the likelihood
+The first of the {\tt isochrones.py} functions we used is the likelihood
 function of equation \ref{eqn:isochrones_only_likelihood}.
 The {\tt isochrones.py} likelihood function accepts a dictionary of
 observables which can, but does not {\it have} to include, all of the
@@ -196,38 +224,37 @@ colors, as well as the uncertainties on all these observables.
 It then calculates the residual vector $({\bf O_I} - {\bf I})$ where ${\bf
 O_I}$ is the vector of observables and ${\bf I}$ is a vector of corresponding
 predicted observables.
-The prediction is calculated using a set of isochrones \citep[we use the MIST
-models,][]{paxton2011, paxton2013, paxton2015, dotter2016, choi2016, paxton2018},
-where the set of {\it model} observables that correspond
-to a set of physical parameters is returned.
+The prediction is calculated using a set of isochrones \citep[we used the MIST
+models,][]{paxton2011, paxton2013, paxton2015, dotter2016, choi2016,
+paxton2018}, where the set of {\it model} observables that correspond to a set
+of physical parameters is returned.
 This requires interpolation over the model grids since, especially at high
 dimensions, it is unlikely that any set of physical parameters will exactly
 match a precomputed set of isochrones.
 The observables that correspond to a set of physical parameters go into ${\bf
 I}$ and the {\tt isochrones.py} likelihood function returns the result of
 equation \ref{eqn:isochrones_only_likelihood}.
-The second {\tt isochrones.py} function we use is one that predicts \cbv\ for
-a given set of stellar parameters.
-This color is then used to calculate the gyrochronal likelihood function of
-equation \ref{eqn:gyro_likelihood}.
+The second {\tt isochrones.py} function we used is one that predicts \cbv\ for
+a given set of stellar parameters, which was then used to calculate the
+gyrochronal likelihood function of equation \ref{eqn:gyro_likelihood}.
 
 %   - Step-by-step description
 The inference processes procedes as follows (as a reminder, we use {\it
 observables} to refer to the data: \teff, \logg, etc and {\it parameters} to
-refer to the model parameters: age, mass, distance, etc).
-First, a set of parameters: age, mass, true bulk metallicity, distance and
-extinction, as well as observables \teff, \logg, bulk metallicity, apparent
-magnitudes and parallax (${\bf O_I}$) for a single star are passed to the
-isochronal likelihood function, equation
-\eqref{eqn:isochrones_only_likelihood}.
+refer to the model parameters: EEP, age, metallicity, distance and extinction.
+First, a set of parameters: age, EEP, metallicity, distance and extinction, as
+well as observables \teff, \logg, bulk metallicity, apparent magnitudes and
+parallax (${\bf O_I}$) for a single star are passed to the isochronal
+likelihood function, equation \eqref{eqn:isochrones_only_likelihood}.
 Then, a set of {\it model} values of \teff, \logg, bulk metallicity, apparent
 magnitudes and parallax (${\bf I}$) that correspond to that set of parameters
 are calculated by {\tt isochrones.py}.
 The isochronal log-likelihood, $\ln(\mathcal{L}_{\mathrm{iso}})$, is then
 computed for these parameter values.
-The same age that was passed to the likelihood function, and the $C_{B-V}$
-corresponding to it, along with the observed rotation period, are then passed
-to the gyrochronal likelhood function (equation \ref{eqn:gyro_likelihood}).
+The same age that was passed to the likelihood function, and the $C_{B-V}$ and
+mass corresponding to it, along with the observed rotation period, are then
+passed to the gyrochronal likelhood function (equation
+\ref{eqn:gyro_likelihood}).
 The gyrochronal log-likelihood, $\ln(\mathcal{L}_{\mathrm{gyro}})$, is
 computed.
 The full log-likelihood is then calculated,
@@ -242,8 +269,8 @@ For cool ($B-V < 0.45$), main sequence (EEP$<454$) stars, the gyrochronology
 model used to predict $\bf{P_P}$ was,
 \begin{equation}
     P_\mathrm{rot} =\begin{cases}
-        A^\eta \alpha (C_{B-V} - \delta)^\beta, & \text{if $Ro < 2.16$}. \\
-        P_{\mathrm{max}}, & \text{if $Ro \geq 2.16$}.
+        A^\eta \alpha (C_{B-V} - \delta)^\beta, & \text{if $Ro < 2$}. \\
+        P_{\mathrm{max}}, & \text{if $Ro \geq 2$}.
     \end{cases}
 \label{eqn:gyro}
 \end{equation}
@@ -263,31 +290,102 @@ retains its terminal rotation period, $P_\mathrm{max}$, which is the period it
 had as it reached the critical Rossby number of 2.16 \citep{vansaders2016}.
 The convective overturn time, $\tau$, was estimated using equation 11 of
 \citet{wright2011}.
-The rotation periods of evolved stars (EEP $>454$ were modelled with equation
-\ref{eqn:gyro}, however the uncertainties were artificially increased, by 10
-days, to account for the large amount of scatter expected in the rotation
-periods of these stars.
-The resulting rotation period model for evolved stars is a stochastic version
-of the above equation for MS stars where rotation periods are drawn from a
-broad Gaussian with equation \ref{eqn:gyro} as the mean function and the
-(rotation period uncertainty + 10)$^2$ as the variance.
-The number ten was chosen somewhat arbitrarily but we found that the resulting
-age estimates were relatively insensitive to this choice as long as the
-rotation periods were uncertain enough to allow isochrone fitting to dominate
-the age information.
-Hot stars ($B-V < 0.45$) and late M dwarfs ($B-V \gsim 1.25$) were treated
-differently again.
-Hot stars retain their primordial rapid rotation periods since they do not
-have the deep convective envelope needed to generate strong magnetic fields.
-Very cool stars have not yet begun to spin down and also retain
-rotation periods that is similar to their primordial distribution \citep[see
-\eg][]{matt2012}.
-The rotation periods of these stars were modeled with a Gaussian in log-space,
-with parameters based on the distribution of M dwarf rotation periods in the
-Praesepe cluster: a mean of 0.5 and variance of 0.55,
-\begin{equation}
-    \log_{10}(P_\mathrm{rot})\sim\mathcal{N}(0.5, 0.55).
-\end{equation}
+
+The rotation periods of hot stars, cool stars, subgiants and giants evolve
+differently to FGK and early M dwarfs.
+Stars more massive than around 1.25 M$_\odot$, with a temperature around 6250
+K and a $B-V$ color around 0.45 do not spin down appreciably over their main
+sequence lifetimes since they do not have the deep convective envelope needed
+to generate strong magnetic fields.
+Late M dwarfs with masses less than $\sim$0.3 M$_\odot$, temperatures less
+than $\sim$3500 and $B-V$ greater than $\sim$1.4 do not start magnetic braking
+until at least after the age of Praesepe ($\sim$650 million years).
+Both hot and cool stars retain rotation periods that are similar to their
+primordial distribution \citep[see \eg][]{matt2012}.
+Finally, the rotation periods of evolved stars slow dramatically as their
+radii grow.
+The empirical gyrochronology relation described above does not include these
+stars, however it is still possible to infer the ages of hot and evolved stars
+using isochrone fitting (unfortunately neither gyrochronology nor isochrone
+fitting works well for late M dwarfs).
+In order to `switch off' gyrochronology, and just use isochrone fitting for
+the hot, cool and evolved stars, we designed a model describing the rotation
+period variance of these stars, inflating the variance to high values in
+regions of parameter space where gyrochronology does not apply.
+The variance model was designed to reflect the observed distributions of hot,
+cool and evolved stars, however its main purpose is to artificially reduce the
+amount of age-information carried by rotation periods for stars where the
+rotation period is uninformative.
+We used three sigmoid functions to increase the standard deviation of the
+rotation period distributions of hot, cool and evolved stars which are shown
+in figure \ref{fig:variance}.
+This additional variance is zero where gyrochronology works well: FGK and
+early M dwarfs and 0.25 ($\sigma = 0.5$) for hot, cool and evolved stars.
+The logistic functions shown in figure \ref{fig:variance} reach half their
+maximum values at $x0 =$ 0.45, 1.4 and 454 for hot stars, cool stars and
+subgiants, respectively.
+The maximum standard deviation value of all three groups (hot, cool and
+evolved) is 0.5 and the logistic growth rate, or steepness, of the three
+sigmoids are 100, 100 and .2 for hot, cool and evolved stars respectively.
+If a star is both hot and evolved, the additional standard deviation of its
+rotation period will rise to 1 (no late M dwarfs have yet evolved off the main
+sequence so this will not apply to the cool stars).
+The (log) rotation periods of hot stars are modelled as a broad Gaussian with
+a mean of 0 (1 day in linear rotation period) and a standard deviation of
+0.5.
+The (log) rotation periods of cool and evolved stars are modelled as a
+Gaussian with mean given by equation \ref{eqn:gyro} and standard deviations of
+0.5.
+\begin{figure}
+  \caption{
+    The additional standard deviation in rotation period added to the
+    observational period uncertainties in our model.
+    The standard deviation is artificially increased for early F stars ($B-V <
+    0.45$), late M dwarfs ($B-V > 1.4$) and evolved stars (EEP $>$ 454) in
+    order to down-weight the age-information supplied by rotation periods.
+    The rotation periods of these stars do not follow the deterministic
+    gyrochronology relation and their ages should mostly be inferred via
+    isochrone fitting.
+    Down-weighting the gyrochronal likelihood by the inverse variance
+    ($1/\sigma^2$) allows the ages of these stars to be dominantly inferred
+    via isochrone fitting.
+    The ages of hot and evolved stars can be relatively precisely constrained
+    with isochrone fitting along since their position on the CMD changes
+    rapidly with time, however isochrone fitting cannot constrain the ages of
+    late M dwarfs, so the age of any star with $B-V > 1.4$ will not be
+    precisely constrained with \sd.
+}
+  \centering
+    \includegraphics[width=1.\textwidth]{variance}
+\label{fig:variance}
+\end{figure}
+
+
+% The rotation periods of evolved stars (EEP $>454$ were modelled with equation
+% \ref{eqn:gyro}, however the uncertainties were artificially increased, by 10
+% days, to account for the large amount of scatter expected in the rotation
+% periods of these stars.
+% The resulting rotation period model for evolved stars is a stochastic version
+% of the above equation for MS stars where rotation periods are drawn from a
+% broad Gaussian with equation \ref{eqn:gyro} as the mean function and the
+% (rotation period uncertainty + 10)$^2$ as the variance.
+% The number ten was chosen somewhat arbitrarily but we found that the resulting
+% age estimates were relatively insensitive to this choice as long as the
+% rotation periods were uncertain enough to allow isochrone fitting to dominate
+% the age information.
+% Hot stars ($B-V < 0.45$) and late M dwarfs ($B-V \gsim 1.25$) were treated
+% differently again.
+% Hot stars retain their primordial rapid rotation periods since they do not
+% have the deep convective envelope needed to generate strong magnetic fields.
+% Very cool stars have not yet begun to spin down and also retain
+% rotation periods that is similar to their primordial distribution \citep[see
+% \eg][]{matt2012}.
+% The rotation periods of these stars were modeled with a Gaussian in log-space,
+% with parameters based on the distribution of M dwarf rotation periods in the
+% Praesepe cluster: a mean of 0.5 and variance of 0.55,
+% \begin{equation}
+%     \log_{10}(P_\mathrm{rot})\sim\mathcal{N}(0.5, 0.55).
+% \end{equation}
 
 % Because this gyochronology model is not calibrated to include stars turning
 % off the main sequence whose rotation slows rapidly due to their increasing
