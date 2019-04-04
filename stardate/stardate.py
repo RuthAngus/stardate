@@ -56,7 +56,7 @@ class Star(object):
 
     def fit(self, inits=[329.58, 9.5596, -.0478, np.exp(5.5629), .0045],
             nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
-            gyro_only=False):
+            gyro_only=False, optimize=False):
         """Run MCMC on a star.
 
         Explore the posterior probability density function of the stellar
@@ -127,49 +127,30 @@ class Star(object):
                 gyro_only]
         self.args = args
 
-        # # Optimize. Try a few inits and pick the best.
-        # neep, nage = 5, 5
-        # likes1, likes2 = np.zeros(nage), np.zeros(neep)
-        # likes = np.zeros((neep, nage))
-        # inds = np.zeros(nage)
-        # result_list = np.zeros((neep, nage, 5))
-        # EEPS, AGES = np.meshgrid(np.linspace(200, 500, neep),
-        #                          np.linspace(7, 10., nage), indexing="ij")
+        # Optimize. Try a few inits and pick the best.
+        if optimize:
+            neep, nage = 5, 5
+            likes1, likes2 = np.zeros(nage), np.zeros(neep)
+            likes = np.zeros((neep, nage))
+            inds = np.zeros(nage)
+            result_list = np.zeros((neep, nage, 5))
+            EEPS, AGES = np.meshgrid(np.linspace(200, 500, neep),
+                                    np.linspace(7, 10., nage), indexing="ij")
 
-        # for i in range(neep):
-        #     for j in range(nage):
-        #         inits = [EEPS[i, j], AGES[i, j], 0., np.log(1000.), .01]
-        #         results = spo.minimize(nll, inits, args=args)
-        #         likes1[j] = lnprob(results.x, *args)[0]
-        #         likes[i, j] = likes1[j]
-        #         result_list[i, j, :] = results.x
-        #     inds[i] = np.argmax(likes1)
-        #     likes2[i] = max(likes1)
-        # eep_ind = np.argmax(likes2)
-        # age_ind = int(inds[eep_ind])
-        # p_init = result_list[eep_ind, age_ind, :]
-
-        # select = likes == max(likes)
-        # inits2 = [366.317778, 9.587769, 0., np.log(1000.), .01]
-        # inits3 = [396.800685, 9.851701, 0., np.log(1000.), .01]
-        # inits4 = [432.246153, 10.122045, 0., np.log(1000.), .01]
-        # inits5 = [255.516647, 9.013790, 0., np.log(1000.), .01]
-        # init_list = np.array([p_init, inits2, inits3, inits4, inits5])
-        # likes = np.zeros(len(init_list))
-        # result_list = np.zeros((len(init_list), 5))
-        # for i, inits in enumerate(init_list):
-        #     results = spo.minimize(nll, inits, args=args)
-        #     likes[i] = lnprob(results.x, *args)[0]
-        #     result_list[i, :] = results.x
-        # select = likes == max(likes)
-        # self.p_init = result_list[select, :][0]
-
-        # p_init = [329.58, 9.5596, -0.0478, 5.56287, 0.00449968]
-        # self.p_init = p_init
+            for i in range(neep):
+                for j in range(nage):
+                    inits = [EEPS[i, j], AGES[i, j], 0., np.log(1000.), .01]
+                    results = spo.minimize(nll, inits, args=args)
+                    likes1[j] = lnprob(results.x, *args)[0]
+                    likes[i, j] = likes1[j]
+                    result_list[i, j, :] = results.x
+                inds[i] = np.argmax(likes1)
+                likes2[i] = max(likes1)
+            eep_ind = np.argmax(likes2)
+            age_ind = int(inds[eep_ind])
+            self.p_init = result_list[eep_ind, age_ind, :]
 
         # Run the MCMC
-        # sampler = run_mcmc(args, p_init, backend, nwalkers=nwalkers,
-        #                    max_n=max_n, thin_by=thin_by)
         sampler = self.run_mcmc()
         self.sampler = sampler
 
