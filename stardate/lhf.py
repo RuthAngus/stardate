@@ -245,6 +245,10 @@ def lnprob(lnparams, *args):
     if not np.isfinite(lnpr):
         return -np.inf, -np.inf
 
+    # Put a prior on EEP
+    if params[0] > 800:
+        return -np.inf, -np.inf
+
     # If isochrones only, just return the isochronal lhf.
     if iso_only:
         return mod.lnlike(params) + lnpr, lnpr
