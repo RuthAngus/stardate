@@ -308,7 +308,8 @@ def lnprob(lnparams, *args):
     params[3] = np.exp(lnparams[3])
 
     # Unpack the args.
-    mod, period, period_err, color, mass, iso_only, gyro_only, model = args
+    mod, period, period_err, color, mass, iso_only, gyro_only, rossby, \
+        model = args
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -324,10 +325,12 @@ def lnprob(lnparams, *args):
     if iso_only:
         return mod.lnlike(params) + lnpr, lnpr
 
-    # If a B-V is not provided, calculate it.
-    if color is None:
-        assert gyro_only == False, "You must provide a colour if you "\
+    if gyro_only == True:
+        assert mass, "You must provide a colour if you "\
             "want to calculate an age using gyrochronology only."
+
+    # If a B-V is not provided, calculate it.
+    if gyro_only == False:
         if model == "angus15":
             color = calc_bv(params)
         elif model == "praesepe":
@@ -352,7 +355,7 @@ def lnprob(lnparams, *args):
 
     # Calculate a period using the gyrochronology model
     log10_period_model = gyro_model_rossby(params[1], color, mass,
-                                           model=model)
+                                           rossby=rossby, model=model)
 
     var = (period_err/period + sigma(color, params[0]))**2
 
