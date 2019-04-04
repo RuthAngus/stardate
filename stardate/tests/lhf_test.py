@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from stardate.lhf import lnprob, calc_bv, gyro_model
 from stardate.lhf import convective_overturn_time, gyro_model_praesepe
-from stardate.lhf import gyro_model_rossby, sigma
+from stardate.lhf import gyro_model_rossby, sigma, age_model
 from tqdm import trange
 
 # from isochrones.mist import MIST_Isochrone
@@ -43,7 +43,8 @@ def test_lnprob_higher_likelihood_sun():
 
     # Set up the StarModel isochrones object.
     mod = StarModel(mist, **iso_params)
-    args = [mod, 26., 1., None, None, False, False]  # the lnprob arguments]
+    # the lnprob arguments]
+    args = [mod, 26., 1., None, None, False, False, "angus15"]
 
     good_lnparams = [346, np.log10(4.56*1e9), 0., np.log(1000), 0.]
     good_lnprob = lnprob(good_lnparams, *args)
@@ -76,7 +77,8 @@ def test_lnprob_higher_likelihood_real():
 
     # Set up the StarModel isochrones object.
     mod = StarModel(mist, **iso_params)
-    args = [mod, df.prot[i], 1, None, None, False, False]  # lnprob arguments
+    # lnprob arguments
+    args = [mod, df.prot[i], 1, None, None, False, False, "angus15"]
     good_lnparams = [df.eep.values[i], df.age.values[i], df.feh.values[i],
                      np.log(df.d_kpc.values[i]*1e3), df.Av.values[i]]
     good_lnprob = lnprob(good_lnparams, *args)
@@ -228,16 +230,24 @@ def test_gyro_model_rossby():
     """
     age = np.log10(4.56*1e9)
     sun = [355, age, 0., np.log(1000), 0.]
-    prot_sun = gyro_model_rossby(age, .65, 1.)
+    prot_sun = 10**gyro_model_rossby(age, .65, 1.)
     assert 24 < prot_sun
     assert prot_sun < 27
 
-    prot_8_sun = gyro_model_rossby(np.log(8*1e9), .65, 1.)
+    prot_8_sun = 10**gyro_model_rossby(np.log(8*1e9), .65, 1.)
     assert 27 < prot_8_sun
     assert prot_8_sun < 32
 
-    prot_10_sun = gyro_model_rossby(np.log(10*1e9), .65, 1.)
+    prot_10_sun = 10**gyro_model_rossby(np.log(10*1e9), .65, 1.)
     assert prot_10_sun == prot_8_sun
+
+    prot_sun_p = 10**gyro_model_rossby(np.log10(4.56*1e9), .82, 1.,
+                                       model="praesepe")
+    assert 25 < prot_sun_p
+    assert prot_sun_p < 27
+
+    assert 10**gyro_model_rossby(np.log10(4.56*1e9), 10**(-.3), .1,
+                                       model="praesepe") == 1
 
 
 def test_sigma():
@@ -248,7 +258,28 @@ def test_sigma():
     assert sigma(.65, 500) > .49  # high variance for giants
 
 
+def test_age_model():
+    assert age_model(np.log10(26), 10**(-.3)) == 10
+    assert 4.5 < (10**age_model(np.log10(26), .82))*1e-9
+    assert (10**age_model(np.log10(26), .82))*1e-9 < 4.7
+
+
+def test_gyro_model_praesepe():
+    assert 25 < 10**gyro_model_praesepe(np.log10(4.56*1e9), .82)
+    assert 10**gyro_model_praesepe(np.log10(4.56*1e9), .82) < 27
+    assert 10**gyro_model_praesepe(np.log10(4.56*1e9), 10**(-.3)) == 1
+
+
 if __name__ == "__main__":
+
+    print("\nTesting gyro model Rossby...")
+    test_gyro_model_rossby()
+
+    print("\nTesting praesepe gyro model...")
+    test_gyro_model_praesepe()
+
+    print("\nTesting age model...")
+    test_age_model()
 
     print("\nTesting sigma...")
     test_sigma()
