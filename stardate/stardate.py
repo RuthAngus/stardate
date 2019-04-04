@@ -54,8 +54,8 @@ class Star(object):
         self.bv = bv
         self.mass = mass
 
-    def fit(self, inits=[355, 9.659, 0., 1000., .01], nwalkers=24,
-            max_n=100000, thin_by=100, burnin=0, iso_only=False,
+    def fit(self, inits=[329.58, 9.5596, -.0478, np.exp(5.5629), .0045],
+            nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
             gyro_only=False):
         """Run MCMC on a star.
 
@@ -103,7 +103,7 @@ class Star(object):
             print("Automatically setting burn in to {}".format(burnin))
 
         p_init = [inits[0], inits[1], inits[2], np.log(inits[3]), inits[4]]
-        # self.p_init = p_init
+        self.p_init = p_init
 
         np.random.seed(42)
 
@@ -164,8 +164,8 @@ class Star(object):
         # select = likes == max(likes)
         # self.p_init = result_list[select, :][0]
 
-        p_init = [329.58, 9.5596, -0.0478, 5.56287, 0.00449968]
-        self.p_init = p_init
+        # p_init = [329.58, 9.5596, -0.0478, 5.56287, 0.00449968]
+        # self.p_init = p_init
 
         # Run the MCMC
         # sampler = run_mcmc(args, p_init, backend, nwalkers=nwalkers,
