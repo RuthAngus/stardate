@@ -56,7 +56,7 @@ class Star(object):
 
     def fit(self, inits=[329.58, 9.5596, -.0478, np.exp(5.5629), .0045],
             nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
-            gyro_only=False, optimize=False):
+            gyro_only=False, optimize=False, model="angus15"):
         """Run MCMC on a star.
 
         Explore the posterior probability density function of the stellar
@@ -124,7 +124,7 @@ class Star(object):
 
         # lnprob arguments
         args = [mod, self.prot, self.prot_err, self.bv, self.mass, iso_only,
-                gyro_only]
+                gyro_only, model]
         self.args = args
 
         # Optimize. Try a few inits and pick the best.

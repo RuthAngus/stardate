@@ -199,16 +199,14 @@ information theory.
 %   - The cluster data
 \subsection{Test 2: the Praesepe Cluster}
 In order to test our model on real stars with known ages, we selected a sample
-of cluster stars with precisely measured ages from ensemble isochrone fitting
-and main sequence turn off.
-The ages of open clusters can be measured much more precisely than field
-stars.
-Stars in the same cluster formed (we assume) from the same molecular cloud at
-the same time and therefore have the same metallicity and age (to within a few
-million years).
-Stars with the same metallicity and age fall on the same isochrone,
-allowing perfect isochrone selection and providing a $N^{-1/2}$ decrease in
-uncertainty where N is the number of cluster stars.
+of stars in the Praesepe open cluster with precisely measured ages from
+ensemble isochrone fitting and main sequence turn off.
+The ages of open clusters can be measured much more precisely than field stars
+because they formed from the same molecular cloud at the same time and
+therefore have the same metallicity and age (to within a few million years).
+Stars with the same metallicity and age fall on the same isochrone, and
+provide a $N^{-1/2}$ decrease in age uncertainty where N is the number of
+cluster stars.
 Single stellar populations also allow main sequence turn off to be identified
 which provides a large amount of age information.
 % and, as demonstrated in figure \ref{fig:iso_fisher}, the turn off supplies a
@@ -235,15 +233,24 @@ analysis since they do not follow a simple gyrochronology relation however, we
 included more massive outliers (orange circles with \gcolor\ $<$ 2.4) in order
 to provide a complete picture of the precision and accuracy of gyrochronology
 applied to Praesepe.
-Figure \ref{fig:praesepe} shows two sets of gyrochronology models: one
-calibrated using several open clusters, asteroseismic stars and the Sun
-\citep{angus2015}, which was used to infer the ages of Praesepe but clearly
-does not provide a perfect fit to this cluster (solid gray line), and one fit
-to Praesepe and the Sun only, as described in section
-\ref{section:motivation}, that was used to calculate the Fisher information
-(dashed black line).
-We did not account for extinction in our analysis since Praesepe is relatively
-nearby (around 180 parsecs) so reddening from dust is minimal.
+Figure \ref{fig:praesepe} shows the posterior PDFs over age for the FGK and
+early M dwarf members of the praesepe cluster, calculated using \sd, compared
+with ages calculated using isochrone fitting (where each star was treated as a
+field star).
+The orange curves show the \sd\ posteriors and the blue curves show the
+isochrone-only posteriors.
+Using gyrochronology to infer the ages of these stars results in an increased
+age precision of ...\%.
+
+% Figure \ref{fig:praesepe} shows two sets of gyrochronology models: one
+% calibrated using several open clusters, asteroseismic stars and the Sun
+% \citep{angus2015}, which was used to infer the ages of Praesepe but clearly
+% does not provide a perfect fit to this cluster (solid gray line), and one fit
+% to Praesepe and the Sun only, as described in section
+% \ref{section:motivation}, that was used to calculate the Fisher information
+% (dashed black line).
+% We did not account for extinction in our analysis since Praesepe is relatively
+% nearby (around 180 parsecs) so reddening from dust is minimal.
 
 % The age of each Praesepe member was inferred using both of these
 % gyrochronology models: the legacy model of equation \ref{eq:gyro} and the

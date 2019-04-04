@@ -77,7 +77,8 @@ def gyro_model_praesepe(log10_age, bprp):
     return 10**log_P
 
 
-def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
+def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2.16, rossby=True,
+                      model="angus15"):
     """Predict a rotation period from an age, B-V colour and mass.
 
     Predict a rotation period from an age, B-V color and mass using the Angus
@@ -86,7 +87,7 @@ def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
 
     Args:
         log10_age (float): The log10_age of a star in years.
-        bv (float or array): The B-V color of a star.
+        color (float or array): The B-V or G_BP - G_RP color of a star.
         mass (float or array): The mass of a star in Solar masses.
         Ro_cutoff (float, optional): The critical Rossby number after which
             stars retain their rotation period. This is 2.16 in van Saders et
@@ -103,11 +104,17 @@ def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
 
     # Angus et al. (2015) parameters.
     a, b, c, n = [.4, .31, .45, .55]
+    if color < c:
+        return 0
+
     age_myr = (10**log10_age)*1e-6
 
     if not rossby:  # If Rossby model is switched off
         # Standard gyro model
-        log_P = gyro_model(log10_age, bv)
+        if model == "angus15":
+            log_P = gyro_model(log10_age, color)
+        elif model == "praesepe":
+            log_P = gyro_model_praesepe(log10_age, color)
         return log_P
 
     # Otherwise the Rossby model is switched on.
@@ -115,12 +122,15 @@ def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
     pmax = Ro_cutoff * convective_overturn_time(mass)
 
     # Calculate the age this star reaches pmax, based on its B-V color.
-    age_thresh_myr = (pmax/(a*(bv-c)**b))**(1./n)
+    age_thresh_myr = (pmax/(a*(color-c)**b))**(1./n)
     log10_age_thresh = np.log10(age_thresh_myr*1e6)
 
     # If star younger than critical age, predict rotation from age and color.
     if log10_age < log10_age_thresh:
-        log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c)
+        if model == "angus15":
+            log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(color-c)
+        elif model == "praesepe":
+            log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(color-c)
 
     # If star older than this age, return maximum possible rotation period.
     else:
@@ -220,12 +230,13 @@ def lnprob(lnparams, *args):
             in ln(pc) and V-band extinction. [EEP, log10(age [yrs]), [Fe/H],
             ln(distance [pc]), A_v].
         *args:
-            The arguments -- mod, period, period_err, bv, mass, iso_only and
-            gyro_only. mod is the isochrones starmodel object which is set up
-            in stardate.py. period, period_err, bv and mass are the rotation
-            period and rotation period uncertainty (in days), B-V color and
-            mass [M_sun]. bv and mass should both be None unless only
-            gyrochronology is being used.
+            The arguments -- mod, period, period_err, color, mass, iso_only
+            and gyro_only. mod is the isochrones starmodel object which is set
+            up in stardate.py. period, period_err, color and mass are the
+            rotation period and rotation period uncertainty (in days), color
+            (either B-V or G_BP - G_RP) and mass [M_sun].
+            color and mass should both be None unless only gyrochronology is
+            being used.
 
     Returns:
         The log-posterior probability of the model given the data.
@@ -237,7 +248,7 @@ def lnprob(lnparams, *args):
     params[3] = np.exp(lnparams[3])
 
     # Unpack the args.
-    mod, period, period_err, bv, mass, iso_only, gyro_only = args
+    mod, period, period_err, color, mass, iso_only, gyro_only, model = args
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -254,13 +265,16 @@ def lnprob(lnparams, *args):
         return mod.lnlike(params) + lnpr, lnpr
 
     # If a B-V is not provided, calculate it.
-    if bv is None:
-        assert gyro_only == False, "You must provide a B-V colour if you "\
+    if color is None:
+        assert gyro_only == False, "You must provide a colour if you "\
             "want to calculate an age using gyrochronology only."
-        bv = calc_bv(params)
+        if model == "angus15":
+            color = calc_bv(params)
+        elif model == "praesepe":
+            color = calc_bprp(params)
 
-    # If the B-V value calculated is nan, return the prior.
-    if not np.isfinite(bv):
+    # If the color value calculated is nan, return the prior.
+    if not np.isfinite(color):
         return lnpr, lnpr
 
     # Check that the period is a positive, finite number. It doesn't matter
@@ -273,9 +287,10 @@ def lnprob(lnparams, *args):
                                     ["mass"])
 
     # Calculate a period using the gyrochronology model
-    log10_period_model = gyro_model_rossby(params[1], bv, mass)
+    log10_period_model = gyro_model_rossby(params[1], color, mass,
+                                           model=model)
 
-    var = (period_err/period + sigma(bv, params[0]))**2
+    var = (period_err/period + sigma(color, params[0]))**2
 
     # Calculate the gyrochronology likelihood.
     gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
@@ -304,12 +319,12 @@ def nll(lnparams, args):
             in ln(pc) and V-band extinction. [EEP, log10(age [yrs]), [Fe/H],
             ln(distance [pc]), A_v].
         *args:
-            The arguments -- mod, period, period_err, bv, mass, iso_only and
-            gyro_only. mod is the isochrones starmodel object which is set up
-            in stardate.py. period, period_err, bv and mass are the rotation
-            period and rotation period uncertainty (in days), B-V color and
-            mass [M_sun]. bv and mass should both be None unless only
-            gyrochronology is being used.
+            The arguments -- mod, period, period_err, color, mass, iso_only
+            and gyro_only. mod is the isochrones starmodel object which is set
+            up in stardate.py. period, period_err, color and mass are the
+            rotation period and rotation period uncertainty (in days), B-V
+            color and mass [M_sun]. color and mass should both be None unless
+            only gyrochronology is being used.
 
     Returns:
         The log-posterior probability of the model given the data.
@@ -321,7 +336,7 @@ def nll(lnparams, args):
     params[3] = np.exp(lnparams[3])
 
     # Unpack the args.
-    mod, period, period_err, bv, mass, iso_only, gyro_only = args
+    mod, period, period_err, color, mass, iso_only, gyro_only, model = args
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -334,13 +349,16 @@ def nll(lnparams, args):
         return -mod.lnlike(params) + lnpr
 
     # If a B-V is not provided, calculate it.
-    if bv is None:
+    if color is None:
         assert gyro_only == False, "You must provide a B-V colour if you "\
             "want to calculate an age using gyrochronology only."
-        bv = calc_bv(params)
+        if model == "angus15":
+            color = calc_bv(params)
+        elif model == "praesepe":
+            color = calc_bprp(params)
 
     # If the B-V value calculated is nan, return the prior.
-    if not np.isfinite(bv):
+    if not np.isfinite(color):
         return -lnpr
 
     # Check that the period is a positive, finite number. It doesn't matter
@@ -353,9 +371,10 @@ def nll(lnparams, args):
                                     ["mass"])
 
     # Calculate a period using the gyrochronology model
-    log10_period_model = gyro_model_rossby(params[1], bv, mass)
+    log10_period_model = gyro_model_rossby(params[1], color, mass,
+                                           model=model)
 
-    var = (period_err/period + sigma(bv, params[0]))**2
+    var = (period_err/period + sigma(color, params[0]))**2
 
     # Calculate the gyrochronology likelihood.
     gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
