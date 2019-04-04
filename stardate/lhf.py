@@ -77,6 +77,25 @@ def gyro_model_praesepe(log10_age, bprp):
     return 10**log_P
 
 
+def age_model(log10_bprp, log10_period):
+    """
+    Predicts log10 age from log10 color and log10 period.
+
+    Args:
+        params (list): The list of model parameters.
+        log10_bprp (array): The (log10) G_bp - G_rp color array.
+        log10_period (array): The (log10) period array.
+    Returns:
+        log10_age (array): The (log10) age  array.
+    """
+
+    # Hard-code the gyro parameters :-)
+    p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
+        0.7161114835620975, -4.716819674578521, 0.6470950862322454,
+        -13.558898318835137, 0.9359250478865809]
+    return (log10_period - np.polyval(p[:5], log10_bprp))/p[5]
+
+
 def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2.16, rossby=True,
                       model="angus15"):
     """Predict a rotation period from an age, B-V colour and mass.
@@ -122,7 +141,10 @@ def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2.16, rossby=True,
     pmax = Ro_cutoff * convective_overturn_time(mass)
 
     # Calculate the age this star reaches pmax, based on its B-V color.
-    age_thresh_myr = (pmax/(a*(color-c)**b))**(1./n)
+    if model == "angus15":
+        age_thresh_myr = (pmax/(a*(color-c)**b))**(1./n)
+    elif model == "praesepe":
+        age_thresh_myr = age_model(np.log10(color), np.log10(pmax))
     log10_age_thresh = np.log10(age_thresh_myr*1e6)
 
     # If star younger than critical age, predict rotation from age and color.
@@ -130,7 +152,7 @@ def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2.16, rossby=True,
         if model == "angus15":
             log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(color-c)
         elif model == "praesepe":
-            log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(color-c)
+            log_P = gyro_model_praesepe(log10_age, color)
 
     # If star older than this age, return maximum possible rotation period.
     else:
