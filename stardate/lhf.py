@@ -55,7 +55,6 @@ def gyro_model_praesepe(log10_age, bprp):
     Predicts log10 rotation period from log10 color and log10 age.
 
     Args:
-        params (list): The list of model parameters.
         log10_age (float): The (log10) age.
         bprp (float): The G_bp - G_rp color.
     Returns:
@@ -108,9 +107,8 @@ def age_model(log10_period, bprp):
     Predicts log10 age from log10 color and log10 period.
 
     Args:
-        params (list): The list of model parameters.
-        log10_bprp (array): The (log10) G_bp - G_rp color array.
         log10_period (array): The (log10) period array.
+        log10_bprp (array): The (log10) G_bp - G_rp color array.
     Returns:
         log10_age (array): The (log10) age  array.
     """
