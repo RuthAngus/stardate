@@ -184,6 +184,11 @@ def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2, rossby=True,
         log10_age_thresh = age_model(np.log10(pmax), color)
 
     # If star younger than critical age, predict rotation from age and color.
+    if color < 0. and model=="praesepe":
+        log_P = 0
+    elif np.isnan(color):
+        log_P = np.nan
+
     if log10_age < log10_age_thresh:
         if model == "angus15":
             age_myr = (10**log10_age)*1e-6
@@ -444,23 +449,35 @@ def sigmoid(k, x0, L, x):
     return L/(np.exp(-k*(x - x0)) + 1)
 
 
-def sigma(bv, eep):
+def sigma(color, eep, model="angus15"):
     """
     The standard deviation of the rotation period distribution.
     Currently comprised of two three logistic functions that 'blow up' the
     variance at hot colours, cool colours and large EEPs. The FGK dwarf part
     of the model has zero variance.
     Args:
-        bv (float or array): The B-V colour.
+        color (float or array): The B-V or G_BP - G_RP colour.
         eep (float or array): The equivalent evolutionary point.
     """
     kcool, khot, keep = 100, 100, .2
-    x0cool, x0hot, x0eep = 1.4, .45, 454
     Lcool, Lhot, Leep = .5, .5, .5
-    sigma_bv = sigmoid(kcool, x0cool, Lcool, bv) \
-        + sigmoid(khot, -x0hot, Lhot, -bv)
+    x0eep = 454
+
+    if model == "angus15":
+        x0cool, x0hot = 1.4, .45
+        sigma_color = sigmoid(kcool, x0cool, Lcool, color) \
+            + sigmoid(khot, -x0hot, Lhot, -color)
+
+    elif model == "praesepe":
+        x0cool, x0hot = .4, .25
+        if color > 0:
+            sigma_color = sigmoid(kcool, x0cool, Lcool, np.log10(color)) \
+                + sigmoid(khot, x0hot, Lhot, -np.log10(color))
+        else:
+            sigma_color = .5
+
     sigma_eep = sigma_eep = sigmoid(keep, x0eep, Leep, eep)
-    return sigma_bv + sigma_eep
+    return sigma_color + sigma_eep
 
 
 def calc_rossby_number(prot, mass):
