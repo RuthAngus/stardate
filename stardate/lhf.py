@@ -43,8 +43,7 @@ def gyro_model(log10_age, bv):
     """
     age_myr = (10**log10_age)*1e-6
     a, b, c, n = [.4, .31, .45, .55]
-    hot = bv < .45
-    if hot:
+    if bv < c:
         return 0
     else:
         return (n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c))
@@ -60,6 +59,11 @@ def gyro_model_praesepe(log10_age, bprp):
     Returns:
         log10_period (float): The period.
     """
+    # Log rotation period is zero if the star is very hot.
+    # Don't try to take log of negative number.
+    if bprp < 0.:
+       return 0
+
     log10_bprp = np.log10(bprp)
 
     # Hard-code the gyro parameters :-)
@@ -112,6 +116,11 @@ def age_model(log10_period, bprp):
     Returns:
         log10_age (array): The (log10) age  array.
     """
+    # If star is very hot, return the age of the Universe.
+    # Don't try to take the log of a negative number.
+    if bprp < 0:
+        return 10.14
+
     log10_bprp = np.log10(bprp)
 
     # Hard-code the gyro parameters :-)
@@ -153,6 +162,9 @@ def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2, rossby=True,
     Returns:
         The log10(rotation period).
     """
+    # If color is nan, return nan. This should be caught by the lhf.
+    if np.isnan(color) == True:
+        return np.nan
 
     # Angus et al. (2015) parameters.
     a, b, c, n = [.4, .31, .45, .55]
@@ -160,8 +172,6 @@ def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2, rossby=True,
     if not rossby:  # If Rossby model is switched off
         # Standard gyro model
         if model == "angus15":
-            if color < c:
-                return 0
             log_P = gyro_model(log10_age, color)
         elif model == "praesepe":
             log_P = gyro_model_praesepe(log10_age, color)
@@ -173,7 +183,7 @@ def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2, rossby=True,
 
     # Calculate the age this star reaches pmax, based on its B-V color.
     if model == "angus15":
-        if color < .45:
+        if color < c:
             log10_age_thresh = 10.14  # The age of the Universe
         else:
             age_thresh_myr = (pmax/(a*(color-c)**b))**(1./n)
@@ -182,21 +192,9 @@ def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2, rossby=True,
         log10_age_thresh = age_model(np.log10(pmax), color)
 
     # If star younger than critical age, predict rotation from age and color.
-    if color < 0. and model=="praesepe":
-        log_P = 0
-    elif color < .45 and model=="angus15":
-        log_P = 0
-    elif np.isnan(color) == True:
-        log_P = np.nan
-
     if log10_age < log10_age_thresh:
         if model == "angus15":
-            age_myr = (10**log10_age)*1e-6
-            if color-c < 0:
-                log_P = 0
-            else:
-                log_P = n*np.log10(age_myr) + np.log10(a) \
-                    + b*np.log10(color-c)
+            log_P = gyro_model(log10_age, color)
         elif model == "praesepe":
             log_P = gyro_model_praesepe(log10_age, color)
 
@@ -338,8 +336,10 @@ def lnprob(lnparams, *args):
         assert mass, "You must provide a colour if you "\
             "want to calculate an age using gyrochronology only."
 
-    # If a B-V is not provided, calculate it.
+    # Unless gyro_only is on, calculate either B-V or BP - RP color.
     if gyro_only == False:
+        mass = mist.interp_value([params[0], params[1], params[2]],
+                                    ["mass"])
         if model == "angus15":
             color = calc_bv(params)
         elif model == "praesepe":
@@ -350,17 +350,10 @@ def lnprob(lnparams, *args):
     if np.isfinite(color) == False:
         return lnpr, lnpr
 
-    if color < 0:
-        return mod.lnlike(params) + lnpr, lnpr
-
     # Check that the period is a positive, finite number. It doesn't matter
     # too much what the lhf is here, as long as it is constant.
     if not period or not np.isfinite(period) or period <= 0.:
         gyro_lnlike = -.5*((5/(20.))**2) - np.log(20.)
-
-    if mass is None:  # If a mass is not provided, calculate it.
-        mass = mist.interp_value([params[0], params[1], params[2]],
-                                    ["mass"])
 
     # Calculate a period using the gyrochronology model
     log10_period_model = gyro_model_rossby(params[1], color, mass,
@@ -469,8 +462,11 @@ def sigma(color, eep, model="angus15"):
 
     if model == "angus15":
         x0cool, x0hot = 1.4, .45
-        sigma_color = sigmoid(kcool, x0cool, Lcool, color) \
-            + sigmoid(khot, -x0hot, Lhot, -color)
+        if color > 0:
+            sigma_color = sigmoid(kcool, x0cool, Lcool, color) \
+                + sigmoid(khot, -x0hot, Lhot, -color)
+        else:
+            sigma_color = .5
 
     elif model == "praesepe":
         x0cool, x0hot = .4, .25
