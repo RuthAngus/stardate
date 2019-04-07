@@ -16,11 +16,10 @@ package on its own.
 
 
 import numpy as np
-import pandas as pd
 from isochrones.mist import MIST_Isochrone
 from isochrones import StarModel, get_ichrone
 # mist = MIST_Isochrone(bands)
-bands = ["B", "V", "J", "H", "K"]
+bands = ["B", "V", "J", "H", "K", "BP", "RP", "G"]
 mist = get_ichrone("mist", bands=bands)
 import emcee
 import h5py
@@ -42,41 +41,104 @@ def gyro_model(log10_age, bv):
 
     """
     age_myr = (10**log10_age)*1e-6
-
     a, b, c, n = [.4, .31, .45, .55]
-
-    log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c)
-    return 10**log_P
+    if bv < c:
+        return 0
+    else:
+        return (n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c))
 
 
 def gyro_model_praesepe(log10_age, bprp):
-    """Predict a rotation period from an age and G_BP - G_RP colour.
-
-    Given a Gaia G_BP - G_RP colour and an age, predict a rotation period
-    using a model fit to the Praesepe cluster alone.
+    """
+    Predicts log10 rotation period from log10 color and log10 age.
 
     Args:
-        log10_age (float or array): The logarithmic age of a star or stars,
-            log10(age), in years.
-        bprp: (float or array): The Gaia G_BP - G_RP colour of a star or
-            stars.
-
+        log10_age (float): The (log10) age.
+        bprp (float): The G_bp - G_rp color.
     Returns:
-        The rotation period in days.
-
+        log10_period (float): The period.
     """
+    # Log rotation period is zero if the star is very hot.
+    # Don't try to take log of negative number.
+    if bprp < 0.:
+       return 0
 
-    age_gyr = (10**log10_age)*1e-9
-    log_age_gyr = np.log10(age_gyr)
-    log_c = np.log10(bprp)
-    params = [1.10469903, 0.6183025, -4.452133, 31.02877576, -47.76497323,
-              0.63604919]
-    log_P = params[0] + params[1]*log_c + params[2]*log_c**2 \
-        + params[3]*log_c**3 + params[4]*log_c**4 + params[5]*log_age_gyr
-    return 10**log_P
+    log10_bprp = np.log10(bprp)
+
+    # Hard-code the gyro parameters :-)
+    p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
+         0.7161114835620975, -4.716819674578521, 0.6470950862322454,
+         -13.558898318835137, 0.9359250478865809]
+
+    if log10_bprp >= .43:
+        return np.polyval(p[6:], log10_bprp) + p[5]*log10_age
+    elif log10_bprp < -.25:
+        return 0
+    else:
+        return np.polyval(p[:5], log10_bprp) + p[5]*log10_age
 
 
-def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
+# def gyro_model_praesepe(log10_age, bprp):
+#     """Predict a rotation period from an age and G_BP - G_RP colour.
+
+#     Given a Gaia G_BP - G_RP colour and an age, predict a rotation period
+#     using a model fit to the Praesepe cluster alone.
+
+#     Args:
+#         log10_age (float or array): The logarithmic age of a star or stars,
+#             log10(age), in years.
+#         bprp: (float or array): The Gaia G_BP - G_RP colour of a star or
+#             stars.
+
+#     Returns:
+#         The rotation period in days.
+
+#     """
+
+#     age_gyr = (10**log10_age)*1e-9
+#     log_age_gyr = np.log10(age_gyr)
+#     log_c = np.log10(bprp)
+#     params = [1.10469903, 0.6183025, -4.452133, 31.02877576, -47.76497323,
+#               0.63604919]
+#     log_P = params[0] + params[1]*log_c + params[2]*log_c**2 \
+#         + params[3]*log_c**3 + params[4]*log_c**4 + params[5]*log_age_gyr
+#     return 10**log_P
+
+
+def age_model(log10_period, bprp):
+    """
+    Predicts log10 age from log10 color and log10 period.
+
+    Args:
+        log10_period (array): The (log10) period array.
+        log10_bprp (array): The (log10) G_bp - G_rp color array.
+    Returns:
+        log10_age (array): The (log10) age  array.
+    """
+    # If star is very hot, return the age of the Universe.
+    # Don't try to take the log of a negative number.
+    if bprp < 0:
+        return 10.14
+
+    log10_bprp = np.log10(bprp)
+
+    # Hard-code the gyro parameters :-)
+    p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
+        0.7161114835620975, -4.716819674578521, 0.6470950862322454,
+        -13.558898318835137, 0.9359250478865809]
+
+    if log10_bprp >= .43:
+        # return (log10_period - np.polyval(p[6:], log10_bprp))/p[5]
+        return 10.14  # The age of the universe
+    elif log10_bprp < -.25:
+        return 10.14
+    else:
+        logage = (log10_period - np.polyval(p[:5], log10_bprp))/p[5]
+        return logage
+
+
+def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2, rossby=True,
+                      model="angus15"):
     """Predict a rotation period from an age, B-V colour and mass.
 
     Predict a rotation period from an age, B-V color and mass using the Angus
@@ -85,7 +147,7 @@ def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
 
     Args:
         log10_age (float): The log10_age of a star in years.
-        bv (float or array): The B-V color of a star.
+        color (float or array): The B-V or G_BP - G_RP color of a star.
         mass (float or array): The mass of a star in Solar masses.
         Ro_cutoff (float, optional): The critical Rossby number after which
             stars retain their rotation period. This is 2.16 in van Saders et
@@ -97,35 +159,49 @@ def gyro_model_rossby(log10_age, bv, mass, Ro_cutoff=2.16, rossby=True):
             unmodified.
 
     Returns:
-        The rotation period in days.
+        The log10(rotation period).
     """
+    # If color is nan, return nan. This should be caught by the lhf.
+    if np.isnan(color) == True:
+        return np.nan
 
     # Angus et al. (2015) parameters.
     a, b, c, n = [.4, .31, .45, .55]
 
-    age_myr = (10**log10_age)*1e-6
-
     if not rossby:  # If Rossby model is switched off
         # Standard gyro model
-        log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c)
-        return 10**log_P
+        if model == "angus15":
+            log_P = gyro_model(log10_age, color)
+        elif model == "praesepe":
+            log_P = gyro_model_praesepe(log10_age, color)
+        return log_P
 
     # Otherwise the Rossby model is switched on.
     # Calculate the maximum theoretical rotation period for this mass.
     pmax = Ro_cutoff * convective_overturn_time(mass)
 
     # Calculate the age this star reaches pmax, based on its B-V color.
-    age_thresh_myr = (pmax/(a*(bv-c)**b))**(1./n)
-    log10_age_thresh = np.log10(age_thresh_myr*1e6)
+    if model == "angus15":
+        if color < c:
+            log10_age_thresh = 10.14  # The age of the Universe
+        else:
+            age_thresh_myr = (pmax/(a*(color-c)**b))**(1./n)
+            log10_age_thresh = np.log10(age_thresh_myr*1e6)
+    elif model == "praesepe":
+        log10_age_thresh = age_model(np.log10(pmax), color)
 
     # If star younger than critical age, predict rotation from age and color.
     if log10_age < log10_age_thresh:
-        log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c)
+        if model == "angus15":
+            log_P = gyro_model(log10_age, color)
+        elif model == "praesepe":
+            log_P = gyro_model_praesepe(log10_age, color)
 
     # If star older than this age, return maximum possible rotation period.
-    else:
+    elif log10_age >= log10_age_thresh:
         log_P = np.log10(pmax)
-    return 10**log_P
+
+    return log_P
 
 
 def calc_bv(mag_pars):
@@ -147,6 +223,22 @@ def calc_bv(mag_pars):
     _, _, _, bands = mist.interp_mag([*mag_pars], ["B", "V"])
     B, V = bands
     return B-V
+
+
+def calc_bprp(mag_pars):
+    """Calculate a G_bp-G_rp colour from stellar parameters.
+    Calculate bp-rp colour from stellar parameters [EEP, log10(age, yrs), feh,
+    distance (in parsecs) and extinction] using MIST isochrones.
+    Args:
+        mag_pars (list): A list containing EEP, log10(age) in years,
+            metallicity, distance in parsecs and V-band extinction, Av, for a
+            star.
+    Returns:
+        G_bp - G_rp color.
+    """
+    _, _, _, bands = mist.interp_mag([*mag_pars], ["BP", "RP"])
+    bp, rp = bands
+    return bp - rp
 
 
 def lnprior(params):
@@ -204,12 +296,13 @@ def lnprob(lnparams, *args):
             in ln(pc) and V-band extinction. [EEP, log10(age [yrs]), [Fe/H],
             ln(distance [pc]), A_v].
         *args:
-            The arguments -- mod, period, period_err, bv, mass, iso_only and
-            gyro_only. mod is the isochrones starmodel object which is set up
-            in stardate.py. period, period_err, bv and mass are the rotation
-            period and rotation period uncertainty (in days), B-V color and
-            mass [M_sun]. bv and mass should both be None unless only
-            gyrochronology is being used.
+            The arguments -- mod, period, period_err, color, mass, iso_only
+            and gyro_only. mod is the isochrones starmodel object which is set
+            up in stardate.py. period, period_err, color and mass are the
+            rotation period and rotation period uncertainty (in days), color
+            (either B-V or G_BP - G_RP) and mass [M_sun].
+            color and mass should both be None unless only gyrochronology is
+            being used.
 
     Returns:
         The log-posterior probability of the model given the data.
@@ -221,7 +314,8 @@ def lnprob(lnparams, *args):
     params[3] = np.exp(lnparams[3])
 
     # Unpack the args.
-    mod, period, period_err, bv, mass, iso_only, gyro_only = args
+    mod, period, period_err, color, mass, iso_only, gyro_only, rossby, \
+        model = args
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -229,22 +323,30 @@ def lnprob(lnparams, *args):
     if not np.isfinite(lnpr):
         return -np.inf, -np.inf
 
-    # # More prior. Put some reasonable limits on things
-    # if params[0] < 0 or params[4] < 0 or 1 < params[4]:
-    #     return -np.inf, -np.inf
+    # Put a prior on EEP
+    if params[0] > 800:
+        return -np.inf, -np.inf
 
     # If isochrones only, just return the isochronal lhf.
     if iso_only:
         return mod.lnlike(params) + lnpr, lnpr
 
-    # If a B-V is not provided, calculate it.
-    if bv is None:
-        assert gyro_only == False, "You must provide a B-V colour if you "\
+    if gyro_only == True:
+        assert mass, "You must provide a colour if you "\
             "want to calculate an age using gyrochronology only."
-        bv = calc_bv(params)
 
-    # If the B-V value calculated is nan, return the prior.
-    if not np.isfinite(bv):
+    # Unless gyro_only is on, calculate either B-V or BP - RP color.
+    if gyro_only == False:
+        mass = mist.interp_value([params[0], params[1], params[2]],
+                                    ["mass"])
+        if model == "angus15":
+            color = calc_bv(params)
+        elif model == "praesepe":
+            color = calc_bprp(params)
+
+    # If the color value calculated is nan, return the prior.
+    # If it is negative, return the iso likelihood.
+    if np.isfinite(color) == False:
         return lnpr, lnpr
 
     # Check that the period is a positive, finite number. It doesn't matter
@@ -252,52 +354,52 @@ def lnprob(lnparams, *args):
     if not period or not np.isfinite(period) or period <= 0.:
         gyro_lnlike = -.5*((5/(20.))**2) - np.log(20.)
 
-    # If FGK and MS:
-    elif bv > .45 and params[0] < 454:
+    # Calculate a period using the gyrochronology model
+    log10_period_model = gyro_model_rossby(params[1], color, mass,
+                                           rossby=rossby, model=model)
 
-        if mass is None:  # If a mass is not provided, calculate it.
-            mass = mist.interp_value([params[0], params[1], params[2]],
-                                     ["mass"])
+    var = (period_err/period + sigma(color, params[0]))**2
 
-        # Calculate a period using the gyrochronology model
-        period_model = gyro_model_rossby(params[1], bv, mass)
-
-        # Calculate the gyrochronology likelihood.
-        gyro_lnlike = -.5*((period - period_model) / (period_err))**2 \
-            - np.log(period_err)
-
-    # If hot, use a broad log-gaussian model with a mean of .5 for rotation.
-    elif bv < .45:# or bv > 1.25:
-        if mass is None:
-            mass = mist.interp_value([params[0], params[1], params[2]],
-                                     ["mass"])
-        period_model = .5  # 1
-        # gyro_lnlike = -.5*((period - period_model)
-        #                     / (period_err+10))**2 - np.log(period_err+10)
-        gyro_lnlike = -.5*((np.log10(period) - period_model)
-                            / (.55))**2 - np.log(.55)
-
-    # If evolved, use a gyrochronology relation with inflated uncertainties.
-    elif bv > .45 and params[0] >= 454:
-        if mass is None:
-            mass = mist.interp_value([params[0], params[1], params[2]],
-                                     ["mass"])
-        period_model = gyro_model_rossby(params[1], bv, mass)
-        gyro_lnlike = -.5*((period - period_model) / (period_err+10))**2 \
-            - np.log(period_err+10)
+    # Calculate the gyrochronology likelihood.
+    gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
+        - .5*np.log(2*np.pi*var)
 
     if gyro_only:
-        return gyro_lnlike + lnpr, lnpr
+        return float(gyro_lnlike) + lnpr, lnpr
 
     prob = mod.lnlike(params) + gyro_lnlike + lnpr
-    if np.isnan(prob):
-        print("nan prob for parameters", params)
-        prob = -np.inf
 
     if not np.isfinite(prob):
         prob = -np.inf
 
-    return prob, lnpr
+    return float(prob), lnpr
+
+
+def nll(lnparams, args):
+    """ The negative ln-probability function.
+
+    Calculates the negative logarithmic posterior probability (likelihood times
+    prior) of the model given the data.
+
+    Args:
+        lnparams (array): The parameter array containing Equivalent
+            Evolutionary Point (EEP), age in log10(yrs), metallicity, distance
+            in ln(pc) and V-band extinction. [EEP, log10(age [yrs]), [Fe/H],
+            ln(distance [pc]), A_v].
+        *args:
+            The arguments -- mod, period, period_err, color, mass, iso_only
+            and gyro_only. mod is the isochrones starmodel object which is set
+            up in stardate.py. period, period_err, color and mass are the
+            rotation period and rotation period uncertainty (in days), B-V
+            color and mass [M_sun]. color and mass should both be None unless
+            only gyrochronology is being used.
+
+    Returns:
+        The negative log-posterior probability of the model given the data.
+
+    """
+    lp, prior = lnprob(lnparams, *args)
+    return -lp
 
 
 def convective_overturn_time(*args):
@@ -327,3 +429,63 @@ def convective_overturn_time(*args):
 
     log_tau = 1.16 - 1.49*np.log10(M) - .54*(np.log10(M))**2
     return 10**log_tau
+
+
+def sigmoid(k, x0, L, x):
+    """
+    Computes a sigmoid function.
+    Args:
+        k (float): The logistic growth rate (steepness).
+        x0 (float): The location of 1/2 max.
+        L (float): The maximum value.
+        x, (array): The x-array.
+    Returns:
+        y (array): The logistic function.
+    """
+    return L/(np.exp(-k*(x - x0)) + 1)
+
+
+def sigma(color, eep, model="angus15"):
+    """
+    The standard deviation of the rotation period distribution.
+    Currently comprised of two three logistic functions that 'blow up' the
+    variance at hot colours, cool colours and large EEPs. The FGK dwarf part
+    of the model has zero variance.
+    Args:
+        color (float or array): The B-V or G_BP - G_RP colour.
+        eep (float or array): The equivalent evolutionary point.
+    """
+    kcool, khot, keep = 100, 100, .2
+    Lcool, Lhot, Leep = .5, .5, .5
+    x0eep = 454
+
+    if model == "angus15":
+        x0cool, x0hot = 1.4, .45
+        if color > 0:
+            sigma_color = sigmoid(kcool, x0cool, Lcool, color) \
+                + sigmoid(khot, -x0hot, Lhot, -color)
+        else:
+            sigma_color = .5
+
+    elif model == "praesepe":
+        x0cool, x0hot = .4, .25
+        if color > 0:
+            sigma_color = sigmoid(kcool, x0cool, Lcool, np.log10(color)) \
+                + sigmoid(khot, x0hot, Lhot, -np.log10(color))
+        else:
+            sigma_color = .5
+
+    sigma_eep = sigma_eep = sigmoid(keep, x0eep, Leep, eep)
+    return sigma_color + sigma_eep
+
+
+def calc_rossby_number(prot, mass):
+    """
+    Calculate the Rossby number of a star.
+    Args:
+        prot (float or array): The rotation period in days.
+        mass (float or array): The mass in Solar masses.
+    Returns:
+        Ro (float or array): The Rossby number.
+    """
+    return prot/convective_overturn_time(mass)

@@ -16,42 +16,45 @@ versa (at MS turn off).
 % masses.
 %   - How will this be used/what will it be useful for?
 The method we present here is available as a {\it python} package called \sd\
-which allows users to infer ages from their apparent magnitudes, parallaxes,
-rotation periods and spectroscopic propertes, if available, in just a few
-lines of code.
-This method is applicable to an extremely large number of stars: most stars
-with a rotation period and broad-band photometry, which already includes
-tens-of-thousands \kepler\ and \ktwo\ stars and could include millions from
-\tess, \lsst, \wfirst, \plato, \gaia, and others.
+which allows users to infer ages from their available apparent magnitudes,
+parallaxes, rotation periods and spectroscopic propertes in just a few lines
+of code.
+This method is applicable to an extremely large number of stars: late F, GK
+and early M stars with a rotation period and broad-band photometry.
+This already includes tens-of-thousands of \kepler\ and \ktwo\ stars and could
+include millions more from \tess, \lsst, \wfirst, \plato, \gaia, and others in
+future.
 Although this method is designed for combining isochrone fitting with
 gyrochronology, \sd\ can still be used {\it without} rotation periods, in
 which case it will predict an isochrone-only stellar age.
-\sd\ is therefore applicable to all stars covered by the MIST isochrones:
-masses from 0.1 to 300 M$_\odot$, ages ranging from 100,000 years to longer
-than the age of the Universe, and metallicities from -4 to 0.5, however it is
-{\it optimally applicable} to stars with rotation periods, otherwise the
-result will be identical to ages measured with {\tt isochrones.py}.
+% \sd\ is therefore applicable to all stars covered by the MIST isochrones:
+% masses from 0.1 to 300 M$_\odot$, ages ranging from 100,000 years to longer
+than the age of the Universe, and metallicities from -4 to 0.5.
+However, it is {\it optimally applicable} to stars with rotation periods,
+otherwise the result will be identical to ages measured with {\tt
+isochrones.py}.
 %   - Where is it not useful?
-However, there are some types of star for which our combined isochrone fitting
-and gyrochronology model should either be used with caution or should not be
-applied.
-This list includes: fully convective stars with \gcolor\ $gtrsim$ 2.4, stars
-younger than around 500 Myrs where there is a significant number of rapidly
-rotating outliers, stars that have stopped magnetically braking, \ie\ those
-with $Ro$ greater than around 2.1; and synchronised binaries whose rotation
-periods are locked to their orbital periods.
+However, \sd\ will often predict inaccurate ages for stars younger than around
+500 million years, where stars are more likely to be rapidly rotating
+outliers, and close binaries whose interactions influence their rotation
+period evolution.
+% These ages may still be precise even though they are inaccurate.
+% Building a mixture model into \sd\ would allow these outliers to be identified
+% and this is one of the main improvements to \sd\ that we plan to make in
+% future.
 % Since many stars with measurable rotation periods do not have precise
 % spectroscopic properties, it is not always possible to tell whether a star
 % falls within these permissable ranges of masses, surface gravities and rossby
 % numbers.
-In addition, any given star, even if it does meet the criteria for mass,
-age, binarity, etc, may still be a rotational outlier.
+% In addition, any given star, even if it does meet the criteria for mass,
+% age, binarity, etc, may still be a rotational outlier.
 Rotational outliers are often seen in clusters \citep[see \eg][]{douglas2016,
-rebull2016, douglas2017, rebull2017}.
+rebull2016, douglas2017, rebull2017} and many of these fall above the main
+sequence, indicating that they are binaries.
 When a star's age is not accurately represented by its rotation period, its
 isochronal age will be in tension with its gyrochronal one, however, given the
-precision of the gyrochronal technique, the gyrochronal age will dominate on
-the MS.
+high information content of gyrochronology, the gyrochronal age will dominate
+on the MS.
 % Figure \ref{fig:bimodal} shows the posterior PDF for a star with a
 % misrepresentative rotation period.
 % This star is rotating more rapidly than its age and mass indicate it should,
@@ -61,19 +64,18 @@ the MS.
 % processes can produce outliers, and partly because misclassified giants, hot
 % stars, M dwarfs or very young or very old stars will not have rotation periods
 % that relate to their ages in the same way.
-In addition, measured rotation periods may not always be accurate and in many
-cases, due to aliasing, can be a harmonic of the true rotation period.
+In addition, measured rotation periods may not always be accurate and can, in
+many cases, be a harmonic of the true rotation period.
 A common rotation period measurement failure mode is to measure half the true
 rotation period.
 The best way to prevent an erroneous or outlying rotation period from
 resulting in an erroneous age measurement is to {\it allow} for outlying
 rotation periods using a mixture model.
-Finally, as shown in figure \ref{fig:praesepe} the gyrochronology model used
-here \citep{angus2015} does not provide a good fit to all available data.
-In future we intend to recalibrate this model so that it fits all available
-cluster and asteroseismic data.
-We also intend to build methods to account for and accommodate outliers,
-old stars and low-mass stars.
+We intend to build a mixture model into \sd\ in future.
+As shown in figure \ref{fig:praesepe}, the gyrochronology model used here
+\citep{angus2015} does not provide a good fit to all available data.
+In future we intend to calibrate a new gyrochronology model that fits all
+available cluster and asteroseismic data.
 For now however, we simply warn users of these caveats and suggest that ages
 calculated using \sd\ are treated with appropriate caution.
 

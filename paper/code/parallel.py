@@ -35,6 +35,7 @@ def infer_stellar_age(df):
     jmag_err = .01 # mags
     hmag_err = .01  # mags
     kmag_err = .01  # mags
+    B_err, V_err, bp_err, rp_err = .01, .01, .01, .01
     parallax_err = .05  # milliarcseconds
     prot_err = 1  # Days
     BV_err = .01  # mags
@@ -48,37 +49,42 @@ def infer_stellar_age(df):
                   "J": (df["jmag"], jmag_err),
                   "H": (df["hmag"], hmag_err),
                   "K": (df["kmag"], kmag_err),
-                  "parallax": (df["parallax"], parallax_err)}
-                  # "maxAV": .1}
+                  "B": (df["B"], B_err),
+                  "V": (df["V"], V_err),
+                  "G": (df["G"], bp_err),
+                  "BP": (df["BP"], bp_err),
+                  "RP": (df["RP"], rp_err),
+                  "parallax": (df["parallax"], parallax_err),
+                  "maxAV": .1}
 
     # Infer an age with isochrones and gyrochronology.
 
     try:
         sd_fn = "{}_stardate".format(str(int(df["ID"])).zfill(4))
         iso_fn = "{}_isochrones".format(str(int(df["ID"])).zfill(4))
+
         if not os.path.exists(sd_fn):
             # Set up the star object
-            star = sd.Star(iso_params, df["prot"], .01, filename=sd_fn)
+            star = sd.Star(iso_params, prot=df["prot"], prot_err=.01,
+                           filename=sd_fn)
 
             # Run the MCMC
-            sampler = star.fit(max_n=2000)
-            # sampler = star.fit(max_n=200000)
+            sampler = star.fit(max_n=300000)
 
         else:
             print("failed to save file for star. File exists: ", sd_fn)
 
-            # Now infer an age with isochrones only.
+            # # Now infer an age with isochrones only.
 
-        if not os.path.exists(iso_fn):
-            # Set up the star object
-            star_iso = sd.Star(iso_params, df["prot"], .01, filename=iso_fn)
+        # if not os.path.exists(iso_fn):
+            # # Set up the star object
+            # star_iso = sd.Star(iso_params, None, None, filename=iso_fn)
 
-            # Run the MCMC
-            sampler = star_iso.fit(max_n=2000, iso_only=True)
+            # # Run the MCMC
             # sampler = star_iso.fit(max_n=200000, iso_only=True)
 
-        else:
-            print("failed to save file for star. File exists: ", iso_fn)
+        # else:
+            # print("failed to save file for star. File exists: ", iso_fn)
 
     except:
         print("failed to save file for star ", str(int(df["ID"])).zfill(4))
@@ -89,6 +95,9 @@ if __name__ == "__main__":
     df = pd.read_csv("data/simulated_data.csv")
     # df = df.iloc[5:6]
     assert len(df.ID) == len(np.unique(df.ID))
+    ids = np.array([69, 132, 139, 178, 190, 216, 240, 246, 296, 325, 330, 349,
+                    443, 496])
+    df = df.iloc[ids]
 
     list_of_dicts = []
     for i in range(len(df)):
@@ -97,7 +106,7 @@ if __name__ == "__main__":
     print(list_of_dicts[0])
     print(len(list_of_dicts))
 
-    p = Pool(24)
+    p = Pool(14)
     # list(p.map(infer_stellar_age, list_of_dicts))
     list(p.map(infer_stellar_age, list_of_dicts))
     # p.map(infer_stellar_age, df.iterrows())

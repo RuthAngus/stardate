@@ -8,10 +8,9 @@ Both of these fields require precise and accurate ages for tens to hundreds of
 thousands of stars, however, age is the most difficult stellar property to
 measure.
 The difficulty of age-dating is particularly acute for low mass (GKM) stars on
-the MS: precisely those that comprise the majority of known planet hosts.
+the MS, precisely those that comprise the majority of known planet hosts.
 Using conventional dating methods, uncertainties on the ages of these stars
-can be as large as the age of the Universe, in other words they are completely
-unconstrained.
+can be as large as the age of the Universe.
 The stars eligible for {\it truly} precise age-dating, where age uncertainties
 can be as low as 10\%, are those in nearby open clusters, those with
 observable acoustic oscillations (asteroseismic stars), those just turning off
@@ -25,17 +24,17 @@ The number of planets detected in open clusters, and therefore with precise
 ages, is growing \citep[\eg][]{mann2017, rizzuto2018, vanderburg2018,
 mann2018}, however there are still only a couple of dozen of these discovered
 so far and the total number of detectable planets in clusters is unlikely to
-reach statistical numbers in the near future, if ever.
+reach statistical numbers in the near future.
 In order to study the evolution of planetary systems, a significant number of
 precise ages for cool MS {\it field} stars are needed.
-Neither cluster stars nor asteroseismic stars can currently provide the
-numbers required for exoplanet population studies: age-dating methods for cool
-MS field stars {\it must} be improved before the evolution of planets can be
-explored.
+% Neither cluster stars nor asteroseismic stars can currently provide the
+% numbers required for exoplanet population studies: age-dating methods for cool
+% MS field stars {\it must} be improved before the evolution of planets can be
+% explored.
 
 %   - Why are MS ages harder than red giant ages?
-The spectra and colors of MS stars do not contain a significant amount of age
-information because they do not change rapidly.
+The ages of GKM dwarfs are difficult to measure because their spectra and
+colors of MS stars do not change rapidly.
 This is represented in the spacing of isochrones on a Hertzsprung-Russell (HR)
 or color-magnitude diagram (CMD).
 On the MS, isochrones are tightly spaced and, even with very precise
@@ -43,16 +42,16 @@ measurements of effective temperature and luminosity, the position of a MS
 star on the HR diagram may be consistent with range of isochrones spanning
 several billion years.
 At main sequence turn-off however, isochrones are spread further apart, so
-that sufficiently precisely measured temperatures and luminosities may yield
+that sufficiently precisely measured temperatures and luminosities can yield
 ages that are extremely precise.
 % Typical age uncertainties of dwarfs.
-The classical method for measuring stellar ages is called isochrone placement,
-or isochrone fitting, where surface gravity changes resulting from fusion in
-the core (usually observed via luminosity, $L$, and effective temperature,
-\teff, or absolute magnitude and colour) are compared with a set of models
-that trace stellar evolution across the HR diagram, or CMD.
+The classical method for measuring stellar ages is isochrone placement, or
+isochrone fitting, where surface gravity changes resulting from fusion in the
+core (usually observed via luminosity, $L$, and effective temperature, \teff,
+or absolute magnitude and colour) are compared with a set of models that trace
+stellar evolution across the HR diagram, or CMD.
 Surface gravity changes have been thoroughly mapped with physical models, and
-can be used to calculate relatively accurate (but not necessarily precise)
+can be used to calculate relatively accurate, but not necessarily precise,
 ages, barring some small, $\sim$10\% variations between different models
 \citep[\eg][]{yi2001, dotter2008, dotter2016}.
 Isochronal ages {\it can} be precise for stars turning off the MS, because the
@@ -105,8 +104,8 @@ For example, old \kepler\ asteroseismic stars rotate more rapidly than
 expected given their age \citep[\eg][]{angus2015, vansaders2016}.
 A new physically motivated gyrochronology model, capable of reproducing these
 data, was recently introduced \citep{vansaders2016}.
-It relaxes magnetic breaking at a critical Rossby number of around the Solar
-value, 2.1.
+It relaxes magnetic breaking at a critical Rossby number of around 2,
+approximately the Solar value.
 This model predicts that, after stellar rotation periods lengthen enough to
 move stars cross this $Ro$ threshold, stars stop spinning down and maintain a
 constant rotation period from then until they evolve off the MS.
@@ -141,7 +140,7 @@ understood and currently no physical model can accurately reproduce all the
 data available.
 For this reason, even physically motivated gyrochronology models cannot always
 be used to reliably extrapolate into unexplored parameter space.
-Physical models, when calibrated to data can provide insight into the physics
+Physical models, when calibrated to data. can provide insight into the physics
 of stars however, if accurate and precise {\it prediction} of stellar
 properties is desired, empirical models can have advantages over physical
 ones.
@@ -158,23 +157,43 @@ it can be extremely fast to fit them to data.
 We use a simple, empirical, deterministic gyrochronology model in this work,
 which, like any other gyrochronology model, cannot yet reproduce all the
 observed data.
-Simple modifications could be made to this model to produce
-significant improvements, for example, by including instrinsic scatter and
-outliers, however we leave these improvements for a future project.
+Simple modifications could be made to this model to produce significant
+improvements, for example, by including a mixture model to account for
+outliers and binaries, however we leave these improvements for a future
+project.
 Ultimately, the model we present here will provide a baseline against which
 other gyrochronology models can be compared.
+We also provide a new gyrochoronology {\it Python} package, the first of its
+kind, called \sd\ which accompanies this paper.
+
+% Motivation
+There are several reasons why combining isochrone fitting with gyrochronology
+is more powerful than using either method in isolation.
+Firstly, the two methods are optimal in different parts of the HR diagram:
+gyrochronology works well for FGK dwarfs and isochrone fitting works well for
+subgiants and hot stars, so combining the two methods results in consistently
+precise ages across a range of masses, ages and evolutionary stages.
+Secondly, using both methods at once circumvents the need to decide which
+method to use {\it a priori}.
+It eliminates the circular process of classifying a star based on its CMD
+position (M dwarf, subgiant, etc), then deciding which age-dating method to
+use, then inferring an age which itself depends on the classification that was
+made.
+It is important to infer all stellar properties at once since they all depend
+on each other.
+Thirdly, including a rotation period measurement can actually improve mass and
+metallicity estimates since these properties depend on stellar age.
 
 % Paper outline
 %-----------------------------------------------------------------------------
 This paper is laid out as follows.
-In section \ref{section:motivation} we provide additional motivation for
-combining gyrochronology and isochrone fitting by providing examples based
-on information theory.
+% In section \ref{section:motivation} we provide additional motivation for
+% combining gyrochronology and isochrone fitting by providing examples based
+% on information theory.
 In section \ref{section:method} we describe our new age-dating model and its
 implementation, in section \ref{section:results} we test this model on
-simulated stars, cluster stars and asteroseismic stars, and in section
-\ref{section:discussion} we discuss the implications of these tests and future
-pathways for development.
+simulated stars and cluster stars, and in section \ref{section:discussion} we
+discuss the implications of these tests and future pathways for development.
 Throughout this paper we use the term {\it `observables'} to refer to the
 following observed properties of a star, \teff, \logg, observed bulk
 metallicity ($[\hat{F}]$), parallax ($\bar{\omega}$), photometric
@@ -182,8 +201,8 @@ colors in different passbands (${\bf m_x} = [m_J, m_H, m_K, m_B, m_V, m_G,
 ...]$, etc) and rotation period
 ($P_{\mathrm{rot}}$).
 The term {\it `parameters'} refers to the physical properties of that star:
-age ($A$), mass ($M$), true bulk metallicity ($F$), distance ($D$) and V-band
-extinction ($A_V$).
+age ($A$), equivalent evolutionary point (EEP), true bulk metallicity ($F$),
+distance ($D$) and V-band extinction ($A_V$).
 These are the properties that generate the observables.
 % Equivalent evolutionary point is a proxy for the evolutionary stage of a star,
 % that is computed as part of the MIST isochrone library.

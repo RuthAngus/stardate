@@ -1,15 +1,14 @@
 import os
 import numpy as np
-import pandas as pd
 import h5py
 import tqdm
-from .lhf import lnprob
+from .lhf import lnprob, nll
 from isochrones import StarModel, get_ichrone
-import pandas as pd
 import emcee
+import scipy.optimize as spo
 
 from isochrones.mist import MIST_Isochrone
-bands = ["B", "V", "J", "H", "K"]
+bands = ["B", "V", "J", "H", "K", "BP", "RP", "G"]
 # mist = MIST_Isochrone(bands)
 mist = get_ichrone("mist", bands=bands)
 
@@ -29,9 +28,11 @@ class Star(object):
         prot (float): The rotation period of the star in days.
         prot_err (float): The uncertainty on the stellar rotation period in
             days.
-        bv (Optional[float]): B-V color. In order to infer an age with only
-            gyrochronology, a B-V color must be provided. Only include this if
-            you want to use gyrochronology only!
+        color (Optional[float]): B-V or G_BP - G_RP color.
+            In order to infer an age with only gyrochronology, a B-V color
+            must be provided if using the angus15 model, or a G_BP - G_RP
+            colour if using the praesepe model. Only include this if you want
+            to use gyrochronology only!
         mass (Optional[float]): In order to infer an age with only
             gyrochronology, a mass must be provided (units of Solar masses).
             Only include this if you want to use gyrochronology only!
@@ -42,7 +43,7 @@ class Star(object):
 
     """
 
-    def __init__(self, iso_params, prot=None, prot_err=None, bv=None,
+    def __init__(self, iso_params, prot=None, prot_err=None, color=None,
                  mass=None, savedir=".", filename="samples"):
 
         self.iso_params = iso_params
@@ -50,12 +51,12 @@ class Star(object):
         self.prot_err = prot_err
         self.savedir = savedir
         self.filename = filename
-        self.bv = bv
+        self.color = color
         self.mass = mass
 
-    def fit(self, inits=[355, 9.659, 0., 1000., .01], nwalkers=24,
-            max_n=100000, thin_by=100, burnin=0, iso_only=False,
-            gyro_only=False):
+    def fit(self, inits=[329.58, 9.5596, -.0478, np.exp(5.5629), .0045],
+            nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
+            gyro_only=False, optimize=False, rossby=True, model="angus15"):
         """Run MCMC on a star.
 
         Explore the posterior probability density function of the stellar
@@ -95,7 +96,7 @@ class Star(object):
 
         if gyro_only:
             assert self.mass, "If gyro_only is set to True, you must " \
-                "provide a B-V colour and a mass."
+                "provide a colour and a mass."
 
         if burnin > max_n/thin_by:
             burnin = int(max_n/thin_by/3)
@@ -114,7 +115,7 @@ class Star(object):
         # Don't forget to clear it in case the file already exists
         fn = "{0}/{1}.h5".format(self.savedir, self.filename)
         backend = emcee.backends.HDFBackend(fn)
-        nwalkers, ndim = 24, 5
+        ndim = 5
         backend.reset(nwalkers, ndim)
         self.backend = backend
 
@@ -122,13 +123,35 @@ class Star(object):
         mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
 
         # lnprob arguments
-        args = [mod, self.prot, self.prot_err, self.bv, self.mass, iso_only,
-                gyro_only]
+
+        args = [mod, self.prot, self.prot_err, self.color, self.mass,
+                iso_only, gyro_only, rossby, model]
         self.args = args
 
+        # Optimize. Try a few inits and pick the best.
+        if optimize:
+            neep, nage = 5, 5
+            likes1, likes2 = np.zeros(nage), np.zeros(neep)
+            likes = np.zeros((neep, nage))
+            inds = np.zeros(nage)
+            result_list = np.zeros((neep, nage, 5))
+            EEPS, AGES = np.meshgrid(np.linspace(200, 500, neep),
+                                    np.linspace(7, 10., nage), indexing="ij")
+
+            for i in range(neep):
+                for j in range(nage):
+                    inits = [EEPS[i, j], AGES[i, j], 0., np.log(1000.), .01]
+                    results = spo.minimize(nll, inits, args=args)
+                    likes1[j] = lnprob(results.x, *args)[0]
+                    likes[i, j] = likes1[j]
+                    result_list[i, j, :] = results.x
+                inds[i] = np.argmax(likes1)
+                likes2[i] = max(likes1)
+            eep_ind = np.argmax(likes2)
+            age_ind = int(inds[eep_ind])
+            self.p_init = result_list[eep_ind, age_ind, :]
+
         # Run the MCMC
-        # sampler = run_mcmc(args, p_init, backend, nwalkers=nwalkers,
-        #                    max_n=max_n, thin_by=thin_by)
         sampler = self.run_mcmc()
         self.sampler = sampler
 
@@ -175,7 +198,7 @@ class Star(object):
         # Broader gaussian for EEP initialization
         ndim = len(self.p_init)  # Should always be 5. Hard code it?
         p0 = np.empty((self.nwalkers, ndim))
-        p0[:, 0] = np.random.randn(self.nwalkers)*10 + self.p_init[0]
+        p0[:, 0] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[0]
         p0[:, 1] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[1]
         p0[:, 2] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[2]
         p0[:, 3] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[3]

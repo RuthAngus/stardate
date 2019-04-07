@@ -4,20 +4,23 @@
 \subsection*{Priors}
 \label{section:priors}
 
-We use the default priors in the {\tt isochrones.py} {\it python} package.
-The prior over age is,
+We used the default priors in the {\tt isochrones.py} {\it python} package.
+The prior over age was,
 \begin{equation}
 p(A) = \frac{\log(10) 10^{A}}{10^{10.5} - 10^8}, ~~~ 8 < A < 10.5.
 \end{equation}
 % where $A$, is $\log_{10}(\frac{\mathrm{Age}}{\mathrm{yrs}})$.
 where $A$, is $\log_{10}(\mathrm{Age~[yrs]})$.
-The prior over mass is uniform in natural-log between -20 and 20,
-\begin{equation}
-    p(M) = U(-20, 20)
-\end{equation}
-% where $M$ is $\ln(\frac{\mathrm{mass}}{M_\odot})$.
-where $M$ is $\ln(\mathrm{Mass}~[M_\odot])$.
-The prior over true bulk metallicity is based on the galactic metallicity
+% The prior over mass is uniform in natural-log between -20 and 20,
+% \begin{equation}
+%     p(M) = U(-20, 20)
+% \end{equation}
+% % where $M$ is $\ln(\frac{\mathrm{mass}}{M_\odot})$.
+% where $M$ is $\ln(\mathrm{Mass}~[M_\odot])$.
+The prior over EEP was uniform with an upper limit of 800.
+We found that adding this upper limit reduced some multi-modality caused by
+the giant branch and resulted in better performance.
+The prior over true bulk metallicity was based on the galactic metallicity
 distribution, as inferred using data from the Sloan Digital Sky Survey
 \racomment{citation}.
 % It is based on two double-Gaussian distribution, where the halo is described as
@@ -50,12 +53,12 @@ $\xi$ is the integral of everything in the square brackets from $-\infty$ to
 $\infty$ and takes the value $\sim 2.507$.
 % D_F = 0.8 \sigma_{\mathrm{disk, 1}} = 0.15 \mu_{\mathrm{disk, 1}} = 0.016
 % \sigma_{\mathrm{disk, 2}} = 0.22 \mu_{\mathrm{disk, 2}} = 0.15
-The prior over distance is,
+The prior over distance was,
 \begin{equation}
     p(D) = \frac{3}{3000^3} D^2, ~~~ 0 < D < 3000,
 \end{equation}
-where D is in kiloparsecs.
-Finally, the prior over extinction is uniform between zero and one,
+with D in kiloparsecs, and, finally, the prior over extinction was uniform
+between zero and one,
 \begin{equation}
     p(A_V) = U(0, 1).
 \end{equation}
