@@ -16,7 +16,6 @@ package on its own.
 
 
 import numpy as np
-import pandas as pd
 from isochrones.mist import MIST_Isochrone
 from isochrones import StarModel, get_ichrone
 # mist = MIST_Isochrone(bands)

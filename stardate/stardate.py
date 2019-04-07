@@ -1,11 +1,9 @@
 import os
 import numpy as np
-import pandas as pd
 import h5py
 import tqdm
 from .lhf import lnprob, nll
 from isochrones import StarModel, get_ichrone
-import pandas as pd
 import emcee
 import scipy.optimize as spo
 
