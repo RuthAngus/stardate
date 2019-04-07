@@ -217,6 +217,8 @@ def test_gyro_model():
     """
     prot = gyro_model(np.log10(4.56*1e9), .65)
     assert 24.5 < prot < 27.5
+    prot = gyro_model(np.log10(4.56*1e9, .2))
+    assert prot == 0
 
 
 def test_praesepe_gyro_model():
@@ -285,39 +287,70 @@ def test_praesepe_angus_model():
     mod = StarModel(mist, **iso_params)
     args = [mod, df["prot"], df["prot"]*.01, None, None, False, False,
             True, "angus15"]
-    prob, prior = lnprob(inits, *args)[0]
+    prob, prior = lnprob(inits, *args)
+    assert np.isfinite(prob)
+    assert np.isfinite(prior)
+
+
+def test_on_hot_star():
+    df = pd.read_csv("../../paper/code/data/simulated_data_noisy.csv")
+    i = 21
+    iso_params = dict({"teff": (df.teff.values[i], df.teff_err.values[i]),
+                      "logg": (df.logg.values[i], df.logg_err.values[i]),
+                      "feh": (df.feh.values[i], df.feh_err.values[i]),
+                      "J": (df.jmag.values[i], df.J_err.values[i]),
+                      "H": (df.hmag.values[i], df.H_err.values[i]),
+                      "K": (df.kmag.values[i], df.K_err.values[i]),
+                      "B": (df.B.values[i], df.B_err.values[i]),
+                      "V": (df.V.values[i], df.V_err.values[i]),
+                      "G": (df.G.values[i], df.G_err.values[i]),
+                      "BP": (df.BP.values[i], df.BP_err.values[i]),
+                      "RP": (df.RP.values[i], df.RP_err.values[i]),
+                      "parallax": (df.parallax.values[i],
+                                   df.parallax_err.values[i]),
+                      "maxAV": .1})
+
+    lnparams = [329.58, np.log10(650*1e6), 0., np.log(177), .035]
+    mod = StarModel(mist, **iso_params)
+    args = [mod, df.prot.values[i], df.prot_err.values[i], None, None, False,
+            False, True, "angus15"]
+    prob, prior = lnprob(lnparams, *args)
+    print(prob, prior)
     assert np.isfinite(prob)
     assert np.isfinite(prior)
 
 
 if __name__ == "__main__":
 
-    print("\n Testing gyro model Angus15...")
-    test_praesepe_angus_model()
+    print("\n Testing on hot star")
+    test_on_hot_star()
 
-    print("\nTesting gyro model Rossby...")
-    test_gyro_model_rossby()
+    # print("\n Testing gyro model Angus15...")
+    # test_praesepe_angus_model()
 
-    print("\nTesting praesepe gyro model...")
-    test_gyro_model_praesepe()
+    # print("\nTesting gyro model Rossby...")
+    # test_gyro_model_rossby()
 
-    print("\nTesting age model...")
-    test_age_model()
+    # print("\nTesting praesepe gyro model...")
+    # test_gyro_model_praesepe()
 
-    print("\nTesting sigma...")
-    test_sigma()
+    # print("\nTesting age model...")
+    # test_age_model()
 
-    print("\nTesting B-V calculation...")
-    test_calc_bv()
+    # print("\nTesting sigma...")
+    # test_sigma()
 
-    print("\nTesting likelihood function on the Sun...")
-    test_lnprob_higher_likelihood_sun()
+    # print("\nTesting B-V calculation...")
+    # test_calc_bv()
 
-    print("\nTesting likelihood function on data...")
-    test_lnprob_higher_likelihood_real()
+    # print("\nTesting likelihood function on the Sun...")
+    # test_lnprob_higher_likelihood_sun()
 
-    print("\nTesting convective overturn timescale calculation...")
-    test_convective_overturn_timescale()
+    # print("\nTesting likelihood function on data...")
+    # test_lnprob_higher_likelihood_real()
 
-    # print("\n Test for NaNs")
-    # test_for_nans()
+    # print("\nTesting convective overturn timescale calculation...")
+    # test_convective_overturn_timescale()
+
+    # # print("\n Test for NaNs")
+    # # test_for_nans()
