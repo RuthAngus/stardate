@@ -151,7 +151,7 @@ def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2, rossby=True,
             unmodified.
 
     Returns:
-        The rotation period in days.
+        The log10(rotation period).
     """
 
     # Angus et al. (2015) parameters.
@@ -184,13 +184,19 @@ def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2, rossby=True,
     # If star younger than critical age, predict rotation from age and color.
     if color < 0. and model=="praesepe":
         log_P = 0
-    elif np.isnan(color):
+    elif color < .45 and model=="angus15":
+        log_P = 0
+    elif np.isnan(color) == True:
         log_P = np.nan
 
     if log10_age < log10_age_thresh:
         if model == "angus15":
             age_myr = (10**log10_age)*1e-6
-            log_P = n*np.log10(age_myr) + np.log10(a) + b*np.log10(color-c)
+            if color-c < 0:
+                log_P = 0
+            else:
+                log_P = n*np.log10(age_myr) + np.log10(a) \
+                    + b*np.log10(color-c)
         elif model == "praesepe":
             log_P = gyro_model_praesepe(log10_age, color)
 
