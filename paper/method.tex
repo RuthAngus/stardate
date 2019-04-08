@@ -2,8 +2,8 @@
 \label{section:method}
 
 %   - Introduction
-In this section we describe our combined isochrone fitting and gyrochronology
-model.
+In this section we describe the combined isochrone fitting and gyrochronology
+model implemented in \sd.
 % A common approach to stellar age-dating is to make separate age predictions
 % using separate sets of observables.
 % For example, if a star's rotation period, parallax, and apparent magnitudes in
@@ -19,16 +19,16 @@ Combining information from different models can be relatively simple, as long
 as the processes being modeled; those that generated the data, are
 independent.
 In this case, we are combining information that relates to the burning of
-hydrogen in the core, which translates to CMD position,
+hydrogen in the core, which translates to CMD or HRD position,
 % (this is the process that drives the slow increase in \teff\ and luminosity
 % over time)
 with information about the magnetic braking history of a star (the current
 rotation period).
 We can assume that, to first order, these two processes are independent: the
 hydrogen fraction in the core does not affect a star's rotation period and
-vice versa.  In practise,  we can never be entirely sure that two such
-processes are independent but, at least within the uncertainties, any
-dependence here is unlikely to affect our results.
+vice versa.
+These processes are not truly independent, however any dependence here is
+unlikely to affect our results within the uncertainties.
 If this assumption is valid, the likelihoods calculated using each model can
 be multiplied together.
 
@@ -43,11 +43,12 @@ apparent magnitudes in various bandpasses, \fhat\ is the {\it observed} bulk
 metallicity, \prot\ is the rotation period and \pmega\ is parallax.
 In order to calculate a posterior PDF over age, we must marginalize over
 parameters that relate to age, but are not of interest in this study.
-These parameters include equivalent evolutionary point ($EEP$), which is a
-dimensionless number ranging from around 200 for M dwarfs up to around 500 for
-subgiants and is 355 for the Sun \citep[see][]{dotter2016, choi2016}.
+These parameters include equivalent evolutionary point (which we abbreviate to
+EEP or $E$), which is a dimensionless number ranging from around 200 for M
+dwarfs up to around 500 for subgiants and is 355 for the Sun
+\citep[see][]{dotter2016, choi2016}.
 Stars are defined as subgiants when their EEP exceeds 454.
-Mass can be calculated from EEP, age and metallicity.
+Mass is uniquely defined by EEP, age and metallicity.
 The other parameters are distance ($D$), V-band extinction ($A_V$) and the
 {\it inferred} bulk metallicity, $F$.
 The marginalization involves integrating over these extra parameters,
@@ -57,7 +58,7 @@ The marginalization involves integrating over these extra parameters,
 \\ \nonumber
     & \propto \int p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
     P_\mathrm{rot}, \bar{\omega}|
-    A, EEP, D, A_V, F)~p(A)p(EEP)p(D)p(A_V)p(F)dEEPdDdA_VdF.
+    A, E, D, A_V, F)~p(A)p(E)p(D)p(A_V)p(F)dEdDdA_VdF.
 \end{eqnarray}
 This equation is a form of Bayes' rule,
 \begin{equation} \label{eqn:eqn2}
@@ -66,11 +67,11 @@ This equation is a form of Bayes' rule,
 where the likelihood of the data given the model is,
 \begin{equation} \label{eqn:full_likelihood}
     p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega},
-    P_{\mathrm{rot}}|A, EEP, D, A_V, F),
+    P_{\mathrm{rot}}|A, E, D, A_V, F),
 \end{equation}
 and the prior PDF over parameters is,
 \begin{equation} \label{eqn:prior}
-    p(A)p(EEP)p(D)p(A_V)p(F).
+    p(A)p(E)p(D)p(A_V)p(F).
 \end{equation}
 
 %   - Why iso and gyro are independent.
@@ -85,29 +86,25 @@ where every observable depends on every parameter, our model can be factorized
 as,
 \begin{equation} \label{eqn:factorized}
     p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega}
-    |A, EEP, D, A_V, F, C_{B-V}, M) ~p(P_\mathrm{rot}|A, C_{B-V}, M),
+    |D, A_V, F, A, E, M, C_{B-V}) ~p(P_\mathrm{rot}|A, E, M, C_{B-V}),
 \end{equation}
 where we have introduced two new parameters, $C_{B-V}$, which is the $B-V$
 color that is often used as a mass proxy in the literature and mass itself
-($M$), which is used in our gyrochronology model.
+($M$), which is used in our gyrochronology model to calculate convective
+turnover time and therefore Rossby number.
 The above factorization of the likelihood describes the fact that, in our
-model, rotation period does not depend directly on \teff, distance, etc, but
-on $C_{B-V}$, mass and age.
-It is the EEP, age, metallicity, extinction and distance that determines the
-observed spectroscopic properties (\teff, \logg, \feh) and apparant
-magnitudes, ${\bf m_x}$).
-These parameters also determine the \cbv\ color and mass of a star.
-In turn, it is a star's age \cbv\ color and mass that determine its rotation
-period.
-Written this way, stellar rotation periods do not directly depend
-on stellar mass.
-This likelihood function does not necessarily represent the physical realities
-of stellar evolution, however breaking up the problem this way allows us to
-easily combine isochronology and gyrochronology and infer the joint age of a
-star from all its observables.
-While true that rotation period also depends on EEP and metallicity at some
-level, we assume that these dependencies are weak enough not to significantly
-affect the ages that we infer.
+model, rotation period does not depend directly on distance, extinction or
+metallicity.
+EEP, age, metallicity, extinction and distance determine the observed
+spectroscopic properties (\teff, \logg, \feh) and apparant magnitudes, ${\bf
+m_x}$) as well as the \cbv\ color and mass of a star.
+In turn, it is a star's age, \cbv\ color, mass and EEP that determine its
+rotation period.
+Breaking up the problem this way allows us to easily combine isochronology and
+gyrochronology and infer the joint age of a star from all its observables.
+While true that rotation period also depends on metallicity at some level, we
+assume that this dependency is weak enough not to significantly affect the
+ages that we infer.
 
 % $C_{B-V}$ and $M$ are not measured but {\it inferred}: they are latent
 % parameters.
@@ -153,7 +150,7 @@ The isochronal likelihood function is,
 \begin{eqnarray} \label{eqn:isochrones_only_likelihood}
     & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x}, T_{\mathrm{eff}}, \log(g),
     \hat{F},
-    \bar{\omega}, C_{B-V}|A, \mathrm{EEP}, D,
+    \bar{\omega}, C_{B-V}|A, E, D,
     A_V, F) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}}
     \exp\left( -\frac{1}{2} ({\bf O_I} - {\bf I})^T \Sigma ^{-1}
