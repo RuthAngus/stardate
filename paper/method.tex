@@ -287,6 +287,27 @@ retains its terminal rotation period, $P_\mathrm{max}$, which is the period it
 had as it reached the critical Rossby number of 2 \citep{vansaders2016}.
 The convective overturn time, $\tau$, was estimated using equation 11 of
 \citet{wright2011}.
+Figure \ref{fig:rotation_model} shows the rotation periods of 841
+simulated stars with rotation periods generated from the gyrochronology model.
+\begin{figure}
+  \caption{
+The rotation period model.
+Late F, GK and early M dwarfs follow the \citet{angus2015} gyrochronology
+relation, with the exception of old, slowly rotating stars with large Rossby
+numbers whose rotation periods are fixed at 2$\times$ their convective
+overturn time.
+The rotation periods of early F, late M dwarfs and subgiants were generate
+    from a log-normal distribution with standard deviation shown in figure
+    \ref{fig:variance}.
+The top panel shows the rotation periods vs. B-V colors of simulated stars,
+    colored by their age and the bottom panel shows the same stars colored
+    by their equivalent evolutionary point (EEP).
+    The gray lines describe the \citep{angus2015} gyrochronology model.
+}
+  \centering
+    \includegraphics[width=1.\textwidth]{rotation_model}
+\label{fig:rotation_model}
+\end{figure}
 
 The rotation periods of hot stars, cool stars, subgiants and giants evolve
 differently to FGK and early M dwarfs.
@@ -446,7 +467,7 @@ reached and the change in autocorrelation length over 100 samples was less
 than 0.01, {\it or} the maximum of 100,000 samples was obtained.
 This method is trivially parallelizable, since the inference process for each
 star can be performed on a separate core.
-The age of a single star can be inferred in around one hour on a laptop
+The age of a single star can be inferred in around 10 minutes on a laptop
 computer.
 
 % Although the gyrochronology model described above \citep[equation

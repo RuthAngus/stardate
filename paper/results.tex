@@ -25,11 +25,20 @@ extinctions at random for 1000 stars from the following uniform distributions:
 & D \sim U(10, 1000)~\mathrm{[pc]} \\
 & A_V \sim U(0, 0.1).
 \end{eqnarray}
-\teff, \logg, \fhat, \pmega\, $C_{B-V}$ and apparent magnitudes $J$, $H$, $K$,
-\gaia\ $G$, $G_{BP}$ and $G_{RP}$ were generated, without noise, from these
+\teff, \logg, \fhat, parallax, and apparent magnitudes $B$, $V$, $J$, $H$, $K$,
+\gaia\ $G$, $G_{BP}$ and $G_{RP}$ were generated from these
 stellar parameters using the MIST stellar evolution models.
-We discarded unphysical combinations of stellar parameters, resulting in a
-final sample size of 889 simulated stars.
+We added a small amount of noise to the `observed' stellar properties in order
+to reflect typical observational uncertainties.
+We added Gaussian noise with a standard deviation of 25 K to \teff, 0.01 dex
+to \feh\ and \logg, and 10 mmags to $B$, $V$, $J$, $H$, and $K$ magnitudes.
+The noise added to Gaia $G$-band photometry ranged from
+0.3 mmag for stars brighter than 13th magnitude, to 10 mmag for stars
+around 20th magnitude \citep{evans2017, brown2018}.
+Noise added to \gaia\ $G_{BP}$ and $G_{RP}$ bands ranged from 2 mmag for stars
+brighter than 13th magnitude to 200 mmag for stars fainter than 17th.
+Unphysical combinations of stellar parameters were discarded, resulting in a
+final sample size of 841 simulated stars.
 Figure \ref{fig:CMD_age} shows the position of these stars on an HR diagram
 (with \logg\ on the y-axis instead of luminosity to improve the visibility of
 the MS), colored by their age.
@@ -38,27 +47,29 @@ gyrochronology relation of equation \ref{eqn:gyro}.
 Rotation periods for hot stars, cool stars and subgiants were generated from
 Gaussian distributions (in log), with standard deviation described by the
 three sigmoid functions shown in figure \ref{fig:variance}.
-We took two approaches to inferring the ages of these simulated stars:
-firstly using isochrone fitting {\it only}, and secondly using isochrone
-fitting {\it combined with} a gyrochronology model.
-Since the posterior PDFs of stars are often not unimodal, we found that the
-choice of initial positions of the {\tt emcee} walkers influenced the final
-outcome because walkers occasionally got `stuck' in certain areas of
-parameter space.
-We found that the following set of initial parameters worked well, though not
-perfectly, for FGK dwarfs but sacrificed some accuracy in subgiant ages: EEP =
-330, $A = 9.56$ Gyr, $F = -0.05$, $D = 269$ pc and $A_V = 0.0$.
+Based on the typical uncertainties on rotation periods in the
+\citet{mcquillan2014} catalog, we added Gaussian noise with a standard
+deviation of 1\% to all stellar rotation periods.
 \begin{figure}
   \caption{
-889 simulated stars plotted on an HR diagram and colored by their age.
+The simulated star sample plotted on an HR diagram and colored by age.
 }
   \centering
     \includegraphics[width=1\textwidth]{simulated_CMD}
 \label{fig:CMD_age}
 \end{figure}
 
-
 %   - The results
+We took two approaches to inferring the ages of these simulated stars:
+firstly using isochrone fitting {\it only}, and secondly using isochrone
+fitting {\it combined with} a gyrochronology model.
+Since the posterior PDFs of stars are often not unimodal, we found that the
+choice of initial positions of the {\tt emcee} walkers influenced the final
+outcome because walkers occasionally got `stuck' in certain areas of parameter
+space.
+We found that the following set of initial parameters worked well, though not
+perfectly, for FGK dwarfs but sacrificed some accuracy in subgiant ages: EEP =
+330, $A = 9.56$ Gyr, $F = -0.05$, $D = 269$ pc and $A_V = 0.0$.
 Figure \ref{fig:simulation_results} shows the results of combining
 gyrochronology with isochrone fitting with simulated stars.
 The stars' true ages are plotted against their predicted ages, with \sd\ ages
@@ -130,18 +141,21 @@ Outliers are caused by multimodal posterior PDFs and imperfect MCMC sampling.
 \label{fig:simulation_results}
 \end{figure}
 
-Figure \ref{fig:precision} shows the simulated stars on an HR diagram, where
-points are colored by the relative precision of their predicted ages.
+Figure \ref{fig:precision} shows the simulated stars on an HR diagram, with
+points colored by the relative precision of their predicted ages.
 \logg\ is plotted the y-axis instead of luminosity because the MS spreads out
 more in \teff-\logg\ space and it is easier to differentiate young and old
 stars.
+The top panel shows the precision of ages calculated using both gyrochronology
+and isochrone fitting and the bottom panel shows the precision of ages
+calculated with isochrone fitting only.
 Although these uncertainties are noisy (they are computed from the standard
 deviation of the age posteriors) they show that ages are extremely precise for
 young FGK stars, less precise for old FGK stars and relatively imprecise for
 late M dwarfs.
-Figure \ref{fig:accuracy} shows age error as a function of HR diagram
-position.
-Again, the young MS stands out as an area of extraordinary age accuracy.
+% Figure \ref{fig:accuracy} shows age error as a function of HR diagram
+% position.
+% Again, the young MS stands out as an area of extraordinary age accuracy.
 
 \begin{figure}
   \caption{
@@ -161,15 +175,15 @@ The ages of late M dwarfs are highly imprecise as these stars have not started
 \label{fig:precision}
 \end{figure}
 
-\begin{figure}
-  \caption{
-The sample of simulated stars on an HR diagram, colored by the difference
-    between their true age and their measured age (the age error).
-}
-  \centering
-    \includegraphics[width=1\textwidth]{error_plot}
-\label{fig:accuracy}
-\end{figure}
+% \begin{figure}
+%   \caption{
+% The sample of simulated stars on an HR diagram, colored by the difference
+%     between their true age and their measured age (the age error).
+% }
+%   \centering
+%     \includegraphics[width=1\textwidth]{error_plot}
+% \label{fig:accuracy}
+% \end{figure}
 
 
 % We're cheating here.
@@ -310,8 +324,8 @@ The orange posteriors were obtained for the same stars using isochrone fitting
 Each star was treated as a single field star.
 The blue posteriors are more tightly peaked and clustered around the true age
 of the cluster because rotation periods add age information.
-Combining gyrochronology and isochrone fitting provides more precise ages than
-    isochrone fitting by itself.
+These blue posteriors are not always accurate because they reflect the scatter
+within rotation periods in the Praesepe cluster.
 }
   \centering
     \includegraphics[width=1\textwidth]{praesepe_results}
