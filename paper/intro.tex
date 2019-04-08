@@ -2,20 +2,21 @@
 \label{section:intro}
 
 %   - The need for better stellar ages.
-The formation and evolution of the Milky Way and the planetary systems within
-it are two topics of significant interest in astronomy today.
-Both of these fields require precise and accurate ages for tens to hundreds of
-thousands of stars, however, age is the most difficult stellar property to
-measure.
-The difficulty of age-dating is particularly acute for low mass (GKM) stars on
-the MS, precisely those that comprise the majority of known planet hosts.
+% The formation and evolution of the Milky Way and the planetary systems within
+% it are two topics of significant interest in astronomy today.
+% Both of these fields require precise and accurate ages for tens to hundreds of
+% thousands of stars, however, age is the most difficult stellar property to
+% measure.
+Age is the most difficult stellar property to measure, and the difficulty of
+age-dating is particularly acute for low mass (GKM) stars on the MS.
+These are precisely the stars that comprise the majority of known planet
+hosts.
 Using conventional dating methods, uncertainties on the ages of these stars
 can be as large as the age of the Universe.
-The stars eligible for {\it truly} precise age-dating, where age uncertainties
+The stars eligible for extremely precise age-dating, where age uncertainties
 can be as low as 10\%, are those in nearby open clusters, those with
 observable acoustic oscillations (asteroseismic stars), those just turning off
-the MS, and the Sun
-\citep[see][for a review of stellar ages]{soderblom2010}.
+the MS, and the Sun \citep[see][for a review of stellar ages]{soderblom2010}.
 There are only a few tens of cool, MS stars with precise ages that are
 suitable for exoplanet population studies, however {\it tens-of-thousands} of
 precise ages are needed to study the evolution of planetary systems
@@ -26,7 +27,7 @@ mann2018}, however there are still only a couple of dozen of these discovered
 so far and the total number of detectable planets in clusters is unlikely to
 reach statistical numbers in the near future.
 In order to study the evolution of planetary systems, a significant number of
-precise ages for cool MS {\it field} stars are needed.
+precise ages for cool MS {\it field} stars is needed.
 % Neither cluster stars nor asteroseismic stars can currently provide the
 % numbers required for exoplanet population studies: age-dating methods for cool
 % MS field stars {\it must} be improved before the evolution of planets can be
@@ -34,7 +35,7 @@ precise ages for cool MS {\it field} stars are needed.
 
 %   - Why are MS ages harder than red giant ages?
 The ages of GKM dwarfs are difficult to measure because their spectra and
-colors of MS stars do not change rapidly.
+colors do not change rapidly.
 This is represented in the spacing of isochrones on a Hertzsprung-Russell (HR)
 or color-magnitude diagram (CMD).
 On the MS, isochrones are tightly spaced and, even with very precise
@@ -52,8 +53,8 @@ or absolute magnitude and colour) are compared with a set of models that trace
 stellar evolution across the HR diagram, or CMD.
 Surface gravity changes have been thoroughly mapped with physical models, and
 can be used to calculate relatively accurate, but not necessarily precise,
-ages, barring some small, $\sim$10\% variations between different models
-\citep[\eg][]{yi2001, dotter2008, dotter2016}.
+ages \citep[barring some small, $\sim$10\% variations between different
+models, \eg][]{yi2001, dotter2008, dotter2016}.
 Isochronal ages {\it can} be precise for stars turning off the MS, because the
 rate of change in brightness and temperature is large during this phase of
 stellar evolution.
@@ -61,7 +62,7 @@ However, on the MS itself, there is little differentiation between stars of
 different ages in the $L$ and \teff\ plane, so ages tend to be very imprecise.
 The method of inferring a star's age from its rotation period, called
 `gyrochronology', is much better suited for measuring ages on the MS because
-MS, stars spin down relatively rapidly.
+MS stars spin down relatively rapidly.
 
 %   - How does gyrochronology work?
 Magnetic braking in MS stars was first observed by \citet{skumanich1972} who,
@@ -101,7 +102,7 @@ rotational evolution goes through a transition at old age or, more
 specifically, at a large Rossby number, $Ro$ (the ratio of rotation period to
 the convective overturn timescale).
 For example, old \kepler\ asteroseismic stars rotate more rapidly than
-expected given their age \citep[\eg][]{angus2015, vansaders2016}.
+expected given their age \citep{angus2015, vansaders2016}.
 A new physically motivated gyrochronology model, capable of reproducing these
 data, was recently introduced \citep{vansaders2016}.
 It relaxes magnetic breaking at a critical Rossby number of around 2,
@@ -109,39 +110,42 @@ approximately the Solar value.
 This model predicts that, after stellar rotation periods lengthen enough to
 move stars cross this $Ro$ threshold, stars stop spinning down and maintain a
 constant rotation period from then until they evolve off the MS.
-The implication is that the ages of stars with $Ro >$ 2.1 cannot be measured
-from their rotation periods.
+As demonstrated in section \ref{section:results} however, this does not mean
+that the ages of stars with Ro $>$ 2 cannot be measured from their rotation
+periods, especially if their rotation periods are combined with HR diagram or
+CMD placement.
+% this does not mean
+% that the rotation periods of these stars are no longer age-informative.
 
 %   - Describe the project presented here.
 The gyrochronology models that capture post $Ro$-threshold, rotational
 evolution \citep{vansaders2016} are the current state-of-the-art in rotation
 dating.
-These models are expensive to compute and, just as with most isochrones and
-stellar evolution tracks, are usually pre-computed over a grid of stellar
-parameters, then interpolation is used to predict the age of a star.
+These models can be computed over a grid of stellar parameters, and
+interpolated over to predict the age of a star.
 The process of measuring a stellar age with these models is similar to
-inferring an age using any set of isochrones, with the main difference being
-that rotation period is an additional dimension.
+inferring an age using any set of isochrones, with difference that rotation
+period is an additional observable dimension.
 Ages calculated using these models are therefore likely to be much more
 precise than using rotation-free isochrones since rotation period provides an
 additional anchor-point for the age of a star.
 We present here a complementary method that combines isochrones with an {\it
 empirical} gyrochronology model using a Bayesian framework.
-The methodology is related to the models described above \citep{vansaders2016}
-in that both use a combination of rotation periods and other observable
-properties that track stellar evolution on the HR diagram in concert.
+The methodology is related to the \citet{vansaders2016} model in that both use
+a combination of rotation periods and other observable properties that track
+stellar evolution on the HR diagram in concert.
 The main difference is that the gyrochronology model used here is an entirely
 empirically calibrated one, as opposed to a physically derived one.
-One major advantage of using a physically motivated gyrochronology model over
-an empirically calibrated one is the ability to rely on physics to interpolate
-or extrapolate over parts of parameter space with sparse data coverage.
+One major advantage of using a physically motivated gyrochronology model is
+the ability to rely on physics to interpolate or extrapolate over parts of
+parameter space with sparse data coverage.
 However, rotational spin-down is a complex process that is not yet fully
 understood and currently no physical model can accurately reproduce all the
 data available.
 For this reason, even physically motivated gyrochronology models cannot always
 be used to reliably extrapolate into unexplored parameter space.
-Physical models, when calibrated to data. can provide insight into the physics
-of stars however, if accurate and precise {\it prediction} of stellar
+Physical models, when calibrated to data, can provide insight into the physics
+of stars, however, if accurate and precise {\it prediction} of stellar
 properties is desired, empirical models can have advantages over physical
 ones.
 For example, the data may reveal complex trends that cannot be reproduced with
@@ -150,39 +154,27 @@ captured by more flexible data-driven models.
 In addition, it is relatively straightforward to build an element of
 stochasticity into empirical models, \ie\ to allow for and incorporate
 outliers or noisy trends.
-This may be particularly important for stellar spin down, which does not
-always seem to behave predictably.
+This is particularly important for stellar spin down, which does not always
+behave deterministically.
 A further advantage of empirical models is that inference is more tractable:
 it can be extremely fast to fit them to data.
-We use a simple, empirical, deterministic gyrochronology model in this work,
-which, like any other gyrochronology model, cannot yet reproduce all the
-observed data.
-Simple modifications could be made to this model to produce significant
-improvements, for example, by including a mixture model to account for
-outliers and binaries, however we leave these improvements for a future
-project.
-Ultimately, the model we present here will provide a baseline against which
-other gyrochronology models can be compared.
-We also provide a new gyrochoronology {\it Python} package, the first of its
-kind, called \sd\ which accompanies this paper.
-
-% Motivation
-There are several reasons why combining isochrone fitting with gyrochronology
-is more powerful than using either method in isolation.
-Firstly, the two methods are optimal in different parts of the HR diagram:
-gyrochronology works well for FGK dwarfs and isochrone fitting works well for
-subgiants and hot stars, so combining the two methods results in consistently
-precise ages across a range of masses, ages and evolutionary stages.
-Secondly, using both methods at once circumvents the need to decide which
-method to use {\it a priori}.
-It eliminates the circular process of classifying a star based on its CMD
-position (M dwarf, subgiant, etc), then deciding which age-dating method to
-use, then inferring an age which itself depends on the classification that was
-made.
-It is important to infer all stellar properties at once since they all depend
-on each other.
-Thirdly, including a rotation period measurement can actually improve mass and
-metallicity estimates since these properties depend on stellar age.
+We used the simple, empirical, power-law gyrochronology model from
+\citet{angus2015} in this work.
+This model is a recalibration of the model first proposed by
+\citet{barnes2003}, and later recalibrated by \citet{mamajek2008}.
+We adapted the \citet{angus2015} model to include the weakened magnetic
+braking proposed by \citet{vansaders2016}.
+Like any other gyrochronology model, this model cannot reproduce all the
+observed data and some simple modifications could be made to produce
+significant improvements, for example, by including a mixture model to account
+for outliers and binaries, and adding another power law to model the late M
+dwarfs.
+We leave these improvements for a future project and, for now, test the
+\citet{angus2015} which is built into a new open source {\it Python} package
+for gyrochronology, called \sd.
+\sd\ provides the framework for simultaneous gyrochronology and isochrone
+fitting and, \sd\ it is modular, it would straightforward to update the
+gyrochronology relation in future.
 
 % Paper outline
 %-----------------------------------------------------------------------------
