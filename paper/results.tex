@@ -3,16 +3,16 @@
 
 In order to demonstrate the performance of our method, we conducted two sets
 of tests.
-In the first we simulated a set of observables from a set fundamental
-parameters for a few hundred stars using the MIST stellar evolution models and
-a gyrochronology model, then compared the parameters predicted with our model
-to the true parameters used to generate the data.
+In the first we simulated observables from a set of stellar parameters for a
+few hundred stars using the MIST stellar evolution models, the gyrochronology
+model of equation \ref{eqn:gyro}, then compared the ages predicted with
+our model to the true parameters used to generate the data.
 In the second we tested our model by measuring the ages of individual stars in
 the Praesepe open cluster.
-The age of Praesepe has been measured precisely because it is an ensemble of
-coeval stars with the same metallicity: a single stellar poplulation, and its
-age can be precisely established through isochrone fitting and MS turn-off.
-We adopted an age of 650 Myrs for Praesepe \citep{fossati2008}.
+% The age of Praesepe has been measured precisely because it is an ensemble of
+% coeval stars with the same metallicity: a single stellar poplulation, and its
+% age can be precisely established through isochrone fitting and MS turn-off.
+% We adopted an age of 650 Myrs for Praesepe \citep{fossati2008}.
 
 \subsection{Test 1: simulated stars}
 For the first test we drew masses, ages, bulk metallicities, distances and
@@ -52,7 +52,13 @@ Based on the typical uncertainties on rotation periods in the
 deviation of 1\% to all stellar rotation periods.
 \begin{figure}
   \caption{
-The simulated star sample plotted on an HR diagram and colored by age.
+      The simulated star sample plotted on an HR diagram, colored by age
+    (top panel) and rotation period (bottom panel).
+    HRD positions were calculated using MIST isochrones via the {\tt
+    isochrones.py} {\it Python} package and rotation periods were generated
+    using equation \ref{eqn:gyro}.
+    This figure was generated in a Jupyter notebook available at
+    \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Simulate_data.ipynb}
 }
   \centering
     \includegraphics[width=1\textwidth]{simulated_CMD}
@@ -62,11 +68,10 @@ The simulated star sample plotted on an HR diagram and colored by age.
 %   - The results
 We took two approaches to inferring the ages of these simulated stars:
 firstly using isochrone fitting {\it only}, and secondly using isochrone
-fitting {\it combined with} a gyrochronology model.
+fitting {\it combined with} a gyrochronology model (\sd).
 Since the posterior PDFs of stars are often not unimodal, we found that the
 choice of initial positions of the {\tt emcee} walkers influenced the final
-outcome because walkers occasionally got `stuck' in certain areas of parameter
-space.
+outcome because walkers occasionally got stuck in local minima.
 We found that the following set of initial parameters worked well, though not
 perfectly, for FGK dwarfs but sacrificed some accuracy in subgiant ages: EEP =
 330, $A = 9.56$ Gyr, $F = -0.05$, $D = 269$ pc and $A_V = 0.0$.
@@ -83,44 +88,45 @@ hot stars ($B-V < 0.45$), cool stars ($B-V > 1.4$) and evolved stars (EEP $>$
 As expected, the low $Ro$, FGK stars show the most drastic improvement in age
 precision.
 The median empirical age precision, the standard deviation of age posteriors
-as a percentage of age, was around 3\% for this group and the median relative
+as a percentage of age, was around 5\% for this group and the median relative
 error, defined as the absolute difference between the true and age the
-inferred age, as a percentage of the true age, was less than 1\%.
+inferred age, as a percentage of the true age, was less than 2\%.
 The median error: the absolute difference between true and measured age was
-30 Myrs.
+around 100 Myrs.
 In contrast, the median empirical precision of ages measured using only
-isochrone fitting was 49\% and the median error was 1.3 Gyr or 30\%.
+isochrone fitting was 50\% and the median error was 1.3 Gyr in absolute units,
+or 30\%.
 Ages measured for FGK stars by combining gyrochronology and isochrone fitting
-with \sd\ were 50 times more accurate than ages measured with isochrone
-fitting.
+with \sd\ were 10 times more accurate and precise than ages measured with
+isochrone fitting.
 Even though the group of old FGK stars with large Rossby numbers have stopped
 magnetic braking, their rotation periods are still age-informative and
 relatively precise ages were measured for these stars with \sd.
-The median age precision for this group was 8\% and 22\% and the median age
-error was 300 Myr/3\% and 1.3 Gyr/16\% for ages measured with \sd\ and
-isochrone fitting respectively.
-Ages measured with \sd\ were over 4 times more accurate than ages measured
-with isochrone fitting only, so although these stars have stopped spinning
-down, their rotation periods are still highly age informative when paired with
-stellar evolution models.
-The median accuracy of hot star ages was marginally decreased with \sd,
-relative to isochrone fitting only (from a median error of 510 Myr to 560 Myr)
-because of issues with sampling the posterior PDFs.
-Adding gyrochronology to the age model creates a more multimodal posterior PDF
-which makes sampling more difficult, leading to some highly inaccurate age
-measurements at very high and very low ages.
-The precision and accuracy of cool star and subgiant ages was relatively
-consistent for ages measured with stardate and ages measured with isochrone
+The median age precision for this group was 10\% with \sd\ and 22\% with
+isochrone fitting.
+The median age error was 500 Myr/5\% with \sd\ and 1.3 Gyr/16\% with isochrone
+fitting.
+Ages measured with \sd\ were around twice more accurate and precise than ages
+measured with isochrone fitting only, so although these stars have stopped
+spinning down, their rotation periods are still age-informative when paired
+with stellar evolution models.
+% The median accuracy of hot star ages stayed roughly constant with \sd,
+% relative to isochrone fitting only (from a median error of 510 Myr to 560 Myr)
+% because of issues with sampling the posterior PDFs.
+% Adding gyrochronology to the age model creates a more multimodal posterior PDF
+% which makes sampling more difficult, leading to some highly inaccurate age
+% measurements at very high and very low ages.
+There was little difference in the precision and accuracy of cool star, hot
+star and subgiant ages measured with \sd\ vs. isochrone
 fitting only.
-This is expected because the rotation periods of these stars do not contain
-information about stellar ages.
-For the whole sample, combining gyrochronology and isochrone fitting results
-an overall age precision of 10\% (down from 28\% for isochrone fitting only),
-a median error of 340 Myrs (down from 1.3 Gyrs), and a relative error of 4\%
-(down from 23 \%).
-The ages of {\it all} FGKM dwarfs and subgiants are 3$\times$ more precise and
-6$\times$ more accurate, on average, when their rotation periods are used to
-infer their ages.
+% This is expected because the rotation periods of these stars do not contain
+% information about stellar ages.
+For the whole sample, an overall median age precision of 10\% was provided by
+\sd\ (down from 28\% for isochrone fitting only), a median absolute error of
+500 Myrs (down from 1.3 Gyrs), and a relative error of 7\% (down from 23 \%).
+On average, the ages of {\it all} FGKM dwarfs and subgiants were 3$\times$
+more precise and accurate when their rotation periods are used to infer their
+ages.
 
 \begin{figure}
   \caption{
@@ -130,7 +136,8 @@ The true vs. predicted ages of stars.
     isochrone fitting only are shown in gray.
 The five panels show the results for five different groups of stars: low $Ro$
 late F, GK and early M dwarfs, high $Ro$ late F, GK and early M dwarfs, early
-    F stars (B-V $<$ 0.45), late M dwarfs (B-V > 1.4) and subgiants (EEP > 454.
+    F stars (B-V $<$ 0.45), late M dwarfs (B-V $>$ 1.4) and subgiants
+    (EEP $>$ 454).
 Gyrochronology is highly effective for low $Ro$ late F, GK and early M dwarfs
 and somewhat effective for high $Ro$ late F, GK and early M dwarfs.
 It does not significantly improve ages for other groups of stars.
@@ -159,16 +166,22 @@ late M dwarfs.
 
 \begin{figure}
   \caption{
-Simulated stars on an HR diagram, colored by the standard deviation of their
-    age posterior PDFs, as a percentage of their ages.
-Gyrochronology is responsible for the high precision of ages measured for
-    young FGK stars (stars in the upper left panel of figure
-    \ref{fig:simulation_results}.
-The ages of old FGK stars with $Ro > $2 are slightly less precise as these
-    stars have stopped spinning down and their rotation periods are not
-    information-rich.
-The ages of late M dwarfs are highly imprecise as these stars have not started
-    spinning down.
+Simulated stars on an HR diagram, colored by their relative age precision
+    using \sd\ (top panel) and isochrone fitting only (bottom panel).
+Using gyrochronology combined with isochrone fitting significantly improves
+    stellar age precision on the MS.
+% Gyrochronology is responsible for the high precision of ages measured for
+%     young FGK stars (stars in the upper left panel of figure
+%     \ref{fig:simulation_results}.
+% The ages of old FGK stars with $Ro > $2 are slightly less precise as these
+%     stars have stopped spinning down and their rotation periods are not
+%     information-rich.
+Isochrone fitting provides precise ages for hot stars and subgiants and the
+    rotation periods of these stars are relatively uninformative, so
+    gyrochronology does not significantly improve their age precision.
+The ages of late M dwarfs are highly imprecise because their ages are not well
+    determined by either their rotation periods or their position on the HR
+    diagram or CMD.
 }
   \centering
     \includegraphics[width=1\textwidth]{precision_plot}
@@ -191,22 +204,25 @@ The ages of late M dwarfs are highly imprecise as these stars have not started
 % rotation periods only, and this illustrates why the combination of isochronal
 % and gyrochronal ages is so precise: almost all this precision comes from
 % rotation periods.
-This simulation experiment is unrealistic for two main reasons: firstly, we
-simulated data from the same gyrochronology model we used to infer ages and so
-the results for FGK dwarfs are extremely accurate by design.
-Secondly, we simulated data without any noise or any additional instrinsic
-scatter for FGK dwarfs, resulting in ages with better precision than can be
-expected for real stars.
-Inaccuracies would arise if the gyrochronology model was incorrect or poorly
-calibrated in some areas of parameter space and imprecision would arise if
-excess intrinsic scatter were built into the gyrochronology model and/or the
-observations.
+This simulation experiment is optimistic because data were simulated from the
+same gyrochronology model used to infer ages, so the results for FGK dwarfs
+are extremely accurate by design.
+% Secondly, we simulated data without any noise or any additional instrinsic
+% scatter for FGK dwarfs, resulting in ages with better precision than can be
+% expected for real stars.
+% Inaccuracies would arise if the gyrochronology model was incorrect or poorly
+% calibrated in some areas of parameter space and additional imprecision would
+% arise if excess intrinsic scatter were built into the gyrochronology model
+% and/or the observations.
+\sd\ can provide precise ages with the caveat that the currently implemented
+gyrochronology model is not perfectly calibrated and ages will only be as
+accurate as the model.
 We leave the recalibration of gyrochronology models for a future exercise
-since, in this work, we are mostly interested in testing the results of
+since, in this work, we were mostly interested in testing the results of
 combining existing gyrochronology relations with isochrone fitting.
-The above experiment demonstrates that building gyrochronology into stellar
-evolution models results in much more precise age predictions, as predicted by
-information theory.
+% The above experiment demonstrates that building gyrochronology into stellar
+% evolution models results in much more precise age predictions, as predicted by
+% information theory.
 
 % TEST 2: Clusters
 %-----------------------------------------------------------------------------
@@ -242,14 +258,29 @@ https://github.com/RuthAngus/stardate/blob/master/paper/code/Praesepe.ipynb}}.
 % because these stars usually do not follow a simple gyrochronology relation.
 % We also excluded late M dwarfs because their rotation periods do not provide a
 % strong prediction of their age.
-Figure \ref{fig:praesepe} shows the rotation periods of Praesepe members as
-a function of their \gaia\ \gcolor\ colors.
-FGK and early M stars, that lie tightly on the Praesepe isochrone and do not
-show excess luminosity suggestive of being a binary are shown as solid blue
-points.
-We only applied \sd\ to these stars because the purpose of this test was to
-demonstrate that it can predict accurate ages for stars that fall on the
-gyrochronology relation.
+Figure \ref{fig:praesepe} shows the rotation periods of Praesepe members as a
+function of their \gaia\ \gcolor\ colors with the gyrochronology relation of
+equation \ref{eqn:gyro}.
+This relation clearly does not provide a good fit to the Praesepe cluster.
+This is because the relation was calibrated using a number of clusters, and
+the model represents a combination of the different clusters' period-color
+relations.
+In addition, the model does not described the M dwarfs well because these
+Praesepe rotation periods were measured from \ktwo\ light curves
+\citep{douglas2017}, published after this gyrochronology relation was
+calibrated \citet{angus2015}.
+The rotational behaviour of M dwarfs observed in this cluster has not yet been
+incorporated into gyrochronology models.
+Finally, there are several outliers: stars with rotation periods much higher
+or lower than the majority of data points.
+Some of these outliers have excess luminosity which is suggestive of binarity
+and others are likely to be lower mass-ratio binaries (Douglas \etal, in prep).
+% FGK and early M stars, that lie tightly on the Praesepe isochrone and do not
+% show excess luminosity suggestive of being a binary are shown as solid blue
+% points.
+% We only applied \sd\ to these stars because the purpose of this test was to
+% demonstrate that it can predict accurate ages for stars that fall on the
+% gyrochronology relation.
 \sd\ is not designed to predict precise ages for binary stars or other
 outliers.
 % The late F, GK and early M dwarfs (\gcolor\ $<$ 2.4) which fall on a `rotational main
@@ -261,15 +292,19 @@ outliers.
 % included more massive outliers (orange circles with \gcolor\ $<$ 2.4) in order
 % to provide a complete picture of the precision and accuracy of gyrochronology
 % applied to Praesepe.
+
 Figure \ref{fig:praesepe} shows the posterior PDFs over age for the FGK and
-early M dwarf members of the praesepe cluster, calculated using \sd, compared
-with ages calculated using isochrone fitting (where each star was treated as a
-field star).
-The orange curves show the \sd\ posteriors and the blue curves show the
-isochrone-only posteriors.
+early M dwarf members of the praesepe cluster where each star was treated as a
+field star.
+Age posteriors calculated with \sd\ are shown in blue and, for comparison, age
+posteriors calculated using isochrone fitting only are shown in orange.
 The blue PDFs are more tightly clustered around the established age of
-Praesepe ($\sim650$Myrs) than the orange PDFs because rotation periods were
-included in the age inference process.
+Praesepe ($\sim650$Myrs) than the orange PDFs because rotation periods are
+extremely age-informative for these stars.
+However, the accuracy of these ages is limited because of the limited accuracy
+of the gyrochronology model \ref{eqn:gyro}.
+Until the gyrochronology model is improved, ages calculated with \sd should be
+interpreted with caution.
 
 % Figure \ref{fig:praesepe} shows two sets of gyrochronology models: one
 % calibrated using several open clusters, asteroseismic stars and the Sun
