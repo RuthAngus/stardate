@@ -83,8 +83,9 @@ grey.
 The five panels show the results for five different types of stars: late F, GK
 and early M dwarfs which are still undergoing magnetic braking (Ro $<$ 2),
 late F, GK and early M dwarfs that have ceased magnetic braking (Ro $>$ 2),
-hot stars ($B-V < 0.45$), cool stars ($B-V > 1.4$) and evolved stars (EEP $>$
-454).
+% hot stars ($B-V < 0.45$), cool stars ($B-V > 1.4$) and evolved stars (EEP $>$
+hot stars (\gcolor\ $<$ 1.8), cool stars (\gcolor\ $>$ 2.5) and evolved stars
+(EEP $>$ 454).
 As expected, the low $Ro$, FGK stars show the most drastic improvement in age
 precision.
 The median empirical age precision, the standard deviation of age posteriors
@@ -136,7 +137,8 @@ The true vs. predicted ages of stars.
     isochrone fitting only are shown in gray.
 The five panels show the results for five different groups of stars: low $Ro$
 late F, GK and early M dwarfs, high $Ro$ late F, GK and early M dwarfs, early
-    F stars (B-V $<$ 0.45), late M dwarfs (B-V $>$ 1.4) and subgiants
+    % F stars (B-V $<$ 0.45), late M dwarfs (B-V $>$ 1.4) and subgiants
+    F stars (\gcolor\ $<$ 1.8), late M dwarfs (\gcolor\ $>$ 2.5) and subgiants
     (EEP $>$ 454).
 Gyrochronology is highly effective for low $Ro$ late F, GK and early M dwarfs
 and somewhat effective for high $Ro$ late F, GK and early M dwarfs.
@@ -292,10 +294,27 @@ outliers.
 % included more massive outliers (orange circles with \gcolor\ $<$ 2.4) in order
 % to provide a complete picture of the precision and accuracy of gyrochronology
 % applied to Praesepe.
+\begin{figure}
+  \caption{
+    The rotation periods of Praesepe members \citep{douglas2016},
+    vs. their \Gaia\ colors (\gcolor) with a broken power law model fit to
+    Praesepe.
+    Shaded regions show the 1$\sigma$ range of the stochastic rotation period
+    model for M dwarfs and hot stars.
+    The rotation periods of these stars are modelled as a broad Gaussian.
+    This model does not perfectly represent Praesepe because it does not
+    account for outliers.
+    This figure was generated in a Jupyter notebook available at this
+    url:\url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fitting_Praesepe.ipynb}
+}
+  \centering
+    \includegraphics[width=1\textwidth]{Praesepe.pdf}
+\label{fig:praesepe}
+\end{figure}
 
-Figure \ref{fig:praesepe} shows the posterior PDFs over age for the FGK and
-early M dwarf members of the praesepe cluster where each star was treated as a
-field star.
+Figure \ref{fig:praesepe_results} shows the posterior PDFs over age for the
+FGK and early M dwarf members of the praesepe cluster where each star was
+treated as a field star.
 Age posteriors calculated with \sd\ are shown in blue and, for comparison, age
 posteriors calculated using isochrone fitting only are shown in orange.
 The blue PDFs are more tightly clustered around the established age of
@@ -364,7 +383,7 @@ within rotation periods in the Praesepe cluster.
 }
   \centering
     \includegraphics[width=1\textwidth]{praesepe_results}
-\label{fig:praesepe}
+\label{fig:praesepe_results}
 \end{figure}
 
 % % Cutting outliers and limiting color range.
@@ -529,41 +548,6 @@ precision of age measurements increase significantly.
 % \label{fig:clusters}
 % \end{figure}
 
-% \begin{figure}
-%   \caption{
-%     The rotation periods of Praesepe members \citep{douglas2016}, plotted
-%     against their \Gaia\ colors (\gcolor) in logarithmic space.
-%     GK and early M dwarfs (\gcolor\ $<$ 2.4), shown as blue points fall on a
-%     `rotational main sequence' whereas the rotation periods of late M dwarfs
-%     (2.4 $<$ \gcolor), shown as orange open circles
-%     are noisy and not strongly predicted by their age and color.
-%     We excluded late M dwarfs from our age analysis of Praesepe stars.
-%     We excluded outliers at earlier spectral types, also shown as open orange
-%     circles at colors less than 2.4, to perform the polynomial fit to Praesepe
-%     described in section \ref{section:motivation} (resulting in the black
-%     dashed line) but included these outliers when inferring the ages of
-%     Praesepe stars in section \ref{section:results}.
-%     The early-type outliers were identified via sigma-clipping at
-%     4.5$\sigma$.
-%     The black-dashed model was used to calculate the Fisher information shown
-%     in figures \ref{fig:iso_fisher} and \ref{fig:gyro_fisher}.
-%     The solid gray lines show gyrochrones that were calibrated using the
-%     Hyades, Coma Berenices and Pleiades clusters, as well as the Sun and
-%     \kepler\ asteroseismic stars \citep{angus2015}, and used to predict the
-%     ages of Praesepe stars, shown in figure \ref{fig:cluster_ages}.
-%     This model does not provide a perfect fit to Praesepe (Praesepe was not
-%     used to calibrate it),
-%     particularly for the hottest and coolest stars,
-%     however this is the current gyrochronology model implemented in our joint
-%     isochrone fitting and gyrochronology model.
-%     This figure was generated in a {\it Jupyter} notebook available at this
-%     url:
-% https://github.com/RuthAngus/stardate/blob/master/paper/code/Praesepe.ipynb
-% }
-%   \centering
-%     \includegraphics[width=1\textwidth]{with_angus_gyrochrones.pdf}
-% \label{fig:praesepe}
-% \end{figure}
 
 % \begin{figure}
 %   \caption{
