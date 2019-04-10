@@ -1,6 +1,201 @@
 \section{Method}
 \label{section:method}
 
+We fit a broken power law to the Praesepe cluster in order to calibrate a new
+gyrochronology relation that takes advantage of new data available from the
+\ktwo\ mission.
+Praesepe is the ideal cluster to calibrate a gyrochronology relation to
+because it has the largest number of members with precisely measured rotation
+periods over a large range of colors.
+Although this model is not perfect because  it does not describe the rotation
+period of every star, it provides a much better representation of rotational
+evolution than previous models such as the \citet{angus2015} model (as shown
+in figure \ref{fig:praesepe}).
+\begin{figure}
+  \caption{
+    The rotation periods of Praesepe members \citep{douglas2016},
+    vs. their \Gaia\ colors (\gcolor) with a broken power law model fit to
+    these data.
+    Shaded regions show the 1$\sigma$ range of the log-normal rotation period
+    model used for M dwarfs and hot stars: the rotation periods of these stars
+    were modelled as a broad Gaussian.
+    This model does not perfectly represent Praesepe because it does not
+    account for outliers.
+    This figure was generated in a Jupyter notebook available at
+    \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fitting_Praesepe.ipynb}
+}
+  \centering
+    \includegraphics[width=1.1\textwidth]{Praesepe.pdf}
+\label{fig:praesepe}
+\end{figure}
+We removed rotational outliers bluer than \gcolor\ = 2.7 from the
+Praesepe cluster and fit a 5th-order polynomial to the remaining FGK and
+early M stars.
+We also fit a straight to the late M dwarfs (\gcolor\ $>$ 2.7).
+We fit a separable straight line function to the period-age relation using
+the ages of Praesepe and the Sun\footnote{The fitting process was
+performed in a Jupyter notebook available at
+\url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fitting_Praesepe.ipynb}.}.
+This new Praesepe-calibrated gyrochronology relation was,
+\begin{equation}
+    \log_{10}(P_{rot}) = f(A)g(C) \nonumber
+\end{equation}
+\begin{equation}
+    = 0.65\log_{10}A -38.96 + 28.71C -4.92C^2 + 0.72C^3 -4.72C^4
+\end{equation}
+where C is $\log_{10}(G_{BP}-G_{RP})$, for stars with \gcolor\ $<$ 2.7 and
+\begin{equation}
+    \log_{10}(P_{rot}) = f(A)h(C) \nonumber
+\end{equation}
+\begin{equation}
+     = 0.65\log_{10}(A) -13.56 + 0.94C,
+\end{equation}
+for stars with \gcolor\ $>$ 2.7.
+
+We used the following composite gyrochronology model to infer ages from
+rotation periods,
+\begin{equation}
+    \log_{10}(P_\mathrm{rot}) \sim \begin{cases}
+        \mathcal{N}\left(f(A)g(C), [\sigma_P+f(E, G_{BP} - G_{RP})^2]\right), & Ro < 2,
+        G_{BP} - G_{RP} < 2.7 \\
+        \mathcal{N}(f(A)h(C), [\sigma_P+f(E, G_{BP} - G_{RP})^2]), & Ro < 2,
+        G_{BP} - G_{RP} > 2.7 \\
+        \mathcal{N}(\log_{10}(P_\mathrm{max}), [\sigma_P+f(E, G_{BP} - G_{RP})^2]),& Ro \geq 2 \\
+        \mathcal{N}(0, [\sigma_P+f(E, G_{BP}-G_{RP})^2]),& G_{BP} - G_{RP} <
+        0.56,
+    \end{cases}
+\label{eqn:gyro}
+\end{equation}
+where $\sigma_P$ is the logarithmic period uncertainty.
+The variance of these normal distributions was given by the observational
+rotation period uncertainties plus an additional scatter that is a function
+of color and EEP (described in more detail later in this section).
+% The power law functional form was introduced by \citep{barnes2003} and the
+% parameter values were adopted from the recalibration performed in
+% \citet{angus2015}, which was based on young cluster stars and old
+% asteroseismic stars.
+This gyrochronology model reflects the observed ceasing of magnetic braking at
+a critical Rossby number of around 2 \citep{vansaders2016}.
+The Rossby number, $Ro$, is the ratio of rotation period to convective
+overturn time $P_{\mathrm{rot}}/\tau$.
+It determines whether a star is still undergoing magnetic braking ($Ro < 2$)
+or has stopped spinning down, in which case it retains its terminal rotation
+period of $P_\mathrm{max} = 2\tau$ \citep{vansaders2016}.
+We estimated the convective overturn time, $\tau$, using equation 11 of
+\citet{wright2011}.
+The rotation periods of hot stars (\gcolor\ $<$ 0.56) are fast and usually do
+not relate to their age or color.
+We modeled these stars with a simple log-normal distribution with a mean of 1
+day.
+Figure \ref{fig:rotation_model} shows the rotation periods of 841
+stars generated from the gyrochronology model.
+\begin{figure}
+  \caption{
+The rotation period model.
+Late F, GK and early M dwarfs follow the \citet{angus2015} gyrochronology
+    relation (dashed gray lines), with the exception of old, slowly
+    rotating stars with large Rossby numbers whose rotation periods are fixed
+    at 2$\times$ their convective overturn time.
+The rotation periods of early F, late M dwarfs and subgiants were generate
+    from a log-normal distribution with standard deviation shown in figure
+    \ref{fig:variance}.
+% The top panel shows the rotation periods vs. B-V colors of simulated stars,
+The top panel shows the rotation periods vs. \gcolor\ colors of simulated stars,
+    colored by their age and the bottom panel shows the same stars colored
+    by their equivalent evolutionary point (EEP).
+    The gray lines describe \citep{angus2015} gyrochrones at ages 1, 3, 5, 7,
+    9, 11, and 13 (rotation periods rise with age).
+}
+  \centering
+    \includegraphics[width=1.\textwidth]{rotation_model_praesepe}
+\label{fig:rotation_model}
+\end{figure}
+
+
+% PIXIE
+% The rotation periods of hot stars, cool stars, subgiants and giants evolve
+% differently to FGK and early M dwarfs.
+% Stars more massive than around 1.25 M$_\odot$, with a temperature $\gtrsim$
+% 6250 K and a $B-V$ color $\lesssim$ 0.45 do not spin down appreciably over
+% their main sequence lifetimes because they do not have the deep convective
+% envelope needed to generate strong magnetic fields.
+% Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures $\lesssim$
+% 3500 and $B-V$ $\gtrsim$ 1.4 do not start magnetic braking until at least
+% after the age of Praesepe ($\sim$650 million years).
+The rotation periods of hot stars, cool stars, subgiants and giants evolve
+differently to FGK and early M dwarfs.
+Stars more massive than around 1.25 M$_\odot$, with a temperature $\gtrsim$
+6250 K and a \gcolor\ color $\lesssim$ 0.56 do not spin down appreciably over
+their main sequence lifetimes because they do not have the deep convective
+envelope needed to generate strong magnetic fields.
+Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures $\lesssim$
+3500 and \gcolor $\gtrsim$ 2.7 do not start magnetic braking until at least
+after the age of Praesepe ($\sim$650 million years).
+Both hot and cool stars retain rotation periods that are similar to their
+primordial distribution \citep[see \eg][]{matt2012}.
+Finally, the rotation periods of evolved stars slow dramatically as their
+radii grow.
+% Although the rotation periods of hot, cool, and evolved stars are less
+% age-informative than late F, GK and early M dwarfs, they still improve age
+% measurement precision and accuracy by refining CMD/HRD placement.
+We designed a model describing the rotation period variance of hot, cool and
+evolved stars, inflating the variance to high values in regions of parameter
+space where the simple gyrochronology power law does not apply or where
+rotation periods become stochastic.
+% In order to reflect the stochastic rotation periods of hot and cool stars,
+% and `switch off' gyrochronology, just using isochrone fitting for
+% the hot, cool and evolved stars, we designed a model describing the rotation
+% period variance of these stars, inflating the variance to high values in
+% regions of parameter space where gyrochronology does not apply.
+The variance model was designed to reflect the observed distributions of hot,
+cool and evolved stars and naturally reduce the amount of age-information
+provided by gyrochronology for stars where the rotation period is
+uninformative.
+In parts of the CMD/HRD where rotation periods are stochastic, isochronal
+information dominates and ages are predominantly inferred via isochrone
+fitting.
+We used three sigmoid functions to increase the (log) rotation period variance
+% as a function of $B-V$ and EEP, shown in figure \ref{fig:variance}.
+as a function of \gcolor\ and EEP, shown in figure \ref{fig:variance}.
+The additional variance was zero where gyrochronology works well: for late F,
+GK and early M dwarfs and 0.25 ($\sigma = 0.5$) for hot, cool and evolved
+stars.
+The logistic functions shown in figure \ref{fig:variance} reach half their
+% PIXIE
+% maximum values at 0.45, 1.4 and 454 for hot stars, cool stars and subgiants,
+maximum values at 0.56, 2.5 and 454 for hot stars, cool stars and subgiants,
+respectively.
+The maximum standard deviation value of the logarithmic rotation periods for
+all three groups (hot, cool and evolved) was 0.5 and the logistic growth rate,
+or steepness, of the three sigmoids were 100, 100 and .2 for hot, cool and
+evolved stars respectively.
+If a star is both hot and evolved, the additional standard deviation of its
+rotation period rises to 1 (no late M dwarfs have yet evolved off the main
+sequence so this does not apply to the cool stars).
+\begin{figure}
+  \caption{
+    The additional standard deviation in rotation period added to the
+    observational period uncertainties in our model.
+    The standard deviation was artificially increased for early F and hotter
+    % stars ($B-V < 0.45$), late M dwarfs ($B-V > 1.4$) and evolved stars
+    stars (\gcolor $<$ 0.56), late M dwarfs (\gcolor\ $>$ 2.7) and evolved stars
+    (EEP $>$ 454) in order to down-weight the age-information supplied by
+    rotation periods and reproduce observed distributions.
+    Down-weighting the gyrochronal likelihood by the inverse variance
+    ($1/\sigma^2$) allows the ages of these stars to be mostly inferred
+    via isochrone fitting.
+    The ages of hot and evolved stars can be relatively precisely constrained
+    with isochrone fitting since their position on the CMD changes
+    rapidly with time, however isochrone fitting cannot constrain the ages of
+    % late M dwarfs, so the age of any star with $B-V > 1.4$ will not be
+    late M dwarfs, so the age of any star with \gcolor\ $\gtrsim$ 2.5 will not
+    be precisely constrained with \sd.
+}
+  \centering
+    \includegraphics[width=1.\textwidth]{variance}
+\label{fig:variance}
+\end{figure}
+
 % %   - Introduction
 % % In this section we describe the combined isochrone fitting and gyrochronology
 % % model implemented in \sd, as well as the inference process.
@@ -45,13 +240,14 @@ in which case they would appear to the right of the `$|$' in the above
 equation since they are observables.
 In order to calculate a posterior PDF over age, other stellar parameters must
 be marginalized over.
-These parameters are distance ($D$), V-band extinction ($A_V$) and the
+These parameters are distance ($D$), V-band extinction ($A_V$), the
 inferred metallicity, $F$\footnote{The inferred metallicity is a
 model parameter which is different to the {\it observed} metallicity which
-would appear on the right side of the $`|'$ in equation \ref{eqn:eqn1}.}.
-The final parameter is equivalent evolutionary point (abbreviated to EEP or
-$E$), which is a dimensionless number ranging from around 200 for M dwarfs up
-to around 500 for subgiants and is 355 for the Sun \citep[see][]{dotter2016,
+would appear on the right side of the $`|'$ in equation \ref{eqn:eqn1}.},
+and equivalent evolutionary point (abbreviated to EEP or
+$E$).
+EEP is a dimensionless number ranging from around 200 for M dwarfs up
+to around 800 for subgiants and is 355 for the Sun \citep[see][]{dotter2016,
 choi2016}.
 Stars are defined as subgiants when their EEP exceeds 454.
 Mass is uniquely defined by EEP, age and metallicity.
@@ -152,7 +348,7 @@ using a gyrochronal model.
 We assumed that the probability of observing the measured observables, given
 the model parameters was a Gaussian and that the observables were identically
 and independently distributed.
-The isochronal likelihood function is,
+The isochronal likelihood function was,
 \begin{eqnarray} \label{eqn:isochrones_only_likelihood}
     % & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x}, T_{\mathrm{eff}}, \log(g),
     & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x},
@@ -167,10 +363,10 @@ spectroscopic and/or asteroseismic observables if available, and $\Sigma$ is
 the covariance matrix of that set of observables.
 ${\bf I}$ is the vector of {\it model} observables that correspond to a set of
 parameters: $A$, $E$, $F$, $D$ and $A_V$, calculated using an isochrone model.
-We assume there is no covariance between these observables and so this
+We assumed there is no covariance between these observables and so this
 covariance matrix consists of individual parameter variances along the
 diagonal with zeros everywhere else.
-The gyrochronal likelihood function is,
+The gyrochronal likelihood function was,
 \begin{eqnarray} \label{eqn:gyro_likelihood}
     % & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |A, C_{B-V}, M) \\ \nonumber
     & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |A, E, F, D, A_V) \\ \nonumber
@@ -185,28 +381,24 @@ The gyrochronal likelihood function is,
 % $P_{\mathrm{pred}, i}$ is the corresponding predicted rotation period,
 % calculated from the $i$th age and $C_{B-V}$ values predicted by the isochronal
 % model.
-where ${\bf P_O}$ is a 1-D vector of observed log-rotation periods, ${\bf
-P_P}$ is the vector of corresponding log-rotation periods, predicted by the
-model.
+where ${\bf P_O}$ is a 1-D vector of observed logarithmic rotation periods,
+and ${\bf P_P}$ is the vector of corresponding logarithmic rotation periods,
+predicted by the model.
 $\Sigma_P$ was comprised of individual rotation period measurement
 % uncertainties, plus an additional variance that was a function of EEP and B-V
-uncertainties, plus an additional variance that was a function of EEP and
+uncertainties, plus an additional variance that is a function of EEP and
 \gcolor\
 color, added in quadrature.
-This variance, described in more detail later in this section, accounts for
-the stochastic nature of the rotation periods of very hot and very cool stars
-and allowed us to predominantly use isochrone fitting to measure the ages of
-subgiants.
-The full likelihood function used in our model was the product of these two
-likelihood functions,
-% \begin{eqnarray} \label{eqn:full_likelihood}
-%     & \mathcal{L_{\mathrm{full}}} = \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}}
-%     \exp\left( -\frac{1}{2} [{\bf O_I} - {\bf I}]^T \Sigma ^{-1}
-%     [{\bf O_I} - {\bf I}]\right) \\ \nonumber
-%     & \times
-%     \frac{1}{\sqrt{(2\pi) \det(\Sigma_P)}}
-%     \exp\left( -\frac{1}{2} [{\bf P_O} - {\bf P_P}]^T \Sigma ^{-1}
-%     [{\bf P_O} - {\bf P_P}]\right).
+This variance accounts for the stochastic nature of the rotation periods of
+very hot and very cool stars and allowed us to predominantly use isochrone
+fitting to measure the ages of subgiants.
+The full likelihood used in our model was the product of these two likelihood
+functions,
+% \begin{eqnarray} \label{eqn:full_likelihood} & \mathcal{L_{\mathrm{full}}} =
+% \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}} \exp\left( -\frac{1}{2} [{\bf O_I} -
+% {\bf I}]^T \Sigma ^{-1} [{\bf O_I} - {\bf I}]\right) \\ \nonumber & \times
+% \frac{1}{\sqrt{(2\pi) \det(\Sigma_P)}} \exp\left( -\frac{1}{2} [{\bf P_O} -
+% {\bf P_P}]^T \Sigma ^{-1} [{\bf P_O} - {\bf P_P}]\right).
 % \end{eqnarray}
 \begin{equation}
     \mathcal{L}_{\mathrm{full}} = \mathcal{L}_{\mathrm{iso}} \times
@@ -252,13 +444,12 @@ and observables for a single star were passed to the isochronal likelihood
 function in equation \eqref{eqn:isochrones_only_likelihood}.
 Then, a set of observables corresponding to those parameters were generated
 from the MIST model grid using {\tt isochrones.py} and compared to the
-measured observables via the isochronal log-likelihood,
-$\ln(\mathcal{L}_{\mathrm{iso}})$.  (also computed using
-{\tt isochrones.py}.
+measured observables via the isochronal likelihood,
+$\mathcal{L}_{\mathrm{iso}}$ (also computed using {\tt isochrones.py}.
 The parameters were also passed to the gyrochronology model where $A$, $E$,
 % $F$, $D$ and $A_V$ were used to calculate $B-V$ color and mass and, in turn,
-$F$, $D$ and $A_V$ were used to calculate \gcolor\ color and mass and, in
-turn, rotation period.
+$F$, $D$ and $A_V$ were used to calculate \gcolor\ color and mass from the
+MIST model grid and, in turn, rotation period via the gyrochronology model.
 % EEP and $B-V$ were also used to calculate the additional rotation period
 EEP and \gcolor\ were also used to calculate the additional rotation period
 variance, added to the individual period uncertainties.
@@ -290,175 +481,6 @@ single sample from the posterior PDF.
 % Rotation periods were described as a normal distribution with a power law mean
 % function for early F and GKM stars with $Ro < 2$, and a constant mean value
 % for stars with $Ro > 2$ or stars hotter than 0.45 in $B-V$.
-
-We fit a broken power law to the Praesepe cluster in order to calibrate a new
-gyrochronology relation that takes advantage of new data available from the
-\ktwo mission.
-Although this model is not perfect, it provides a much better representation
-of rotational evolution than previous models such as the \citet{angus15}
-model.
-In brief, we removed rotational outliers, bluer than \gcolor\ = 2.5, from the
-Praesepe cluster and fit a 5th-order polynomial to the FGK and early M stars.
-We also fit a straight to the late M dwarfs (\gcolor\ $>$ 2.5).
-We fit a separable straight line function to the period-age relation using
-only the ages of Praesepe and the Sun\footnote{The fitting process was
-performed in a Jupyter notebook available at
-\url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fitting_Praesepe.ipynb}.}.
-This new Praesepe-calibrated gyrochronology relation was,
-\begin{equation}
-    \log_{10}(P_{rot}) = f(C)g(A) \nonumber
-\end{equation}
-\begin{equation}
-    = -38.96 + 28.71C -4.92C^2 + 0.72C^3 -4.72C^4 + 0.65\log_{10}A
-\end{equation}
-where C is $\log_{10}(G_{BP}-G_{RP})$, for stars with \gcolor\ $<$ 2.5 and
-\begin{equation}
-    \log_{10}(P_{rot}) = h(C)g(A) \nonumber
-\end{equation}
-\begin{equation}
-     = -13.56 + 0.94C + 0.65\log_{10}(A),
-\end{equation}
-for stars with \gcolor\ $>$ 2.5.
-
-We used the following composite gyrochronology model to infer ages from
-rotation periods,
-\begin{equation}
-    \log_{10}(P_\mathrm{rot}) \sim \begin{cases}
-        \mathcal{N}(f(C)g(A), [\sigma_P+f(E, G_{BP} - G_{RP})^2]), & Ro < 2,
-        G_{BP} - G_{RP} < 2.5 \\
-        \mathcal{N}(h(C)g(A), [\sigma_P+f(E, G_{BP} - G_{RP})^2]), & Ro < 2,
-        G_{BP} - G_{RP} > 2.5 \\
-        \mathcal{N}(\log_{10}(P_\mathrm{max}), [\sigma_P+f(E, G_{BP} - G_{RP})^2]),& Ro \geq 2 \\
-        \mathcal{N}(0, [\sigma_P+f(E, G_{BP}-G_{RP})^2]),& G_{BP} - G_{RP} < 1.8,
-    \end{cases}
-\label{eqn:gyro}
-\end{equation}
-where $\sigma_P$ is the logarithmic period uncertainty.
-The variance of these normal distributions is given by the observational
-rotation period uncertainties plus an additional scatter that is a function
-of color and EEP (described in more detail later in this section).
-% The power law functional form was introduced by \citep{barnes2003} and the
-% parameter values were adopted from the recalibration performed in
-% \citet{angus2015}, which was based on young cluster stars and old
-% asteroseismic stars.
-This gyrochronology model reflects the observed ceasing of magnetic braking at
-a critical Rossby number of around 2 \citep{vansaders2016}.
-The Rossby number, $Ro$, is the ratio of rotation period to convective
-overturn time $P_{\mathrm{rot}}/\tau$.
-It determines whether a star is still undergoing magnetic braking ($Ro < 2$)
-or has stopped spinning down, in which case it retains its terminal rotation
-period of $P_\mathrm{max} = 2\tau$ \citep{vansaders2016}.
-We estimated the convective overturn time, $\tau$, using equation 11 of
-\citet{wright2011}.
-The rotation periods of hot stars (\gcolor\ $<$ 1.8) are fast and usually do
-not relate to their age or color.
-We model these stars with a simple log-normal distribution with a mean of 1
-day.
-
-% PIXIE
-% The rotation periods of hot stars, cool stars, subgiants and giants evolve
-% differently to FGK and early M dwarfs.
-% Stars more massive than around 1.25 M$_\odot$, with a temperature $\gtrsim$
-% 6250 K and a $B-V$ color $\lesssim$ 0.45 do not spin down appreciably over
-% their main sequence lifetimes because they do not have the deep convective
-% envelope needed to generate strong magnetic fields.
-% Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures $\lesssim$
-% 3500 and $B-V$ $\gtrsim$ 1.4 do not start magnetic braking until at least
-% after the age of Praesepe ($\sim$650 million years).
-The rotation periods of hot stars, cool stars, subgiants and giants evolve
-differently to FGK and early M dwarfs.
-Stars more massive than around 1.25 M$_\odot$, with a temperature $\gtrsim$
-6250 K and a \gcolor\ color $\lesssim$ 1.8 do not spin down appreciably over
-their main sequence lifetimes because they do not have the deep convective
-envelope needed to generate strong magnetic fields.
-Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures $\lesssim$
-3500 and \gcolor $\gtrsim$ 2.5 do not start magnetic braking until at least
-after the age of Praesepe ($\sim$650 million years).
-Both hot and cool stars retain rotation periods that are similar to their
-primordial distribution \citep[see \eg][]{matt2012}.
-Finally, the rotation periods of evolved stars slow dramatically as their
-radii grow.
-Although the rotation periods of hot, cool, and evolved stars are less
-age-informative than late F, GK and early M dwarfs, they still improve age
-measurement precision and accuracy by refining CMD/HRD placement.
-We designed a model describing the rotation period variance of these stars,
-inflating the variance to high values in regions of parameter space where the
-simple gyrochronology power law does not apply or where rotation periods
-become stochastic.
-% In order to reflect the stochastic rotation periods of hot and cool stars,
-% and `switch off' gyrochronology, just using isochrone fitting for
-% the hot, cool and evolved stars, we designed a model describing the rotation
-% period variance of these stars, inflating the variance to high values in
-% regions of parameter space where gyrochronology does not apply.
-The variance model was designed to reflect the observed distributions of hot,
-cool and evolved stars and naturally reduce the amount of age-information
-provided by gyrochronology for stars where the rotation period is
-uninformative.
-In parts of the CMD/HRD where rotation periods are stochastic, isochronal
-information dominates and ages are predominantly inferred via isochrone
-fitting.
-We used three sigmoid functions to increase the (log) rotation period variance
-% as a function of $B-V$ and EEP, shown in figure \ref{fig:variance}.
-as a function of \gcolor\ and EEP, shown in figure \ref{fig:variance}.
-The additional variance was zero where gyrochronology works well: for late F,
-GK and early M dwarfs and 0.25 ($\sigma = 0.5$) for hot, cool and evolved
-stars.
-The logistic functions shown in figure \ref{fig:variance} reach half their
-maximum values at 0.45, 1.4 and 454 for hot stars, cool stars and subgiants,
-respectively.
-The maximum standard deviation value of the logarithmic rotation periods for
-all three groups (hot, cool and evolved) was 0.5 and the logistic growth rate,
-or steepness, of the three sigmoids were 100, 100 and .2 for hot, cool and
-evolved stars respectively.
-If a star is both hot and evolved, the additional standard deviation of its
-rotation period rises to 1 (no late M dwarfs have yet evolved off the main
-sequence so this does not apply to the cool stars).
-\begin{figure}
-  \caption{
-    The additional standard deviation in rotation period added to the
-    observational period uncertainties in our model.
-    The standard deviation was artificially increased for early F and hotter
-    % stars ($B-V < 0.45$), late M dwarfs ($B-V > 1.4$) and evolved stars
-    stars (\gcolor $<$ 1.8), late M dwarfs (\gcolor\ $>$ 2.5) and evolved stars
-    (EEP $>$ 454) in order to down-weight the age-information supplied by
-    rotation periods and reproduce observed distributions.
-    Down-weighting the gyrochronal likelihood by the inverse variance
-    ($1/\sigma^2$) allows the ages of these stars to be mostly inferred
-    via isochrone fitting.
-    The ages of hot and evolved stars can be relatively precisely constrained
-    with isochrone fitting since their position on the CMD changes
-    rapidly with time, however isochrone fitting cannot constrain the ages of
-    % late M dwarfs, so the age of any star with $B-V > 1.4$ will not be
-    late M dwarfs, so the age of any star with \gcolor\ $>$ 2.5 will not be
-    precisely constrained with \sd.
-}
-  \centering
-    \includegraphics[width=1.\textwidth]{variance}
-\label{fig:variance}
-\end{figure}
-Figure \ref{fig:rotation_model} shows the rotation periods of 841
-stars generated from the gyrochronology model.
-\begin{figure}
-  \caption{
-The rotation period model.
-Late F, GK and early M dwarfs follow the \citet{angus2015} gyrochronology
-    relation (dashed gray lines), with the exception of old, slowly
-    rotating stars with large Rossby numbers whose rotation periods are fixed
-    at 2$\times$ their convective overturn time.
-The rotation periods of early F, late M dwarfs and subgiants were generate
-    from a log-normal distribution with standard deviation shown in figure
-    \ref{fig:variance}.
-% The top panel shows the rotation periods vs. B-V colors of simulated stars,
-The top panel shows the rotation periods vs. \gcolor\ colors of simulated stars,
-    colored by their age and the bottom panel shows the same stars colored
-    by their equivalent evolutionary point (EEP).
-    The gray lines describe \citep{angus2015} gyrochrones at ages 1, 3, 5, 7,
-    9, 11, and 13 (rotation periods rise with age).
-}
-  \centering
-    \includegraphics[width=1.\textwidth]{rotation_model_praesepe}
-\label{fig:rotation_model}
-\end{figure}
 
 %   - Emcee, including assessing convergence.
 Ages were inferred with \sd\ using Markov Chain Monte Carlo.

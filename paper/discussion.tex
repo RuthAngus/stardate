@@ -2,8 +2,8 @@
 \label{section:discussion}
 
 In the previous sections we demonstrated that modeling the ages of stars using
-isochrones {\it and} gyrochronology can result in more precise and accurate
-ages than using isochrone fitting alone.
+isochrones {\it and} gyrochronology can result in more precise ages than using
+isochrone fitting alone.
 Isochrone fitting and gyrochronology are  complementary because gyrochronology
 is more precise where isochrone fitting is less precise (on the MS) and vice
 versa (at MS turn off).
@@ -25,11 +25,11 @@ This already includes tens-of-thousands of \kepler\ and \ktwo\ stars and could
 include millions more from \tess, \lsst, \wfirst, \plato, \gaia, and others in
 future.
 Although this method is designed for combining isochrone fitting with
-gyrochronology, \sd\ can still be used {\it without} rotation periods, in
+gyrochronology, \sd\ can still be used without rotation periods, in
 which case it will predict an isochrone-only stellar age.
 % \sd\ is therefore applicable to all stars covered by the MIST isochrones:
 % masses from 0.1 to 300 M$_\odot$, ages ranging from 100,000 years to longer
-than the age of the Universe, and metallicities from -4 to 0.5.
+% than the age of the Universe, and metallicities from -4 to 0.5.
 However, it is {\it optimally applicable} to stars with rotation periods,
 otherwise the result will be identical to ages measured with {\tt
 isochrones.py}.
@@ -72,12 +72,12 @@ The best way to prevent an erroneous or outlying rotation period from
 resulting in an erroneous age measurement is to {\it allow} for outlying
 rotation periods using a mixture model.
 We intend to build a mixture model into \sd\ in future.
-As shown in figure \ref{fig:praesepe}, the gyrochronology model used here
-\citep{angus2015} does not provide a good fit to all available data.
-In future we intend to calibrate a new gyrochronology model that fits all
-available cluster and asteroseismic data.
-For now however, we simply warn users of these caveats and suggest that ages
-calculated using \sd\ are treated with appropriate caution.
+% As shown in figure \ref{fig:praesepe}, the gyrochronology model used here
+% \citep{angus2015} does not provide a good fit to all available data.
+% In future we intend to calibrate a new gyrochronology model that fits all
+% available cluster and asteroseismic data.
+% For now however, we simply warn users of these caveats and suggest that ages
+% calculated using \sd\ are treated with appropriate caution.
 
 % %   - Caveats and gotchas -- e.g. isochrones aren't 100% accurate.
 % Throughout this manuscript we have referred to the `accuracy' of the

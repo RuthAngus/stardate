@@ -4,7 +4,7 @@
 We present a statistical framework for measuring precise ages of MS stars and
 subgiants by combining observables that relate, via different evolutionary
 processes, to stellar age.
-Specifically, we combined HR diagram/CMD placement with rotation periods, in a
+Specifically, we combined HRD/CMD placement with rotation periods, in a
 hierarchical Bayesian model, to age-date stars based on both their hydrogen
 burning and magnetic braking history.
 The two methods of isochrone fitting and gyrochronology were combined by
@@ -13,16 +13,32 @@ and the other a gyrochronal one.
 We used the MIST stellar evolution models and computed isochronal ages and
 likelihoods using the {\tt isochrones.py} {\it Python} package.
 % The gyrochronal model was a power-law relation between rotation period, B-V
-The gyrochronal model was a power-law relation between rotation period,
-\gcolor\
-color and age, based on the functional form first introduced by
-\citet{barnes2003} and later recalibrated by \citet{angus2015}, with a
-modification recommended by \citet{vansaders2016} that accounts for weakened
-magnetic braking at Rossby numbers larger than 2.
-We tested this age-dating method, implemented in a {\it Python} package called
-\sd, on simulated data and cluster stars and demonstrated that combining
-gyrochronology with isochrone fitting produces age predictions that are an
-order of magnitude more precise than isochrone fitting alone.
+We fit a new broken power law gyrochronology model to the Praesepe cluster
+% The gyrochronal model was a power-law relation between rotation period,
+% \gcolor\ color and age, based on the functional form first introduced by
+% \citet{barnes2003} and later recalibrated by \citet{angus2015}, with a
+and included a modification recommended by \citet{vansaders2016} that accounts
+for weakened magnetic braking at Rossby numbers larger than 2.
+The rotation periods of hot stars, cool stars and evolved stars were modeled
+stochastically with a broad log-normal distribution.
+We tested \sd\ on simulated data and cluster stars and demonstrated that
+combining gyrochronology with isochrone fitting produces age predictions that
+are an order of magnitude more precise than isochrone fitting alone.
+
+\sd\ may predict inaccurate ages for stars younger than around 500 million
+years, when stars are more likely to be rapidly rotating outliers, and close
+binaries whose interactions influence their rotation period evolution.
+Rotational outliers are often seen in clusters \citep[see \eg][]{douglas2016,
+rebull2016, douglas2017, rebull2017} and many of these fall above the main
+sequence, indicating that they are binaries.
+In addition, measured rotation periods may not always be accurate and can, in
+many cases, be a harmonic of the true rotation period.
+For example, a common rotation period measurement failure mode is to measure
+half the true rotation period.
+The best way to prevent an erroneous or outlying rotation period from
+resulting in an erroneous age measurement is to {\it allow} for outlying
+rotation periods using a mixture model, and we intend to build a mixture model
+into \sd\ in future.
 
 % Motivation
 The optimal way to age-date stars is by combining {\it all} their available
@@ -57,12 +73,11 @@ top of, \sd\ accepts apparent magnitudes in all pass-bands covered by the MIST
 isochrones which includes the Johnson-Cousins, {\it 2MASS}, \Kepler, {\it
 SDSS} and \Gaia\ photometric systems.
 
-We caution users that the gyrochronology model currently built into \sd\ does
-not alway provide a good fit to all data and is not suitable for very young
-stars or binaries.
-In the future we hope to make several improvements to the gyrochronology
-relation implemented in \sd\ that will make it applicable to {\it all} MS and
-subgiant stars.
+\sd is applicable to an extremely large number of stars: late F, GK and early
+M stars with a rotation period and broad-band photometry.
+This already includes tens-of-thousands of \kepler\ and \ktwo\ stars and could
+include millions more from \tess, \lsst, \wfirst, \plato, \gaia, and others in
+future.
 
 The code used in this project is available as a documented {\it python}
 package called \sd.
