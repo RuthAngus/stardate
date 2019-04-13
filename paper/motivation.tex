@@ -248,76 +248,76 @@ in section \ref{section:method} and equation \ref{eqn:gyro}.
 % \ref{section:results}.
 
 
-\begin{figure}
-  \caption{
-    This figure shows Solar-metallicity MIST isochrones in \Gaia\ absolute
-    G-band magnitude and Gaia $G_{BP} - G_{RP}$ color.
-    In the left panel the isochrones are colored by the minimum absolute age
-    uncertainty at each point on the CMD, calculated using the Fisher
-    information.
-    This calculation is based on the typical uncertainties of
-    \Gaia\ $G$-band photometry, and a color spread that covers metallicities
-    ranging from -0.25 to 0.25 dex (represented by black errorbars in the
-    upper right).
-    The Sun's position \citep{casagrande2018} is indicated with the Solar\
-    symbol.
-    The purple color in the top left corresponds to small age uncertainties,
-    \ie\ good age precision.
-    Age precision increases as stars begin to turn off the MS.
-    On the MS however, particularly at low masses, the age precision is poor.
-    For late K dwarfs, for example, isochrone fitting age uncertainties exceed
-    the age of the Universe.
-    This makes sense when you consider that typical \Gaia\ uncertaintes on $G$
-    and $G_{BP} - G_{RP}$ exceed the entire width of the MS, which spans
-    0.01-14 Gyrs.
-    Isochrone fitting is not an appropriate age-dating method for MS stars,
-    especially at low masses.
-    In the right panel the isochrones are colored by the logarithmic
-    {\it relative} age precision at each point in the CMD.
-    Relative age uncertainties range from 100\% for the oldest MS GKM stars,
-    to several thousand percent for the youngest.
-    These age uncertainties were calculated using the derivatives of $G$ and
-    $G_{BP} - G_{RP}$ with age, \ie\ the rate of change in a star's luminosity
-    and temperature.
-    For example, K dwarf temperatures increase at a rate of only around 20 K
-    per billion years.
-    The precision with which an age can be measured is related to the
-    separation between isochrones, which indicate epochs of rapid change
-    (steep gradients).
-    This figure was created using the following Jupyter notebook:
-    \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fisher_information.ipynb}
-    \label{fig:fischer_iso}
-}
-  \centering
-    \includegraphics[width=1\textwidth]{iso_fisher.pdf}
-\label{fig:iso_fisher}
-\end{figure}
+% \begin{figure}
+%   \caption{
+%     This figure shows Solar-metallicity MIST isochrones in \Gaia\ absolute
+%     G-band magnitude and Gaia $G_{BP} - G_{RP}$ color.
+%     In the left panel the isochrones are colored by the minimum absolute age
+%     uncertainty at each point on the CMD, calculated using the Fisher
+%     information.
+%     This calculation is based on the typical uncertainties of
+%     \Gaia\ $G$-band photometry, and a color spread that covers metallicities
+%     ranging from -0.25 to 0.25 dex (represented by black errorbars in the
+%     upper right).
+%     The Sun's position \citep{casagrande2018} is indicated with the Solar\
+%     symbol.
+%     The purple color in the top left corresponds to small age uncertainties,
+%     \ie\ good age precision.
+%     Age precision increases as stars begin to turn off the MS.
+%     On the MS however, particularly at low masses, the age precision is poor.
+%     For late K dwarfs, for example, isochrone fitting age uncertainties exceed
+%     the age of the Universe.
+%     This makes sense when you consider that typical \Gaia\ uncertaintes on $G$
+%     and $G_{BP} - G_{RP}$ exceed the entire width of the MS, which spans
+%     0.01-14 Gyrs.
+%     Isochrone fitting is not an appropriate age-dating method for MS stars,
+%     especially at low masses.
+%     In the right panel the isochrones are colored by the logarithmic
+%     {\it relative} age precision at each point in the CMD.
+%     Relative age uncertainties range from 100\% for the oldest MS GKM stars,
+%     to several thousand percent for the youngest.
+%     These age uncertainties were calculated using the derivatives of $G$ and
+%     $G_{BP} - G_{RP}$ with age, \ie\ the rate of change in a star's luminosity
+%     and temperature.
+%     For example, K dwarf temperatures increase at a rate of only around 20 K
+%     per billion years.
+%     The precision with which an age can be measured is related to the
+%     separation between isochrones, which indicate epochs of rapid change
+%     (steep gradients).
+%     This figure was created using the following Jupyter notebook:
+%     \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fisher_information.ipynb}
+%     \label{fig:fischer_iso}
+% }
+%   \centering
+%     \includegraphics[width=1\textwidth]{iso_fisher.pdf}
+% \label{fig:iso_fisher}
+% \end{figure}
 
-\begin{figure}
-  \caption{
-    As figure \ref{fig:iso_fisher}, however in this case the minimum age
-    uncertainties are calculated based on isochrone fitting and gyrochronology
-    {\it combined}.
-    The isochrones are colored by the minimum relative age uncertainty at each
-    point on the CMD, calculated using the Fisher information.
-    This calculation is based on the typical uncertainties of
-    \Gaia\ $G$-band photometry, a color spread that covers metallicities
-    ranging from -0.25 to 0.25 dex (represented by black errorbars in the
-    upper right), and Kepler rotation period uncertainties (conservatively
-    estimated at around 1 day).
-    In contrast to figure \ref{fig:iso_fisher}, here the left panel shows the
-    {\it logarithmic} absolute age and the right panel shows the linear
-    relative age.
-    The isochrones still supply precise ages at the MS turn off (purple, upper
-    left) however, gyrochronology supplies precise ages on the MS (15 - 25\%
-    relative precision).
-    Gyrochronology and isochrone fitting complement each other and when used
-    together, all subgiants and MS stars can have ages more precise than 30\%.
-    This figure was created using the following Jupyter notebook:
-    \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fisher_information.ipynb}
-    \label{fig:fischer_gyro}
-}
-  \centering
-    \includegraphics[width=1\textwidth]{gyro_fisher.pdf}
-\label{fig:gyro_fisher}
-\end{figure}
+% \begin{figure}
+%   \caption{
+%     As figure \ref{fig:iso_fisher}, however in this case the minimum age
+%     uncertainties are calculated based on isochrone fitting and gyrochronology
+%     {\it combined}.
+%     The isochrones are colored by the minimum relative age uncertainty at each
+%     point on the CMD, calculated using the Fisher information.
+%     This calculation is based on the typical uncertainties of
+%     \Gaia\ $G$-band photometry, a color spread that covers metallicities
+%     ranging from -0.25 to 0.25 dex (represented by black errorbars in the
+%     upper right), and Kepler rotation period uncertainties (conservatively
+%     estimated at around 1 day).
+%     In contrast to figure \ref{fig:iso_fisher}, here the left panel shows the
+%     {\it logarithmic} absolute age and the right panel shows the linear
+%     relative age.
+%     The isochrones still supply precise ages at the MS turn off (purple, upper
+%     left) however, gyrochronology supplies precise ages on the MS (15 - 25\%
+%     relative precision).
+%     Gyrochronology and isochrone fitting complement each other and when used
+%     together, all subgiants and MS stars can have ages more precise than 30\%.
+%     This figure was created using the following Jupyter notebook:
+%     \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fisher_information.ipynb}
+%     \label{fig:fischer_gyro}
+% }
+%   \centering
+%     \includegraphics[width=1\textwidth]{gyro_fisher.pdf}
+% \label{fig:gyro_fisher}
+% \end{figure}

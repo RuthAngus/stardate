@@ -31,7 +31,7 @@ in figure \ref{fig:praesepe}).
 We removed rotational outliers bluer than \gcolor\ = 2.7 from the
 Praesepe cluster and fit a 5th-order polynomial to the remaining FGK and
 early M stars.
-We also fit a straight to the late M dwarfs (\gcolor\ $>$ 2.7).
+We also fit a straight line to the late M dwarfs (\gcolor\ $>$ 2.7).
 We fit a separable straight line function to the period-age relation using
 the ages of Praesepe and the Sun\footnote{The fitting process was
 performed in a Jupyter notebook available at
@@ -84,7 +84,7 @@ or has stopped spinning down, in which case it retains its terminal rotation
 period of $P_\mathrm{max} = 2\tau$ \citep{vansaders2016}.
 We estimated the convective overturn time, $\tau$, using equation 11 of
 \citet{wright2011}.
-The rotation periods of hot stars (\gcolor\ $<$ 0.56) are fast and usually do
+The rotation periods of hot stars (\gcolor\ $<$ 0.56) are fast and do
 not relate to their age or color.
 We modeled these stars with a simple log-normal distribution with a mean of 1
 day.
@@ -104,8 +104,11 @@ The rotation periods of early F, late M dwarfs and subgiants were generate
 The top panel shows the rotation periods vs. \gcolor\ colors of simulated stars,
     colored by their age and the bottom panel shows the same stars colored
     by their equivalent evolutionary point (EEP).
-    The gray lines describe \citep{angus2015} gyrochrones at ages 1, 3, 5, 7,
-    9, 11, and 13 (rotation periods rise with age).
+    % PIXIE
+    % The gray lines describe \citep{angus2015} gyrochrones at ages 1, 3, 5, 7,
+    % 9, 11, and 13 (rotation periods rise with age).
+    The gray lines describe gyrochrones fit to the Praesepe cluster at ages 1,
+    3, 5, 7, 9, 11, and 13 (rotation periods rise with age).
 }
   \centering
     \includegraphics[width=1.\textwidth]{rotation_model_praesepe}
@@ -130,10 +133,10 @@ Stars more massive than around 1.25 M$_\odot$, with a temperature $\gtrsim$
 their main sequence lifetimes because they do not have the deep convective
 envelope needed to generate strong magnetic fields.
 Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures $\lesssim$
-3500 and \gcolor $\gtrsim$ 2.7 do not start magnetic braking until at least
-after the age of Praesepe ($\sim$650 million years).
+3500 and \gcolor $\gtrsim$ 2.7 are only weakly magnetically braking until at
+least after the age of Praesepe ($\sim$650 million years).
 Both hot and cool stars retain rotation periods that are similar to their
-primordial distribution \citep[see \eg][]{matt2012}.
+primordial distribution \citep[see \eg][]{matt2012, somers2017}.
 Finally, the rotation periods of evolved stars slow dramatically as their
 radii grow.
 % Although the rotation periods of hot, cool, and evolved stars are less
@@ -162,10 +165,10 @@ The additional variance was zero where gyrochronology works well: for late F,
 GK and early M dwarfs and 0.25 ($\sigma = 0.5$) for hot, cool and evolved
 stars.
 The logistic functions shown in figure \ref{fig:variance} reach half their
-% PIXIE
-% maximum values at 0.45, 1.4 and 454 for hot stars, cool stars and subgiants,
-maximum values at 0.56, 2.5 and 454 for hot stars, cool stars and subgiants,
-respectively.
+% PIXIE maximum values at 0.45, 1.4 and 454 for hot stars, cool stars and
+% subgiants,
+maximum values at \gcolor\ = 0.56 and 2.5 for hot and cool stars respectively
+and EEP = 454 for subgiants.
 The maximum standard deviation value of the logarithmic rotation periods for
 all three groups (hot, cool and evolved) was 0.5 and the logistic growth rate,
 or steepness, of the three sigmoids were 100, 100 and .2 for hot, cool and
@@ -185,9 +188,16 @@ sequence so this does not apply to the cool stars).
     Down-weighting the gyrochronal likelihood by the inverse variance
     ($1/\sigma^2$) allows the ages of these stars to be mostly inferred
     via isochrone fitting.
+    The variance of an inferred age is proportional to the
+    variance of the rotation periods.
+    Adding 0.25 to the variance of the (log) rotation periods is an increase over
+    the variance provided by period measurement uncertainties of a factor of 100.
+    By increasing the variance 100-fold, we reduce the age-information in
+    rotation periods by 100-fold, effectively rendering them completely
+    uninformative.
     The ages of hot and evolved stars can be relatively precisely constrained
-    with isochrone fitting since their position on the CMD changes
-    rapidly with time, however isochrone fitting cannot constrain the ages of
+    with isochrone fitting since their position on the CMD changes rapidly
+    with time, however isochrone fitting cannot constrain the ages of
     % late M dwarfs, so the age of any star with $B-V > 1.4$ will not be
     late M dwarfs, so the age of any star with \gcolor\ $\gtrsim$ 2.5 will not
     be precisely constrained with \sd.

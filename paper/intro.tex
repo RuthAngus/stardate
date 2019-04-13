@@ -44,7 +44,7 @@ star on the HR diagram may be consistent with range of isochrones spanning
 several billion years.
 At main sequence turn-off however, isochrones are spread further apart, so
 that sufficiently precisely measured temperatures and luminosities can yield
-ages that are extremely precise.
+ages that are extremely precise \citep[\eg][]{pont2004}.
 % Typical age uncertainties of dwarfs.
 The classical method for measuring stellar ages is isochrone placement, or
 isochrone fitting, where surface gravity changes resulting from fusion in the
@@ -55,11 +55,11 @@ CMD/HRD position has been thoroughly mapped with physical models, and can be
 used to calculate relatively accurate (but not necessarily precise) ages,
 barring some small, $\sim$10\% variations between different models,
 \citep[\eg][]{yi2001, dotter2008, dotter2016}.
-Isochronal ages {\it can} be precise for stars turning off the MS, because the
-rate of change in brightness and temperature is large during this phase of
-stellar evolution.
-However, on the MS itself, there is little differentiation between stars of
-different ages in the $L$ and \teff\ plane, so ages tend to be very imprecise.
+% Isochronal ages {\it can} be precise for stars turning off the MS, because the
+% rate of change in brightness and temperature is large during this phase of
+% stellar evolution.
+On the MS itself, there is little differentiation between stars of different
+ages in the $L$ and \teff\ plane, so ages tend to be very imprecise.
 The method of inferring a star's age from its rotation period, called
 `gyrochronology', is much better suited for measuring ages on the MS because
 MS stars spin down relatively rapidly.
@@ -82,9 +82,9 @@ primordial ones, comes from the steep dependence of spin-down rate on rotation
 period \citep{kawaler1989}.
 Stars spinning with high angular velocity will experience a much greater
 angular momentum loss rate than slowly spinning stars and for this reason, no
-matter the initial rotation period, stars of the same mass will have the same
+matter the initial rotation period, Solar type stars will have the same
 rotation period after around the age of the Hyades, 500-700 million years
-\citep{irwin2009}.
+\citep{irwin2009, gallet2015}.
  % stellar rotation periods appear to converge
 % onto a tight sequence \citep{irwin2009}.
 After this time, the age of a star can be inferred, to first order, from its
@@ -162,7 +162,8 @@ In addition, it is relatively straightforward to build an element of
 stochasticity into empirical models, \ie\ to allow for and incorporate
 outliers or noisy trends.
 This is particularly important for stellar spin down, which does not always
-behave deterministically.
+behave deterministically: for example, the presence of a binary companion may
+affect the rotational evolution of a star.
 A further advantage of empirical models is that inference is more tractable:
 it can be extremely fast to fit them to data.
 % PIXIE
@@ -196,9 +197,8 @@ We leave these improvements for a future project and, for now, test the
 new Praesepe model which is built into a new open source {\it Python} package
 for gyrochronology, called \sd.
 \sd\ provides the framework for simultaneous gyrochronology and isochrone
-fitting and.
-Because \sd\ is modular, it would straightforward to update the gyrochronology
-relation in future.
+fitting, and, because \sd\ is modular, it would be straightforward to update
+the gyrochronology relation in future.
 
 % Paper outline
 %-----------------------------------------------------------------------------
@@ -212,12 +212,12 @@ simulated stars and cluster stars, and in section \ref{section:conclusion} we
 discuss the implications of these tests and future pathways for development.
 Throughout this paper we use the term {\it `observables'} to refer to the
 following observed properties of a star, \teff, \logg, observed bulk
-metallicity ($[\hat{F}]$), parallax ($\bar{\omega}$), photometric
+metallicity ($[\hat{\mathrm{Fe/H}}]$), parallax ($\bar{\omega}$), photometric
 colors in different passbands (${\bf m_x} = [m_J, m_H, m_K, m_B, m_V, m_G,
 m_{GBP}, m_{GRP}...]$, etc) and rotation period ($P_{\mathrm{rot}}$).
 The term `parameters' refers to the physical properties of that star: age
-($A$), equivalent evolutionary point (EEP), true bulk metallicity ($F$),
-distance ($D$) and V-band extinction ($A_V$).
+($A$), equivalent evolutionary point (EEP), true bulk metallicity
+($\mathrm{Fe/H}$), distance ($D$) and V-band extinction ($A_V$).
 These are the properties that generate the observables.
 % Equivalent evolutionary point is a proxy for the evolutionary stage of a star,
 % that is computed as part of the MIST isochrone library.
