@@ -63,7 +63,7 @@ rotation periods,
         \mathcal{N}(f(A)h(C), [\sigma_P+f(E, G_{BP} - G_{RP})^2]), & Ro < 2,
         G_{BP} - G_{RP} > 2.7 \\
         \mathcal{N}(\log_{10}(P_\mathrm{max}), [\sigma_P+f(E, G_{BP} - G_{RP})^2]),& Ro \geq 2 \\
-        \mathcal{N}(0, [\sigma_P+f(E, G_{BP}-G_{RP})^2]),& G_{BP} - G_{RP} <
+        \mathcal{N}(0.56, [\sigma_P+f(E, G_{BP}-G_{RP})^2]),& G_{BP} - G_{RP} <
         0.56,
     \end{cases}
 \label{eqn:gyro}
@@ -87,8 +87,9 @@ We estimated the convective overturn time, $\tau$, using equation 11 of
 \citet{wright2011}.
 The rotation periods of hot stars (\gcolor\ $<$ 0.56) are fast and do
 not relate to their age or color.
-We modeled these stars with a simple log-normal distribution with a mean of 1
-day.
+We modeled these stars with a simple log-normal distribution with a mean of
+3.5 days, based on the rotation periods of hot stars in the
+\citet{mcquillan2014} catalog.
 Figure \ref{fig:rotation_model} shows the rotation periods of 841
 stars generated from the gyrochronology model.
 \begin{figure}
