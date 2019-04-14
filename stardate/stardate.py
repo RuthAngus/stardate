@@ -28,14 +28,6 @@ class Star(object):
         prot (float): The rotation period of the star in days.
         prot_err (float): The uncertainty on the stellar rotation period in
             days.
-        color (Optional[float]): B-V or G_BP - G_RP color.
-            In order to infer an age with only gyrochronology, a B-V color
-            must be provided if using the angus15 model, or a G_BP - G_RP
-            colour if using the praesepe model. Only include this if you want
-            to use gyrochronology only!
-        mass (Optional[float]): In order to infer an age with only
-            gyrochronology, a mass must be provided (units of Solar masses).
-            Only include this if you want to use gyrochronology only!
         savedir (Optional[str]): The name of the directory where the samples
             will be saved. Default is the current working directory.
         filename (Optional[str]): The name of the h5 file which the posterior
@@ -43,20 +35,18 @@ class Star(object):
 
     """
 
-    def __init__(self, iso_params, prot=None, prot_err=None, color=None,
-                 mass=None, savedir=".", filename="samples"):
+    def __init__(self, iso_params, prot=None, prot_err=None, savedir=".",
+                 filename="samples"):
 
         self.iso_params = iso_params
         self.prot = prot
         self.prot_err = prot_err
         self.savedir = savedir
         self.filename = filename
-        self.color = color
-        self.mass = mass
 
     def fit(self, inits=[329.58, 9.5596, -.0478, np.exp(5.5629), .0045],
             nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
-            gyro_only=False, optimize=False, rossby=True, model="angus15"):
+            optimize=False, rossby=True, model="angus15"):
         """Run MCMC on a star.
 
         Explore the posterior probability density function of the stellar
@@ -80,23 +70,12 @@ class Star(object):
                 number of saved samples (which is max_n/thin_by). Default = 0.
             iso_only (Optional[bool]): If true only the isochronal likelihood
                 function will be used.
-            gyro_only (Optional[bool]): If true only the gyrochronal
-                likelihood function will be used. Cannot be true if iso_only
-                is true.
 
         """
 
         self.max_n = max_n
         self.nwalkers = nwalkers
         self.thin_by = thin_by
-
-        if iso_only:
-            assert gyro_only == False, "You cannot set both iso_only and "\
-                "gyro_only to be True."
-
-        if gyro_only:
-            assert self.mass, "If gyro_only is set to True, you must " \
-                "provide a colour and a mass."
 
         if burnin > max_n/thin_by:
             burnin = int(max_n/thin_by/3)
@@ -124,8 +103,7 @@ class Star(object):
 
         # lnprob arguments
 
-        args = [mod, self.prot, self.prot_err, self.color, self.mass,
-                iso_only, gyro_only, rossby, model]
+        args = [mod, self.prot, self.prot_err, iso_only, rossby, model]
         self.args = args
 
         # Optimize. Try a few inits and pick the best.
