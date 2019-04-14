@@ -458,6 +458,11 @@ def sigma(color, eep, model="angus15"):
     kcool, khot, keep = 100, 100, .2
     Lcool, Lhot, Leep = .5, .5, .5
     x0eep = 454
+    k_old, x0_old = 100, np.log10(10*1e9)
+    k_young, x0_young = 20, np.log10(250*1e6)
+    L_age = .5
+    k_feh, L_feh, x0_feh = 5, .5, 3.
+
 
     if model == "angus15":
         x0cool, x0hot = 1.4, .45
@@ -476,7 +481,14 @@ def sigma(color, eep, model="angus15"):
             sigma_color = .5
 
     sigma_eep = sigma_eep = sigmoid(keep, x0eep, Leep, eep)
-    return sigma_color + sigma_eep
+    sigma_total = sigma_color + sigma_eep
+
+    # sigma_age = sigmoid(k_age, x0_age, L_age, log_age) \
+    #     + sigmoid(k_young, -x0_young, L_age, -log_age)
+    # sigma_feh = sigmoid(k_feh, x0_feh, L_feh, feh) \
+    #     + sigmoid(k_feh, x0_feh, L_feh, -feh)
+
+    return sigma_total
 
 
 def calc_rossby_number(prot, mass):
