@@ -61,7 +61,7 @@ def gyro_model_praesepe(log10_age, bprp):
     # Log rotation period is zero if the star is very hot.
     # Don't try to take log of negative number.
     if bprp < 0.:
-       return 0
+       return .56
 
     log10_bprp = np.log10(bprp)
 
@@ -73,7 +73,7 @@ def gyro_model_praesepe(log10_age, bprp):
     if log10_bprp >= .43:
         return np.polyval(p[6:], log10_bprp) + p[5]*log10_age
     elif log10_bprp < -.25:
-        return 0.56
+        return .56
     else:
         return np.polyval(p[:5], log10_bprp) + p[5]*log10_age
 
