@@ -171,7 +171,7 @@ def gyro_model_rossby(params, Ro_cutoff=2, rossby=True, model="angus15"):
         return np.nan, np.nan
 
     # Calculate the additional sigma
-    sig = sigma(params[0], params[1], params[2], color)
+    sig = sigma(params[0], params[1], params[2], color, model=model)
 
     if not rossby:  # If Rossby model is switched off
         # Standard gyro model
@@ -470,12 +470,12 @@ def sigma(eep, log_age, feh, color, model="angus15"):
             sigma_color = .5
 
     sigma_eep = sigma_eep = sigmoid(keep, x0eep, Leep, eep)
-    sigma_age = sigmoid(k_old, x0_old, L_age, log_age) \
-        + sigmoid(k_young, -x0_young, L_age, -log_age)
+    sigma_age = sigmoid(k_young, -x0_young, L_age, -log_age) \
+        # + sigmoid(k_old, x0_old, L_age, log_age) \
     sigma_feh = sigmoid(k_feh, x0_feh, L_feh, feh) \
         + sigmoid(k_feh, x0_feh, L_feh, -feh)
 
-    sigma_total = sigma_color + sigma_eep + sigma_age + sigma_feh
+    sigma_total = sigma_color + sigma_eep + sigma_feh + sigma_age
     return sigma_total
 
 
