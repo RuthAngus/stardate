@@ -58,20 +58,22 @@ We used the following composite gyrochronology model to infer ages from
 rotation periods,
 \begin{equation}
     \log_{10}(P_\mathrm{rot}) \sim \begin{cases}
-        \mathcal{N}\left(f(A)g(C), [\sigma_P+f(E, G_{BP} - G_{RP})^2]\right), & Ro < 2,
+        \mathcal{N}\left(f(A)g(C), [\sigma_P+f(E, A, \mathrm{[Fe/H]}, C)]^2\right), & Ro < 2,
         G_{BP} - G_{RP} < 2.7 \\
-        \mathcal{N}(f(A)h(C), [\sigma_P+f(E, G_{BP} - G_{RP})^2]), & Ro < 2,
+        \mathcal{N}(f(A)h(C), [\sigma_P+f(E, A, \mathrm{[Fe/H]}, C)]^2), & Ro < 2,
         G_{BP} - G_{RP} > 2.7 \\
-        \mathcal{N}(\log_{10}(P_\mathrm{max}), [\sigma_P+f(E, G_{BP} - G_{RP})^2]),& Ro \geq 2 \\
-        \mathcal{N}(0.56, [\sigma_P+f(E, G_{BP}-G_{RP})^2]),& G_{BP} - G_{RP} <
+        \mathcal{N}(\log_{10}(P_\mathrm{max}), [\sigma_P+f(E, A,
+        \mathrm{[Fe/H]}, C)]^2),& Ro \geq 2 \\
+        \mathcal{N}(0.56, [\sigma_P+f(E, A, \mathrm{[Fe/H]}, C)]^2),& G_{BP} - G_{RP} <
         0.56,
     \end{cases}
 \label{eqn:gyro}
 \end{equation}
 where $\sigma_P$ is the logarithmic period uncertainty.
 The variance of these normal distributions was given by the observational
-rotation period uncertainties plus an additional scatter that is a function
-of color and EEP (described in more detail later in this section).
+rotation period uncertainties plus an additional scatter that is a function of
+EEP, age, metallicity and color (described in more detail later in this
+section).
 % The power law functional form was introduced by \citep{barnes2003} and the
 % parameter values were adopted from the recalibration performed in
 % \citet{angus2015}, which was based on young cluster stars and old
@@ -173,8 +175,8 @@ maximum values at \gcolor\ = 0.56 and 2.5 for hot and cool stars respectively
 and EEP = 454 for subgiants.
 The maximum standard deviation value of the logarithmic rotation periods for
 all three groups (hot, cool and evolved) was 0.5 and the logistic growth rate,
-or steepness, of the three sigmoids were 100, 100 and .2 for hot, cool and
-evolved stars respectively.
+or steepness, of the three sigmoids were 100 dex$^-1$, 100 dex$^-1$ and
+.2 in EEP$^-1$ for hot, cool and evolved stars respectively.
 If a star is both hot and evolved, the additional standard deviation of its
 rotation period rises to 1 (no late M dwarfs have yet evolved off the main
 sequence so this does not apply to the cool stars).
@@ -182,21 +184,21 @@ sequence so this does not apply to the cool stars).
   \caption{
     The additional standard deviation in rotation period added to the
     observational period uncertainties in our model.
-    The standard deviation was artificially increased for early F and hotter
+    The standard deviation was increased for early F and hotter
     % stars ($B-V < 0.45$), late M dwarfs ($B-V > 1.4$) and evolved stars
-    stars (\gcolor $<$ 0.56), late M dwarfs (\gcolor\ $>$ 2.7) and evolved stars
-    (EEP $>$ 454) in order to down-weight the age-information supplied by
-    rotation periods and reproduce observed distributions.
+    stars (\gcolor $<$ 0.56), late M dwarfs (\gcolor\ $>$ 2.7) and evolved
+    stars (EEP $>$ 454) in order to down-weight the age-information supplied
+    by rotation periods and reproduce observed rotation period distributions.
     Down-weighting the gyrochronal likelihood by the inverse variance
     ($1/\sigma^2$) allows the ages of these stars to be mostly inferred
     via isochrone fitting.
     The variance of an inferred age is proportional to the
     variance of the rotation periods.
-    Adding 0.25 to the variance of the (log) rotation periods is an increase over
-    the variance provided by period measurement uncertainties of a factor of 100.
-    By increasing the variance 100-fold, we reduce the age-information in
-    rotation periods by 100-fold, effectively rendering them completely
-    uninformative.
+    Adding 0.25 to the variance of the (log) rotation periods is an increase
+    over the variance provided by period measurement uncertainties of around
+    a factor of 10.
+    By increasing the variance 10-fold, we reduce the age-information in
+    rotation periods by 10-fold.
     The ages of hot and evolved stars can be relatively precisely constrained
     with isochrone fitting since their position on the CMD changes rapidly
     with time, however isochrone fitting cannot constrain the ages of
