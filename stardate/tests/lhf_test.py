@@ -235,11 +235,14 @@ def test_gyro_model_rossby():
 
 
 def test_sigma():
-    assert sigma(.3, 355) > .49  # Low BV (hot star) high variance
-    assert sigma(2, 355) > .49  # high BV (hot star) high variance
-    assert sigma(.65, 355) < .01  # low variance for FGK dwarfs
-    assert sigma(.65, 355) < .01  # low variance for dwarfs
-    assert sigma(.65, 500) > .49  # high variance for giants
+    assert sigma(355, 9, 0., .3) > .49  # Low BV (hot star) high variance
+    assert sigma(355, 9, 0, 2) > .49  # high BV (cool star) high variance
+    assert sigma(355, 9, 0, .65) < .01  # low variance for FGK dwarfs
+    assert sigma(500, 9, 0, .65) > .49  # high variance for giants
+    assert sigma(300, 7, 0, .65) > .49  # high variance for young stars
+    assert sigma(300, 10.1, 0, .65) > .49  # high variance for old stars
+    assert sigma(355, 9, -4., .65) > .49  # high variance for old stars
+    assert sigma(355, 9, 4., .65) > .49  # high variance for old stars
 
 
 def test_age_model():
