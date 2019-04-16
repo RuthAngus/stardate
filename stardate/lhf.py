@@ -441,8 +441,12 @@ def sigma(eep, log_age, feh, color, model="angus15"):
     variance at hot colours, cool colours and large EEPs. The FGK dwarf part
     of the model has zero variance.
     Args:
-        color (float or array): The B-V or G_BP - G_RP colour.
-        eep (float or array): The equivalent evolutionary point.
+        eep (float): The equivalent evolutionary point.
+        log_age (float): The log10(age) in years.
+        feh (float): The metallicity.
+        color (float): The G_BP - G_RP colour if model == "praesepe" or the
+            B-V color if model == "angus15"
+
     """
     kcool, khot, keep = 100, 100, .2
     Lcool, Lhot, Leep = .5, .5, .5
