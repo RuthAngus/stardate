@@ -359,8 +359,8 @@ def lnprob(lnparams, *args):
     log10_period_model = gyro_model_rossby(params[1], color, mass,
                                            rossby=rossby, model=model)
 
-    print("var", var)
     var = (period_err/period + sigma(color, params[0], model=model))**2
+    print("var", var)
 
     # Calculate the gyrochronology likelihood.
     gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
