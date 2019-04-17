@@ -487,6 +487,8 @@ def sigma(eep, log_age, feh, color, model="angus15"):
     sigma_feh = sigmoid(k_feh, x0_feh, L_feh, feh) \
         + sigmoid(k_feh, x0_feh, L_feh, -feh)
 
+    print(color, "color", eep, "eep")
+    print(sigma_color, "sigma_color", sigma_eep, "sigma_eep")
     sigma_total = sigma_color + sigma_eep# + sigma_feh + sigma_age
     return sigma_total
 
