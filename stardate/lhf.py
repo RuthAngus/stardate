@@ -362,8 +362,8 @@ def lnprob(lnparams, *args):
     # Calculate the gyrochronology likelihood.
     gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
         - .5*np.log(2*np.pi*var)
+    print(log10_period_model, np.log10(period), var)
 
-    print(mod.lnlike(params), gyro_lnlike, lnpr)
     prob = mod.lnlike(params) + gyro_lnlike + lnpr
 
     if not np.isfinite(prob):
@@ -487,7 +487,7 @@ def sigma(eep, log_age, feh, color, model="angus15"):
     sigma_feh = sigmoid(k_feh, x0_feh, L_feh, feh) \
         + sigmoid(k_feh, x0_feh, L_feh, -feh)
 
-    sigma_total = sigma_color + sigma_eep + sigma_feh + sigma_age
+    sigma_total = sigma_color + sigma_eep# + sigma_feh + sigma_age
     return sigma_total
 
 
