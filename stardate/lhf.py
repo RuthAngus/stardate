@@ -373,6 +373,7 @@ def lnprob(lnparams, *args):
     if not np.isfinite(prob):
         prob = -np.inf
 
+    print(float(prob), lnpr)
     return float(prob), lnpr
 
 
