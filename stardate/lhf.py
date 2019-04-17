@@ -478,8 +478,6 @@ def sigma(color, eep, model="angus15"):
     elif model == "praesepe":
         x0cool, x0hot = .4, .25
         if color > 0:
-            print(sigmoid(khot, x0hot, Lhot, -np.log10(color)), "1")
-            print(sigmoid(kcool, x0cool, Lcool, np.log10(color)), "2")
             sigma_color = sigmoid(kcool, x0cool, Lcool, np.log10(color)) \
                 + sigmoid(khot, x0hot, Lhot, -np.log10(color))
         else:
@@ -487,7 +485,7 @@ def sigma(color, eep, model="angus15"):
 
     sigma_eep = sigma_eep = sigmoid(keep, x0eep, Leep, eep)
     sigma_total = sigma_color + sigma_eep
-
+    print("sigma_color", sigma_color, "sigma_eep", sigma_eep)
     # sigma_age = sigmoid(k_age, x0_age, L_age, log_age) \
     #     + sigmoid(k_young, -x0_young, L_age, -log_age)
     # sigma_feh = sigmoid(k_feh, x0_feh, L_feh, feh) \
