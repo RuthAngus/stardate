@@ -359,7 +359,7 @@ def lnprob(lnparams, *args):
     log10_period_model = gyro_model_rossby(params[1], color, mass,
                                            rossby=rossby, model=model)
 
-    var = (period_err/period + sigma(color, params[0]))**2
+    var = (period_err/period + sigma(color, params[0], model=model))**2
 
     # Calculate the gyrochronology likelihood.
     gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
@@ -485,8 +485,6 @@ def sigma(color, eep, model="angus15"):
 
     sigma_eep = sigma_eep = sigmoid(keep, x0eep, Leep, eep)
     sigma_total = sigma_color + sigma_eep
-    print(color, "color", eep, "eep")
-    print(sigma_color, "sigma_color", sigma_eep, "sigma_eep")
 
     # sigma_age = sigmoid(k_age, x0_age, L_age, log_age) \
     #     + sigmoid(k_young, -x0_young, L_age, -log_age)
