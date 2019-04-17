@@ -224,7 +224,21 @@ def test_gyro_model_rossby():
     """
     age = np.log10(4.56*1e9)
     sun = [355, age, 0., 1000, 0.]
-    prot_sun = 10**gyro_model_rossby(sun, model="angus15")[0]
+
+    iso_params = {"teff": (5777, 10),
+                  "logg": (4.44, .05),
+                  "feh": (0., .001),
+                  "parallax": (1., .01),  # milliarcseconds
+                  "B": (15.48, 0.02)}
+
+    # Set up the StarModel isochrones object.
+    mod = StarModel(mist, **iso_params)
+    # the lnprob arguments]
+    args = [mod, 26., 1., False, True, "praesepe"]
+    print(lnprob(sun, *args))
+    assert 0
+
+    prot_sun = 10**gyro_model_rossby(sun, model="praesepe")[0]
     assert 23 < prot_sun
     assert prot_sun < 27
 
