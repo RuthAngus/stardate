@@ -364,6 +364,7 @@ def lnprob(lnparams, *args):
     # Calculate the gyrochronology likelihood.
     gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
         - .5*np.log(2*np.pi*var)
+    print(log10_period_model, np.log10(period), var)
 
     if gyro_only:
         return float(gyro_lnlike) + lnpr, lnpr
