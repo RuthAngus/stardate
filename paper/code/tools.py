@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from tqdm import tqdm, trange
+import emcee
 
 import read_mist_models
 from isochrones.mist import MIST_Isochrone
@@ -25,6 +26,21 @@ def color_err(c):
 
 
 def photometric_noise(G, bp, rp):
+    """
+    Calculates the noise on Gaia G, bp, rp and parallax.
+
+    Args:
+        G (array): Gaia G band magnitude.
+        bp (array): Gaia G_BP band magnitude.
+        rp (array): Gaia G_RP band magnitude.
+
+    Returns:
+        G (array): Uncertainty on Gaia G band magnitude.
+        bp (array): Uncertainty on Gaia G_BP band magnitude.
+        rp (array): Uncertainty on Gaia G_RP band magnitude.
+        parallax_err (array): Photometry-based uncertainty on Gaia parallax.
+
+    """
     G_err = np.zeros(len(G))
     bright = G < 13
     medium = (13 < G) * (G < 17)
@@ -169,3 +185,95 @@ def generate_df(N=1000, with_noise=False):
     finite_df["ID"] = range(len(finite_df))
 
     return finite_df
+
+
+def percentiles_from_samps(samps):
+    med = np.median(samps)
+    std = np.std(samps)
+    upper = np.percentile(samps, 84)
+    lower = np.percentile(samps, 16)
+    errp = upper - med
+    errm = med -lower
+    return med, errp, errm, std
+
+
+def read_files(name, ids, dirname=".", zf=4, burnin=100):
+    """
+    Read h5 results files.
+
+    Args:
+        name (int): The non star-id part of the string.
+        ids (list): list of star ids.
+        dirname (str): Directory path.
+        burnin (Optional[int]): Number of burn in samples to discard.
+
+    Returns:
+        age_samps (list): list of arrays.
+        meds (array): median age values.
+        errp (array): upper age uncertainties.
+        errm (array): lower age uncertainties.
+        std (array): Age uncertainties.
+        inds (array): Indices of ids that had files available.
+    """
+    meds, age_samps, errp, errm, std, inds = [], [], [], [], [], []
+
+    for i, ID in enumerate(ids):
+        try:
+            fname = "{0}/{1}_{2}.h5".format(dirname, str(int(ID)).zfill(zf),
+                                            name)
+            reader = emcee.backends.HDFBackend(fname)
+            samples = reader.get_chain()
+
+            if np.shape(samples)[0] > 10:
+                nsteps, nwalkers, ndim = np.shape(samples)
+                samps = np.reshape(samples, (nsteps*nwalkers, ndim))
+
+                a, ap, am, _std = percentiles_from_samps(
+                    (10**samps[burnin:, 1])*1e-9)
+                age_samps.append((10**samps[burnin:, 1])*1e-9)
+                meds.append(a)
+                errp.append(ap)
+                errm.append(am)
+                std.append(_std)
+                inds.append(i)
+            else:
+                print("too few samples")
+
+        except:
+            pass
+
+    return age_samps, np.array(meds), np.array(errp), np.array(errm), \
+        np.array(std), np.array(inds)
+
+
+def selection(df, inds, model="angus15"):
+    """
+    Separate hot stars, cool stars, etc.
+
+    """
+
+    if model == "angus15":
+        hot_cut, cool_cut, giant_cut, ro_cut = .45, 1.35, 440, 1.8
+        Ro = (df.prot.values[inds]/convective_overturn_time(df.mass.values[inds]))
+        evolved = (df.eep.values[inds] > giant_cut) #* (df.BV.values[inds] > hot_cut)
+        hot = (df.BV.values[inds] < hot_cut) * (df.eep.values[inds] < giant_cut)
+        hot_evolved = (df.BV.values[inds] < hot_cut) * (df.eep.values[inds] > giant_cut)
+        cool = (df.BV.values[inds] > cool_cut) * (df.eep.values[inds] < giant_cut) * (Ro < ro_cut)
+        fgk = (df.eep.values[inds] < giant_cut) * (df.BV.values[inds] > hot_cut) * \
+            (df.BV.values[inds] < cool_cut) * (Ro < ro_cut)
+        rossbied = (Ro > ro_cut) * (df.BV.values[inds] > hot_cut) * (df.BV.values[inds] < cool_cut) \
+            * (df.eep.values[inds] < giant_cut)
+
+    elif model == "praesepe":
+        bprp = df.BP.values[inds] - df.RP.values[inds]
+        hot_cut, cool_cut, giant_cut, ro_cut = .56, 1.4, 440, 1.8
+        Ro = (df.prot.values[inds]/convective_overturn_time(df.mass.values[inds]))
+        evolved = (df.eep.values[inds] > giant_cut)
+        hot = (bprp < hot_cut) * (df.eep.values[inds] < giant_cut)
+        hot_evolved = (bprp < hot_cut) * (df.eep.values[inds] > giant_cut)
+        cool = (bprp > cool_cut) * (df.eep.values[inds] < giant_cut) * (Ro < ro_cut)
+        fgk = (df.eep.values[inds] < giant_cut) * (bprp > hot_cut) * (bprp < cool_cut) * (Ro < ro_cut)
+        rossbied = (Ro > ro_cut) * (bprp > hot_cut) * (bprp < cool_cut) * (df.eep.values[inds] < giant_cut)
+
+
+    return fgk, hot, cool, evolved, rossbied
