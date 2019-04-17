@@ -213,7 +213,8 @@ def test_gyro_model():
 
 def test_praesepe_gyro_model():
     prot = gyro_model_praesepe(np.log10(4.56*1e9), .82)
-    assert 24.5 < prot < 27.5
+    print(10**prot, "praesepe_gyro_model")
+    assert 24.5 < 10**prot < 27.5
 
 
 def test_gyro_model_rossby():
@@ -229,7 +230,7 @@ def test_gyro_model_rossby():
 
     prot_sun_p = 10**gyro_model_rossby(
         [355, np.log10(4.56*1e9), 0., 1000, 0.], model="praesepe")[0]
-    print(prot_sun_p)
+    print(prot_sun_p, "gyro_model_rossby")
     assert 21 < prot_sun_p
     assert prot_sun_p < 27
 
@@ -252,6 +253,7 @@ def test_age_model():
 
 
 def test_gyro_model_praesepe():
+    print(10**gyro_model_praesepe(np.log10(4.56*1e9), .82), "gyro_model_praesepe")
     assert 25 < 10**gyro_model_praesepe(np.log10(4.56*1e9), .82)
     assert 10**gyro_model_praesepe(np.log10(4.56*1e9), .82) < 27
     assert 10**gyro_model_praesepe(np.log10(4.56*1e9), 0.4) == 10**.56
@@ -306,11 +308,11 @@ def test_on_hot_star():
 
 if __name__ == "__main__":
 
-    print("\n Testing on hot star")
-    test_on_hot_star()
+    # print("\n Testing on hot star")
+    # test_on_hot_star()
 
-    print("\n Testing gyro model Angus15...")
-    test_praesepe_angus_model()
+    # print("\n Testing gyro model Angus15...")
+    # test_praesepe_angus_model()
 
     print("\nTesting gyro model Rossby...")
     test_gyro_model_rossby()
@@ -318,23 +320,26 @@ if __name__ == "__main__":
     print("\nTesting praesepe gyro model...")
     test_gyro_model_praesepe()
 
-    print("\nTesting age model...")
-    test_age_model()
+    print("\nTesting praesepe gyro model...")
+    test_praesepe_gyro_model()
 
-    print("\nTesting sigma...")
-    test_sigma()
+    # print("\nTesting age model...")
+    # test_age_model()
 
-    print("\nTesting B-V calculation...")
-    test_calc_bv()
+    # print("\nTesting sigma...")
+    # test_sigma()
 
-    print("\nTesting likelihood function on the Sun...")
-    test_lnprob_higher_likelihood_sun()
+    # print("\nTesting B-V calculation...")
+    # test_calc_bv()
 
-    print("\nTesting likelihood function on data...")
-    test_lnprob_higher_likelihood_real()
+    # print("\nTesting likelihood function on the Sun...")
+    # test_lnprob_higher_likelihood_sun()
 
-    print("\nTesting convective overturn timescale calculation...")
-    test_convective_overturn_timescale()
+    # print("\nTesting likelihood function on data...")
+    # test_lnprob_higher_likelihood_real()
 
-    # print("\n Test for NaNs")
-    # test_for_nans()
+    # print("\nTesting convective overturn timescale calculation...")
+    # test_convective_overturn_timescale()
+
+    # # print("\n Test for NaNs")
+    # # test_for_nans()
