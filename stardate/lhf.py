@@ -161,6 +161,7 @@ def gyro_model_rossby(log10_age, color, mass, Ro_cutoff=2, rossby=True,
     Returns:
         The log10(rotation period).
     """
+    print(color, "color")
     # If color is nan, return nan. This should be caught by the lhf.
     if np.isnan(color) == True:
         return np.nan

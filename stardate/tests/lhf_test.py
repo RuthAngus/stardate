@@ -233,7 +233,20 @@ def test_gyro_model_rossby():
     """
     age = np.log10(4.56*1e9)
     sun = [355, age, 0., np.log(1000), 0.]
-    prot_sun = 10**gyro_model_rossby(age, .65, 1.)
+    # prot_sun = 10**gyro_model_rossby(age, .65, 1.)
+
+    iso_params = {"teff": (5777, 10),
+                  "logg": (4.44, .05),
+                  "feh": (0., .001),
+                  "parallax": (1., .01),  # milliarcseconds
+                  "B": (15.48, 0.02)}
+
+    # Set up the StarModel isochrones object.
+    mod = StarModel(mist, **iso_params)
+
+    args = [mod, 26, 1., None, None, False, False, True, "praesepe"]
+    lnprob(sun, *args)
+    assert 0
     assert 24 < prot_sun
     assert prot_sun < 27
 
@@ -322,14 +335,14 @@ def test_on_hot_star():
 
 if __name__ == "__main__":
 
-    print("\n Testing on hot star")
-    test_on_hot_star()
+    # print("\n Testing on hot star")
+    # test_on_hot_star()
 
     # print("\n Testing gyro model Angus15...")
     # test_praesepe_angus_model()
 
-    # print("\nTesting gyro model Rossby...")
-    # test_gyro_model_rossby()
+    print("\nTesting gyro model Rossby...")
+    test_gyro_model_rossby()
 
     # print("\nTesting praesepe gyro model...")
     # test_gyro_model_praesepe()
