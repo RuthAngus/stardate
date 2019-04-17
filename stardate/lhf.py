@@ -363,6 +363,7 @@ def lnprob(lnparams, *args):
     gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
         - .5*np.log(2*np.pi*var)
 
+    print(mod.lnlike(params), gyro_lnlike, lnpr)
     prob = mod.lnlike(params) + gyro_lnlike + lnpr
 
     if not np.isfinite(prob):

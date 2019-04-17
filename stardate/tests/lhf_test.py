@@ -223,7 +223,7 @@ def test_gyro_model_rossby():
     Make sure it gives a maximum rotation period of pmax.
     """
     age = np.log10(4.56*1e9)
-    sun = [355, age, 0., 1000, 0.]
+    sun = [355, age, 0., np.log(1000), 0.]
 
     iso_params = {"teff": (5777, 10),
                   "logg": (4.44, .05),
