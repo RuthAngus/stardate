@@ -161,13 +161,10 @@ def gyro_model_rossby(params, Ro_cutoff=2, rossby=True, model="angus15"):
     """
     if model == "angus15":
         color = calc_bv(params)
-        print(color, "bv")
     elif model == "praesepe":
         color = calc_bprp(params)
-        print(color, "bprp")
 
     mass = mist.interp_value([params[0], params[1], params[2]], ["mass"])
-    print(mass, "mass")
 
     # If color is nan, return nan. This should be caught by the lhf.
     if np.isfinite(color) == False:
@@ -206,13 +203,11 @@ def gyro_model_rossby(params, Ro_cutoff=2, rossby=True, model="angus15"):
             log_P = gyro_model(params[1], color)
         elif model == "praesepe":
             log_P = gyro_model_praesepe(params[1], color)
-            print(10**log_P, "praesepe_model_period")
 
     # If star older than this age, return maximum possible rotation period.
     elif params[1] >= log10_age_thresh:
         log_P = np.log10(pmax)
 
-    print("period = ", 10**log_P)
     return log_P, sig
 
 
@@ -358,12 +353,10 @@ def lnprob(lnparams, *args):
         return lnpr, lnpr
 
     var = (period_err/period*.434 + sig)**2
-    print("var", var)
 
     # Calculate the gyrochronology likelihood.
     gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
         - .5*np.log(2*np.pi*var)
-    print(log10_period_model, np.log10(period), var)
 
     prob = mod.lnlike(params) + gyro_lnlike + lnpr
 
