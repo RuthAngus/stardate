@@ -167,7 +167,7 @@ def gyro_model_rossby(params, Ro_cutoff=2, rossby=True, model="angus15"):
     mass = mist.interp_value([params[0], params[1], params[2]], ["mass"])
 
     # If color is nan, return nan. This should be caught by the lhf.
-    if np.isnan(color) == True:
+    if np.isfinite(color) == False:
         return np.nan, np.nan
 
     # Calculate the additional sigma
@@ -349,6 +349,8 @@ def lnprob(lnparams, *args):
     # Calculate a period using the gyrochronology model
     log10_period_model, sig = gyro_model_rossby(params, rossby=rossby,
                                                 model=model)
+    if np.isnan(log10_period_model):
+        return lnpr, lnpr
 
     var = (period_err/period*.434 + sig)**2
 
@@ -479,7 +481,7 @@ def sigma(eep, log_age, feh, color, model="angus15"):
     sigma_feh = sigmoid(k_feh, x0_feh, L_feh, feh) \
         + sigmoid(k_feh, x0_feh, L_feh, -feh)
 
-    sigma_total = sigma_color + sigma_eep + sigma_feh + sigma_age
+    sigma_total = sigma_color + sigma_eep# + sigma_feh + sigma_age
     return sigma_total
 
 
