@@ -38,13 +38,15 @@ class Star(object):
     def __init__(self, iso_params, prot=None, prot_err=None, savedir=".",
                  filename="samples"):
 
-        if prot <= 0.:
-            print("WARNING: rotation period <= 0, isochrone likelihood" \
-                  "function will be used")
+        if prot not None:
+            if prot <= 0.:
+                print("WARNING: rotation period <= 0, isochrone likelihood" \
+                    "function will be used")
 
-        if prot_err <= 0.:
-            print("WARNING: rotation period uncertainty <= 0, isochrone" \
-                  "likelihood function will be used")
+        if prot_err not None:
+            if prot_err <= 0.:
+                print("WARNING: rotation period uncertainty <= 0, isochrone" \
+                    "likelihood function will be used")
 
         self.iso_params = iso_params
         self.prot = prot
