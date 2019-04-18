@@ -246,34 +246,52 @@ def read_files(name, ids, dirname=".", zf=4, burnin=100):
         np.array(std), np.array(inds)
 
 
-def selection(df, inds, model="angus15"):
+def getDust(G, bp, rp, ebv, maxnit=100):
     """
-    Separate hot stars, cool stars, etc.
+    Compute the Gaia extinctions assuming relations from Babusieux.
+
+    Author: Sergey Koposov skoposov@cmu.edu
+
+    Args:
+        G (float): Gaia G mag.
+        bp (float): Gaia BP mag.
+        rp (float): Gaia RP mag.
+        ebv (float): E(B-V), extinction in B-V.
+        maxnit (int): number of iterations
+
+    Returns:
+        Extinction in G,bp, rp
 
     """
+    c1, c2, c3, c4, c5, c6, c7 = [0.9761, -0.1704,
+                                  0.0086, 0.0011, -0.0438, 0.0013, 0.0099]
+    d1, d2, d3, d4, d5, d6, d7 = [
+        1.1517, -0.0871, -0.0333, 0.0173, -0.0230, 0.0006, 0.0043]
+    e1, e2, e3, e4, e5, e6, e7 = [
+        0.6104, -0.0170, -0.0026, -0.0017, -0.0078, 0.00005, 0.0006]
+    A0 = 3.1*ebv
+    P1 = np.poly1d([c1, c2, c3, c4][::-1])
 
-    if model == "angus15":
-        hot_cut, cool_cut, giant_cut, ro_cut = .45, 1.35, 440, 1.8
-        Ro = (df.prot.values[inds]/convective_overturn_time(df.mass.values[inds]))
-        evolved = (df.eep.values[inds] > giant_cut) #* (df.BV.values[inds] > hot_cut)
-        hot = (df.BV.values[inds] < hot_cut) * (df.eep.values[inds] < giant_cut)
-        hot_evolved = (df.BV.values[inds] < hot_cut) * (df.eep.values[inds] > giant_cut)
-        cool = (df.BV.values[inds] > cool_cut) * (df.eep.values[inds] < giant_cut) * (Ro < ro_cut)
-        fgk = (df.eep.values[inds] < giant_cut) * (df.BV.values[inds] > hot_cut) * \
-            (df.BV.values[inds] < cool_cut) * (Ro < ro_cut)
-        rossbied = (Ro > ro_cut) * (df.BV.values[inds] > hot_cut) * (df.BV.values[inds] < cool_cut) \
-            * (df.eep.values[inds] < giant_cut)
+    def F1(bprp): return np.poly1d(
+        [c1, c2, c3, c4][::-1])(bprp)+c5*A0+c6*A0**2+c7*bprp*A0
 
-    elif model == "praesepe":
-        bprp = df.BP.values[inds] - df.RP.values[inds]
-        hot_cut, cool_cut, giant_cut, ro_cut = .56, 1.4, 440, 1.8
-        Ro = (df.prot.values[inds]/convective_overturn_time(df.mass.values[inds]))
-        evolved = (df.eep.values[inds] > giant_cut)
-        hot = (bprp < hot_cut) * (df.eep.values[inds] < giant_cut)
-        hot_evolved = (bprp < hot_cut) * (df.eep.values[inds] > giant_cut)
-        cool = (bprp > cool_cut) * (df.eep.values[inds] < giant_cut) * (Ro < ro_cut)
-        fgk = (df.eep.values[inds] < giant_cut) * (bprp > hot_cut) * (bprp < cool_cut) * (Ro < ro_cut)
-        rossbied = (Ro > ro_cut) * (bprp > hot_cut) * (bprp < cool_cut) * (df.eep.values[inds] < giant_cut)
+    def F2(bprp): return np.poly1d(
+        [d1, d2, d3, d4][::-1])(bprp)+d5*A0+d6*A0**2+d7*bprp*A0
 
+    def F3(bprp): return np.poly1d(
+        [e1, e2, e3, e4][::-1])(bprp)+e5*A0+e6*A0**2+e7*bprp*A0
+    xind = np.isfinite(bp+rp+G)
+    curbp = bp-rp
+    for i in range(maxnit):
+        AG = F1(curbp)*A0
+        Abp = F2(curbp)*A0
+        Arp = F3(curbp)*A0
+        curbp1 = bp-rp-Abp+Arp
 
-    return fgk, hot, cool, evolved, rossbied
+        delta = np.abs(curbp1-curbp)[xind]
+        curbp = curbp1
+
+    AG = F1(curbp)*A0
+    Abp = F2(curbp)*A0
+    Arp = F3(curbp)*A0
+    return AG, Abp, Arp
