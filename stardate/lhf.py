@@ -348,17 +348,18 @@ def lnprob(lnparams, *args):
             or period_err <= 0.:
         gyro_lnlike = -.5*((5/(20.))**2) - np.log(20.)
 
-    # Calculate a period using the gyrochronology model
-    log10_period_model, sig = gyro_model_rossby(params, rossby=rossby,
-                                                model=model)
-    if np.isnan(log10_period_model):
-        return lnpr, lnpr
+    else:
+        # Calculate a period using the gyrochronology model
+        log10_period_model, sig = gyro_model_rossby(params, rossby=rossby,
+                                                    model=model)
+        if np.isnan(log10_period_model):
+            return lnpr, lnpr
 
-    var = (period_err/period*.434 + sig)**2
+        var = (period_err/period*.434 + sig)**2
 
-    # Calculate the gyrochronology likelihood.
-    gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
-        - .5*np.log(2*np.pi*var)
+        # Calculate the gyrochronology likelihood.
+        gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
+            - .5*np.log(2*np.pi*var)
 
     prob = mod.lnlike(params) + gyro_lnlike + lnpr
 
