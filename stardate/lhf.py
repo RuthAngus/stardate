@@ -343,7 +343,8 @@ def lnprob(lnparams, *args):
 
     # Check that the period is a positive, finite number. It doesn't matter
     # too much what the lhf is here, as long as it is constant.
-    if not period or not np.isfinite(period) or period <= 0.:
+    if not period or not np.isfinite(period) or period <= 0. \
+            or period_err <= 0.:
         gyro_lnlike = -.5*((5/(20.))**2) - np.log(20.)
 
     # Calculate a period using the gyrochronology model
