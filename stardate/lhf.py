@@ -355,7 +355,8 @@ def lnprob(lnparams, *args):
         if np.isnan(log10_period_model):
             return lnpr, lnpr
 
-        var = (period_err/period*.434 + sig)**2
+        relative_err = period_err/period
+        var = (relative_err*.434 + sig)**2
 
         # Calculate the gyrochronology likelihood.
         gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
