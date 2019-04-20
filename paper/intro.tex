@@ -40,8 +40,8 @@ This is represented in the spacing of isochrones on a Hertzsprung-Russell
 diagram (HRD) or color-magnitude diagram (CMD).
 On the MS, isochrones are tightly spaced and, even with very precise
 measurements of effective temperature and luminosity, the position of a MS
-star on the HR diagram may be consistent with range of isochrones spanning
-several billion years.
+star on the HRD may be consistent with range of isochrones spanning several
+billion years.
 At main sequence turn-off however, isochrones are spread further apart, so
 that sufficiently precisely measured temperatures and luminosities can yield
 ages that are extremely precise \citep[\eg][]{pont2004}.
@@ -50,7 +50,7 @@ The classical method for measuring stellar ages is isochrone placement, or
 isochrone fitting, where surface gravity changes resulting from fusion in the
 core (usually observed via luminosity, $L$, and effective temperature, \teff,
 or absolute magnitude and colour) are compared with a set of models that trace
-stellar evolution across the HR diagram, or CMD.
+stellar evolution across the HRD, or CMD.
 CMD/HRD position has been thoroughly mapped with physical models, and can be
 used to calculate relatively accurate (but not necessarily precise) ages,
 barring some small, $\sim$10\% variations between different models,
@@ -88,8 +88,8 @@ rotation period after around the age of the Hyades, 500-700 million years
  % stellar rotation periods appear to converge
 % onto a tight sequence \citep{irwin2009}.
 After this time, the age of a star can be inferred, to first order, from its
-color and rotation period alone and this is the principle behind
-gyrochronology.
+dust-corrected color (\eg\ B-V or \gcolor) and rotation period alone and this
+is the principle behind gyrochronology.
 
 %   - Theoretical vs empirical gyro models
 The relation between age, rotation period and mass has been studied in detail,
@@ -140,7 +140,7 @@ We present here a complementary method that combines isochrones with an {\it
 empirical} gyrochronology model using a Bayesian framework.
 The methodology is related to the \citet{vansaders2016} model in that both use
 a combination of rotation periods and other observable properties that track
-stellar evolution on the HR diagram in concert.
+stellar evolution on the HRD in concert.
 The main difference is that the gyrochronology model used here is an entirely
 empirically calibrated one, as opposed to a physically derived one.
 One major advantage of using a physically motivated gyrochronology model is
@@ -194,11 +194,20 @@ different ages.
 We leave these improvements for a future project and, for now, test the
 % PIXIE
 % \citet{angus2015} model which is built into a new open source {\it Python} package
-new Praesepe model which is built into a new open source {\it Python} package
-for gyrochronology, called \sd.
+new Praesepe-based model which is built into a new open source {\it Python}
+package for gyrochronology, called \sd.
 \sd\ provides the framework for simultaneous gyrochronology and isochrone
 fitting, and, because \sd\ is modular, it would be straightforward to update
 the gyrochronology relation in future.
+
+\racomment{An important point of context for this work is the new availability
+of data relevant to gyrochronology and stellar ages.
+\Gaia\ now provides broad-band photometry and parallaxes for over a billion
+stars, and \kepler\ \ktwo\ and \tess\ are providing rotation periods for
+hundreds of thousands of stars.
+Gyrochronology is becoming one of the most readily available age-dating
+methods, so it is important to continue to improve gyrochronology relations
+and methods.}
 
 % Paper outline
 %-----------------------------------------------------------------------------

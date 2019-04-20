@@ -40,7 +40,7 @@ Noise added to \gaia\ $G_{BP}$ and $G_{RP}$ bands ranged from 2 mmag for stars
 brighter than 13th magnitude to 200 mmag for stars fainter than 17th.
 Unphysical combinations of stellar parameters were discarded, resulting in a
 final sample size of 841 simulated stars.
-Figure \ref{fig:CMD_age} shows the position of these stars on an HR diagram
+Figure \ref{fig:CMD_age} shows the position of these stars on an HRD
 (with \logg\ on the y-axis instead of luminosity to improve the visibility of
 the MS), colored by their age.
 Rotation periods for FGK and early M dwarfs were generated using the
@@ -53,7 +53,7 @@ Based on the typical uncertainties on rotation periods in the
 deviation of 1\% to all stellar rotation periods.
 \begin{figure}
   \caption{
-      The simulated star sample plotted on an HR diagram, colored by age
+      The simulated star sample plotted on an HRD, colored by age
     (top panel) and rotation period (bottom panel).
     HRD positions were calculated using MIST isochrones via the {\tt
     isochrones.py} {\it Python} package and rotation periods were generated
@@ -89,47 +89,48 @@ hot stars (\gcolor\ $<$ 1.8), cool stars (\gcolor\ $>$ 2.5) and evolved stars
 (EEP $>$ 454).
 As expected, the low $Ro$, FGK stars show the most dramatic improvement in age
 precision.
-The median empirical age precision, the standard deviation of age posteriors
-as a percentage of age, was around 5\% for this group and the median relative
-error, defined as the absolute difference between the true and age the
-inferred age, as a percentage of the true age, was less than 2\%.
-The median error: the absolute difference between true and measured age was
-around 100 Myrs.
-In contrast, the median empirical precision of ages measured using only
-isochrone fitting was 50\% and the median error was 1.3 Gyr in absolute units,
-or 30\%.
-Ages measured for FGK stars by combining gyrochronology and isochrone fitting
-with \sd\ were 10 times more precise than ages measured with isochrone
-fitting.
-Even though the group of old FGK stars with large Rossby numbers have stopped
-magnetic braking, their rotation periods are still age-informative and
-relatively precise ages were measured for these stars with \sd.
-The median age precision for this group was 10\% with \sd\ and 22\% with
-isochrone fitting.
-The median age error was 500 Myr/5\% with \sd\ and 1.3 Gyr/16\% with isochrone
-fitting.
-Ages measured with \sd\ were around twice more precise than ages measured with
-isochrone fitting only, so although these stars have stopped spinning down,
-their rotation periods are still age-informative when paired with stellar
-evolution models.
-There is a tendency for the ages of these stars to be slightly underestimated
-however.
-% The median accuracy of hot star ages stayed roughly constant with \sd,
-% relative to isochrone fitting only (from a median error of 510 Myr to 560 Myr)
-% because of issues with sampling the posterior PDFs.
-% Adding gyrochronology to the age model creates a more multimodal posterior PDF
-% which makes sampling more difficult, leading to some highly inaccurate age
-% measurements at very high and very low ages.
-There was only a very slight improvement the precision of cool star, hot star
-and subgiant ages measured with \sd\ vs. isochrone
-fitting only.
-% This is expected because the rotation periods of these stars do not contain
-% information about stellar ages.
-For the whole sample, an overall median age precision of 10\% was provided by
-\sd\ (down from 28\% for isochrone fitting only), a median absolute error of
-500 Myrs (down from 1.3 Gyrs), and a relative error of 7\% (down from 23 \%).
-% On average, the ages of {\it all} FGKM dwarfs and subgiants were 3$\times$
-% more precise when their rotation periods were used to infer their ages.
+\racomment{Summary statistics rewrite in progress...}
+% The median empirical age precision, the standard deviation of age posteriors
+% as a percentage of age, was around 5\% for this group and the median relative
+% error, defined as the absolute difference between the true and age the
+% inferred age, as a percentage of the true age, was less than 2\%.
+% The median error: the absolute difference between true and measured age was
+% around 100 Myrs.
+% In contrast, the median empirical precision of ages measured using only
+% isochrone fitting was 50\% and the median error was 1.3 Gyr in absolute units,
+% or 30\%.
+% Ages measured for FGK stars by combining gyrochronology and isochrone fitting
+% with \sd\ were 10 times more precise than ages measured with isochrone
+% fitting.
+% Even though the group of old FGK stars with large Rossby numbers have stopped
+% magnetic braking, their rotation periods are still age-informative and
+% relatively precise ages were measured for these stars with \sd.
+% The median age precision for this group was 10\% with \sd\ and 22\% with
+% isochrone fitting.
+% The median age error was 500 Myr/5\% with \sd\ and 1.3 Gyr/16\% with isochrone
+% fitting.
+% Ages measured with \sd\ were around twice more precise than ages measured with
+% isochrone fitting only, so although these stars have stopped spinning down,
+% their rotation periods are still age-informative when paired with stellar
+% evolution models.
+% There is a tendency for the ages of these stars to be slightly underestimated
+% however.
+% % The median accuracy of hot star ages stayed roughly constant with \sd,
+% % relative to isochrone fitting only (from a median error of 510 Myr to 560 Myr)
+% % because of issues with sampling the posterior PDFs.
+% % Adding gyrochronology to the age model creates a more multimodal posterior PDF
+% % which makes sampling more difficult, leading to some highly inaccurate age
+% % measurements at very high and very low ages.
+% There was only a very slight improvement the precision of cool star, hot star
+% and subgiant ages measured with \sd\ vs. isochrone
+% fitting only.
+% % This is expected because the rotation periods of these stars do not contain
+% % information about stellar ages.
+% For the whole sample, an overall median age precision of 10\% was provided by
+% \sd\ (down from 28\% for isochrone fitting only), a median absolute error of
+% 500 Myrs (down from 1.3 Gyrs), and a relative error of 7\% (down from 23 \%).
+% % On average, the ages of {\it all} FGKM dwarfs and subgiants were 3$\times$
+% % more precise when their rotation periods were used to infer their ages.
 \begin{figure}
   \caption{
 The true vs. predicted ages of simulated stars.
@@ -151,7 +152,7 @@ Ages for other groups were improved slightly but not substantially.
 \label{fig:simulation_results}
 \end{figure}
 
-Figure \ref{fig:precision} shows the simulated stars on an HR diagram, with
+Figure \ref{fig:precision} shows the simulated stars on an HRD, with
 points colored by the relative precision of their predicted ages.
 % \logg\ is plotted the y-axis instead of luminosity because the MS spreads out
 % more in \teff-\logg\ space and it is easier to differentiate young and old
@@ -164,7 +165,7 @@ deviation of the age posteriors) they show that combining gyrochronology and
 isochrone fitting significantly improves age precision on the MS
 \begin{figure}
   \caption{
-Simulated stars on an HR diagram, colored by their relative age precision
+Simulated stars on an HRD, colored by their relative age precision
     using gyrochronology and isochrone fitting via \sd\ (top panel) and
     isochrone fitting only (bottom panel).
 Combining gyrochronology with isochrone fitting significantly improves stellar
@@ -189,7 +190,7 @@ The ages of late M dwarfs are highly imprecise because their ages are not well
 
 % \begin{figure}
 %   \caption{
-% The sample of simulated stars on an HR diagram, colored by the difference
+% The sample of simulated stars on an HRD, colored by the difference
 %     between their true age and their measured age (the age error).
 % }
 %   \centering
