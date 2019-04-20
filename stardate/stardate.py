@@ -56,7 +56,7 @@ class Star(object):
 
     def fit(self, inits=[329.58, 9.5596, -.0478, np.exp(5.5629), .0045],
             nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
-            optimize=False, rossby=True, model="angus15"):
+            gyro_only=False, optimize=False, rossby=True, model="praesepe"):
         """Run MCMC on a star.
 
         Explore the posterior probability density function of the stellar
@@ -79,6 +79,8 @@ class Star(object):
                 when accessing the results. This number cannot exceed the
                 number of saved samples (which is max_n/thin_by). Default = 0.
             iso_only (Optional[bool]): If true only the isochronal likelihood
+                function will be used.
+            gyro_only (Optional[bool]): If true only the gyro likelihood
                 function will be used.
 
         """
@@ -113,7 +115,8 @@ class Star(object):
 
         # lnprob arguments
 
-        args = [mod, self.prot, self.prot_err, iso_only, rossby, model]
+        args = [mod, self.prot, self.prot_err, iso_only, gyro_only, rossby,
+                model]
         self.args = args
 
         # Optimize. Try a few inits and pick the best.
