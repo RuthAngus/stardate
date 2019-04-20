@@ -16,6 +16,9 @@ in figure \ref{fig:praesepe}).
     The rotation periods of Praesepe members \citep{douglas2016},
     vs. their \Gaia\ colors (\gcolor) with a broken power law model fit to
     these data.
+    The dashed line and shaded region shows the mean model and variance
+    described in equation \ref{eqn:gyro}.
+    The solid blue line shows the \citep{angus2015} gyrochronology relation.
     Shaded regions show the 1$\sigma$ range of the log-normal rotation period
     model used for M dwarfs and hot stars: the rotation periods of these stars
     were modelled as a broad Gaussian.
@@ -37,34 +40,66 @@ the ages of Praesepe and the Sun\footnote{The fitting process was
 performed in a Jupyter notebook available at
 \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fitting_Praesepe.ipynb}.}.
 This new Praesepe-calibrated gyrochronology relation was,
+% \begin{equation}
+%     \log_{10}(P_\mathrm{rot}) = f(\log_{10}[A])g(\log_{10}[G_{BP}-G_{RP}]) \nonumber,
+% \end{equation}
 \begin{equation}
-    P_\mathrm{rot} = f(A)g(C) \nonumber,
+    \log_{10}(P_\mathrm{rot}) =
+    c_A\log_{10}(A) +
+    \sum_{n=0}^4 c_n[\log_{10}(G_{BP}-G_{RP})]^n
+    % 0.65(0.05)\log_{10}(A) -4.7(0.5) + 0.72(0.05)C
+    % -4.9(0.2)C^2 + 29(2)C^3 -38(3)C^4
+\label{eqn:fgk_gyro}
 \end{equation}
+% where C is $\log_{10}(G_{BP}-G_{RP})$, $A$ is age in years, and parameter
+% uncertainties are parenthesized,
+for stars with \gcolor\ $<$ 2.7 and
+% \begin{equation}
+%     P_{\mathrm{rot}} = f(A)h(C) \nonumber,
+% \end{equation}
 \begin{equation}
-    \log_{10}(P_{rot}) = 0.65(0.05)\log_{10}(A) -4.7(0.5) + 0.72(0.05)C
-    -4.9(0.2)C^2 + 29(2)C^3 -38(3)C^4
+    \log_{10}(P_\mathrm{rot}) =
+    c_A\log_{10}(A) +
+    \sum_{m=0}^1 b_m[\log_{10}(G_{BP}-G_{RP})]^m
+    % \log_{10}(P_{rot}) = 0.65(0.05)\log_{10}(A) + 0.9(0.5) -13.6(0.1)C,
+\label{eqn:m_gyro}
 \end{equation}
-where C is $\log_{10}(G_{BP}-G_{RP})$, $A$ is age in years, and parameter
-uncertainties are parenthesized, for stars with \gcolor\ $<$ 2.7 and
-\begin{equation}
-    P_{\mathrm{rot}} = f(A)h(C) \nonumber,
-\end{equation}
-\begin{equation}
-    \log_{10}(P_{rot}) = 0.65(0.05)\log_{10}(A) + 0.9(0.5) -13.6(0.1)C,
-\end{equation}
-for stars with \gcolor\ $>$ 2.7.
+for stars with \gcolor\ $>$ 2.7, where $P_{\mathrm{rot}}$ is rotation period
+in days and $A$ is age in years.
+Best-fit coefficient values are shown in table \ref{tab:coefficients}.
+\begin{table}[h!]
+  \begin{center}
+      \caption{Coefficient values for equations \ref{eqn:fgk_gyro} and
+      \ref{eqn:m_gyro}.}
+    \label{tab:coefficients}
+    \begin{tabular}{l|c} % <-- Alignments: 1st column left and 2nd middle, with vertical lines in between
+      Coefficient & Value  \\
+      \hline
+      $c_A$ & 0.65 $\pm$ 0.05 \\
+      $c_0$ & -4.7 $\pm$ 0.5 \\
+      $c_1$ & 0.72 $\pm$ 0.05 \\
+      $c_2$ & -4.9 $\pm$ 0.2 \\
+      $c_3$ & 29 $\pm$ 2 \\
+      $c_4$ & -38 $\pm$ 4 \\
+      $b_0$ & 0.9 $\pm$ 0.5 \\
+      $b_1$ & -13.6 $\pm$ 0.1 \\
+    \end{tabular}
+  \end{center}
+\end{table}
 
 We used the following composite gyrochronology model to infer ages from
 rotation periods,
 \begin{equation}
     \log_{10}(P_\mathrm{rot}) \sim \begin{cases}
-        \mathcal{N}\left(f(A)g(C), [\sigma_P+f(E, A, \mathrm{[Fe/H]}, C)]^2\right), & Ro < 2,
+        \mathcal{N}\left[(\ref{eqn:fgk_gyro}), (\sigma_P+f[E, A,
+        \mathrm{[Fe/H]}, C])^2\right], & Ro < 2,
         G_{BP} - G_{RP} < 2.7 \\
-        \mathcal{N}(f(A)h(C), [\sigma_P+f(E, A, \mathrm{[Fe/H]}, C)]^2), & Ro < 2,
+        \mathcal{N}[(\ref{eqn:m_gyro}), (\sigma_P+f[E, A, \mathrm{[Fe/H]},
+        C])^2], & Ro < 2,
         G_{BP} - G_{RP} > 2.7 \\
-        \mathcal{N}(\log_{10}(P_\mathrm{max}), [\sigma_P+f(E, A,
-        \mathrm{[Fe/H]}, C)]^2),& Ro \geq 2 \\
-        \mathcal{N}(0.56, [\sigma_P+f(E, A, \mathrm{[Fe/H]}, C)]^2),& G_{BP} - G_{RP} <
+        \mathcal{N}[\log_{10}(P_\mathrm{max}), (\sigma_P+f[E, A,
+        \mathrm{[Fe/H]}, C])^2],& Ro \geq 2 \\
+        \mathcal{N}[0.56, (\sigma_P+f[E, A, \mathrm{[Fe/H]}, C])^2],& G_{BP} - G_{RP} <
         0.56,
     \end{cases}
 \label{eqn:gyro}
@@ -134,7 +169,7 @@ The rotation periods of hot stars, cool stars, subgiants and giants evolve
 differently to FGK and early M dwarfs.
 Stars more massive than around 1.25 M$_\odot$, with a temperature $\gtrsim$
 6250 K and a \gcolor\ color $\lesssim$ 0.56 do not spin down appreciably over
-their main sequence lifetimes because they do not have the deep convective
+their main-sequence lifetimes because they do not have the deep convective
 envelope needed to generate strong magnetic fields.
 Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures $\lesssim$
 3500 and \gcolor $\gtrsim$ 2.7 are only weakly magnetically braking until at
