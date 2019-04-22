@@ -1,39 +1,26 @@
-We present a new age-dating technique that combines two established methods,
-gyrochronology and isochrone fitting, to infer precise ages for field stars.
-This new method provides ages with a median theoretical precision of 10\%
-across the MS and subgiant branch.
-Gyrochronology and isochrone fitting are independent age-dating methods, each
-capable of providing extremely precise ages in certain areas of the
+We present a new age-dating technique that combines gyrochronology and
+isochrone fitting to infer ages for FGKM main-sequence and subgiant field
+stars.
+Gyrochronology and isochrone fitting are two age-dating methods that are each
+capable of providing relatively precise ages in certain areas of the
 Hertzsprung-Russell diagram.
-Combined, they can be applied to a much broader range of stellar masses and
-evolutionary stages and can provide ages that are more precise and accurate
-than either method in isolation.
-Rotation periods supply precise ages for cool stars on the main sequence via
-gyrochronology and isochrone fitting provides precise ages near main sequence
-turn off.
-In this investigation, we demonstrate that the placement of a star on the
-Hertzsprung-Russell or color-magnitude diagram
-% observables of main sequence
-% stars used to trace core hydrogen burning and stellar evolution on the
-% Hertzprung-Russell diagram (\teff, \feh, \logg, parallax, apparent magnitude
-% and photometric colors)
-can be combined with its \kepler\ rotation period to infer a precise age from
-both isochrone fitting and gyrochronology simultaneously.
+Rotation periods can provide precise ages for cool stars on the main sequence
+via gyrochronology, and isochrone fitting provides precise ages for stars near
+main sequence turn off.
+Combined, these two age-dating techniques can be applied to a broader range of
+stellar masses and evolutionary stages and can provide ages that are more
+precise and accurate than either method used in isolation.
+In this investigation, we demonstrate that the position of a star on the
+Hertzsprung-Russell or color-magnitude diagram can be combined with its
+\kepler\ rotation period to infer a precise age from both isochrone fitting
+and gyrochronology simultaneously.
 We show that incorporating rotation periods into stellar evolution models
-improves the precision of inferred ages on the main sequence.
-% For late F, GK and early M field dwarfs, this new method can provide ages with
-% 5\% precision, which is an order of magnitude improvement over using isochrone
-% fitting alone.
-However, since ages predicted with gyrochronology on the main sequence are, in
-general, much more precise than isochronal ages, care must be taken to ensure
-the gyrochronology relation being used is accurate.
-% The goal of this study is to explore the power of combining two independent
-% dating methods, not to recalibrate or improve upon existing gyrochronology
-% models.
-% However, only a slight modification to our algorithm would be required to
-% perform a calibration and, since the code is modular, an updated
-% gyrochronology model could easily replace the one used here in future.
-This publication is accompanied by an open source {\it Python} package called
-\sd, for inferring stellar ages for main sequence stars and subgiants from
-rotation periods, spectroscopic parameters and/or apparent magnitudes and
-parallaxes.
+particularly improves age precision and accuracy for GK stars on the main
+sequence, and can result in age estimates that are three times more precise
+and accurate than isochrone fitting alone.
+In addition, we provide a new gyrochronology relation, calibrated to the
+Praesepe cluster and the Sun, that includes a variance model for stars that
+do not have Solar-like magnetic dynamos.
+This publication is accompanied by an open source {\it Python} package (\sd)
+for inferring the ages of main sequence and subgiant FGKM stars from rotation
+periods, spectroscopic parameters and/or apparent magnitudes and parallaxes.
