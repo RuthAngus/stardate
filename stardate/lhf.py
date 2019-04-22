@@ -66,9 +66,17 @@ def gyro_model_praesepe(log10_age, bprp):
     log10_bprp = np.log10(bprp)
 
     # Hard-code the gyro parameters :-)
+    # c4, c3, c2, c1, c0, cA, b1, b0
+
+    # Parameters with Solar bp - rp = 0.82
     p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
          0.7161114835620975, -4.716819674578521, 0.6470950862322454,
          -13.558898318835137, 0.9359250478865809]
+
+    # Parameters with Solar bp - rp = 0.77
+    # p = [-38.982347111370984, 28.706848179526098, -4.922906414784183,
+    #      0.7176636876966253, -5.489008990829778, 0.7347258099244045,
+    #      -13.55785651951684, 0.16105197784241776]
 
     if log10_bprp >= .43:
         return np.polyval(p[6:], log10_bprp) + p[5]*log10_age
@@ -126,6 +134,10 @@ def age_model(log10_period, bprp):
     p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
         0.7161114835620975, -4.716819674578521, 0.6470950862322454,
         -13.558898318835137, 0.9359250478865809]
+
+    # p = [-38.982347111370984, 28.706848179526098, -4.922906414784183,
+    #      0.7176636876966253, -5.489008990829778, 0.7347258099244045,
+    #      -13.55785651951684, 0.16105197784241776]
 
     if log10_bprp >= .43:
         # return (log10_period - np.polyval(p[6:], log10_bprp))/p[5]
@@ -303,8 +315,8 @@ def lnprob(lnparams, *args):
             in ln(pc) and V-band extinction. [EEP, log10(age [yrs]), [Fe/H],
             ln(distance [pc]), A_v].
         *args:
-            The arguments -- mod, period, period_err, iso_only, rossby and
-            model.
+            The arguments -- mod, period, period_err, iso_only, gyro_only,
+            rossby and model.
             mod is the isochrones starmodel object which is set
             up in stardate.py. period and period_err are the
             rotation period and rotation period uncertainty (in days).
@@ -325,7 +337,7 @@ def lnprob(lnparams, *args):
     params[3] = np.exp(lnparams[3])
 
     # Unpack the args.
-    mod, period, period_err, iso_only, rossby, model = args
+    mod, period, period_err, iso_only, gyro_only, rossby, model = args
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -362,7 +374,10 @@ def lnprob(lnparams, *args):
         gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
             - .5*np.log(2*np.pi*var)
 
-    prob = mod.lnlike(params) + gyro_lnlike + lnpr
+    if gyro_only:
+        prob = gyro_lnlike + lnpr
+    else:
+        prob = mod.lnlike(params) + gyro_lnlike + lnpr
 
     if not np.isfinite(prob):
         prob = -np.inf
