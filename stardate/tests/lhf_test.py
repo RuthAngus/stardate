@@ -44,7 +44,7 @@ def test_lnprob_higher_likelihood_sun():
     # Set up the StarModel isochrones object.
     mod = StarModel(mist, **iso_params)
     # the lnprob arguments]
-    args = [mod, 26., 1., False, True, "angus15"]
+    args = [mod, 26., 1., False, False, True, "angus15"]
 
     good_lnparams = [346, np.log10(4.56*1e9), 0., np.log(1000), 0.]
     good_lnprob = lnprob(good_lnparams, *args)
@@ -78,7 +78,7 @@ def test_lnprob_higher_likelihood_real():
     # Set up the StarModel isochrones object.
     mod = StarModel(mist, **iso_params)
     # lnprob arguments
-    args = [mod, df.prot[i], 1, False, True, "angus15"]
+    args = [mod, df.prot[i], 1, False, False, True, "angus15"]
     good_lnparams = [df.eep.values[i], df.age.values[i], df.feh.values[i],
                      np.log(df.d_kpc.values[i]*1e3), df.Av.values[i]]
     good_lnprob = lnprob(good_lnparams, *args)
@@ -110,7 +110,7 @@ def test_for_nans():
 
         for j in trange(N):
             lnparams = [eeps[j], lnages[j], fehs[j], Ds[j], Avs[j]]
-            args = [mod, df.prot[i], 1., False, True,
+            args = [mod, df.prot[i], 1., False, False, True,
                     "angus15"]
             probs[j] = lnprob(lnparams, *args)[0]
             priors[j] = lnprob(lnparams, *args)[1]
@@ -133,16 +133,16 @@ def test_likelihood_rotation_giant():
     mod = StarModel(mist, **iso_params)
     lnparams = [355, np.log10(4.56*1e9), 0., np.log(1000), 0.]
 
-    args = [mod, None, None, False, True, "angus15"]  # the lnprob arguments]
+    args = [mod, None, None, False, False, True, "angus15"]  # the lnprob arguments]
     none_lnprob = lnprob(lnparams, *args)
 
-    args = [mod, np.nan, np.nan, False, True, "angus15"]  # the lnprob arguments]
+    args = [mod, np.nan, np.nan, False, False, True, "angus15"]  # the lnprob arguments]
     nan_lnprob = lnprob(lnparams, *args)
 
-    args = [mod, 0., 0., False, True, "angus15"]  # the lnprob arguments]
+    args = [mod, 0., 0., False, False, True, "angus15"]  # the lnprob arguments]
     zero_lnprob = lnprob(lnparams, *args)
 
-    args = [mod, 26., 1., True, True, "angus15"]  # the lnprob arguments]
+    args = [mod, 26., 1., True, False, True, "angus15"]  # the lnprob arguments]
     iso_lnprob = lnprob(lnparams, *args)
 
     # check that gyro is switched off for all of these.
@@ -153,7 +153,7 @@ def test_likelihood_rotation_giant():
     # Gaussian for giants.
     giant_params = [455, np.log10(4.56*1e9), 0., np.log(1000), 0.]
     dwarf_params = [453, np.log10(4.56*1e9), 0., np.log(1000), 0.]
-    args = [mod, 26., 1., False, True, "angus15"]
+    args = [mod, 26., 1., False, False, True, "angus15"]
     giant_lnprob = lnprob(giant_params, *args)
     dwarf_lnprob = lnprob(dwarf_params, *args)
     assert giant_lnprob[0] < dwarf_lnprob[0]
@@ -166,8 +166,8 @@ def test_likelihood_rotation_giant():
     cool_params = [ceep, cage, cfeh, np.log(1000), 0.]
     cool_prot = gyro_model_rossby(cool_params)
     hot_prot = gyro_model_rossby(hot_params)
-    cool_args = [mod, cool_prot, 1., False, True, "angus15"]
-    hot_args = [mod, hot_prot, 1., False, True, "angus15"]
+    cool_args = [mod, cool_prot, 1., False, False, True, "angus15"]
+    hot_args = [mod, hot_prot, 1., False, False, True, "angus15"]
 
     hot_lnprob = lnprob(hot_params, *args)
     cool_lnprob = lnprob(cool_params, *args)
@@ -267,9 +267,9 @@ def test_age_model():
 
 
 def test_gyro_model_praesepe():
-    print(10**gyro_model_praesepe(np.log10(4.56*1e9), .82), "gyro_model_praesepe")
-    assert 25 < 10**gyro_model_praesepe(np.log10(4.56*1e9), .82)
-    assert 10**gyro_model_praesepe(np.log10(4.56*1e9), .82) < 27
+    print(10**gyro_model_praesepe(np.log10(4.56*1e9), .77), "gyro_model_praesepe")
+    assert 25 < 10**gyro_model_praesepe(np.log10(4.56*1e9), .77)
+    assert 10**gyro_model_praesepe(np.log10(4.56*1e9), .77) < 27
     assert 10**gyro_model_praesepe(np.log10(4.56*1e9), 0.4) == 10**.56
 
 
@@ -285,7 +285,7 @@ def test_praesepe_angus_model():
 
     inits = [330, np.log10(650*1e6), 0., np.log(177), 0.035]
     mod = StarModel(mist, **iso_params)
-    args = [mod, df["prot"], df["prot"]*.01, False,
+    args = [mod, df["prot"], df["prot"]*.01, False, False,
             True, "angus15"]
     prob, prior = lnprob(inits, *args)
     assert np.isfinite(prob)
@@ -312,7 +312,7 @@ def test_on_hot_star():
 
     lnparams = [329.58, np.log10(650*1e6), 0., np.log(177), .035]
     mod = StarModel(mist, **iso_params)
-    args = [mod, df.prot.values[i], df.prot_err.values[i], False, True,
+    args = [mod, df.prot.values[i], df.prot_err.values[i], False, False, True,
             "angus15"]
     prob, prior = lnprob(lnparams, *args)
     print(prob, prior)
