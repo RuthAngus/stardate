@@ -227,148 +227,171 @@ combining existing gyrochronology relations with isochrone fitting.
 % TEST 2: Clusters
 %-----------------------------------------------------------------------------
 %   - The cluster data
-\subsection{Test 2: the Praesepe Cluster}
+\subsection{Test 2: Open clusters}
 In order to test our model on real stars with known ages, we selected a sample
-of stars in the Praesepe open cluster.
-The ages of open clusters can be measured much more precisely than field stars
-because they formed from the same molecular cloud at the same time and
-therefore have the same metallicity and age (to within a few million years).
-Stars with the same metallicity and age fall on the same isochrone, and
-provide a $N^{-1/2}$ decrease in age uncertainty where N is the number of
-cluster stars.
-Single stellar populations also allow main sequence turn off to be identified
-which provides a large amount of age information.
-We compiled rotation periods, \Gaia\ photometry and \gaia\ parallaxes for
-members of Praesepe, a 650 Myr cluster \citep{fossati2008}.
-We chose Praesepe because it is relatively tightly clustered on the sky and
-many of its members were targeted in a single \ktwo\ campaign, from which
-rotation periods were measured via light curve frequency analysis
-\citep{douglas2017, rebull2017}.
-We identified Praesepe members with measured rotation periods from the
-\citet{douglas2017} catalog in the \ktwo-\gaia\ crossmatch catalog provided at
-\url{https://gaia-kepler.fun/}.
-This catalog cross-matched the EPIC catalog \citep{huber2016} with with the
-Gaia DR2 catalog \citep{brown2018}, using a 1'' search radius.
-The result was a sample of 757 stars with rotation periods, parallaxes and
-\gaia\ $G$, $G_{BP}$ and $G_{RP}$-band photometry\footnote{This analysis was
-performed in a Jupyter notebook available here:
-\url{
-https://github.com/RuthAngus/stardate/blob/master/paper/code/Praesepe.ipynb}}.
-% Equal-mass binaries were identified based on their CMD position and excluded
-% because these stars usually do not follow a simple gyrochronology relation.
-% We also excluded late M dwarfs because their rotation periods do not provide a
-% strong prediction of their age.
-Figure \ref{fig:praesepe} shows the rotation periods of Praesepe members as a
-function of their \gaia\ \gcolor\ colors with the new gyrochronology model fit
-to it (black dashed lines) and an older gyrochronology relation
-\citep{angus2015}.
-% This relation clearly does not provide a good fit to the Praesepe cluster.
-% This is because the relation was calibrated using a number of clusters, and
-% the model represents a combination of the different clusters' period-color
-% relations.
-% In addition, the model does not described the M dwarfs well because these
-% Praesepe rotation periods were measured from \ktwo\ light curves
-% \citep{douglas2017}, published after this gyrochronology relation was
-% calibrated \citet{angus2015}.
-% The rotational behaviour of M dwarfs observed in this cluster has not yet been
-% incorporated into gyrochronology models.
-Praesepe has several rotational outliers: stars with rotation periods much
-higher or lower than the majority of data points.
-Some of these outliers have excess luminosity which is suggestive of binarity
-and others are likely to be lower mass-ratio binaries (Douglas \etal, in prep).
-% FGK and early M stars, that lie tightly on the Praesepe isochrone and do not
-% show excess luminosity suggestive of being a binary are shown as solid blue
-% points.
-% We only applied \sd\ to these stars because the purpose of this test was to
-% demonstrate that it can predict accurate ages for stars that fall on the
-% gyrochronology relation.
-Because the gyrochronology model does not capture the rotational behavior of
-these outliers, \sd\ is not designed to predict precise ages for binary stars
-or other outliers.
-% The late F, GK and early M dwarfs (\gcolor\ $<$ 2.4) which fall on a `rotational main
-% sequence' are shown as blue points and the late M dwarfs (\gcolor\ $>$ 2.4)
-% whose rotation periods are not well determined by their age and color are
-% shown as orange open circles.
-% We excluded the late M dwarfs (orange circles with \gcolor\ $>$ 2.4) from this
-% analysis since they do not follow a simple gyrochronology relation however, we
-% included more massive outliers (orange circles with \gcolor\ $<$ 2.4) in order
-% to provide a complete picture of the precision and accuracy of gyrochronology
-% applied to Praesepe.
-% \begin{figure}
-%   \caption{
-%     The rotation periods of Praesepe members \citep{douglas2016},
-%     vs. their \Gaia\ colors (\gcolor) with a broken power law model fit to
-%     Praesepe.
-%     Shaded regions show the 1$\sigma$ range of the stochastic rotation period
-%     model for M dwarfs and hot stars.
-%     The rotation periods of these stars are modelled as a broad Gaussian.
-%     This model does not perfectly represent Praesepe because it does not
-%     account for outliers.
-%     This figure was generated in a Jupyter notebook available at this
-%     url:\url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fitting_Praesepe.ipynb}
-% }
-%   \centering
-%     \includegraphics[width=1\textwidth]{Praesepe.pdf}
-% \label{fig:praesepe}
-% \end{figure}
-
-Figure \ref{fig:praesepe_results} shows the posterior PDFs over age for the
-FGK and early M dwarf members of the praesepe cluster where each star was
-treated as a field star.
-Age posteriors calculated with \sd\ are shown in blue and, for comparison, age
-posteriors calculated using isochrone fitting only are shown in orange.
-\gaia\ colors (\gcolor), \gaia\ apparent magnitude ($G$), \gaia\ parallaxes
-and rotation periods were used the observable properties.
-The blue PDFs are more tightly clustered around the established age of
-Praesepe ($\sim650$Myrs, shown as a dashed vertical line) than the orange PDFs
-because rotation periods are extremely age-informative for these stars.
-However, the accuracy of these ages is limited because of the limited accuracy
-of the gyrochronology model.
-Until the gyrochronology model is improved to incorporate rotational outliers
-and binaries, ages calculated with \sd\ should be interpreted with caution.
-% Figure \ref{fig:praesepe} shows two sets of gyrochronology models: one
-% calibrated using several open clusters, asteroseismic stars and the Sun
-% \citep{angus2015}, which was used to infer the ages of Praesepe but clearly
-% does not provide a perfect fit to this cluster (solid gray line), and one fit
-% to Praesepe and the Sun only, as described in section
-% \ref{section:motivation}, that was used to calculate the Fisher information
-% (dashed black line).
-% We did not account for extinction in our analysis since Praesepe is relatively
-% nearby (around 180 parsecs) so reddening from dust is minimal.
-% The age of each Praesepe member was inferred using both of these
-% gyrochronology models: the legacy model of equation \ref{eq:gyro} and the
-% Praesepe model of equation \ref{eq:new_gyro}.
-% This exercise is not designed to test one gyrochronology model against
-% another: the model fit to the Praesepe data will provide a better age
-% prediction by design, as the legacy model was fit to number of clusters at
-% once.
-% The point of this exercise is to show how precise gyrochronology could be if
-% a {\it perfect} model was used.
-% The age of each Praesepe member was inferred using our combined stellar
-% evolution and gyrochronology model.
-% We did not force the cluster members to have the same age since the aim of
-% this experiment was to reveal the precision and accuracy of our method by
-% quantifying the level of scatter in our predicted ages and identifying regions
-% of parameter space where the ages deviate from the established age for
-% Praesepe.
+of stars in the 2.5 Gyr NGC 6819 cluster.
+We compiled \kepler-based rotation periods \citep{meibom2015}, \Gaia\
+photometry and \gaia\ parallaxes for members of the NGC 6819 cluster.
+Figure \ref{fig:NGC6819} shows the rotation period-color relation of this
+cluster and figure \ref{fig:NGC6819_results} shows the results of inferring
+the ages of individual cluster members using \sd\ and isochrone fitting.
+% Following our analysis of Praesepe which showed that rotation period
+% uncertainties of around 10\% are realistic for cluster stars, we used 10\%
+% uncertainties on the rotation periods, rather than the provided measurement
+% uncertainties.
+The ages of F stars in this cluster (\gcolor\ $\sim$ 5.5-6.5) are relatively
+precisely constrained by isochrone fitting alone because, at 2.5 Gyr, they are
+approaching MS turn-off.
+The \sd\ and isochrone-only ages are consistent for this group of stars and
+similarly precise, showing that isochrones provide a lot of age information
+for these stars and rotation periods do not add significantly more
+information.
+The G and early K stars in this cluster (\gcolor\ $\lesssim$ 6.5) are not
+precisely recovered from isochrone fitting alone -- the isochrone-only age
+posteriors tend towards the prior which is a uniform distribution between 0
+and 13.8 Gyrs.
+In contrast, the rotation periods of G and K stars in this cluster
+significantly improve the accuracy of age measurements.
+% The RMS of ages measured with the Praesepe-based gyrochronology model and
+% isochrones via \sd\ is 3.4 Gyr and the RMS of ages measured with isochrones
+% only is 13.5 Gyr.
+% The median uncertainty of \sd\ ages is 1.4 Gyr and the median uncertainty of
+% isochrone-only ages is 2.2 Gyr.
+The median age of stars in this cluster was 2.63 $\pm$ 0.16 Gyr when ages were
+inferred with a combination of isochrone fitting and gyrochronology, with a
+Praesepe-calibrated gyrochronology model.
+The previously-calibrated \citet{angus2015} model resulted in a median age of
+2.66 $\pm$ 0.21 Gyr.
+% This is due to the \citet{angus15} model slightly under-predicting stellar
+% rotation periods at this age, as shown in figure \ref{fig:NGC6819}.
+The median age of the cluster, calculated with isochrone fitting and a
+Praesepe-calibrated gyrochronology model, without correcting the photometry
+for redenning, was slightly under-estimated at 1.86 $\pm$ 0.22 Gyr.
+This suggests that, despite the fact that V-band extinction is a parameter
+that gets marginalized over during the inference process, correcting for
+extinction {\it before} ages are estimated will reduce bias introduced by
+dust.
+Finally, the median age of stars in the cluster was 4.27 $\pm$ 0.48 Gyr when
+only isochrone fitting was used.
+Isochrone-only ages were over-estimated because they were prior dominated, and
+the prior was a uniform distribution between 0 and 13.8 Gyr.
+% The ages quoted above are the {\it median} age of stars in the cluster,
+% calculated using each method.
+% It is worth noting however that the average, inverse variance-weighted  age of
+% cluster stars is exactly 2.5 Gyr in each case.
+% This suggests that all
 \begin{figure}
   \caption{
-Posterior PDFs over the ages of members of the 650 Myr Praesepe cluster.
-The blue posteriors were recovered with \sd, by combining \gaia\ apparent
-    magnitudes ($G$, $G_BP$ and $G_RP$) and parallaxes with their photometric,
-    \ktwo\ rotation periods.
-The orange posteriors were obtained for the same stars using isochrone fitting
-    with \gaia magnitudes and parallaxes.
-Each star was treated as a single field star.
-The blue posteriors are more tightly peaked and clustered around the true age
-of the cluster because rotation periods add age information.
-These blue posteriors are not always accurate because they reflect the scatter
-within rotation periods in the Praesepe cluster.
+    The \kepler-based rotation periods of members of the 2.5 Gyr NGC 6819 open
+    cluster.
+    The raw \gcolor\ colors are shown in red and the dust-corrected colors are
+    shown in black.
+    The dashed line shows a gyrochronology model that was fit to the Praesepe
+    cluster and the Sun in this work, interpolated to 2.5 Gyrs.
+    This model was used to infer the ages of these stars.
+    For comparison, the solid blue line shows a previously calibrated
+    gyrochronology model \citep{angus2015}.
 }
   \centering
-    \includegraphics[width=1\textwidth]{praesepe_results}
-\label{fig:praesepe_results}
+    \includegraphics[width=1\textwidth]{NGC6819}
+\label{fig:NGC6819}
 \end{figure}
+\begin{figure}
+  \caption{
+    The inferred ages of members of the NGC 6819 open cluster as a function of
+    their \gcolor\ color.
+    Black circles and red squares show the ages of stars inferred using a
+    combination of isochrone fitting and gyrochronology, with a gyrochronology
+    relation that was calibrated to Praesepe and the Sun.
+    Black circles show ages inferred with dereddened \gaia\ $G$, $G_{BP}$ and
+    $G_{RP}$ photometry and red squares show ages inferred with uncorrected,
+    raw, photometry.
+    Even though V-band extinction is marginalized over in the inference
+    process, reddening can still bias ages.
+    Blue triangles, pointing down show ages inferred using isochrone fitting
+    and gyrochronology, with the \citet{angus2015} gyrochronology model.
+    Orange triangles show ages inferred using isochrone fitting only.
+    The ages of F stars (stars bluer than 0.7) were precisely constrained by
+    isochrones and including gyrochronology makes little difference to their
+    inferred ages.
+    The ages of G and K dwarfs (stars redder than 0.7) were improved in both
+    precision and accuracy by including gyrochronology.
+    The average age of stars, inferred using the gyrochronology model
+    calibrated to Praesepe and the Sun (black circles) was 2.65 $\pm$ 0.13
+    which is consistent with the established cluster age.
+}
+  \centering
+    \includegraphics[width=1\textwidth]{NGC6819_results}
+\label{fig:NGC6819_results}
+\end{figure}
+
+The quoted rotation period uncertainties shown in figure \ref{fig:NGC6819} are
+underestimated for some stars, which results in inaccurate ages.
+We found that 5\% rotation period uncertainties resulted in the most accurate
+ages.
+On the other hand, 10\% rotation period uncertainties were too conservative
+and resulted in ages being affected by the prior and systematically
+over-estimated.
+This raises the question of what the optimal rotation period uncertainties
+are.
+Because the likelihood is weighted by the inverse variance, uncertainties on
+the rotation period control the relative information provided by
+gyrochronology, isochrones, and the prior.
+If rotation period uncertainties are either too large or too small, the
+resulting age estimate will be inaccurate.
+It is difficult to measure uncertainties on rotation periods directly because
+standard techniques such as Lomb-Scargle periodograms and autocorrelation
+functions do not have reliable ways to calculate formal uncertainties.
+In general, rotation period uncertainties should be calculated empirically
+via simulations as in the \citet{aigrain2015} study.
+A thorough exploration of how rotation period uncertainties affect stellar
+ages via gyrochronology is warranted, but we leave question for a future
+study.
+
+
+% Figure \ref{fig:praesepe} shows the rotation periods of Praesepe members as a
+% function of their \gaia\ \gcolor\ colors with the new gyrochronology model fit
+% to it (black dashed lines) and an older gyrochronology relation
+% \citep{angus2015}.
+% Praesepe has several rotational outliers: stars with rotation periods much
+% higher or lower than the majority of data points.
+% Some of these outliers have excess luminosity which is suggestive of binarity
+% and others are likely to be lower mass-ratio binaries (Douglas \etal, in prep).
+% Because the gyrochronology model does not capture the rotational behavior of
+% these outliers, \sd\ is not designed to predict precise ages for binary stars
+% or other outliers.
+% Figure \ref{fig:praesepe_results} shows the posterior PDFs over age for the
+% FGK and early M dwarf members of the praesepe cluster where each star was
+% treated as a field star.
+% Age posteriors calculated with \sd\ are shown in blue and, for comparison, age
+% posteriors calculated using isochrone fitting only are shown in orange.
+% \gaia\ colors (\gcolor), \gaia\ apparent magnitude ($G$), \gaia\ parallaxes
+% and rotation periods were used the observable properties.
+% The blue PDFs are more tightly clustered around the established age of
+% Praesepe ($\sim650$Myrs, shown as a dashed vertical line) than the orange PDFs
+% because rotation periods are extremely age-informative for these stars.
+% However, the accuracy of these ages is limited because of the limited accuracy
+% of the gyrochronology model.
+% Until the gyrochronology model is improved to incorporate rotational outliers
+% and binaries, ages calculated with \sd\ should be interpreted with caution.
+% \begin{figure}
+%   \caption{
+% Posterior PDFs over the ages of members of the 650 Myr Praesepe cluster.
+% The blue posteriors were recovered with \sd, by combining \gaia\ apparent
+%     magnitudes ($G$, $G_BP$ and $G_RP$) and parallaxes with their photometric,
+%     \ktwo\ rotation periods.
+% The orange posteriors were obtained for the same stars using isochrone fitting
+%     with \gaia magnitudes and parallaxes.
+% Each star was treated as a single field star.
+% The blue posteriors are more tightly peaked and clustered around the true age
+% of the cluster because rotation periods add age information.
+% These blue posteriors are not always accurate because they reflect the scatter
+% within rotation periods in the Praesepe cluster.
+% }
+%   \centering
+%     \includegraphics[width=1\textwidth]{praesepe_results}
+% \label{fig:praesepe_results}
+% \end{figure}
 
 % % Cutting outliers and limiting color range.
 % In order to fit a period-color relation to these data we restricted the sample

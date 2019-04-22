@@ -295,3 +295,22 @@ def getDust(G, bp, rp, ebv, maxnit=100):
     Abp = F2(curbp)*A0
     Arp = F3(curbp)*A0
     return AG, Abp, Arp
+
+
+# Add Angus (2015) model
+def bv_2_bprp(bv):
+    """
+    Numbers from https://arxiv.org/pdf/1008.0815.pdf
+    """
+    a, b, c, d = .0981, 1.4290, -.0269, .0061  # sigma = .43
+    return a + b*bv + c*bv**2 + d*bv**3
+
+
+def bprp_2_bv(bprp):
+    """
+    Try to find the analytic version of this, please!
+    """
+    bv_iter = np.linspace(0., 2., 10000)
+    bprp_pred = [bv_2_bprp(bv) for bv in bv_iter]
+    diffs = bprp - np.array(bprp_pred)
+    return bv_iter[np.argmin(diffs**2)]

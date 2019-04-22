@@ -1,16 +1,31 @@
 \section{Method}
 \label{section:method}
 
-We fit a broken power law to the Praesepe cluster in order to calibrate a new
-gyrochronology relation that takes advantage of new data available from the
-\ktwo\ mission.
+We fit a broken power law to the 650 Myr Praesepe cluster in order to
+calibrate a new gyrochronology relation that takes advantage of new data
+available from the \ktwo\ mission.
 Praesepe is the ideal cluster to calibrate a gyrochronology relation to
 because it has the largest number of members with precisely measured rotation
 periods over a large range of colors.
-Although this model is not perfect because  it does not describe the rotation
-period of every star, it provides a much better representation of rotational
-evolution than previous models such as the \citet{angus2015} model (as shown
-in figure \ref{fig:praesepe}).
+It is relatively tightly clustered on the sky and many of its members were
+targeted in a single \ktwo\ campaign, from which rotation periods have been
+measured via light curve frequency analysis \citep{douglas2017, rebull2017}.
+We compiled rotation periods, \Gaia\ photometry and \gaia\ parallaxes for
+members of the 650 Myr Praesepe cluster \citep{fossati2008} by identifying
+Praesepe members with measured rotation periods from \citet{douglas2017} in
+the \ktwo-\gaia\ crossmatch catalog provided at
+\url{https://gaia-kepler.fun/}.
+This catalog cross-matched the EPIC catalog \citep{huber2016} with with the
+Gaia DR2 catalog \citep{brown2018}, using a 1'' search radius.
+The result was a sample of 757 stars with rotation periods, parallaxes and
+\gaia\ $G$, $G_{BP}$ and $G_{RP}$-band photometry, shown in figure
+\ref{fig:praesepe}\footnote{This analysis was performed in a Jupyter notebook
+available here: \url{
+    https://github.com/RuthAngus/stardate/blob/master/paper/code/Praesepe.ipynb}}.
+Although this new model does not perfectly describe the rotation period of
+every star, it provides a better representation of rotational evolution than
+previous models such as the \citet{angus2015} model (as shown in figure
+\ref{fig:praesepe}).
 \begin{figure}
   \caption{
     The rotation periods of Praesepe members \citep{douglas2016},
@@ -31,15 +46,15 @@ in figure \ref{fig:praesepe}).
     \includegraphics[width=1.1\textwidth]{Praesepe.pdf}
 \label{fig:praesepe}
 \end{figure}
-We removed rotational outliers bluer than \gcolor\ = 2.7 from the
-Praesepe cluster and fit a 5th-order polynomial to the remaining FGK and
-early M stars.
+In order to fit a relation to Praesepe, we removed rotational outliers bluer
+than \gcolor\ = 2.7 via sigma-clipping and fit a 5th-order polynomial to the
+remaining FGK and early M stars.
 We also fit a straight line to the late M dwarfs (\gcolor\ $>$ 2.7).
 We fit a separable straight line function to the period-age relation using
 the ages of Praesepe and the Sun\footnote{The fitting process was
 performed in a Jupyter notebook available at
 \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Fitting_Praesepe.ipynb}.}.
-This new Praesepe-calibrated gyrochronology relation was,
+This new Praesepe-calibrated gyrochronology relation is,
 % \begin{equation}
 %     \log_{10}(P_\mathrm{rot}) = f(\log_{10}[A])g(\log_{10}[G_{BP}-G_{RP}]) \nonumber,
 % \end{equation}
@@ -91,28 +106,19 @@ We used the following composite gyrochronology model to infer ages from
 rotation periods,
 \begin{equation}
     \log_{10}(P_\mathrm{rot}) \sim \begin{cases}
-        \mathcal{N}\left[(\ref{eqn:fgk_gyro}), (\sigma_P+f[E, A,
-        \mathrm{[Fe/H]}, C])^2\right], & Ro < 2,
+        \mathcal{N}\left[(\ref{eqn:fgk_gyro}), (\sigma+\sigma_P)^2\right], & Ro < 2,
         G_{BP} - G_{RP} < 2.7 \\
-        \mathcal{N}[(\ref{eqn:m_gyro}), (\sigma_P+f[E, A, \mathrm{[Fe/H]},
-        C])^2], & Ro < 2,
+        \mathcal{N}[(\ref{eqn:m_gyro}), (\sigma+\sigma_P)^2], & Ro < 2,
         G_{BP} - G_{RP} > 2.7 \\
-        \mathcal{N}[\log_{10}(P_\mathrm{max}), (\sigma_P+f[E, A,
-        \mathrm{[Fe/H]}, C])^2],& Ro \geq 2 \\
-        \mathcal{N}[0.56, (\sigma_P+f[E, A, \mathrm{[Fe/H]}, C])^2],& G_{BP} - G_{RP} <
-        0.56,
+        \mathcal{N}[\log_{10}(P_\mathrm{max}), (\sigma+\sigma_P)^2],& Ro \geq 2 \\
+        \mathcal{N}[0.56, (\sigma+\sigma_P)^2],& G_{BP} - G_{RP} < 0.56,
     \end{cases}
 \label{eqn:gyro}
 \end{equation}
-where $\sigma_P$ is the logarithmic period uncertainty.
-The variance of these normal distributions was given by the observational
-rotation period uncertainties plus an additional scatter that is a function of
-EEP, age, metallicity and color (described in more detail later in this
-section).
-% The power law functional form was introduced by \citep{barnes2003} and the
-% parameter values were adopted from the recalibration performed in
-% \citet{angus2015}, which was based on young cluster stars and old
-% asteroseismic stars.
+where $\sigma$ is the relative period uncertainty, divided by $\ln(10)$, on
+individual rotation period measurements and $\sigma_P$ is an additional
+scatter that is a function of EEP, age, metallicity and color.
+This additional scatter is described in more detail later in this section.
 This gyrochronology model reflects the observed ceasing of magnetic braking at
 a critical Rossby number of around 2 \citep{vansaders2016}.
 The Rossby number, $Ro$, is the ratio of rotation period to convective
@@ -217,13 +223,20 @@ rotation period rises to 1 (no late M dwarfs have yet evolved off the main
 sequence so this does not apply to the cool stars).
 \begin{figure}
   \caption{
-    The additional standard deviation in rotation period added to the
-    observational period uncertainties in our model.
+    The additional rotation period scatter, $\sigma_P$, added to the
+    observational period uncertainties in the model (see equation
+    \ref{eqn:gyro}).
     The standard deviation was increased for early F and hotter
     % stars ($B-V < 0.45$), late M dwarfs ($B-V > 1.4$) and evolved stars
     stars (\gcolor $<$ 0.56), late M dwarfs (\gcolor\ $>$ 2.7) and evolved
     stars (EEP $>$ 454) in order to down-weight the age-information supplied
     by rotation periods and reproduce observed rotation period distributions.
+    We also increased the variance for stars younger than around 250 Myrs,
+    because the rotation periods of these stars typically have not yet
+    converged onto a tight gyrochronology sequence.
+    The variance was also increased for very high and low metallicity stars
+    (-3 $\lesssim$ [Fe/H] $\lesssim$ 3) because the gyrochronology relations
+    have not been calibrated at these extreme values.
     Down-weighting the gyrochronal likelihood by the inverse variance
     ($1/\sigma^2$) allows the ages of these stars to be mostly inferred
     via isochrone fitting.
