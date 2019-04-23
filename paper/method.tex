@@ -154,33 +154,37 @@ The rotation period model for each of these groups is described below.
         as a log-normal distribution, with mean given by equation
         \ref{eqn:fgk_gyro}, and variance given by the squared inverse of the
         observational uncertainties.}
-    \item{The rotation periods of stars hotter than around 6250 K are
-        modeled with a log-normal distribution with mean,
-        $\log_{10}(P_\mathrm{rot})=0.56$, and an extra standard deviation
-        of 0.5 dex, added to observational uncertainties.
+    \item{The rotation periods of stars with \gcolor\ $<$ 0.56 dex are modeled
+        with a log-normal distribution with mean,
+        $\log_{10}(P_\mathrm{rot})=0.56$, and an extra standard deviation of
+        0.5 dex, added to observational uncertainties.
+        Stars more massive than around 1.25 M$_\odot$, with a temperature
+        $\gtrsim$ 6250 K and a \gcolor\ color $\lesssim$ 0.56 do not spin down
+        appreciably over their main-sequence lifetimes because they do not
+        have the deep convective envelope needed to generate strong magnetic
+        fields.
         This model for the mean and variance of hot star rotation periods is
         based on stars hotter than 6250 K in the \citet{mcquillan2014} sample,
         which have a mean $\log_{10}(P_\mathrm{rot})$ of 0.56 dex and a
         standard deviation of around 0.5 dex.}
-    \item{The rotation periods of fully convective stars are modeled with a
-         log-normal distribution with mean given by equation \ref{eqn:m_gyro},
-         and additional standard deviation of 0.5 dex.
-         This distribution reflects the observed rotation periods  of late M
-        dwarfs in the Praesepe cluster.}
-    % \item{Rotation period measurements of asteroseismic stars suggest that
-    %     stellar rotation periods stop evolving when stars reach a maximum
-    %     Rossby number of 2 \citep{vansaders2016, vansaders2018}.
-    %     After this, stars maintain a constant rotation period of
-    %     $P_\mathrm{max} = 2/\tau$, where $\tau$ is the convective turnover
-    %     timescale, until they become subgiants.
+    \item{The rotation periods of fully convective stars (\gcolor\ $>$ 2.7)
+        are modeled with a log-normal distribution with mean given by equation
+        \ref{eqn:m_gyro}, and additional standard deviation of 0.5 dex.
+        This distribution reflects the observed rotation periods  of late M
+        dwarfs in the Praesepe cluster.
+        Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures
+        $\lesssim$ 3500 and \gcolor $\gtrsim$ 2.7 exhibit weak magnetic
+        braking until at least after the age of Praesepe ($\sim$650 million
+        years).
+        Both hot and cool stars retain rotation periods that are similar to
+        their primordial distribution \citep[see \eg][]{matt2012,
+        somers2017}.}
     \item{The age at which a star's Rossby number would exceed 2 is calculated
         for each star by inverting equation \ref{eqn:fgk_gyro}.
         If a star's age is greater than this, its mean rotation period is
         given by $P_\mathrm{max} = 2/\tau$, where $\tau$ is the convective
-        turnover timescale, calculated using equation 11 from
+        turnover timescale, calculated via stellar mass using equation 11 from
         \citet{wright2011}.}
-        % We included this newly characterized behavior in our composite
-        % gyrochronology model.}
     \item{The rotation periods of subgiants are described with a log-normal
         distribution with mean given by equation \ref{eqn:fgk_gyro},
         \ref{eqn:m_gyro} or 0.56, depending on its color, and an additional
@@ -250,6 +254,25 @@ It takes a maximal value of 0.5 for hot stars, fully convective stars,
 subgiants and giants and a minimal value of zero for late F, GK and early M
 dwarfs.
 The variance model is shown in figure \ref{fig:variance}.
+Sigmoid functions were used to provide smooth transitions between regions of
+low and high variance.
+Sharp changes in variance would produce sharp changes in likelihood, which
+would cause the posterior distributions over stellar parameters to be more
+difficult to sample.
+The sigmoid functions shown in figure \ref{fig:variance} reach half their
+maximum values at \gcolor\ = 0.56 and 2.5 for hot and cool stars respectively,
+EEP = 454 for subgiants age = 250 Myrs for young stars, $[$Fe/H$]$ = -3 for
+metal poor stars and 3 for metal rich stars.
+The maximum additional standard deviation value ($\sigma_P$) is 0.5 for all
+stars and the minimum is zero.
+The logistic growth rate, or steepness, of the sigmoid functions is 100
+dex$^{-1}$ for both color transitions, .2 EEP$^{-1}$ for the EEP transition,
+20 dex$^{-1}$ for the age transition and 5 dex$^{-1}$ for the both metallicity
+transitions.
+The additional standard deviation is additive, so if a star is \eg\ hot,
+evolved and metal poor, the additional standard deviation of its rotation
+period rises to 1.5.
+
 % This additional scatter is described in more detail later in this section.
 % This gyrochronology model reflects the observed ceasing of magnetic braking at
 % a critical Rossby number of around 2 \citep{vansaders2016}.
@@ -266,98 +289,86 @@ The variance model is shown in figure \ref{fig:variance}.
 % 3.5 days, based on the rotation periods of hot stars in the
 % \citet{mcquillan2014} catalog.
 
-% PIXIE
+% % PIXIE
+% % The rotation periods of hot stars, cool stars, subgiants and giants evolve
+% % differently to FGK and early M dwarfs.
+% % Stars more massive than around 1.25 M$_\odot$, with a temperature $\gtrsim$
+% % 6250 K and a $B-V$ color $\lesssim$ 0.45 do not spin down appreciably over
+% % their main sequence lifetimes because they do not have the deep convective
+% % envelope needed to generate strong magnetic fields.
+% % Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures $\lesssim$
+% % 3500 and $B-V$ $\gtrsim$ 1.4 do not start magnetic braking until at least
+% % after the age of Praesepe ($\sim$650 million years).
 % The rotation periods of hot stars, cool stars, subgiants and giants evolve
 % differently to FGK and early M dwarfs.
 % Stars more massive than around 1.25 M$_\odot$, with a temperature $\gtrsim$
-% 6250 K and a $B-V$ color $\lesssim$ 0.45 do not spin down appreciably over
-% their main sequence lifetimes because they do not have the deep convective
+% 6250 K and a \gcolor\ color $\lesssim$ 0.56 do not spin down appreciably over
+% their main-sequence lifetimes because they do not have the deep convective
 % envelope needed to generate strong magnetic fields.
 % Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures $\lesssim$
-% 3500 and $B-V$ $\gtrsim$ 1.4 do not start magnetic braking until at least
-% after the age of Praesepe ($\sim$650 million years).
-The rotation periods of hot stars, cool stars, subgiants and giants evolve
-differently to FGK and early M dwarfs.
-Stars more massive than around 1.25 M$_\odot$, with a temperature $\gtrsim$
-6250 K and a \gcolor\ color $\lesssim$ 0.56 do not spin down appreciably over
-their main-sequence lifetimes because they do not have the deep convective
-envelope needed to generate strong magnetic fields.
-Late M dwarfs with masses $\lesssim$ 0.3 M$_\odot$, temperatures $\lesssim$
-3500 and \gcolor $\gtrsim$ 2.7 are only weakly magnetically braking until at
-least after the age of Praesepe ($\sim$650 million years).
-Both hot and cool stars retain rotation periods that are similar to their
-primordial distribution \citep[see \eg][]{matt2012, somers2017}.
-Finally, the rotation periods of evolved stars slow dramatically as their
-radii grow.
-% Although the rotation periods of hot, cool, and evolved stars are less
-% age-informative than late F, GK and early M dwarfs, they still improve age
-% measurement precision and accuracy by refining CMD/HRD placement.
-We designed a model describing the rotation period variance of hot, cool and
-evolved stars, inflating the variance to high values in regions of parameter
-space where the simple gyrochronology power law does not apply or where
-rotation periods become stochastic.
-% In order to reflect the stochastic rotation periods of hot and cool stars,
-% and `switch off' gyrochronology, just using isochrone fitting for
-% the hot, cool and evolved stars, we designed a model describing the rotation
-% period variance of these stars, inflating the variance to high values in
-% regions of parameter space where gyrochronology does not apply.
-The variance model was designed to reflect the observed distributions of hot,
-cool and evolved stars and naturally reduce the amount of age-information
-provided by gyrochronology for stars where the rotation period is
-uninformative.
-In parts of the CMD/HRD where rotation periods are stochastic, isochronal
-information dominates and ages are predominantly inferred via isochrone
-fitting.
-We used three sigmoid functions to increase the (log) rotation period variance
-% as a function of $B-V$ and EEP, shown in figure \ref{fig:variance}.
-as a function of \gcolor\ and EEP, shown in figure \ref{fig:variance}.
-The additional variance was zero where gyrochronology works well: for late F,
-GK and early M dwarfs and 0.25 ($\sigma = 0.5$) for hot, cool and evolved
-stars.
-The logistic functions shown in figure \ref{fig:variance} reach half their
-% PIXIE maximum values at 0.45, 1.4 and 454 for hot stars, cool stars and
-% subgiants,
-maximum values at \gcolor\ = 0.56 and 2.5 for hot and cool stars respectively
-and EEP = 454 for subgiants.
-The maximum standard deviation value of the logarithmic rotation periods for
-all three groups (hot, cool and evolved) was 0.5 and the logistic growth rate,
-or steepness, of the three sigmoids were 100 dex$^-1$, 100 dex$^-1$ and
-.2 in EEP$^-1$ for hot, cool and evolved stars respectively.
-If a star is both hot and evolved, the additional standard deviation of its
-rotation period rises to 1 (no late M dwarfs have yet evolved off the main
-sequence so this does not apply to the cool stars).
+% 3500 and \gcolor $\gtrsim$ 2.7 are only weakly magnetically braking until at
+% least after the age of Praesepe ($\sim$650 million years).
+% Both hot and cool stars retain rotation periods that are similar to their
+% primordial distribution \citep[see \eg][]{matt2012, somers2017}.
+% Finally, the rotation periods of evolved stars slow dramatically as their
+% radii grow.
+% % Although the rotation periods of hot, cool, and evolved stars are less
+% % age-informative than late F, GK and early M dwarfs, they still improve age
+% % measurement precision and accuracy by refining CMD/HRD placement.
+% We designed a model describing the rotation period variance of hot, cool and
+% evolved stars, inflating the variance to high values in regions of parameter
+% space where the simple gyrochronology power law does not apply or where
+% rotation periods become stochastic.
+% % In order to reflect the stochastic rotation periods of hot and cool stars,
+% % and `switch off' gyrochronology, just using isochrone fitting for
+% % the hot, cool and evolved stars, we designed a model describing the rotation
+% % period variance of these stars, inflating the variance to high values in
+% % regions of parameter space where gyrochronology does not apply.
+% The variance model was designed to reflect the observed distributions of hot,
+% cool and evolved stars and naturally reduce the amount of age-information
+% provided by gyrochronology for stars where the rotation period is
+% uninformative.
+% In parts of the CMD/HRD where rotation periods are stochastic, isochronal
+% information dominates and ages are predominantly inferred via isochrone
+% fitting.
+% We used three sigmoid functions to increase the (log) rotation period variance
+% % as a function of $B-V$ and EEP, shown in figure \ref{fig:variance}.
+% as a function of \gcolor\ and EEP, shown in figure \ref{fig:variance}.
+% The additional variance was zero where gyrochronology works well: for late F,
+% GK and early M dwarfs and 0.25 ($\sigma = 0.5$) for hot, cool and evolved
+% stars.
+% The logistic functions shown in figure \ref{fig:variance} reach half their
+% % PIXIE maximum values at 0.45, 1.4 and 454 for hot stars, cool stars and
+% % subgiants,
+% maximum values at \gcolor\ = 0.56 and 2.5 for hot and cool stars respectively
+% and EEP = 454 for subgiants.
+% The maximum standard deviation value of the logarithmic rotation periods for
+% all three groups (hot, cool and evolved) was 0.5 and the logistic growth rate,
+% or steepness, of the three sigmoids were 100 dex$^-1$, 100 dex$^-1$ and
+% .2 in EEP$^-1$ for hot, cool and evolved stars respectively.
+% If a star is both hot and evolved, the additional standard deviation of its
+% rotation period rises to 1 (no late M dwarfs have yet evolved off the main
+% sequence so this does not apply to the cool stars).
 \begin{figure}
   \caption{
     The additional rotation period scatter, $\sigma_P$, added to the
     observational period uncertainties in the model (see equation
     \ref{eqn:gyro}).
-    The standard deviation was increased for early F and hotter
+    The standard deviation is increased for early F and hotter
     % stars ($B-V < 0.45$), late M dwarfs ($B-V > 1.4$) and evolved stars
     stars (\gcolor $<$ 0.56), late M dwarfs (\gcolor\ $>$ 2.7) and evolved
     stars (EEP $>$ 454) in order to down-weight the age-information supplied
     by rotation periods and reproduce observed rotation period distributions.
-    We also increased the variance for stars younger than around 250 Myrs,
+    We also increase the variance for stars younger than around 250 Myrs,
     because the rotation periods of these stars typically have not yet
-    converged onto a tight gyrochronology sequence.
-    The variance was also increased for very high and low metallicity stars
-    (-3 $\lesssim$ [Fe/H] $\lesssim$ 3) because the gyrochronology relations
-    have not been calibrated at these extreme values.
+    converged onto a tight gyrochronology sequence, and for very high and low
+    metallicity stars (-3 $\lesssim$ [Fe/H] $\lesssim$ 3) because the
+    gyrochronology relations have not been calibrated at these extreme values.
     Down-weighting the gyrochronal likelihood by the inverse variance
     ($1/\sigma^2$) allows the ages of these stars to be mostly inferred
     via isochrone fitting.
-    The variance of an inferred age is proportional to the
-    variance of the rotation periods.
-    Adding 0.25 to the variance of the (log) rotation periods is an increase
-    over the variance provided by period measurement uncertainties of around
-    a factor of 100.
-    By increasing the variance 100-fold, we reduce the age-information in
-    rotation periods by 100-fold.
-    The ages of hot and evolved stars can be relatively precisely constrained
-    with isochrone fitting since their position on the CMD changes rapidly
-    with time, however isochrone fitting cannot constrain the ages of
-    % late M dwarfs, so the age of any star with $B-V > 1.4$ will not be
-    late M dwarfs, so the age of any star with \gcolor\ $\gtrsim$ 2.5 will not
-    be precisely constrained with \sd.
+    Sigmoid functions were used to provide smooth transitions between regions
+    of low and high variance.
 }
   \centering
     \includegraphics[width=1.\textwidth]{variance}
@@ -392,6 +403,12 @@ sequence so this does not apply to the cool stars).
 % If this assumption is valid, the likelihoods calculated using each model can
 % be multiplied together.
 
+\racomment{The above part of this section describes the mean and variance
+relations we used to model the rotation periods of stars as a function of
+their ages (and colors, EEPs, masses and metallicities).
+In what follows, we describe how we combined this model with a stellar
+evolution model to infer stellar ages (and other parameters) via
+gyrochronology and isochrone fitting simultaneously.}
 Our goal was to infer the age of a star from its observable properties by
 estimating the posterior probability density function (PDF) over age,
 \begin{equation} \label{eqn:eqn1}
@@ -614,7 +631,8 @@ Then, a set of observables corresponding to those parameters were generated
 from the MIST model grid using {\tt isochrones.py} and compared to the
 measured observables via the isochronal likelihood,
 $\mathcal{L}_{\mathrm{iso}}$ (also computed using {\tt isochrones.py}.
-The parameters were also passed to the gyrochronology model where $A$, $E$,
+The parameters were also passed to the gyrochronology model (equation
+\ref{eqn:gyro}) where $A$, $E$,
 % $F$, $D$ and $A_V$ were used to calculate $B-V$ color and mass and, in turn,
 $F$, $D$ and $A_V$ were used to calculate \gcolor\ color and mass from the
 MIST model grid and, in turn, rotation period via the gyrochronology model.
