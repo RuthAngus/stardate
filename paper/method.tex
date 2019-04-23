@@ -737,39 +737,3 @@ computer.
 % \ref{eqn:gyro_age_praesepe} are used to predict the ages of individual
 % Praesepe stars from their rotation periods and apparent magnitudes in section
 % \ref{section:results}.
-
-% % The PGM
-% \begin{figure}
-%   \caption{
-% A probabilistic graphical model (PGM) showing the conditional
-% dependencies between the parameters (white nodes) and
-% observables (gray nodes) in our model.
-% % ${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
-% %     metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
-% %     {\it observables}: apparent magnitudes, $m_x$, effective temperature,
-% %     \teff, surface gravity, \logg, observed bulk metallicity, $\hat{F}$, and
-% %     parallax, $\bar{\omega}$.
-% % determined by the mass, $M$, age, $A$, distance, $D$, extinction, $A_V$
-% % and bulk metallicity, $F$, of a star.
-% ${\bf \theta}$ is a vector of {\it parameters}: mass, observed bulk
-%     metallicity, distance and V-band extinction; and ${\bf O}$ is a vector of
-%     {\it observables}: apparent magnitudes, effective temperature, surface
-%     gravity, observed bulk metallicity, and parallax.
-%     The observables, ${\bf O}$, are determined by the parameters, $A$ and
-%     ${\bf \theta}$.
-%     $C_{B-V}$ is a latent parameter that is also determined by the parameters
-%     $A$ and ${\bf \theta}$.
-%     In our model, the rotation period observable, $P$, is determined {\it
-%     only} by the age, $A$, and color ${C_{B-V}}$ parameters.
-% The dependencies of observables on parameters and parameters on parameters are
-%     indicated by arrows that start at a `parent' node and end at the dependent
-%     observable, or `child' node.
-% In our model, rotation period does not directly depend on distance,
-% extinction, metallicity or mass, only age and B-V color.
-% This PGM is a representation of the factorized joint PDF over parameters and
-% observables of equation \ref{eqn:factorized}.
-% }
-%   \centering
-%     \includegraphics[width=.7\textwidth]{PGM}
-% \label{fig:PGM}
-% \end{figure}
