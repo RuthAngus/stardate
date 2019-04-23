@@ -173,41 +173,45 @@ it can be extremely fast to fit them to data.
 % \citet{barnes2003}, and later recalibrated by \citet{mamajek2008}.
 % We adapted the \citet{angus2015} model to include the weakened magnetic
 % braking proposed by \citet{vansaders2016}.
+
 In this work we calibrated a new empirical gyrochronology relation, fit to the
-Praesepe data and the Sun.
+Praesepe open cluster and the Sun.
+The Praesepe cluster has the largest number of measured rotation periods,
+spanning the largest mass range of any open cluster.
 This relation is a broken power law in \gaia\ \gcolor, that incorporates new
 rotation periods for late M dwarfs obtained with the \ktwo\ mission
 \citep{douglas2017, rebull2017}.
-We fit a relation to Praesepe to capture the detailed shape of its newly
-revealed rotation period-color relation and also to provide a gyrochronology
-relation in \gaia\ \gcolor\ color, the most abundant color index, with more
-than a billion stars from \gaia\ DR2 \citep{brown2018}.
-Like any other gyrochronology model, this model cannot reproduce all the
-observed data and some simple modifications could make significant
-improvements, for example, by including a mixture model to account for
-outliers and binaries, and by removing the period-age, period-color
-separability to account for different period-color shapes seen in clusters of
-different ages.
-% PIXIE
-% outliers and binaries, and adding another power law to model the late M
-% dwarfs.
-We leave these improvements for a future project and, for now, test the
-% PIXIE
-% \citet{angus2015} model which is built into a new open source {\it Python} package
-new Praesepe-based model which is built into a new open source {\it Python}
-package for gyrochronology, called \sd.
-\sd\ provides the framework for simultaneous gyrochronology and isochrone
-fitting, and, because \sd\ is modular, it would be straightforward to update
-the gyrochronology relation in future.
-
-\racomment{An important point of context for this work is the new availability
-of data relevant to gyrochronology and stellar ages.
+We calibrated this new relation both to capture the detailed shape of its
+newly revealed rotation period-color relation and also to provide a
+gyrochronology relation calibrated to \gaia\ \gcolor\ color.
+\Gaia\ $G$, $G_{BP}$ and $G_{RP}$-band apparent magnitudes are now the most
+widely available photometric measurements, with more than a billion stars from
+\gaia\ DR2 \citep{brown2018}.
+\racomment{In fact, an important point of context for this work is the new
+availability of data relevant to gyrochronology and stellar ages.
 \Gaia\ now provides broad-band photometry and parallaxes for over a billion
 stars, and \kepler, \ktwo\ and \tess\ are providing rotation periods for
 hundreds of thousands of stars.
 Gyrochronology is becoming one of the most readily available age-dating
 methods, so it is important to continue to improve gyrochronology relations
 and methods.}
+Like any other gyrochronology model, this new Praesepe-based model cannot
+reproduce all the observed data and some simple modifications could make
+significant improvements, for example, by including a mixture model to account
+for outliers and binaries, and by removing the period-age, period-color
+separability to account for different period-color shapes seen in clusters of
+different ages.
+% PIXIE
+% outliers and binaries, and adding another power law to model the late M
+% dwarfs.
+We leave these improvements for a future project and, for now, test this
+% PIXIE
+% \citet{angus2015} model which is built into a new open source {\it Python} package
+new Praesepe-based model which is built into an open source {\it Python}
+package for gyrochronology, called \sd.
+\sd\ provides the framework for simultaneous gyrochronology and isochrone
+fitting, and, because \sd\ is modular, it would be straightforward to update
+the gyrochronology relation in future.
 
 % Paper outline
 %-----------------------------------------------------------------------------

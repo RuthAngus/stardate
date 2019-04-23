@@ -3,10 +3,10 @@
 
 We fit a broken power law to the 650 Myr Praesepe cluster in order to
 calibrate a new gyrochronology relation that takes advantage of new data
-available from the \ktwo\ mission.
-Praesepe is the ideal cluster to calibrate a gyrochronology relation to
-because it has the largest number of members with precisely measured rotation
-periods over a large range of colors.
+available from the \ktwo\ and \gaia\ surveys.
+Praesepe is the ideal calibration cluster because it has the largest number of
+members with precisely measured rotation periods, over a large range of
+colors, of any open cluster.
 It is relatively tightly clustered on the sky and many of its members were
 targeted in a single \ktwo\ campaign, from which rotation periods have been
 measured via light curve frequency analysis \citep{douglas2017, rebull2017}.
@@ -101,6 +101,108 @@ Best-fit coefficient values are shown in table \ref{tab:coefficients}.
     \end{tabular}
   \end{center}
 \end{table}
+\racomment{We calibrated a relation to Praesepe and the Sun alone and did not
+include other clusters or asteroseismic stars in the fit for the following
+reasons.
+Firstly, different open clusters have slightly different period-color
+relationships \citep{agueros2018, agueros2018b, curtis2018} and, given that we
+use an age-color separable relation, adding in extra clusters is unlikely to
+improve the calibration in this format.
+We did not calibrate to asteroseismic stars because they are slightly evolved
+and, because this gyrochronology relation does not include $\log g$, not
+useful calibrators.
+This new relation does not perfectly predict the rotation periods of stars at
+all colors and ages, but it provides several improvements over previous
+empirical gyrochronology relations.
+Firstly, it uses new \ktwo\ rotation period measurements to model the
+period-color relation of Praesepe in detail, secondly, it includes a model for
+the rotational behavior of M dwarfs for the first time, and thirdly, it is
+calibrated to \Gaia\ \gcolor\ color: the most widely available photometric
+color index (as opposed to B-V).
+Equation \ref{eqn:fgk_gyro} describes the rotational evolution of stars with
+Sun-like magnetic dynamos.
+These are stars that follow the \citet{skumanich1972} magnetic braking law,
+\ie\ their rotation period increases with the square root of their age.
+It does not describe stars hotter than around 6250 K which have a thin
+convective layers and a weak magnetic dynamo, nor does it describe fully
+convective stars which a long time to converge onto the \citet{skumanich1972}
+braking law.
+In addition, stars with Rossby numbers larger than around 2 do not show
+Skumanich-like magnetic braking \citep{angus2015, vansaders2016,
+vansaders2018}, so equation \ref{eqn:fgk_gyro} does not describe these stars.
+It also does not describe the rotation periods of subgiants or giants, whose
+rotation periods are influenced by their expanding radii, changing winds, and
+core-to-surface differential rotation \citep[\eg][]{vansaders2013, tayar2018}.
+Finally, this relation does not describe the rotation periods of dynamically
+or magnetically interacting binaries.
+Binaries often rotate more rapidly than isolated stars at the same age and
+color \citep{douglas2016}.
+In order to include these non-Skumanich type stars in our combined gyrochronal
+and isochronal model, we designed a composite gyrochronology relation which
+describes the mean and variance of the rotation period distribution across the
+HRD.
+Rotation periods are modeled differently for stars of different photometric
+color, EEP, Rossby number, age and metallicity.
+The rotation period model for each of these groups is described below.
+\begin{itemize}
+    \item{The rotation periods of late F, GK, and early M dwarfs are modeled
+        with equation \ref{eqn:fgk_gyro}.}
+    \item{The rotation periods of stars hotter than around 6250 K are
+        described with a log-normal distribution with mean,
+        $\log_{10}(P_\mathrm{rot})=0.56$, and an extra standard deviation,
+        which added to observational uncertainties, of 0.5 dex.
+        This model for the mean and variance of hot star rotation periods is
+        based on stars hotter than 6250 K in the \citet{mcquillan2014} sample,
+        which have a mean $\log_{10}(P_\mathrm{rot})$ of 0.56 dex and a
+        standard deviation of around 0.5 dex.}
+    \item{The rotation periods of fully convective stars are described as a
+         log-normal distribution with mean given by equation \ref{eqn:m_gyro},
+         and additional standard deviation of 0.5 dex.
+         This distribution reflects observations of late M dwarfs in the
+        Praesepe cluster, which follow relation \ref{eqn:m_gyro}, with an
+        additional standard deviation (in log-period) of around 0.5 dex.}
+    \item{Rotation period measurements of asteroseismic stars suggest that
+        stellar rotation periods stop evolving when stars reach a maximum
+        Rossby number of 2 \citep{vansaders2016, vansaders2018}.
+        After this, stars maintain a constant rotation period of
+        $P_\mathrm{max} = 2/\tau$, where $\tau$ is the convective turnover
+        timescale, until they become subgiants.
+        We included this newly characterized behavior in our composite
+        gyrochronology model.}
+    \item{The rotation periods of subgiants are described with a log-normal
+        distribution with mean given by equation \ref{eqn:fgk_gyro} and
+        additional standard deviation of 0.5 dex.
+        This is not a strictly accurate model of subgiant rotation periods
+        \citep[see, \eg][]{vansaders2013} but, because of the inflated
+        variance, it is a weakly constraining one.
+        Isochrone fitting provides precise ages for subgiants, so by inflating
+        the variance of the gyrochronology relation at large EEP, we allow a
+        star's position on the HRD/CMD to dominate the age information over
+        its rotation period.}
+    \item{We model stars younger than around 250 Myrs with a log-normal
+        distribution with mean function given by \ref{eqn:fgk_gyro},
+        \ref{eqn:m_gyro} or 0.56, depending on it whether it has
+        an intermediate, blue or red color, respectively and a inflated
+        standard deviation of 0.5 dex.
+        Rotation periods in young open clusters show a large amount of scatter
+        because they have not yet converged onto the \citet{skumanich1972}
+        spin-down sequence.}
+    \item{Finally, we model stars with very low and high metallicites (-3 $<$
+        [Fe/H] $<$ 3} with a log-normal distribution with mean given by
+        \ref{eqn:fgk_gyro}, \ref{eqn:m_gyro} or 0.56, depending on its color,
+        and a standard deviation of 0.5 dex.
+        Gyrochronology is not calibrated at these extreme metallicities due to
+        a lack of suitable metal poor and rich calibration stars.
+        Rather than assume the same gyrochronology model can be naively
+        applied to these stars, we take a more conservative approach and model
+        them with a broad Gaussian distribution.
+\end{itemize}
+Inflating the variance for stars with non-Skumanich magnetic braking behavior
+has two purposes: 1) in the cases of hot stars and fully convective stars, it
+allows the broad distributions of rotation periods observed in clusters and
+the field to be matched, and 2) it down-weights the age-information provided
+by rotation periods in regions of the HRD/CMD where rotation periods are not
+information-rich or the gyrochronology model is inaccurate or uncalibrated.}
 
 We used the following composite gyrochronology model to infer ages from
 rotation periods,
@@ -118,6 +220,9 @@ rotation periods,
 where $\sigma$ is the relative period uncertainty, divided by $\ln(10)$, on
 individual rotation period measurements and $\sigma_P$ is an additional
 scatter that is a function of EEP, age, metallicity and color.
+It takes a maximal value of 0.5 for hot stars, fully convective stars,
+subgiants and giants and a minimal value of zero for late F, GK and early M
+dwarfs.
 This additional scatter is described in more detail later in this section.
 This gyrochronology model reflects the observed ceasing of magnetic braking at
 a critical Rossby number of around 2 \citep{vansaders2016}.
