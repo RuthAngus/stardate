@@ -122,7 +122,7 @@ def age_model(log10_period, bprp):
         return logage
 
 
-def gyro_model_rossby(params, Ro_cutoff=2, rossby=True, model="angus15"):
+def gyro_model_rossby(params, Ro_cutoff=2, rossby=True, model="praesepe"):
     """Predict a rotation period from an age, B-V colour and mass.
 
     Predict a rotation period from an age, B-V color and mass using the Angus
@@ -135,14 +135,17 @@ def gyro_model_rossby(params, Ro_cutoff=2, rossby=True, model="angus15"):
         Ro_cutoff (float, optional): The critical Rossby number after which
             stars retain their rotation period. This is 2.16 in van Saders et
             al. (2016) and 2.08 in van Saders et al. (2018). We adopt a
-            default value of 2.16.
+            default value of 2.
         rossby (Optional[bool]): If True (default), the van Saders (2016)
             weakened magnetic braking law will be implemented. If false, the
-            Angus et al. (2015) gyrochronology relation will be used
-            unmodified.
+            gyrochronology relation will be used unmodified.
+        model (Optional[str)]: The gyrochronology model. If "praesepe", the
+            Praesepe-based gyro model will be used (default) and if "angus15",
+            the Angus et al. (2015) model will be used.
 
     Returns:
         The log10(rotation period).
+
     """
     if model == "angus15":
         color = calc_bv(params)
@@ -301,7 +304,8 @@ def lnprob(lnparams, *args):
             for the Praesepe gyro model.
 
     Returns:
-        The log-posterior probability of the model given the data.
+        The log-posterior probability of the model given the data and the
+            log-prior.
 
     """
 
@@ -428,7 +432,7 @@ def sigmoid(k, x0, L, x):
     return L/(np.exp(-k*(x - x0)) + 1)
 
 
-def sigma(eep, log_age, feh, color, model="angus15"):
+def sigma(eep, log_age, feh, color, model="praesepe"):
     """
     The standard deviation of the rotation period distribution.
     Currently comprised of two three logistic functions that 'blow up' the

@@ -64,10 +64,9 @@ class Star(object):
 
         Args:
             inits (Optional[array-like]): A list of initial values to use for
-            EEP, age (in log10[yrs]), feh, distance (in pc) and Av. The
-            defaults are Solar values at 1000 pc with .01 extinction.
+                EEP, age (in log10[yrs]), feh, distance (in pc) and Av.
             nwalkers (Optional[int]): The number of walkers to use with emcee.
-            The default is 24.
+                The default is 24.
             max_n (Optional[int]): The maximum number of samples to obtain
                 (although not necessarily to save -- see thin_by). The default
                 is 100000.
@@ -79,8 +78,6 @@ class Star(object):
                 when accessing the results. This number cannot exceed the
                 number of saved samples (which is max_n/thin_by). Default = 0.
             iso_only (Optional[bool]): If true only the isochronal likelihood
-                function will be used.
-            gyro_only (Optional[bool]): If true only the gyro likelihood
                 function will be used.
 
         """
