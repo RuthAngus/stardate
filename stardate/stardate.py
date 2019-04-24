@@ -54,7 +54,7 @@ class Star(object):
         self.savedir = savedir
         self.filename = filename
 
-    def fit(self, inits=[329.58, 9.5596, -.0478, np.exp(5.5629), .0045],
+    def fit(self, inits=[329.58, 9.5596, -.0478, 260, .0045],
             nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
             gyro_only=False, optimize=False, rossby=True, model="praesepe"):
         """Run MCMC on a star.
