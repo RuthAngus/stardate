@@ -86,33 +86,6 @@ def gyro_model_praesepe(log10_age, bprp):
         return np.polyval(p[:5], log10_bprp) + p[5]*log10_age
 
 
-# def gyro_model_praesepe(log10_age, bprp):
-#     """Predict a rotation period from an age and G_BP - G_RP colour.
-
-#     Given a Gaia G_BP - G_RP colour and an age, predict a rotation period
-#     using a model fit to the Praesepe cluster alone.
-
-#     Args:
-#         log10_age (float or array): The logarithmic age of a star or stars,
-#             log10(age), in years.
-#         bprp: (float or array): The Gaia G_BP - G_RP colour of a star or
-#             stars.
-
-#     Returns:
-#         The rotation period in days.
-
-#     """
-
-#     age_gyr = (10**log10_age)*1e-9
-#     log_age_gyr = np.log10(age_gyr)
-#     log_c = np.log10(bprp)
-#     params = [1.10469903, 0.6183025, -4.452133, 31.02877576, -47.76497323,
-#               0.63604919]
-#     log_P = params[0] + params[1]*log_c + params[2]*log_c**2 \
-#         + params[3]*log_c**3 + params[4]*log_c**4 + params[5]*log_age_gyr
-#     return 10**log_P
-
-
 def age_model(log10_period, bprp):
     """
     Predicts log10 age from log10 color and log10 period.
