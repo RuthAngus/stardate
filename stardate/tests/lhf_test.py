@@ -250,10 +250,10 @@ def test_gyro_model_rossby():
 
 
 def test_sigma():
-    assert sigma(355, 9, 0., .3) > .49  # Low BV (hot star) high variance
-    assert sigma(355, 9, 0, 2) > .49  # high BV (cool star) high variance
-    assert sigma(355, 9, 0, .65) < .01  # low variance for FGK dwarfs
-    assert sigma(500, 9, 0, .65) > .49  # high variance for giants
+    assert sigma(355, 9, 0., .3, model="angus15") > .49  # Low BV (hot star) high variance
+    assert sigma(355, 9, 0, 2, model="angus15") > .49  # high BV (cool star) high variance
+    assert sigma(355, 9, 0, .65, model="angus15") < .01  # low variance for FGK dwarfs
+    assert sigma(500, 9, 0, .65, model="angus15") > .49  # high variance for giants
     # assert sigma(300, 7, 0, .65) > .49  # high variance for young stars
     # assert sigma(300, 10.1, 0, .65) > .49  # high variance for old stars
     # assert sigma(355, 9, -4., .65) > .49  # high variance for metal poor
@@ -267,9 +267,9 @@ def test_age_model():
 
 
 def test_gyro_model_praesepe():
-    print(10**gyro_model_praesepe(np.log10(4.56*1e9), .77), "gyro_model_praesepe")
-    assert 25 < 10**gyro_model_praesepe(np.log10(4.56*1e9), .77)
-    assert 10**gyro_model_praesepe(np.log10(4.56*1e9), .77) < 27
+    print(10**gyro_model_praesepe(np.log10(4.56*1e9), .82), "gyro_model_praesepe")
+    assert 25 < 10**gyro_model_praesepe(np.log10(4.56*1e9), .82)
+    assert 10**gyro_model_praesepe(np.log10(4.56*1e9), .82) < 27
     assert 10**gyro_model_praesepe(np.log10(4.56*1e9), 0.4) == 10**.56
 
 
