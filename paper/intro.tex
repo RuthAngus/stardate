@@ -1,39 +1,11 @@
 \section{Introduction}
 \label{section:intro}
 
-%   - The need for better stellar ages.
-% The formation and evolution of the Milky Way and the planetary systems within
-% it are two topics of significant interest in astronomy today.
-% Both of these fields require precise and accurate ages for tens to hundreds of
-% thousands of stars, however, age is the most difficult stellar property to
-% measure.
 Age is the most difficult stellar property to measure, and the difficulty of
 age-dating is particularly acute for low mass (GKM) stars on the main sequence
 (MS).
-% These are precisely the stars that comprise the majority of known planet
-% hosts.
 Using conventional dating methods, uncertainties on the ages of these stars
 can be as large as the age of the Universe.
-% The stars eligible for extremely precise age-dating, where age uncertainties
-% can be as low as 10\%, are those in nearby open clusters, those with
-% observable acoustic oscillations (asteroseismic stars), those just turning off
-% the MS, and the Sun \citep[see][for a review of stellar ages]{soderblom2010}.
-% There are only a few tens of cool, MS stars with precise ages that are
-% suitable for exoplanet population studies, however {\it tens-of-thousands} of
-% precise ages are needed to study the evolution of planetary systems
-% \citep[\eg][]{petigura2013, foreman-mackey2014, veras2015, burke2015}.
-% The number of planets detected in open clusters, and therefore with precise
-% ages, is growing \citep[\eg][]{mann2017, rizzuto2018, vanderburg2018,
-% mann2018}, however there are still only a couple of dozen of these discovered
-% so far and the total number of detectable planets in clusters is unlikely to
-% reach statistical numbers in the near future.
-% In order to study the evolution of planetary systems, a significant number of
-% precise ages for cool MS {\it field} stars is needed.
-% % Neither cluster stars nor asteroseismic stars can currently provide the
-% % numbers required for exoplanet population studies: age-dating methods for cool
-% % MS field stars {\it must} be improved before the evolution of planets can be
-% % explored.
-%   - Why are MS ages harder than red giant ages?
 GKM dwarfs are difficult to age-date because their physical and observable
 properties do not change rapidly.
 This is represented in the spacing of isochrones on a Hertzsprung-Russell
@@ -55,27 +27,18 @@ CMD/HRD position has been thoroughly mapped with physical models, and can be
 used to calculate relatively accurate (but not necessarily precise) ages,
 barring some small, $\sim$10\% variations between different models,
 \citep[\eg][]{yi2001, dotter2008, dotter2016}.
-% Isochronal ages {\it can} be precise for stars turning off the MS, because the
-% rate of change in brightness and temperature is large during this phase of
-% stellar evolution.
 On the MS itself, there is little differentiation between stars of different
 ages in the $L$ and \teff\ plane, so ages tend to be very imprecise.
 The method of inferring a star's age from its rotation period, called
 `gyrochronology', is much better suited for measuring ages on the MS because
 MS stars spin down relatively rapidly.
-% Isochrones in the rotation period-color plane are not tightly spaced: rotation
-% periods evolve rapidly, so rotation periods can provide more precise ages than
-% CMD/HRD placement on the MS.
 
-%   - How does gyrochronology work?
 Magnetic braking in MS stars was first observed by \citet{skumanich1972} who,
 studying young clusters and the Sun, found that the rotation periods of
 Solar-type stars decay with the square-root of time.
 It has since been established that the rotation period of a MS star depends,
 to first order, only on its age and effective temperature or color
 \citep[\eg][]{barnes2003}.
-% This means that a star's age can be determined from its rotation period and
-% color.
 The convenient characteristic of stars that allows their ages to be inferred
 from their {\it current} rotation periods and independently of their
 primordial ones, comes from the steep dependence of spin-down rate on rotation
@@ -85,13 +48,10 @@ angular momentum loss rate than slowly spinning stars and for this reason, no
 matter the initial rotation period, Solar type stars will have the same
 rotation period after around the age of the Hyades, 500-700 million years
 \citep{irwin2009, gallet2015}.
- % stellar rotation periods appear to converge
-% onto a tight sequence \citep{irwin2009}.
 After this time, the age of a star can be inferred, to first order, from its
 dust-corrected color (\eg\ B-V or \gcolor) and rotation period alone and this
 is the principle behind gyrochronology.
 
-%   - Theoretical vs empirical gyro models
 The relation between age, rotation period and mass has been studied in detail,
 and several different models have been developed to capture the rotational
 evolution of Sun-like stars.
@@ -121,10 +81,7 @@ As demonstrated in section \ref{section:results} however, this does not mean
 that the ages of stars with Ro $>$ 2 cannot be measured from their rotation
 periods, especially if their rotation periods are combined with HRD or CMD
 placement.
-% this does not mean
-% that the rotation periods of these stars are no longer age-informative.
 
-%   - Describe the project presented here.
 The gyrochronology models that capture post $Ro$-threshold, rotational
 evolution \citep{vansaders2016} are the current state-of-the-art in rotation
 dating.
@@ -166,13 +123,6 @@ can be affected by additional confounding variables which are not always
 observed (having a binary or planetary companion, for example).
 A further advantage of empirical models is that inference is more tractable:
 it can be extremely fast to fit them to data.
-% PIXIE
-% We used the simple, empirical, power-law gyrochronology model from
-% \citet{angus2015} in this work.
-% This model is a recalibration of the model first proposed by
-% \citet{barnes2003}, and later recalibrated by \citet{mamajek2008}.
-% We adapted the \citet{angus2015} model to include the weakened magnetic
-% braking proposed by \citet{vansaders2016}.
 
 In this work we calibrated a new empirical gyrochronology relation, fit to the
 Praesepe open cluster and the Sun.
@@ -201,24 +151,14 @@ significant improvements, for example, by including a mixture model to account
 for outliers and binaries, and by removing the period-age, period-color
 separability to account for different period-color shapes seen in clusters of
 different ages.
-% PIXIE
-% outliers and binaries, and adding another power law to model the late M
-% dwarfs.
 We leave these improvements for a future project and, for now, test this
-% PIXIE
-% \citet{angus2015} model which is built into a new open source {\it Python} package
 new Praesepe-based model which is built into an open source {\it Python}
 package for gyrochronology, called \sd.
 \sd\ provides the framework for simultaneous gyrochronology and isochrone
 fitting, and, because \sd\ is modular, it would be straightforward to update
 the gyrochronology relation in future.
 
-% Paper outline
-%-----------------------------------------------------------------------------
 This paper is laid out as follows.
-% In section \ref{section:motivation} we provide additional motivation for
-% combining gyrochronology and isochrone fitting by providing examples based
-% on information theory.
 In section \ref{section:method} we describe our new age-dating model and its
 implementation, in section \ref{section:results} we test this model on
 simulated stars and cluster stars, and in section \ref{section:conclusion} we
@@ -232,6 +172,3 @@ The term `parameters' refers to the physical properties of that star: age
 ($A$), equivalent evolutionary point (EEP), true bulk metallicity
 ($\mathrm{Fe/H}$), distance ($D$) and V-band extinction ($A_V$).
 These are the properties that generate the observables.
-% Equivalent evolutionary point is a proxy for the evolutionary stage of a star,
-% that is computed as part of the MIST isochrone library.
-% Mass can be exactly determined from \eep, age and metallicity.

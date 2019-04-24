@@ -10,10 +10,6 @@ The ages predicted with our model were compared to the true parameters used to
 generate the data.
 In the second we tested our model by measuring the ages of individual stars in
 the NGC 6819 open cluster.
-% The age of Praesepe has been measured precisely because it is an ensemble of
-% coeval stars with the same metallicity: a single stellar poplulation, and its
-% age can be precisely established through isochrone fitting and MS turn-off.
-% We adopted an age of 650 Myrs for Praesepe \citep{fossati2008}.
 
 \subsection{Test 1: simulated stars}
 For the first test we drew masses, ages, bulk metallicities, distances and
@@ -84,8 +80,6 @@ The rotation period model.
 The top panel shows the rotation periods vs. \gcolor\ colors of simulated stars,
     colored by their age and the bottom panel shows the same stars colored
     by their equivalent evolutionary point (EEP).
-    % PIXIE
-    % The gray lines describe \citep{angus2015} gyrochrones at ages 1, 3, 5, 7,
     % 9, 11, and 13 (rotation periods rise with age).
     The gray lines describe the mean gyrochronology model at ages 1,
     3, 5, 7, 9, 11, and 13 (rotation periods rise with age).
@@ -95,8 +89,6 @@ The top panel shows the rotation periods vs. \gcolor\ colors of simulated stars,
 \label{fig:rotation_model}
 \end{figure}
 
-
-%   - The results
 We took two approaches to inferring the ages of these simulated stars:
 firstly using isochrone fitting {\it only}, and secondly using isochrone
 fitting {\it combined with} a gyrochronology model (\sd).
@@ -120,47 +112,6 @@ hot stars (\gcolor\ $<$ 0.56), cool stars (\gcolor\ $>$ 2.7) and evolved stars
 As expected, the low $Ro$, FGK stars show the most dramatic improvement in age
 precision.
 \racomment{Summary statistics rewrite in progress...}
-% The median empirical age precision, the standard deviation of age posteriors
-% as a percentage of age, was around 5\% for this group and the median relative
-% error, defined as the absolute difference between the true and age the
-% inferred age, as a percentage of the true age, was less than 2\%.
-% The median error: the absolute difference between true and measured age was
-% around 100 Myrs.
-% In contrast, the median empirical precision of ages measured using only
-% isochrone fitting was 50\% and the median error was 1.3 Gyr in absolute units,
-% or 30\%.
-% Ages measured for FGK stars by combining gyrochronology and isochrone fitting
-% with \sd\ were 10 times more precise than ages measured with isochrone
-% fitting.
-% Even though the group of old FGK stars with large Rossby numbers have stopped
-% magnetic braking, their rotation periods are still age-informative and
-% relatively precise ages were measured for these stars with \sd.
-% The median age precision for this group was 10\% with \sd\ and 22\% with
-% isochrone fitting.
-% The median age error was 500 Myr/5\% with \sd\ and 1.3 Gyr/16\% with isochrone
-% fitting.
-% Ages measured with \sd\ were around twice more precise than ages measured with
-% isochrone fitting only, so although these stars have stopped spinning down,
-% their rotation periods are still age-informative when paired with stellar
-% evolution models.
-% There is a tendency for the ages of these stars to be slightly underestimated
-% however.
-% % The median accuracy of hot star ages stayed roughly constant with \sd,
-% % relative to isochrone fitting only (from a median error of 510 Myr to 560 Myr)
-% % because of issues with sampling the posterior PDFs.
-% % Adding gyrochronology to the age model creates a more multimodal posterior PDF
-% % which makes sampling more difficult, leading to some highly inaccurate age
-% % measurements at very high and very low ages.
-% There was only a very slight improvement the precision of cool star, hot star
-% and subgiant ages measured with \sd\ vs. isochrone
-% fitting only.
-% % This is expected because the rotation periods of these stars do not contain
-% % information about stellar ages.
-% For the whole sample, an overall median age precision of 10\% was provided by
-% \sd\ (down from 28\% for isochrone fitting only), a median absolute error of
-% 500 Myrs (down from 1.3 Gyrs), and a relative error of 7\% (down from 23 \%).
-% % On average, the ages of {\it all} FGKM dwarfs and subgiants were 3$\times$
-% % more precise when their rotation periods were used to infer their ages.
 \begin{figure}
   \caption{
 The true vs. predicted ages of simulated stars.
@@ -169,7 +120,6 @@ The true vs. predicted ages of simulated stars.
     isochrone fitting only are shown in gray.
 The five panels show the results for five different groups of stars: low $Ro$
 late F, GK and early M dwarfs, high $Ro$ late F, GK and early M dwarfs, early
-    % F stars (B-V $<$ 0.45), late M dwarfs (B-V $>$ 1.4) and subgiants
     F stars (\gcolor\ $<$ 0.56), late M dwarfs (\gcolor\ $>$ 2) and subgiants
     (EEP $>$ 454).
 Gyrochronology is highly effective for low $Ro$ late F, GK and early M dwarfs
@@ -184,9 +134,6 @@ Ages for other groups were improved slightly but not substantially.
 
 Figure \ref{fig:precision} shows the simulated stars on an HRD, with
 points colored by the relative precision of their predicted ages.
-% \logg\ is plotted the y-axis instead of luminosity because the MS spreads out
-% more in \teff-\logg\ space and it is easier to differentiate young and old
-% stars.
 The top panel shows the precision of ages calculated using both gyrochronology
 and isochrone fitting with \sd\ and the bottom panel shows the precision of
 ages calculated with isochrone fitting only.
@@ -206,12 +153,6 @@ Simulated stars on an HRD, colored by their relative age precision
     isochrone fitting only (bottom panel).
 Combining gyrochronology with isochrone fitting significantly improves stellar
     age precision on the MS.
-% Gyrochronology is responsible for the high precision of ages measured for
-%     young FGK stars (stars in the upper left panel of figure
-%     \ref{fig:simulation_results}.
-% The ages of old FGK stars with $Ro > $2 are slightly less precise as these
-%     stars have stopped spinning down and their rotation periods are not
-%     information-rich.
 Isochrone fitting provides precise ages for hot stars and subgiants and the
     rotation periods of these stars are relatively uninformative, so
     gyrochronology does not significantly improve their age precision.
@@ -224,39 +165,6 @@ The ages of late M dwarfs are highly imprecise because their ages are not well
 \label{fig:precision}
 \end{figure}
 
-% \begin{figure}
-%   \caption{
-% The sample of simulated stars on an HRD, colored by the difference
-%     between their true age and their measured age (the age error).
-% }
-%   \centering
-%     \includegraphics[width=1\textwidth]{error_plot}
-% \label{fig:accuracy}
-% \end{figure}
-
-
-% We're cheating here.
-% Figure \ref{gyro_only} demonstrates the results of inferring ages using
-% rotation periods only, and this illustrates why the combination of isochronal
-% and gyrochronal ages is so precise: almost all this precision comes from
-% rotation periods.
-% Secondly, we simulated data without any noise or any additional instrinsic
-% scatter for FGK dwarfs, resulting in ages with better precision than can be
-% expected for real stars.
-% Inaccuracies would arise if the gyrochronology model was incorrect or poorly
-% calibrated in some areas of parameter space and additional imprecision would
-% arise if excess intrinsic scatter were built into the gyrochronology model
-% and/or the observations.
-% We leave further recalibration of gyrochronology models for a future exercise
-% since, in this work, we were mostly interested in testing the results of
-% combining existing gyrochronology relations with isochrone fitting.
-% The above experiment demonstrates that building gyrochronology into stellar
-% evolution models results in much more precise age predictions, as predicted by
-% information theory.
-
-% TEST 2: Clusters
-%-----------------------------------------------------------------------------
-%   - The cluster data
 \subsection{Test 2: Open clusters}
 \racomment{
 In order to test our model on real stars with known ages, we selected a sample
@@ -266,10 +174,6 @@ photometry and \gaia\ parallaxes for members of the NGC 6819 cluster.
 Figure \ref{fig:NGC6819} shows the rotation period-color relation of this
 cluster and figure \ref{fig:NGC6819_results} shows the results of inferring
 the ages of individual cluster members using \sd\ and isochrone fitting.
-% Following our analysis of Praesepe which showed that rotation period
-% uncertainties of around 10\% are realistic for cluster stars, we used 10\%
-% uncertainties on the rotation periods, rather than the provided measurement
-% uncertainties.
 The ages of F stars in this cluster (\gcolor\ $\sim$ 5.5-6.5) are relatively
 precisely constrained by isochrone fitting alone because, at 2.5 Gyr, they are
 approaching MS turn-off.
@@ -283,18 +187,11 @@ posteriors tend towards the prior which is a uniform distribution between 0
 and 13.8 Gyrs.
 In contrast, the rotation periods of G and K stars in this cluster
 significantly improve the accuracy of age measurements.
-% The RMS of ages measured with the Praesepe-based gyrochronology model and
-% isochrones via \sd\ is 3.4 Gyr and the RMS of ages measured with isochrones
-% only is 13.5 Gyr.
-% The median uncertainty of \sd\ ages is 1.4 Gyr and the median uncertainty of
-% isochrone-only ages is 2.2 Gyr.
 The median age of stars in this cluster was 2.63 $\pm$ 0.16 Gyr when ages were
 inferred with a combination of isochrone fitting and gyrochronology, with a
 Praesepe-calibrated gyrochronology model.
 The previously-calibrated \citet{angus2015} model resulted in a median age of
 2.66 $\pm$ 0.21 Gyr.
-% This is due to the \citet{angus15} model slightly under-predicting stellar
-% rotation periods at this age, as shown in figure \ref{fig:NGC6819}.
 The median age of the cluster, calculated with isochrone fitting and a
 Praesepe-calibrated gyrochronology model, without correcting the photometry
 for redenning, was slightly under-estimated at 1.86 $\pm$ 0.22 Gyr.
@@ -306,11 +203,6 @@ Finally, the median age of stars in the cluster was 4.27 $\pm$ 0.48 Gyr when
 only isochrone fitting was used.
 Isochrone-only ages were over-estimated because they were prior dominated, and
 the prior was a uniform distribution between 0 and 13.8 Gyr.
-% The ages quoted above are the {\it median} age of stars in the cluster,
-% calculated using each method.
-% It is worth noting however that the average, inverse variance-weighted  age of
-% cluster stars is exactly 2.5 Gyr in each case.
-% This suggests that all
 \begin{figure}
   \caption{
     The \kepler-based rotation periods of members of the 2.5 Gyr NGC 6819 open
@@ -363,9 +255,6 @@ The uncertainties on the measured rotation periods, provided in
 for some stars.
 Underestimating the rotation period uncertainty can result in an inaccurate
 age estimate.
-% Overestimating the uncertainties can also result in inaccurate ages: 10\%
-% rotation period uncertainties were too conservative and resulted in ages being
-% affected by the prior and systematically over-estimated.
 This raises the question: how should uncertainties on rotation periods be
 estimated?
 The likelihood is weighted by the inverse variance, so uncertainties on the
@@ -380,245 +269,3 @@ In general, rotation period uncertainties should probably be calculated
 empirically via simulations as in the \citet{aigrain2015} study.
 A thorough exploration of how rotation period uncertainties affect stellar
 ages via gyrochronology would be useful in future.}
-
-% Figure \ref{fig:praesepe} shows the rotation periods of Praesepe members as a
-% function of their \gaia\ \gcolor\ colors with the new gyrochronology model fit
-% to it (black dashed lines) and an older gyrochronology relation
-% \citep{angus2015}.
-% Praesepe has several rotational outliers: stars with rotation periods much
-% higher or lower than the majority of data points.
-% Some of these outliers have excess luminosity which is suggestive of binarity
-% and others are likely to be lower mass-ratio binaries (Douglas \etal, in prep).
-% Because the gyrochronology model does not capture the rotational behavior of
-% these outliers, \sd\ is not designed to predict precise ages for binary stars
-% or other outliers.
-% Figure \ref{fig:praesepe_results} shows the posterior PDFs over age for the
-% FGK and early M dwarf members of the praesepe cluster where each star was
-% treated as a field star.
-% Age posteriors calculated with \sd\ are shown in blue and, for comparison, age
-% posteriors calculated using isochrone fitting only are shown in orange.
-% \gaia\ colors (\gcolor), \gaia\ apparent magnitude ($G$), \gaia\ parallaxes
-% and rotation periods were used the observable properties.
-% The blue PDFs are more tightly clustered around the established age of
-% Praesepe ($\sim650$Myrs, shown as a dashed vertical line) than the orange PDFs
-% because rotation periods are extremely age-informative for these stars.
-% However, the accuracy of these ages is limited because of the limited accuracy
-% of the gyrochronology model.
-% Until the gyrochronology model is improved to incorporate rotational outliers
-% and binaries, ages calculated with \sd\ should be interpreted with caution.
-% \begin{figure}
-%   \caption{
-% Posterior PDFs over the ages of members of the 650 Myr Praesepe cluster.
-% The blue posteriors were recovered with \sd, by combining \gaia\ apparent
-%     magnitudes ($G$, $G_BP$ and $G_RP$) and parallaxes with their photometric,
-%     \ktwo\ rotation periods.
-% The orange posteriors were obtained for the same stars using isochrone fitting
-%     with \gaia magnitudes and parallaxes.
-% Each star was treated as a single field star.
-% The blue posteriors are more tightly peaked and clustered around the true age
-% of the cluster because rotation periods add age information.
-% These blue posteriors are not always accurate because they reflect the scatter
-% within rotation periods in the Praesepe cluster.
-% }
-%   \centering
-%     \includegraphics[width=1\textwidth]{praesepe_results}
-% \label{fig:praesepe_results}
-% \end{figure}
-
-% % Cutting outliers and limiting color range.
-% In order to fit a period-color relation to these data we restricted the sample
-% of cluster stars to the color range, 0.56 $<$ \gcolor\ $<$ 3 in order to
-% remove early F and late M dwarfs whose rotation periods do not fall on the
-% `gyrochronology main sequence'.
-% Although it {\it may} be possible to crudely predict the ages of these stars
-% (at least the M dwarfs) from their rotation periods, the age-rotation-color
-% relation for these stars is very different to the FGK star relations and is
-% not the focus of this paper.
-% In addition, we removed rapidly rotating stars from the sample since, although
-% modeling outliers is important and consequential for gyrochronology in
-% general, the goal of this paper is not to produce a perfect gyrochronology
-% that reproduces stochasticity in the data, just a simple function that fits
-% the rotational main sequence of Praesepe.
-% In future we plan to update the gyrochronology models to include M dwarfs,
-% and the outlying rapid rotators using a mixture of Gaussians.
-% Similarly, we used only Praesepe in this study because the period-color
-% relations of each open cluster with rotation periods has a different shape.
-% This is likely due to differences in metalicities, incomplete or noisy
-% membership lists and differences in rotation period measurement algorithms.
-% A global gyrochronology calibration, using all cluster data is planned for the
-% future but, again, is beyond the scope of the project presented here.
-% The rotation periods of the Praesepe members in the restricted color range and
-% with outliers removed are plotted against their \Gaia\ colors in figure
-% \ref{fig:Praesepe}.
-% We used linear least squares to fit a linear model to Praesepe and the Sun.
-% A 4th order polynomial in $\log(G_{BP} - G_{RP})$ and a straight line in
-% $\log(\mathrm{Age~[yrs]})$ was fit to reproduce
-% $\log(\mathrm{rotation~period~[days]})$.
-% \begin{equation}
-%     \log(P) = a + b\log(C_G) + c\log^2(C_G) + d\log^3(C_G) + e\log^4(C_G) +
-%     f\log(A),
-% \end{equation}
-% \label{eq:new_gyro}
-% were $P$ is period, $C_G$ is \Gaia \gcolor\ color, and A is age.
-
-% %   - Praesepe results: metallicity, mass, distance
-% Stellar rotation periods are age-informative and so including them in our
-% analysis leads to the more precise measurement of ages.
-% However, rotation periods do not carry very much information about the
-% metallicity of a star, nor their distance.
-% They are also not particularly informative about the mass of a star because,
-% even though rotation period depends on both mass and age, stellar mass is
-% strongly informed by color and temperature information, so is chiefly
-% determined by the stellar evolution/isochrone models.
-% However, age, mass and metallicity are correlated: a star can be more blue
-% because it is more massive, older or more metal poor and for this reason, if a
-% star's age is more tightly constrained, constraints on its mass and
-% metallicity will also improve.
-% Figures \ref{fig:metallicity} and \ref{fig:mass} show the differences in
-% posterior PDFs over metallicity and mass respectively, calculated for Praesepe
-% stars where rotation period information is both used (blue posteriors) and not
-% used (orange posteriors).
-% The black line in figure \ref{fig:metallicity} shows the established
-% metallicity of Praesepe \racomment{citation}.
-% There is little difference between blue and orange because rotation periods do
-% not strongly depend on metallicity or mass (independantly of age).
-% However, the precision of mass and metallicity measurements are slightly
-% improved due to the fact that age, mass and metallicity are correlated.
-% Figure \ref{fig:distances} shows the posterior PDFs over distance to the
-% Praesepe cluster.
-% In this example of fitting our model to Prasepe data, Since we used \gaia\
-% parallaxes, which are extremely informative about distances, more precisely
-% constrained ages make a minimal improvement to distances.
-
-%   - Praesepe results: the Praesepe gyro relation
-% The results in figure \ref{fig:praesepe_old_model_ages} were produced using a
-% gyrochronology relation (equation \ref{eqn:old_gyro}) that was calibrated
-% using the Hyades, Coma Berenices and Pleiades clusters, plus the Sun and old
-% asteroseismic stars \citep{angus2015}.
-% Figure \ref{fig:praesepe_new_model_ages} however, shows the results of
-% inferring the ages of Praesepe members with the dedicated Praesepe
-% gyrochronology relation of equation \ref{eqn:gyro_age_praesepe}.
-% We include these results because we would like to provide an idea of the kind
-% of age measurement accuracy that is achievable in the best case: where the
-% gyrochronology model perfectly reproduces the data.
-
-% %   - Summary
-% In summary, fitting our new age model to simulated stars and members of the
-% NGC 6819 cluster (an open cluster with a precisely measured age from ensemble
-% isochrone fitting and MS turn-off) demonstrates that combining isochrone
-% fitting with gyrochronology provides more precise ages
-% extremely imprecise ages, however when gyrochonology is incorporated, the
-% precision of age measurements increase significantly.
-
-% % The simulation figures
-% % iso only
-% \begin{figure}
-%   \caption{
-% The results of a test in which we simulated observable properties of stars
-%     with the same model we used to infer their properties.
-% In this experiment we used {\it only} isochrone fitting to infer ages;
-% we did not use rotation periods/gyrochronology.
-%     For results where we used {\it both} stellar evolution models {\it and}
-%     gyrochronology, see figure \ref{fig:iso_and_gyro}.
-% The true age, used to produce associated observables is shown on the x-axis,
-%     and the inferred ages are shown on the y-axis.
-% This figure shows the posterior PDFs over stellar age for each of the
-%     simulated stars as a `violin plot', where samples from the posterior are
-%     plotted vertically as a smooth, symmetric function.
-% The widths of these functions indicates the probability density over age:
-%     wider regions indicated greater probability mass.
-% The median values of the posterior PDFs are plotted as solid horizontal lines.
-% This figure demonstrates that when only stellar evolution models are used to
-%     infer ages for field MS stars, the resulting predicted ages are extremely
-%     imprecise.
-% }
-%   \centering
-%     \includegraphics[width=1\textwidth]{../plots/iso_only_violin.pdf}
-% \label{fig:iso_only}
-% \end{figure}
-
-% \begin{figure}
-%   \caption{
-% The results of a test in which we simulated observable properties of stars
-%     with the same model we used to infer their properties.
-%     In this experiment we used both isochrone fitting {\it and}
-%     gyrochronology to infer ages.
-% For results where we used stellar evolution models {\it only}, see the
-%     previous figure (figure \ref{fig:iso_only}).
-% The true age, used to produce associated observables is shown on the x-axis,
-%     and the inferred ages are shown on the y-axis.
-% This figure shows the posterior PDFs over stellar age for each of the
-%     simulated stars as a `violin plot', where samples from the posterior are
-%     plotted vertically as a smooth, symmetric function.
-% The widths of these functions indicates the age probability density: wider
-%     regions represent greater probability mass.
-% The median values of the posterior PDFs are plotted as solid horizontal lines.
-%     This figure demonstrates that when rotation periods (gyrochronology) {\it
-%     and} stellar evolution models are used to infer the ages of field MS
-%     stars, the resulting predicted ages are much more precise
-%     than isochrone fitting can provide alone.
-%     \racomment{I am rerunning code to fix the outliers in this figure -- I
-%     think it's an initialization issue. I am also planning to combine this
-%     figure with the figure above.}
-% }
-%   \centering
-%     \includegraphics[width=1\textwidth]{../plots/iso_and_gyro_violin.pdf}
-% \label{fig:iso_and_gyro}
-% \end{figure}
-
-% % The Cluster figure
-% \begin{figure}
-%   \caption{
-% % The rotation periods of stars in open clusters, and the Sun, plotted against
-% %     their \Gaia\ colors (\gcolor) in logarithmic space.
-% % The result of this fit is plotted on top of the data at the ages of
-% %     the cluster stars and the Sun.
-%     The rotation periods of Praesepe members and the Sun, plotted against
-%     their \Gaia\ colors (\gcolor) in logarithmic space.
-%     We fit a linear model to these data in order to predict
-%     rotation periods from \gaia\ colors and age.
-%     This model consisted of a fourth-order polynomial in $\log_{10}$ color,
-%     and a 1st order polynomial (a straight line) in $\log_{10}$ age.
-% The result of this fit is plotted on top of the data at the ages of
-%     Praesepe and the Sun.
-% }
-%   \centering
-%     \includegraphics[width=1\textwidth]{clusters.pdf}
-% \label{fig:clusters}
-% \end{figure}
-
-
-% \begin{figure}
-%   \caption{
-%     The unnormalized posterior PDFs over the ages of Praesepe stars inferred
-%     using an isochrone fitting method (orange) and a joint isochrone fitting
-%     and gyrochronology model (blue).
-%     MIST isochrones were used for isochrone fitting and the gyrochronology
-%     model is shown as solid grey lines in
-%     figure \ref{fig:praesepe} \citep{angus2015}.
-%     The black line shows the established age of Praesepe (650 Myrs).
-%     The blue posterior PDFs are more strongly peaked around the established
-%     age for Praesepe than the orange, indicating that gyrochronology is much
-%     more informative for these MS stars than isochrone fitting.
-%     \racomment{Still need to quantify the improvement. Also need to plot these
-%     stars on a CMD, colored by their age uncertainties. Need to make sure
-%     there are some Praesepe subgiants in there to test the isochrone fitting.}
-% }
-%   \centering
-%     \includegraphics[width=1\textwidth]{cluster_ages.pdf}
-% \label{fig:cluster_ages}
-% \end{figure}
-
-
-% \begin{figure}
-%   \caption{
-%     The posterior PDFs over metallicity of Praesepe stars inferred using an
-%     isochrone fitting method (orange) and a joint isochrone fitting and
-%     gyrochronology model (blue).
-%     The black line shows the established metallicity of Praesepe (citation).
-%     The blue posterior PDFs are
-% }
-%   \centering
-%     \includegraphics[width=1\textwidth]{praesepe.pdf}
-% \label{fig:metallicity}
- % \end{figure}
