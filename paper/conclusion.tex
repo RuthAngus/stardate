@@ -19,18 +19,18 @@ We fit a new broken power law gyrochronology model to the Praesepe cluster
 % \citet{barnes2003} and later recalibrated by \citet{angus2015}, with a
 and included a modification recommended by \citet{vansaders2016} that accounts
 for weakened magnetic braking at Rossby numbers larger than 2.
-The rotation periods of hot stars, cool stars and evolved stars were modeled
-stochastically with a broad log-normal distribution.
+The rotation periods of hot stars, cool stars, evolved stars, young stars and
+extremely metal poor and rich stars were modeled stochastically with a broad
+log-normal distribution.
 We tested \sd\ on simulated data and cluster stars and demonstrated that
-combining gyrochronology with isochrone fitting produces age predictions that
-are an order of magnitude more precise than isochrone fitting alone.
+combining gyrochronology with isochrone fitting increases the precision of age
+estimates, compared to using isochrone fitting alone.
 
-\sd\ may predict inaccurate ages for stars younger than around 500 million
-years, when stars are more likely to be rapidly rotating outliers, and close
-binaries whose interactions influence their rotation period evolution.
+\sd\ may predict inaccurate ages for stars in close binaries whose
+interactions influence their rotation period evolution.
 Rotational outliers are often seen in clusters \citep[see \eg][]{douglas2016,
 rebull2016, douglas2017, rebull2017} and many of these fall above the main
-sequence, indicating that they are binaries.
+sequence on a CMD, indicating that they are binaries.
 In addition, measured rotation periods may not always be accurate and can, in
 many cases, be a harmonic of the true rotation period.
 For example, a common rotation period measurement failure mode is to measure
@@ -61,26 +61,24 @@ use, then inferring an age which itself depends on the classification that was
 made.
 It is important to infer all stellar properties at once since they all depend
 on each other.
-
 % Gyrochronology and isochrone fitting are complementary: gyrochronology
 % supplies precise ages on the \MS\ and isochrone fitting provides precise ages
 % near \MS\ turn off.
 % \sd\ allows users to infer precise ages for MS stars and subgiants alike,
 % without having to first identify the age-dating method that is best for any
 % given star.
-Due to the flexibility of the {\tt isochrones} package that \sd\ is built on
-top of, \sd\ accepts apparent magnitudes in all pass-bands covered by the MIST
-isochrones which includes the Johnson-Cousins, {\it 2MASS}, \Kepler, {\it
-SDSS} and \Gaia\ photometric systems.
-
-\sd\ is applicable to an extremely large number of stars: late F, GK and early
-M stars with a rotation period and broad-band photometry.
+% Due to the flexibility of the {\tt isochrones} package that \sd\ is built on
+% top of, \sd\ accepts apparent magnitudes in all pass-bands covered by the MIST
+% isochrones which includes the Johnson-Cousins, {\it 2MASS}, \Kepler, {\it
+% SDSS} and \Gaia\ photometric systems.
+\sd\ is applicable to a large number of stars: AFGKM dwarfs and subgiants with
+a rotation period and broad-band photometry.
 This already includes tens-of-thousands of \kepler\ and \ktwo\ stars and could
 include millions more from \tess, \lsst, \wfirst, \plato, \gaia, and others in
 future.
 
-The code used in this project is available as a documented {\it python}
-package called \sd.
+The code used in this project is available as a {\it python} package called
+\sd.
 It is available for download via Github\footnote{git clone
 https://github.com/RuthAngus/stardate.git} or through
 PyPI\footnote{pip install stardate\_code}.

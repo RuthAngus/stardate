@@ -6,7 +6,7 @@ calibrate a new gyrochronology relation that takes advantage of new data
 available from the \ktwo\ and \gaia\ surveys.
 Praesepe is the ideal calibration cluster because it has the largest number of
 members with precisely measured rotation periods, over a large range of
-colors, of any open cluster.
+colors (spanning spectral types A0 through M6), of any open cluster.
 It is relatively tightly clustered on the sky and many of its members were
 targeted in a single \ktwo\ campaign, from which rotation periods have been
 measured via light curve frequency analysis \citep{douglas2017, rebull2017}.
@@ -159,7 +159,7 @@ The rotation period model for each of these groups is described below.
         $\log_{10}(P_\mathrm{rot})=0.56$, and an extra standard deviation of
         0.5 dex, added to observational uncertainties.
         Stars more massive than around 1.25 M$_\odot$, with a temperature
-        $\gtrsim$ 6250 K and a \gcolor\ color $\lesssim$ 0.56 do not spin down
+        $\gtrsim$ 6250 K and a \gcolor\ $\lesssim$ 0.56 do not spin down
         appreciably over their main-sequence lifetimes because they do not
         have the deep convective envelope needed to generate strong magnetic
         fields.
@@ -239,7 +239,7 @@ rotation periods,
 \begin{equation}
     \log_{10}(P_\mathrm{rot}) \sim \begin{cases}
         \mathcal{N}\left[(\ref{eqn:fgk_gyro}), (\sigma+\sigma_P)^2\right], & Ro < 2,
-        G_{BP} - G_{RP} < 2.7 \\
+        0.56 < G_{BP} - G_{RP} < 2.7 \\
         \mathcal{N}[(\ref{eqn:m_gyro}), (\sigma+\sigma_P)^2], & Ro < 2,
         G_{BP} - G_{RP} > 2.7 \\
         \mathcal{N}[\log_{10}(P_\mathrm{max}), (\sigma+\sigma_P)^2],& Ro \geq 2 \\
@@ -543,7 +543,7 @@ The isochronal likelihood function was,
     \exp\left( -\frac{1}{2} ({\bf O_I} - {\bf I})^T \Sigma ^{-1}
     ({\bf O_I} - {\bf I})\right),
 \end{eqnarray}
-where ${\bf O_I}$ is the vector of observables: \pmega, ${\bf m_x}$ plus
+where ${\bf O_I}$ is the vector of n observables: \pmega, ${\bf m_x}$ plus
 spectroscopic and/or asteroseismic observables if available, and $\Sigma$ is
 the covariance matrix of that set of observables.
 ${\bf I}$ is the vector of {\it model} observables that correspond to a set of
@@ -556,7 +556,7 @@ The gyrochronal likelihood function was,
     % & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |A, C_{B-V}, M) \\ \nonumber
     & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |A, E, F, D, A_V) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi) \det(\Sigma_P)}}
-    \exp\left( -\frac{1}{2} ({\bf P_O} - {\bf P_P})^T \Sigma ^{-1}
+    \exp\left( -\frac{1}{2} ({\bf P_O} - {\bf P_P})^T \Sigma_P ^{-1}
     ({\bf P_O} - {\bf P_P})\right),
     % = \prod_i \frac{1}{\sqrt{2\pi}\sigma_i} \exp
     % \left(-\frac{(P_{\mathrm{obs}, i} - P_{\mathrm{pred},
