@@ -89,6 +89,7 @@ class Star(object):
         self.args = args
         ndim = 5
         sampler = NestedSampler(lnlike, ptform, ndim, logl_args=args)
+                                # nlive=1500, bound="balls")
         sampler.run_nested()
         self.samples = sampler.results.samples
         df = pd.DataFrame({"samples": [self.samples]})
