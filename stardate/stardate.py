@@ -93,10 +93,12 @@ class Star(object):
         sampler.run_nested()
 
         # normalized weights
-        weights = np.exp(sampler.results.logwt - sampler.results.logz[-1])
+        self.weights = np.exp(sampler.results.logwt
+                              - sampler.results.logz[-1])
 
         self.samples = sampler.results.samples
-        df = pd.DataFrame({"samples": [self.samples], "weights": [weights]})
+        df = pd.DataFrame({"samples": [self.samples],
+                           "weights": [self.weights]})
         fname = "{0}/{1}.h5".format(self.savedir, self.filename)
         df.to_hdf(fname, key="samples", mode="w")
 
