@@ -309,12 +309,9 @@ def lnprob(lnparams, *args):
 
     """
 
-    # Transform mass and distance back to linear.
-    params = lnparams*1
-    params[3] = np.exp(lnparams[3])
-
-    # Unpack the args.
-    mod, period, period_err, iso_only, gyro_only, rossby, model = args
+    # Put a prior on EEP
+    if params[0] > 800:
+        return -np.inf, -np.inf
 
     # If the prior is -inf, don't even try to calculate the isochronal
     # likelihood.
@@ -322,13 +319,48 @@ def lnprob(lnparams, *args):
     if not np.isfinite(lnpr):
         return -np.inf, -np.inf
 
-    # Put a prior on EEP
-    if params[0] > 800:
-        return -np.inf, -np.inf
+    like = lnlike(lnparams, *args)
+    return lnlike + lnpr, lnpr
+
+
+def lnlike(lnparams, *args):
+    """ The log-likelihood function.
+
+    Calculates the logarithmic likelihood of the data given the model.
+
+    Args:
+        lnparams (array): The parameter array containing Equivalent
+            Evolutionary Point (EEP), age in log10(yrs), metallicity, distance
+            in ln(pc) and V-band extinction. [EEP, log10(age [yrs]), [Fe/H],
+            ln(distance [pc]), A_v].
+        *args:
+            The arguments -- mod, period, period_err, iso_only, gyro_only,
+            rossby and model.
+            mod is the isochrones starmodel object which is set
+            up in stardate.py. period and period_err are the
+            rotation period and rotation period uncertainty (in days).
+            iso_only should be true if you want to use ONLY isochrone fitting
+            and not gyrochronology.
+            rossby is true if you want to use the van Saders + (2016) weakened
+            magnetic braking law. Set to false to turn this off.
+            model is "angus15" for the Angus + (2015) gyro model or "praesepe"
+            for the Praesepe gyro model.
+
+    Returns:
+        The log-likelihood
+
+    """
+
+    # Transform mass and distance back to linear.
+    params = lnparams*1
+    params[3] = np.exp(lnparams[3])
+
+    # Unpack the args.
+    mod, period, period_err, iso_only, gyro_only, rossby, model = args
 
     # If isochrones only, just return the isochronal lhf.
     if iso_only:
-        return mod.lnlike(params) + lnpr, lnpr
+        return mod.lnlike(params)
 
     # Check that the period is a positive, finite number. It doesn't matter
     # too much what the lhf is here, as long as it is constant.
@@ -352,14 +384,14 @@ def lnprob(lnparams, *args):
             - .5*np.log(2*np.pi*var)
 
     if gyro_only:
-        prob = gyro_lnlike + lnpr
+        like = gyro_lnlike
     else:
-        prob = mod.lnlike(params) + gyro_lnlike + lnpr
+        like = mod.lnlike(params) + gyro_lnlike
 
     if not np.isfinite(prob):
-        prob = -np.inf
+        like = -np.inf
 
-    return float(prob), lnpr
+    return float(like)
 
 
 def nll(lnparams, args):
