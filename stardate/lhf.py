@@ -293,10 +293,10 @@ def ptform(u):
     x = np.array(u)
 
     # EEP between 100 and 800
-    x[0] = 700*x[0] + 800  # x by range and + max
+    x[0] = 100*x[0] + 300  # x by range and + max
 
     # Age between 0 and 13.8
-    x[1] = np.log(x[1]*13.8)
+    x[1] = np.log10(x[1]*13.8*1e9)
 
     # Fe/H between -5 and 5
     x[2] = x[2]*10 - 5
@@ -411,8 +411,8 @@ def lnlike(lnparams, *args):
         # Calculate a period using the gyrochronology model
         log10_period_model, sig = gyro_model_rossby(params, rossby=rossby,
                                                     model=model)
-        if np.isnan(log10_period_model):
-            return lnpr, lnpr
+        # if np.isnan(log10_period_model):
+        #     return lnpr, lnpr
 
         relative_err = period_err/period
         var = (relative_err*.434 + sig)**2

@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import pandas as pd
 import h5py
 import tqdm
 from .lhf import lnprob, lnlike, nll, ptform
@@ -55,7 +56,7 @@ class Star(object):
         self.savedir = savedir
         self.filename = filename
 
-    def dynasty_fit(self, iso_only=False, gyro_only=False, rossby=True,
+    def dynesty_fit(self, iso_only=False, gyro_only=False, rossby=True,
                     model="praesepe"):
         """
         Run MCMC on a star using dynasty.
@@ -89,8 +90,10 @@ class Star(object):
         ndim = 5
         sampler = NestedSampler(lnlike, ptform, ndim, logl_args=args)
         sampler.run_nested()
-        samps = sampler.results.samples
-
+        self.samples = sampler.results.samples
+        df = pd.DataFrame({"samples": [self.samples]})
+        fname = "{0}/{1}.h5".format(self.savedir, self.filename)
+        df.to_hdf(fname, key="samples", mode="w")
 
     def fit(self, inits=[329.58, 9.5596, -.0478, 260, .0045],
             nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
@@ -272,179 +275,179 @@ class Star(object):
         return sampler
 
 
-    def age_results(self, burnin=0):
-        """The age samples.
+    # def age_results(self, burnin=0):
+    #     """The age samples.
 
-        The posterior samples for age, optionally with a specified number of
-        burn in steps thrown away.
+    #     The posterior samples for age, optionally with a specified number of
+    #     burn in steps thrown away.
 
-        Args:
-            burnin (Optional[int]): The number of samples to throw away.
-                Default is 0.
+    #     Args:
+    #         burnin (Optional[int]): The number of samples to throw away.
+    #             Default is 0.
 
-        Returns:
-            The median age, its 16th and 84th percentile lower and upper
-            uncertainties and the age samples. Age is log10(Age/yrs).
+    #     Returns:
+    #         The median age, its 16th and 84th percentile lower and upper
+    #         uncertainties and the age samples. Age is log10(Age/yrs).
 
-        """
+    #     """
 
-        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
-        assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away ({0}) cannot exceed the number of steps that were saved "\
-            "({1}). Try setting the burnin keyword argument.".format(burnin,
-                                                                     nsteps)
-        samples = self.sampler.chain[:, burnin:, 1]
-        samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
-        a = np.median(samps)
-        errp = np.percentile(samps, 84) - a
-        errm = a - np.percentile(samps, 16)
-        return a, errm, errp, samps
-
-
-    def eep_results(self, burnin=0):
-        """The EEP samples.
-
-        The posterior samples for Equivalent Evolutionary Point, optionally
-        with a specified number of burn in steps thrown away.
-
-        Args:
-            burnin (Optional[int]): The number of samples to throw away.
-                Default is 0.
-
-        Returns:
-            The median EEP, its 16th and 84th percentile lower and upper
-            uncertainties and the EEP samples.
-
-        """
-
-        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
-        assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away ({0}) cannot exceed the number of steps that were saved "\
-            "({1}). Try setting the burnin keyword argument.".format(burnin,
-                                                                     nsteps)
-        samples = self.sampler.chain[:, burnin:, 0]
-        samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
-        e = np.median(samps)
-        errp = np.percentile(samps, 84) - e
-        errm = e - np.percentile(samps, 16)
-        return e, errm, errp, samps
+    #     nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+    #     assert nsteps > burnin, "The number of burn in samples to throw "\
+    #         "away ({0}) cannot exceed the number of steps that were saved "\
+    #         "({1}). Try setting the burnin keyword argument.".format(burnin,
+    #                                                                  nsteps)
+    #     samples = self.sampler.chain[:, burnin:, 1]
+    #     samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
+    #     a = np.median(samps)
+    #     errp = np.percentile(samps, 84) - a
+    #     errm = a - np.percentile(samps, 16)
+    #     return a, errm, errp, samps
 
 
-    def mass_results(self, burnin=0):
-        """The mass samples.
+    # def eep_results(self, burnin=0):
+    #     """The EEP samples.
 
-        The posterior samples for mass, calculated from the EEP, age and feh
-        samples, optionally with a specified number of burn in steps thrown
-        away.
+    #     The posterior samples for Equivalent Evolutionary Point, optionally
+    #     with a specified number of burn in steps thrown away.
 
-        Args:
-            burnin (Optional[int]): The number of samples to throw away.
-                Default is 0.
+    #     Args:
+    #         burnin (Optional[int]): The number of samples to throw away.
+    #             Default is 0.
 
-        Returns:
-            The median mass, its 16th and 84th percentile lower and upper
-            uncertainties and the mass 'samples' in units of Solar masses.
+    #     Returns:
+    #         The median EEP, its 16th and 84th percentile lower and upper
+    #         uncertainties and the EEP samples.
 
-        """
+    #     """
 
-        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
-        assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away ({0}) cannot exceed the number of steps that were saved "\
-            "({1}). Try setting the burnin keyword argument.".format(burnin,
-                                                                     nsteps)
-        samples = self.sampler.chain[:, burnin:, :]
-        nwalkers, nsteps, ndim = np.shape(samples)
-        samps = np.reshape(samples, (nwalkers*nsteps, ndim))
-        msamps = mist.interp_value([samps[:, 0], samps[:, 1], samps[:, 2]],
-                                   ["mass"])
-        m = np.median(msamps)
-        errp = np.percentile(msamps, 84) - m
-        errm = m - np.percentile(msamps, 16)
-        return m, errm, errp, msamps
+    #     nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+    #     assert nsteps > burnin, "The number of burn in samples to throw "\
+    #         "away ({0}) cannot exceed the number of steps that were saved "\
+    #         "({1}). Try setting the burnin keyword argument.".format(burnin,
+    #                                                                  nsteps)
+    #     samples = self.sampler.chain[:, burnin:, 0]
+    #     samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
+    #     e = np.median(samps)
+    #     errp = np.percentile(samps, 84) - e
+    #     errm = e - np.percentile(samps, 16)
+    #     return e, errm, errp, samps
 
 
-    def feh_results(self, burnin=0):
-        """The metallicity samples.
+    # def mass_results(self, burnin=0):
+    #     """The mass samples.
 
-        The posterior samples for metallicity, optionally with a specified
-        number of burn in steps thrown away.
+    #     The posterior samples for mass, calculated from the EEP, age and feh
+    #     samples, optionally with a specified number of burn in steps thrown
+    #     away.
 
-        Args:
-            burnin (Optional[int]): The number of samples to throw away.
-                Default is 0.
+    #     Args:
+    #         burnin (Optional[int]): The number of samples to throw away.
+    #             Default is 0.
 
-        Returns:
-            The median metallicity, its 16th and 84th percentile lower and
-            upper uncertainties and the metallicity samples.
+    #     Returns:
+    #         The median mass, its 16th and 84th percentile lower and upper
+    #         uncertainties and the mass 'samples' in units of Solar masses.
 
-        """
+    #     """
 
-        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
-        assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away ({0}) cannot exceed the number of steps that were saved "\
-            "({1}). Try setting the burnin keyword argument.".format(burnin,
-                                                                     nsteps)
-        samples = self.sampler.chain[:, burnin:, 2]
-        samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
-        f = np.median(samps)
-        errp = np.percentile(samps, 84) - f
-        errm = f - np.percentile(samps, 16)
-        return f, errm, errp, samps
-
-
-    def distance_results(self, burnin=0):
-        """The ln(distance) samples.
-
-        The posterior samples for distance (in natural log, parsecs),
-        optionally with a specified number of burn in steps thrown away.
-
-        Args:
-            burnin (Optional[int]): The number of samples to throw away.
-                Default is 0.
-
-        Returns:
-            The median ln(distance), its 16th and 84th percentile lower and
-            upper uncertainties and the ln(distance) samples.
-
-        """
-
-        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
-        assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away ({0}) cannot exceed the number of steps that were saved "\
-            "({1}). Try setting the burnin keyword argument.".format(burnin,
-                                                                     nsteps)
-        samples = self.sampler.chain[:, burnin:, 3]
-        samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
-        d = np.median(samps)
-        errp = np.percentile(samps, 84) - d
-        errm = d - np.percentile(samps, 16)
-        return d, errm, errp, samps
+    #     nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+    #     assert nsteps > burnin, "The number of burn in samples to throw "\
+    #         "away ({0}) cannot exceed the number of steps that were saved "\
+    #         "({1}). Try setting the burnin keyword argument.".format(burnin,
+    #                                                                  nsteps)
+    #     samples = self.sampler.chain[:, burnin:, :]
+    #     nwalkers, nsteps, ndim = np.shape(samples)
+    #     samps = np.reshape(samples, (nwalkers*nsteps, ndim))
+    #     msamps = mist.interp_value([samps[:, 0], samps[:, 1], samps[:, 2]],
+    #                                ["mass"])
+    #     m = np.median(msamps)
+    #     errp = np.percentile(msamps, 84) - m
+    #     errm = m - np.percentile(msamps, 16)
+    #     return m, errm, errp, msamps
 
 
-    def Av_results(self, burnin=0):
-        """The Av samples.
+    # def feh_results(self, burnin=0):
+    #     """The metallicity samples.
 
-        The posterior samples for V-band extinction, optionally with
-        a specified number of burn in steps thrown away.
+    #     The posterior samples for metallicity, optionally with a specified
+    #     number of burn in steps thrown away.
 
-        Args:
-            burnin (Optional[int]): The number of samples to throw away.
-                Default is 0.
+    #     Args:
+    #         burnin (Optional[int]): The number of samples to throw away.
+    #             Default is 0.
 
-        Returns:
-            The median Av, its 16th and 84th percentile lower and upper
-            uncertainties and the Av samples.
+    #     Returns:
+    #         The median metallicity, its 16th and 84th percentile lower and
+    #         upper uncertainties and the metallicity samples.
 
-        """
+    #     """
 
-        nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
-        assert nsteps > burnin, "The number of burn in samples to throw "\
-            "away ({0}) cannot exceed the number of steps that were saved "\
-            "({1}). Try setting the burnin keyword argument.".format(burnin,
-                                                                     nsteps)
-        samples = self.sampler.chain[:, burnin:, 4]
-        samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
-        a_v = np.median(samps)
-        errp = np.percentile(samps, 84) - a_v
-        errm = a_v - np.percentile(samps, 16)
-        return a_v, errm, errp, samps
+    #     nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+    #     assert nsteps > burnin, "The number of burn in samples to throw "\
+    #         "away ({0}) cannot exceed the number of steps that were saved "\
+    #         "({1}). Try setting the burnin keyword argument.".format(burnin,
+    #                                                                  nsteps)
+    #     samples = self.sampler.chain[:, burnin:, 2]
+    #     samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
+    #     f = np.median(samps)
+    #     errp = np.percentile(samps, 84) - f
+    #     errm = f - np.percentile(samps, 16)
+    #     return f, errm, errp, samps
+
+
+    # def distance_results(self, burnin=0):
+    #     """The ln(distance) samples.
+
+    #     The posterior samples for distance (in natural log, parsecs),
+    #     optionally with a specified number of burn in steps thrown away.
+
+    #     Args:
+    #         burnin (Optional[int]): The number of samples to throw away.
+    #             Default is 0.
+
+    #     Returns:
+    #         The median ln(distance), its 16th and 84th percentile lower and
+    #         upper uncertainties and the ln(distance) samples.
+
+    #     """
+
+    #     nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+    #     assert nsteps > burnin, "The number of burn in samples to throw "\
+    #         "away ({0}) cannot exceed the number of steps that were saved "\
+    #         "({1}). Try setting the burnin keyword argument.".format(burnin,
+    #                                                                  nsteps)
+    #     samples = self.sampler.chain[:, burnin:, 3]
+    #     samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
+    #     d = np.median(samps)
+    #     errp = np.percentile(samps, 84) - d
+    #     errm = d - np.percentile(samps, 16)
+    #     return d, errm, errp, samps
+
+
+    # def Av_results(self, burnin=0):
+    #     """The Av samples.
+
+    #     The posterior samples for V-band extinction, optionally with
+    #     a specified number of burn in steps thrown away.
+
+    #     Args:
+    #         burnin (Optional[int]): The number of samples to throw away.
+    #             Default is 0.
+
+    #     Returns:
+    #         The median Av, its 16th and 84th percentile lower and upper
+    #         uncertainties and the Av samples.
+
+    #     """
+
+    #     nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+    #     assert nsteps > burnin, "The number of burn in samples to throw "\
+    #         "away ({0}) cannot exceed the number of steps that were saved "\
+    #         "({1}). Try setting the burnin keyword argument.".format(burnin,
+    #                                                                  nsteps)
+    #     samples = self.sampler.chain[:, burnin:, 4]
+    #     samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
+    #     a_v = np.median(samps)
+    #     errp = np.percentile(samps, 84) - a_v
+    #     errm = a_v - np.percentile(samps, 16)
+    #     return a_v, errm, errp, samps
