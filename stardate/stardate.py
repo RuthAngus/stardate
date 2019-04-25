@@ -88,7 +88,8 @@ class Star(object):
                 model]
         self.args = args
         ndim = 5
-        sampler = NestedSampler(lnlike, ptform, ndim, logl_args=args)
+        sampler = NestedSampler(lnlike, ptform, ndim, logl_args=args,
+                                bound="balls")
                                 # nlive=1500, bound="balls")
         sampler.run_nested()
 
