@@ -309,6 +309,13 @@ def lnprob(lnparams, *args):
 
     """
 
+    # transform mass and distance back to linear.
+    params = lnparams*1
+    params[3] = np.exp(lnparams[3])
+
+    # Unpack the args.
+    mod, period, period_err, iso_only, gyro_only, rossby, model = args
+
     # Put a prior on EEP
     if params[0] > 800:
         return -np.inf, -np.inf
@@ -320,7 +327,7 @@ def lnprob(lnparams, *args):
         return -np.inf, -np.inf
 
     like = lnlike(lnparams, *args)
-    return lnlike + lnpr, lnpr
+    return like + lnpr, lnpr
 
 
 def lnlike(lnparams, *args):
@@ -351,7 +358,7 @@ def lnlike(lnparams, *args):
 
     """
 
-    # Transform mass and distance back to linear.
+    # transform mass and distance back to linear.
     params = lnparams*1
     params[3] = np.exp(lnparams[3])
 
@@ -388,7 +395,7 @@ def lnlike(lnparams, *args):
     else:
         like = mod.lnlike(params) + gyro_lnlike
 
-    if not np.isfinite(prob):
+    if not np.isfinite(like):
         like = -np.inf
 
     return float(like)
