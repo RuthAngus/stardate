@@ -293,7 +293,7 @@ def calc_bprp(mag_pars):
 #     x = np.array(u)
 
     # EEP between 100 and 800
-    x[0] = 300*x[0] + 600  # x by range and + max
+    # x[0] = 300*x[0] + 600  # x by range and + max
     # x[0] = 700*x[0] + 800  # x by range and + max
 
 #     # Age between 0 and 13.8
