@@ -293,7 +293,8 @@ def ptform(u):
     x = np.array(u)
 
     # EEP between 100 and 800
-    x[0] = 700*x[0] + 800  # x by range and + max
+    x[0] = 300*x[0] + 600  # x by range and + max
+    # x[0] = 700*x[0] + 800  # x by range and + max
 
     # Age between 0 and 13.8
     x[1] = np.log10(x[1]*13.8*1e9)
