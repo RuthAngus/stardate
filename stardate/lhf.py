@@ -279,35 +279,35 @@ def calc_bprp(mag_pars):
 #         return -np.inf
 
 
-def ptform(u):
-    """
-    Prior transform for sampling with dynesty.
+# def ptform(u):
+#     """
+#     Prior transform for sampling with dynesty.
 
-    Args:
-        u (array): The parameter array.
+#     Args:
+#         u (array): The parameter array.
 
-    Returns:
-        u' (array): The parameters transformed from the unit cube to the prior
-            space.
-    """
-    x = np.array(u)
+#     Returns:
+#         u' (array): The parameters transformed from the unit cube to the prior
+#             space.
+#     """
+#     x = np.array(u)
 
-    # EEP between 100 and 800
-    x[0] = 700*x[0] + 800  # x by range and + max
+#     # EEP between 100 and 800
+#     x[0] = 700*x[0] + 800  # x by range and + max
 
-    # Age between 0 and 13.8
-    x[1] = np.log10(x[1]*13.8*1e9)
+#     # Age between 0 and 13.8
+#     x[1] = np.log10(x[1]*13.8*1e9)
 
-    # Fe/H between -5 and 5
-    x[2] = x[2]*10 - 5
+#     # Fe/H between -5 and 5
+#     x[2] = x[2]*10 - 5
 
-    # Distance uniform in log between 0 and 100 kpc
-    x[3] = x[3]*np.log(100*1e3)
+#     # Distance uniform in log between 0 and 100 kpc
+#     x[3] = x[3]*np.log(100*1e3)
 
-    # Av uniform between 0 and 1
-    x[4] = x[4]
+#     # Av uniform between 0 and 1
+#     x[4] = x[4]
 
-    return x
+#     return x
 
 
 def lnprob(lnparams, *args):
