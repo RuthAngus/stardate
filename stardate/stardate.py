@@ -9,6 +9,7 @@ import emcee
 import scipy.optimize as spo
 from dynesty import NestedSampler
 
+from isochrones.priors import FlatPrior
 from isochrones.mist import MIST_Isochrone
 bands = ["B", "V", "J", "H", "K", "BP", "RP", "G"]
 # mist = MIST_Isochrone(bands)
@@ -82,6 +83,7 @@ class Star(object):
         """
 
         mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
+        mod.set_prior(age=FlatPrior(8, 10.14))
 
         # lnlike arguments
         args = [mod, self.prot, self.prot_err, iso_only, gyro_only, rossby,
