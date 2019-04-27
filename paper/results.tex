@@ -92,44 +92,109 @@ The top panel shows the rotation periods vs. \gcolor\ colors of simulated stars,
 We took two approaches to inferring the ages of these simulated stars:
 firstly using isochrone fitting {\it only}, and secondly using isochrone
 fitting {\it combined with} a gyrochronology model (\sd).
-Since the posterior PDFs of stars are often not unimodal, we found that the
+Since the posterior PDFs of stars are often multimodal, we found that the
 choice of initial positions of the {\tt emcee} walkers influenced the final
 outcome because walkers occasionally got stuck in local minima.
 We found that the following set of initial parameters worked well, though not
-perfectly, for FGK dwarfs but sacrificed some accuracy in subgiant ages: EEP =
+perfectly, for dwarfs but sacrificed some accuracy in subgiant ages: EEP =
 330, $A = 9.56$ Gyr, $F = -0.05$, $D = 269$ pc and $A_V = 0.0$.
 Figure \ref{fig:simulation_results} shows the results of combining
 gyrochronology with isochrone fitting for the simulated sample.
 The stars' true ages are plotted against their predicted ages, with \sd\ ages
 in color, and ages predicted using isochrone fitting only plotted in light
 grey.
-The five panels show the results for five different types of stars: late F, GK
-and early M dwarfs which are still undergoing magnetic braking (Ro $<$ 2),
-late F, GK and early M dwarfs that have ceased magnetic braking (Ro $>$ 2),
-% hot stars ($B-V < 0.45$), cool stars ($B-V > 1.4$) and evolved stars (EEP $>$
-hot stars (\gcolor\ $<$ 0.56), cool stars (\gcolor\ $>$ 2.7) and evolved stars
-(EEP $>$ 454).
-As expected, the low $Ro$, FGK stars show the most dramatic improvement in age
-precision.
-\racomment{Summary statistics rewrite in progress...}
+\racomment{
+    The three panels show the results for three different types of stars: FGK
+dwarfs (\gcolor\ $<$ 2.2), M dwarfs (2.2 $<$ \gcolor) and subgiants (420 <
+EEP).
+% late F, GK and early M dwarfs that have ceased magnetic braking (Ro $>$ 2),
+% % hot stars ($B-V < 0.45$), cool stars ($B-V > 1.4$) and evolved stars (EEP $>$
+% hot stars (\gcolor\ $<$ 0.56), cool stars (\gcolor\ $>$ 2.7) and evolved stars
+% (EEP $>$ 454).
+The FGK dwarfs show an improvement in age precision and accuracy when modeled
+with isochrones and gyrochronology.
+The median age precision for this group (defined as the standard deviation of
+the posterior as a percentage of the median age) was 12\% when using a
+combination of isochrones and gyrochronology, and 43\% using isochrone fitting
+alone.
+The age RMS was 1.2 Gyr for isochrones plus gyrochronology and 2.9 Gyr for
+isochrones only.
+The precision of M dwarf ages changed very little when their rotation periods
+were included, with precision improving from 56\% to 38\% and RMS from 4.5 Gyr
+to 4.3 Gyr.
+This very small improvement is entirely driven by the early M dwarfs.}
 \begin{figure}
   \caption{
 The true vs. predicted ages of simulated stars.
     Ages calculated by combining gyrochronology
     and isochrone fitting with \sd are shown in color and ages calculated with
     isochrone fitting only are shown in gray.
-The five panels show the results for five different groups of stars: low $Ro$
-late F, GK and early M dwarfs, high $Ro$ late F, GK and early M dwarfs, early
-    F stars (\gcolor\ $<$ 0.56), late M dwarfs (\gcolor\ $>$ 2) and subgiants
-    (EEP $>$ 454).
-Gyrochronology is highly effective for low $Ro$ late F, GK and early M dwarfs
-and somewhat effective for high $Ro$ late F, GK and early M dwarfs.
-Ages for other groups were improved slightly but not substantially.
-% Outliers are caused by multimodal posterior PDFs and imperfect MCMC sampling.
+The different panels show the results for stars
+    with \gcolor\ $<$ 2.2 (spectral types F through late K),
+    stars with 2.2 $<$ \gcolor\ (M dwarfs), and evolved stars (EEP $>$ 420).
+Gyrochronology is highly effective for FGK stars and ages inferred with
+    gyrochronology and isochrone fitting are more accurate and precise than
+    ages inferred via isochrone fitting only for this group.
+Neither gyrochronology nor isochrone fitting can provide precise ages for
+    M dwarfs, so the ages of these stars are imprecise regardless of
+    age-dating method.
+The ages of some evolved stars are often highly inaccurate and under-estimated.
+This is a result of the posterior PDF being multi-modal, the MCMC sampling
+    algorithm running for a finite length of time, and the choice of
+    initialization parameters being sub-optimal for these evolved stars.
 }
   \centering
     \includegraphics[width=1\textwidth]{simulation_results}
 \label{fig:simulation_results}
+\end{figure}
+
+Figure \ref{fig:all_iso_gyr} shows the inferred vs. true ages of all simulated
+stars, colored by their \gaia\ \gcolor\ age.
+The ages of FGK stars (\gcolor\ $<$ 2.2) were more precisely recovered with
+\sd\ than with isochrone fitting alone.
+In both cases M dwarfs ages were not precisely recovered.
+\begin{figure}
+  \caption{
+      Inferred vs. true ages for all simulated stars using isochrones plus
+      gyrochronology via the \sd\ code (left) and isochrones only (right).
+      Stellar ages are colored by \gaia\ \gcolor\ color.
+      The ages of FGK stars (\gcolor\ $<$ 2.2)
+      were more precisely recovered with \sd\ than with isochrones only.
+      In both cases M dwarfs ages were not precisely recovered.
+      Points in the lower right of the left panel are either M dwarfs or
+      evolved (EEP $>$ 400).
+      In both panels, the ages of FGK stars were slightly underestimated.
+}
+  \centering
+    \includegraphics[width=1\textwidth]{all_iso_gyro}
+\label{fig:all_iso_gyro}
+\end{figure}
+
+\racomment{
+Figure \ref{fig:eep} shows the inferred equivalent evolutionary point (EEP)
+for the simulated star sample.
+EEP is a dimensionless number that describes evolutionary stage and, combined
+with age and metallicity, determines stellar mass.
+An interesting side-effect of fitting isochrones with rotation periods is an
+increased precision in EEP as well as age.
+The reason for this is partly that EEP and age are correlated, so shrinking
+the age posterior also shrinks the EEP posterior, and partly because rotation
+period {\it is a function of HRD position}.
+As shown in equation \ref{eqn:gyro}, rotation period does not just depend on
+color and age, but also on EEP and [Fe/H].}
+\jegin{figure}
+  \caption{
+    Inferred EEP for the simulated star sample with isochrone fitting only
+(left panel) and isochrones plus gyrochronology (right panel).
+    Rotation periods provide information about position on the HRD via
+equation \ref{eqn:gyro} and therefore improves all stellar parameters, not
+just age.
+Mass is determined by EEP, age and [Fe/H], so improvements in EEP and age will
+improve stellar mass estimates.
+}
+  \centering
+    \includegraphics[width=1\textwidth]{eep}
+\label{fig:eep}
 \end{figure}
 
 Figure \ref{fig:precision} shows the simulated stars on an HRD, with

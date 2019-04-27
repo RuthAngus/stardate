@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import h5py
 import tqdm
-from .lhf import lnprob, lnlike, nll, ptform
+from .lhf import lnprob, lnlike, nll# , ptform
 from isochrones import StarModel, get_ichrone
 import emcee
 import scipy.optimize as spo
