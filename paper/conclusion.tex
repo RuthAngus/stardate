@@ -1,4 +1,4 @@
-\section{Conclusion}
+\section{Conclusions}
 \label{section:conclusion}
 
 We present a statistical framework for measuring precise ages of MS stars and
@@ -16,11 +16,20 @@ We fit a new broken power law gyrochronology model to the Praesepe cluster
 and included a modification recommended by \citet{vansaders2016} that accounts
 for weakened magnetic braking at Rossby numbers larger than 2.
 The rotation periods of hot stars, cool stars, evolved stars, young stars and
-extremely metal poor and rich stars were modeled stochastically with a broad
-log-normal distribution.
+extremely metal poor and rich stars were modeled with a broad log-normal
+distribution.
 We tested \sd\ on simulated data and cluster stars and demonstrated that
-combining gyrochronology with isochrone fitting increases the precision of age
-estimates, compared to using isochrone fitting alone.
+combining gyrochronology with isochrone fitting improves the precision of age
+estimates for FGK dwarfs by a factor of 3 over isochrone fitting alone,
+assuming 5\% measurement uncertainties on rotation periods.
+Incorporating rotation periods into stellar evolution models also improves the
+precision of the equivalent evolutionary point (EEP) parameter and, since EEP,
+combined with age and metallicity, determines the mass, radius and \logg\ of a
+star, this means rotation periods can improve the precision of {\it all}
+stellar parameters.
+Although V-band extinction is marginalized over during inference, correcting
+photometry for dust-extinction {\it before} analysis can improve the accuracy
+of stellar ages measured with \sd.
 
 \sd\ may predict inaccurate ages for stars in close binaries whose
 interactions influence their rotation period evolution.
@@ -55,7 +64,7 @@ use, then inferring an age which itself depends on the classification that was
 made.
 It is important to infer all stellar properties at once since they all depend
 on each other.
-\sd\ is applicable to a large number of stars: AFGKM dwarfs and subgiants with
+\sd\ is applicable to a large number of stars: FGKM dwarfs and subgiants with
 a rotation period and broad-band photometry.
 This already includes tens-of-thousands of \kepler\ and \ktwo\ stars and could
 include millions more from \tess, \lsst, \wfirst, \plato, \gaia, and others in

@@ -547,7 +547,7 @@ def sigma(eep, log_age, feh, color, model="praesepe"):
         # + sigmoid(k_old, x0_old, L_age, log_age) \
     sigma_feh = sigmoid(k_feh, x0_feh, L_feh, feh) \
         + sigmoid(k_feh, x0_feh, L_feh, -feh)
-    sigma_total = sigma_color + sigma_eep# + sigma_feh + sigma_age
+    sigma_total = sigma_color + sigma_eep + sigma_feh + sigma_age
 
     return sigma_total
 
