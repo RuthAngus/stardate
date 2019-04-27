@@ -83,7 +83,7 @@ class Star(object):
         """
 
         mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
-        mod.set_prior(age=FlatPrior(8, 10.14))
+        # mod.set_prior(age=FlatPrior(8, 10.14))
 
         # lnlike arguments
         args = [mod, self.prot, self.prot_err, iso_only, gyro_only, rossby,
