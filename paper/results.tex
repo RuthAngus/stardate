@@ -76,9 +76,9 @@ The rotation period model.
     rotating stars with large Rossby numbers whose rotation periods are fixed
     at 2$\times$ their convective overturn time.
     The rotation periods of early F (\gcolor $<$ 0.56), late M dwarfs (\gcolor
-    $<$ 2.7) and subgiants (EEP $>$ 454) were generated
-    from a log-normal distribution with standard deviation shown in figure
-    \ref{fig:variance}.
+    $<$ 2.7) and subgiants (EEP $\gtrsim$ 420) were generated
+    from a log-normal distribution with standard deviation given by equation
+    \ref{eqn:gyro}.
 % The top panel shows the rotation periods vs. B-V colors of simulated stars,
 The top panel shows the rotation periods vs. \gcolor\ colors of simulated stars,
     colored by their age and the bottom panel shows the same stars colored
@@ -147,14 +147,14 @@ rotation periods almost entirely uninformative for this group.
   \caption{
 The true vs. predicted ages of simulated stars.
     Ages calculated by combining gyrochronology
-    and isochrone fitting with \sd are shown in color and ages calculated with
+    and isochrone fitting with \sd\ are shown in color and ages calculated with
     isochrone fitting only are shown in gray.
 The different panels show the results for stars
     with \gcolor\ $<$ 2.2 (FGK dwarfs) that are still braking magnetically
     ($Ro < 2$), stars with \gcolor\ $<$ 2.2 that have stopped braking
     magnetically ($Ro \geq 2$),
     stars with 2.2 $<$ \gcolor\ (M dwarfs), and evolved stars (EEP $>$ 420).
-Gyrochronology is highly effective for FGK stars: ages inferred with both
+Gyrochronology is highly effective for FGK stars and ages inferred with both
     gyrochronology and isochrone fitting are more accurate and precise than
     ages inferred via isochrone fitting only for this group.
 Neither gyrochronology nor isochrone fitting can provide precise ages for
@@ -303,9 +303,8 @@ are estimated will reduce bias introduced by dust.
     shown in black.
     The dashed line shows a gyrochronology model that was fit to the Praesepe
     cluster and the Sun in this work, interpolated to 2.5 Gyrs.
-    This model was used to infer the ages of these stars.
-    For comparison, the solid blue line shows a previously calibrated
-    gyrochronology model \citep{angus2015}.
+    The solid blue line shows a previously calibrated gyrochronology model
+    \citep{angus2015}.
   }
   \centering
     \includegraphics[width=1\textwidth]{NGC6819}
@@ -324,17 +323,18 @@ are estimated will reduce bias introduced by dust.
     raw, photometry.
     Even though V-band extinction is marginalized over in the inference
     process, reddening can still bias ages.
-    Blue triangles, pointing down show ages inferred using isochrone fitting
+    Blue triangles, pointing up, show ages inferred using isochrone fitting
     and gyrochronology, with the \citet{angus2015} gyrochronology model.
-    Orange triangles show ages inferred using isochrone fitting only.
+    Orange triangles, pointing down, show ages inferred using isochrone
+    fitting only.
     The ages of F stars (stars bluer than 0.7) were precisely constrained by
     isochrones and including gyrochronology makes little difference to their
     inferred ages.
-    The ages of G and K dwarfs (stars redder than 0.7) were improved in both
-    precision and accuracy by including gyrochronology.
-    The average age of stars, inferred using the gyrochronology model
+    The age precision of G and K dwarfs (stars redder than 0.7) was improved
+    by including gyrochronology.
+    The median age of stars inferred using the gyrochronology model
     calibrated to Praesepe and the Sun (black circles) was 2.65 $\pm$ 0.13
-    which is consistent with the established cluster age.
+    which is consistent with the established cluster age (2.5 Gyr).
 }
   \centering
     \includegraphics[width=1\textwidth]{NGC6819_results}
