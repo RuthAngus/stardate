@@ -284,6 +284,110 @@ class Star(object):
         return sampler
 
 
+def percentiles_from_samps(samps, lp):
+    """
+    Calculate percentiles and maximum-likelihood values from 1D sample array.
+
+    Args:
+        samps (array): The 1D sample array for a single star.
+        lp (array): The 1D log-probability array.
+    Returns:
+        med, errm, errp, std, max_like: The median value, lower and upper
+            uncertainties, standard deviation and maximum likelihood value.
+
+    """
+    med = np.median(samps)
+    std = np.std(samps)
+    upper = np.percentile(samps, 84)
+    lower = np.percentile(samps, 16)
+    errp = upper - med
+    errm = med - lower
+    max_like = samps[lp == max(lp)][0]
+
+    return med, errm, errp, std, max_like
+
+
+def load_samples(fname, burnin=0):
+    """
+    Read in H5 file containing samples and return the best-fit parameters.
+
+    Args:
+        fname (str): The full path to the H5 file.
+        burnin (Optional[int]): The number of burn in steps to discard.
+            Default is 0.
+
+    Returns:
+        flatsamps (array): The flattened 2d sample array, useful for making
+            corner plots, with log-probability samples
+            appended. The shape is Nwalkers*(Nsteps - burnin) x ndim + 1.
+            The log-probability samples are the final dimension:
+        augmented (array): The 3d sample array, useful for plotting chains.
+            With log-probs appended as the extra dimension.
+    """
+
+    reader = emcee.backends.HDFBackend(fname, read_only=True)
+    samples = reader.get_chain()
+    lnprobs = reader.get_log_prob()
+    nsteps, nwalkers, ndim = np.shape(samples)
+    augmented = np.zeros((nsteps, nwalkers, ndim+1))
+    augmented[:, :, :-1] = samples
+    augmented[:, :, -1] = lnprobs
+    nsteps, nwalkers, ndim = np.shape(augmented)
+    flatsamps = np.reshape(
+        augmented[burnin:, :, :], (nwalkers*(nsteps - burnin), ndim))
+    return flatsamps, augmented
+
+
+def read_samples(samps, burnin=0):
+    """
+    Extract best-fit parameters from samples.
+
+    Args:
+        samples (array): The 2D sample array (steps x dimensions), optionally
+            with log-probability samples appended as an extra dimension.
+            Designed to take the output from load_samples.
+        burnin (Optional[int]): The number of burn in steps to discard.
+            Default is 0.
+
+    Returns:
+        param_dict (dict): A pandas dataframe of results with columns:
+            EEP_med, EEP_errm, EEP_errp, EEP_std, EEP_ml, age_med, age_errm,
+            age_errp, age_std, age_ml, feh_med, feh_errm, feh_errp, feh_std,
+            feh_ml, distance_med, distance_errm, distance_errp, distance_std,
+            distance_ml, av_med, av_errm, av_errp, av_std, av_ml.
+            Columns ending in "ml" mean the maximum-likelihood value. Columns
+            ending in "med" mean the median value. Recommend using the ml
+            value for stars hotter (lower) than 1.3 in Gaia G_BP - G_RP and
+            the median value for stars cooler (higher) than 1.3.
+            Age is provided in units of Gyrs and distance in parsecs.
+    """
+
+    e, em, ep, _estd, eml = percentiles_from_samps(
+        samps[burnin:, 0], samps[burnin:, 5])
+    a, am, ap, _astd, aml = percentiles_from_samps(
+        (10**samps[burnin:, 1])*1e-9, samps[burnin:, 5])
+    f, fm, fp, _fstd, fml = percentiles_from_samps(
+        samps[burnin:, 2], samps[burnin:, 5])
+    d, dm, dp, _dstd, dml = percentiles_from_samps(
+        np.exp(samps[burnin:, 3]), samps[burnin:, 5])
+    av, avm, avp, _avstd, avml = percentiles_from_samps(
+        samps[burnin:, 4], samps[burnin:, 5])
+
+    param_dict = pd.DataFrame(dict({
+        "EEP_med": e, "EEP_errm": em, "EEP_errp": ep, "EEP_std": _estd,
+        "EEP_ml": eml,
+        "age_med": a, "age_errm": am, "age_errp": ap, "age_std": _astd,
+        "age_ml": aml,
+        "feh_med": f, "feh_errm": fm, "feh_errp": fp, "feh_std": _fstd,
+        "feh_ml": fml,
+        "distance_med": d, "distance_errm": dm, "distance_errp": dp,
+        "distance_std": _dstd, "distance_ml": dml,
+        "Av_med": av, "Av_errm": avm, "Av_errp": avp, "Av_std": _avstd,
+        "Av_ml": avml}, index=[0]))
+
+    return param_dict
+
+
     # def age_results(self, burnin=0):
     #     """The age samples.
 
