@@ -342,7 +342,8 @@ The marginalization involves integrating over these extra parameters,
     % & \propto \int p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
     & \propto \int p({\bf m_x},
     P_\mathrm{rot}, \bar{\omega}|
-    A, E, F, D, A_V)~p(A)p(E)p(F)p(D)p(A_V)dEdFdDdA_V.
+    A, E, F, D, A_V)~p(A)\, p(E)\, p(F)\, p(D)\, p(A_V)\, \mathrm{d}E\,
+    \mathrm{d}F\, \mathrm{d}D\, \mathrm{d}A_V.
 \end{eqnarray}
 This equation is a form of Bayes' rule,
 \begin{equation} \label{eqn:eqn2}
@@ -355,7 +356,7 @@ where the likelihood of the data given the model is,
 \end{equation}
 and the prior PDF over parameters is,
 \begin{equation} \label{eqn:prior}
-    p(A)p(E)p(D)p(A_V)p(F).
+    p(A)\, p(E)\, p(D)\, p(A_V)\, p(F).
 \end{equation}
 The priors we used are described in the appendix.
 
