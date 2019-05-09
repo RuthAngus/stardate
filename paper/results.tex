@@ -26,7 +26,7 @@ extinctions at random for 1000 stars from the following uniform distributions:
 \gaia\ $G$, $G_{BP}$ and $G_{RP}$ were generated from these
 stellar parameters using the MIST stellar evolution models.
 We added a small amount of noise to the `observed' stellar properties in order
-to reflect typical observational uncertainties.
+to reflect optimistic observational uncertainties for isochrone-dating.
 We added Gaussian noise with a standard deviation of 25 K to \teff, 0.01 dex
 to \feh\ and \logg, and 10 mmags to $B$, $V$, $J$, $H$, and $K$ magnitudes.
 The noise added to Gaia $G$-band photometry ranged from
@@ -42,15 +42,13 @@ the MS), colored by their age.
 Rotation periods for these stars were generated using the gyrochronology
 relation described in equation \ref{eqn:gyro}.
 We added 5\% Gaussian noise to all stellar rotation periods to represent
-measurement uncertainties of 5\%.
+realistic measurement uncertainties of 5\%.
 The median uncertainty on rotation periods calculated from \kepler\ light
-curves using an autocorrelation function mnethod, provided in the
-\citet{mcquillan2014} catalog is 1\%.
+curves, provided in the \citet{mcquillan2014} catalog is 1\%.
 However, the \citet{aigrain2015} injection and recovery study showed that true
-rotation period uncertainties are often slightly larger than this.
-A Gaussian is a crude approximation for the noise distribution of rotation
-periods which can be highly non-Gaussian \citep[\eg][]{aigrain2015,
-angus2018}.
+rotation period uncertainties are often slightly larger than this, and noise
+distribution of rotation periods can be highly non-Gaussian
+\citep[\eg][]{aigrain2015, angus2018}.
 \begin{figure}
   \caption{
       The simulated star sample plotted on an HRD, colored by age
@@ -109,8 +107,7 @@ The stars' true ages are plotted against their predicted ages, with ages
 inferred with gyrochronology and isochrone fitting
 in color, and ages inferred using isochrone fitting only plotted in light
 grey.
-\racomment{
-    The different panels show the results for different types of stars: FGK
+The different panels show the results for different types of stars: FGK
 dwarfs that are still undergoing magnetic braking, FGK dwarfs that have ceased
 magnetic braking (their Rossby number is around 2), M dwarfs, and evolved
 stars.
@@ -144,7 +141,7 @@ rotation periods were included in the inference process.
 This is because the variance of the rotation-age relation was inflated by a
 large amount in the gyrochronology model (equation \ref{eqn:gyro}), making
 rotation periods almost entirely uninformative for this group.
-}
+
 \begin{figure}
   \caption{
 The true vs. predicted ages of simulated stars.
@@ -192,7 +189,6 @@ Neither gyrochronology nor isochrone fitting can provide precise ages for
 % \label{fig:all_iso_gyro}
 % \end{figure}
 
-\racomment{
 Figure \ref{fig:eep} shows the inferred equivalent evolutionary phase (EEP)
 for the simulated star sample.
 EEP is a dimensionless number that describes evolutionary stage and, combined
@@ -203,7 +199,7 @@ The reason for this is partly that EEP and age are correlated, so shrinking
 the age posterior also shrinks the EEP posterior, and partly because rotation
 period is a function of HRD position.
 As shown in equation \ref{eqn:gyro}, rotation period does not just depend on
-color and age, but also on EEP and [Fe/H].}
+color and age, but also on EEP and [Fe/H].
 \begin{figure}
   \caption{
     Inferred EEP for the simulated star sample with isochrones plus
@@ -218,6 +214,23 @@ just age.
     \includegraphics[width=1\textwidth]{eep}
 \label{fig:eep}
 \end{figure}
+In general, the posterior PDFs of stellar properties, inferred using
+isochrones or stellar evolution models, are multimodal.
+The stars with under-predicted EEP in both panels of figure \ref{fig:eep} are
+slightly evolved, with EEPs $>$ 400.
+These slightly evolved stars have two high probability modes: one at their
+true EEP and age values, and another at a lower EEP and corresponding lower
+age.
+In other words, these are subgiants being mistaken for dwarfs.
+Rotation periods do not carry information for subgiants, so including the
+rotation periods in the analysis of these stars doesn't break the degeneracy,
+and this is why stars with under-predicted EEPs are present in both panels.
+Stars with over-predicted EEPs in the right-hand panel of figure \ref{fig:eep}
+are usually dwarfs being confused for subgiants.
+The rotation periods of dwarfs are informative, so when the rotation periods
+are included in the analysis for these stars, the degeneracy is broken, the
+amplitude of the secondary mode is reduced, and their EEP is correctly
+inferred.
 
 Figure \ref{fig:precision} shows the simulated stars on an HRD, with
 points colored by the precision of their predicted ages
@@ -227,8 +240,8 @@ The top panel shows the precision of ages calculated using both gyrochronology
 and isochrone fitting via \sd\ and the bottom panel shows the precision of
 ages calculated with isochrone fitting only.
 Although these are empirical uncertainties, calculated via MCMC which only
-approximates the age posterior PDFs, they show that combining gyrochronology
-and isochrone fitting improves age precision on the MS.
+approximates the age posterior PDFs, they nevertheless show that combining
+gyrochronology and isochrone fitting improves age precision on the MS.
 \begin{figure}
   \caption{
 Simulated stars on an HRD, colored by their relative age precision
@@ -250,7 +263,6 @@ The ages of late M dwarfs are highly imprecise because their ages are not well
 \label{fig:precision}
 \end{figure}
 
-\racomment{
 This simulation experiment was designed to show the theoretical improvement in
 age precision when gyrochronology is incorporated into isochrone fitting.
 However, it does not demonstrate the accuracy of this method because the test
@@ -264,10 +276,9 @@ Stellar ages calculated with \sd\ depend on both the accuracy of the MIST
 models {\it and} the accuracy of the gyrochronology model (equation
 \ref{eqn:gyro}).
 In order to test the accuracy of \sd, we applied it to real data, as described
-in the following section.}
+in the following section.
 
 \subsection{Test 2: Open clusters}
-\racomment{
 In order to test our model on real stars with known ages, we selected a sample
 of stars in the 2.5 Gyr NGC 6819 cluster.
 We compiled \kepler-based rotation periods \citep{meibom2015}, \Gaia\
@@ -302,7 +313,7 @@ slightly underestimated at 1.86 $\pm$ 0.22 Gyr.
 This suggests that, despite the fact that V-band extinction is marginalized
 over during the inference process, correcting for extinction {\it before} ages
 are estimated will reduce bias introduced by dust.
-}
+
 \begin{figure}
   \caption{
     The \kepler-based rotation periods of members of the 2.5 Gyr NGC 6819 open
@@ -325,12 +336,16 @@ are estimated will reduce bias introduced by dust.
   \caption{
     The inferred ages of members of the NGC 6819 open cluster as a function of
     their \gcolor\ color.
-    Black circles and red squares show the ages of stars inferred using a
-    combination of isochrone fitting and gyrochronology, with a gyrochronology
-    relation that was calibrated to Praesepe and the Sun.
-    Black circles show ages inferred with dereddened \gaia\ $G$, $G_{BP}$ and
-    $G_{RP}$ photometry and red squares show ages inferred with uncorrected,
-    raw, photometry.
+    Ages of stars inferred using a combination of isochrone fitting and
+    gyrochronology (Praesepe and Sun calibration) with dereddened \gaia\ $G$,
+    $G_{BP}$, and $G_{RP}$ photometry (black circles) and uncorrected, raw,
+    photometry (red squares).
+    % Black circles and red squares show the ages of stars inferred using a
+    % combination of isochrone fitting and gyrochronology, with a gyrochronology
+    % relation that was calibrated to Praesepe and the Sun.  Black circles show
+    % ages inferred with dereddened \gaia\ $G$, $G_{BP}$ and
+    % $G_{RP}$ photometry and red squares show ages inferred with uncorrected,
+    % raw, photometry.
     Even though V-band extinction is marginalized over in the inference
     process, reddening can still bias ages.
     Blue triangles, pointing up, show ages inferred using isochrone fitting
@@ -353,7 +368,6 @@ are estimated will reduce bias introduced by dust.
 \label{fig:NGC6819_results}
 \end{figure}
 
-\racomment{
 We found that 5\% rotation period uncertainties resulted in the most accurate
 ages for NGC 6819.
 The uncertainties on the measured rotation periods, provided in
@@ -377,4 +391,3 @@ A thorough exploration of how rotation period uncertainties affect stellar
 ages via gyrochronology is key to understanding the power of gyrochronology as
 an age-dating method.
 For now, we leave this exploration for a future study.
-}

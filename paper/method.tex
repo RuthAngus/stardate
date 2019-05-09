@@ -1,11 +1,12 @@
 \section{Method}
 \label{section:method}
+\subsection{A new empirical gyrochronology relation}
 
 We fit a broken power law to the 650 Myr Praesepe cluster in order to
 calibrate a gyrochronology relation that takes advantage of new data available
 from the \ktwo\ and \gaia\ surveys.
-This relation captures the detailed shape of Praesepe's newly revealed
-rotation period-color relation, and is calibrated to \gaia\ \gcolor\ color.
+This relation captures the detailed shape of Praesepe's rotation period-color
+relation, and is calibrated to \gaia\ \gcolor\ color.
 Praesepe is the ideal calibration cluster because it has the largest number of
 members with precisely measured rotation periods, over a large range of colors
 \citep[spanning spectral types A0 through M6,][]{rebull2017}, of any open
@@ -97,12 +98,11 @@ Best-fit coefficient values are shown in table \ref{tab:coefficients}.
   \end{center}
 \end{table}
 
-\racomment{
-We calibrated a new relation using Praesepe and the Sun alone,
-without including other clusters, because different open clusters have
-slightly different period-color relationships \citep{agueros2018,
-agueros2018b, curtis2018} and, given that we used an age-color separable
-relation, adding in extra clusters was unlikely to improve the calibration.
+We calibrated this new relation using Praesepe and the Sun alone, without
+including other clusters, because different open clusters have slightly
+different period-color relationships \citep{agueros2018, agueros2018b,
+curtis2018} and, given that we used an age-color separable relation, adding in
+extra clusters was unlikely to improve the calibration.
 We did not include asteroseismic stars because most are slightly evolved and
 would require a gyrochronology relation that depends on $\log g$.
 This new relation, fit to Praesepe and the Sun, does not perfectly predict the
@@ -134,7 +134,6 @@ core-to-surface differential rotation \citep[\eg][]{vansaders2013, tayar2018}.
 Finally, this relation does not describe the rotation periods of dynamically
 or magnetically interacting binaries which often rotate more rapidly than
 isolated stars at the same age and color \citep{douglas2016}.
-
 In order to include non-Skumanich type stars in our combined gyrochronal and
 isochronal model, we designed a composite gyrochronology relation which
 describes a mean and variance model for the rotation period distributions
@@ -234,7 +233,7 @@ in variance.
 % deviation.
 So, practically speaking, when the standard deviation is inflated to 0.5 dex
 or more, ages are almost entirely inferred via isochrone fitting.
-}
+
 
 We used the following composite gyrochronology model to infer ages from
 rotation periods,
@@ -278,18 +277,18 @@ period rises to 6.
     The additional rotation period scatter, $\sigma_P$, added to the
     observational period uncertainties in the model (see equation
     \ref{eqn:gyro}).
-    The standard deviation is increased for early F and hotter
+    The standard deviation was increased for early F and hotter
     stars (\gcolor $<$ 0.56), late M dwarfs (\gcolor\ $>$ 2.7) and evolved
     stars (EEP $\gtrsim$ 420) in order to down-weight the age-information
     supplied
     by rotation periods and reproduce observed rotation period distributions.
-    We also increase the variance for stars younger than around 250 Myrs,
+    We also increased the variance for stars younger than around 250 Myrs,
     because the rotation periods of these stars typically have not yet
     converged onto a tight gyrochronology sequence, and for very high and low
     metallicity stars (-3 $\lesssim$ [Fe/H] $\lesssim$ 3) because the
     gyrochronology relations have not been calibrated at these extreme values.
     Down-weighting the gyrochronal likelihood by the inverse variance
-    ($1/\sigma^2$) allows the ages of these stars to be mostly inferred
+    ($1/\sigma^2$) allowed the ages of these stars to be mostly inferred
     via isochrone fitting.
     Sigmoid functions were used to provide smooth transitions between regions
     of low and high variance.
@@ -299,14 +298,13 @@ period rises to 6.
 \label{fig:variance}
 \end{figure}
 
-\racomment{
+\subsection{Simultaneously fitting gyrochronology and isochrones}
 The previous part of this section describes the model for the mean and
 variance of rotation periods as a function of their ages (and colors, EEPs,
 masses and metallicities).
 In what follows, we describe how this model was combined with a stellar
 evolution model to infer stellar ages (and other parameters) via
-gyrochronology and isochrone fitting simultaneously.}
-
+gyrochronology and isochrone fitting simultaneously.
 Our goal was to infer the age of a star from its observable properties by
 estimating the posterior probability density function (PDF) over age,
 \begin{equation} \label{eqn:eqn1}
@@ -329,7 +327,7 @@ would appear on the right side of the $`|'$ in equation \ref{eqn:eqn1}.},
 and equivalent evolutionary phase (abbreviated to EEP or
 $E$).
 EEP is a dimensionless number ranging from around 200 for M dwarfs up
-to around 800 for subgiants and is 355 for the Sun \citep[see][]{dotter2016,
+to around 1600 for giants and is 355 for the Sun \citep[see][]{dotter2016,
 choi2016}.
 Stars are defined as subgiants when their EEP exceeds 454.
 Mass is uniquely defined by EEP, age and metallicity.
@@ -361,8 +359,8 @@ and the prior PDF over parameters is,
 The priors we used are described in the appendix.
 
 We assumed that the process of magnetic braking is independent of hydrogen
-burning in the core (outside of the dependencies that are captured in the
-model).
+burning in the core, outside of the dependencies that are captured in the
+model.
 This assumption allowed us to multiply two separate likelihood
 functions together: one computed using an isochronal model and one computed
 using a gyrochronal model.
@@ -416,8 +414,8 @@ First, a set of parameters: age, EEP, metallicity, distance and extinction,
 and observables for a single star were passed to the isochronal likelihood
 function in equation \eqref{eqn:isochrones_only_likelihood}.
 Then, a set of observables corresponding to those parameters were generated
-from the MIST model grid using {\tt isochrones.py} and compared to the
-measured observables via the isochronal likelihood,
+from the MIST model grid using {\tt isochrones.py} \citep{isochrones} and
+compared to the measured observables via the isochronal likelihood,
 $\mathcal{L}_{\mathrm{iso}}$ (also computed using {\tt isochrones.py}).
 The parameters were also passed to the gyrochronology model (equation
 \ref{eqn:gyro}) where $A$, $E$,

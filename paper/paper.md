@@ -34,23 +34,22 @@ particularly for stars on the main sequence.
 These stars change slowly in brightness and temperature, so measuring their
 ages via placement on the Hertzsprung-Russell or color-magnitude diagram can
 be imprecise.
-stardate combines alternative dating methods with isochrone placement to infer
-more precise and accurate ages than any one method alone.
+*stardate* combines alternative dating methods with isochrone placement to
+infer more precise and accurate ages than any one method alone.
 Users provide observable stellar properties that place stars on a
 Hertzsprung-Russell or color-magnitude diagram, such as apparent magnitudes,
-parallax, spectroscopic parameters (if available) and asteroseismic parameters
-(if available).
+parallax, plus spectroscopic parameters and asteroseismic parameters (if
+available).
 They can also provide other information relating to stellar age, such as a
 rotation period.
-Based on these observables, stardate combines different dating methods to
-estimate posterior probability density functions over stellar age and other
-parameters such as distance, extinction, metallicity and mass or evolutionary
-stage.
-This process is similar to isochrone fitting, where rotation period is an
-additional observable dimension that is directly related to age, mass and
+Based on these observables, stardate combines the different dating methods to
+estimate posterior probability density functions over stellar age, as well as
+other parameters such as distance, extinction, metallicity and mass or
 evolutionary stage.
 The paper describing the method in more detail is Angus et al. (in prep).
 
-stardate is built on top of the isochrones Python package. Development of stardate happens on GitHub and any issues can be raised there.
+*stardate* is built on top of the *isochrones* Python package.
+Development of *stardate* happens on GitHub and any issues can be raised
+there.
 
 # References
