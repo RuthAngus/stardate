@@ -6,7 +6,7 @@
 stardate
 ====================================
 
-https://zenodo.org/badge/134314438.svg
+<img src="https://zenodo.org/badge/134314438.svg"></a>
 
 Checkout `the documentation <https://stardate.readthedocs.io/en/latest/>`_.
 
