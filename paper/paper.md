@@ -48,7 +48,8 @@ other parameters such as distance, extinction, metallicity and mass or
 evolutionary stage.
 The paper describing the method in more detail is Angus et al. (in prep).
 
-*stardate* is built on top of the *isochrones* Python package.
+*stardate* is built on top of the *isochrones* Python package [@isochrones]
+and uses the MIST stellar evolution models [@dotter2016], @[choi2016].
 Development of *stardate* happens on GitHub and any issues can be raised
 there.
 
