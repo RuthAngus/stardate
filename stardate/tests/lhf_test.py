@@ -278,8 +278,8 @@ def test_praesepe_angus_model():
     df = df.iloc[0]
 
     iso_params = {"G": (df["G"], df["G_err"]),
-                  "BP": (df["bp"], df["bp_err"]),
-                  "RP": (df["rp"], df["rp_err"]),
+                  "BP": (df["bp"], df["BP_err"]),
+                  "RP": (df["rp"], df["RP_err"]),
                   "parallax": (df["parallax"], df["parallax_err"]),
                   "maxAV": .1}
 
