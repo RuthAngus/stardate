@@ -6,9 +6,13 @@
 stardate
 ====================================
 
+.. <p>
+.. <a href="https://github.com/ruthangus/stardate">
+.. <img src="https://zenodo.org/badge/134314438.svg"></a>
+.. </p>
 <p>
-<a href="https://github.com/ruthangus/stardate">
-<img src="https://zenodo.org/badge/134314438.svg"></a>
+<a href="https://github.com/dfm/exoplanet">
+<img src="https://img.shields.io/badge/GitHub-dfm%2Fexoplanet-blue.svg?style=flat"></a>
 </p>
 
 Checkout `the documentation <https://stardate.readthedocs.io/en/latest/>`_.
