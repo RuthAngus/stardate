@@ -6,6 +6,8 @@
 stardate
 ====================================
 
+https://zenodo.org/badge/134314438.svg
+
 Checkout `the documentation <https://stardate.readthedocs.io/en/latest/>`_.
 
 *stardate* is a tool for measuring precise stellar ages.
