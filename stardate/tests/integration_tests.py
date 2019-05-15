@@ -88,10 +88,10 @@ def test_on_sun():
     assert np.shape(flatsamples[:, :-1]) == np.shape(samples)
     results = read_samples(flatsamples)
 
-    # labels = ["EEP", "Age", "Fe/H", "Distance", "Av", "lnprob"]
-    # truths = [355, np.log10(4.56*1e9), 0., 1000, 0., None]
-    # corner.corner(flatsamples, labels=labels, truths=truths);
-    # plt.savefig("sun_test_corner")
+    labels = ["EEP", "Age", "Fe/H", "Distance", "Av", "lnprob"]
+    truths = [355, np.log10(4.56*1e9), 0., 1000, 0., None]
+    corner.corner(flatsamples, labels=labels, truths=truths);
+    plt.savefig("sun_test_corner")
 
     # Assert the results are within 1 sigma of the Sun.
     assert (float(results.age_med_gyr) - float(results.age_errm) < 4.56), \

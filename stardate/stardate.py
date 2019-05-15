@@ -14,6 +14,7 @@ from isochrones.mist import MIST_Isochrone
 bands = ["B", "V", "J", "H", "K", "BP", "RP", "G"]
 # mist = MIST_Isochrone(bands)
 mist = get_ichrone("mist", bands=bands)
+from isochrones.priors import GaussianPrior
 
 
 class Star(object):
@@ -28,9 +29,12 @@ class Star(object):
             All parameters should also have associated uncertainties.
             This dictionary should be similar to the standard one created for
             isochrones.py.
-        prot (float): The rotation period of the star in days.
-        prot_err (float): The uncertainty on the stellar rotation period in
-            days.
+        prot (Optional[float]): The rotation period of the star in days.
+        prot_err (Optional[float]): The uncertainty on the stellar rotation
+            period in days.
+        Av (Optional[float]): The v-band extinction (if known).
+        Av_err (Optional[float]): The v-band extinction uncertainty
+            (if known).
         savedir (Optional[str]): The name of the directory where the samples
             will be saved. Default is the current working directory.
         filename (Optional[str]): The name of the h5 file which the posterior
@@ -38,8 +42,8 @@ class Star(object):
 
     """
 
-    def __init__(self, iso_params, prot=None, prot_err=None, savedir=".",
-                 filename="samples"):
+    def __init__(self, iso_params, prot=None, prot_err=None, Av=None,
+                 Av_err=None, savedir=".", filename="samples"):
 
         if prot is not None:
             if prot <= 0.:
@@ -54,6 +58,8 @@ class Star(object):
         self.iso_params = iso_params
         self.prot = prot
         self.prot_err = prot_err
+        self.Av_mean = Av
+        self.Av_sigma = Av_err
         self.savedir = savedir
         self.filename = filename
 
@@ -170,6 +176,12 @@ class Star(object):
 
         # Set up the StarModel object needed to calculate the likelihood.
         mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
+        # mod.set_prior(age=FlatPrior(bounds=(8, 10.14)))
+
+        # Set up a Gaussian prior with the extinction, if provided.
+        if self.Av_mean is not None and self.Av_sigma is not None:
+            mod.set_prior(AV=GaussianPrior(self.Av_mean, self.Av_sigma,
+                                           bounds=(0, 1)))
 
         # lnprob arguments
 
@@ -500,11 +512,13 @@ def load_samples(fname, burnin=0):
             The log-probability samples are the final dimension:
         augmented (array): The 3d sample array, useful for plotting chains.
             With log-probs appended as the extra dimension.
+        prior_samples (array): The 3d array of prior samples.
     """
 
     reader = emcee.backends.HDFBackend(fname, read_only=True)
     samples = reader.get_chain()
     lnprobs = reader.get_log_prob()
+    prior_samples = reader.get_blobs()
     nsteps, nwalkers, ndim = np.shape(samples)
     augmented = np.zeros((nsteps, nwalkers, ndim+1))
     augmented[:, :, :-1] = samples
@@ -512,7 +526,8 @@ def load_samples(fname, burnin=0):
     nsteps, nwalkers, ndim = np.shape(augmented)
     flatsamps = np.reshape(
         augmented[burnin:, :, :], (nwalkers*(nsteps - burnin), ndim))
-    return flatsamps, augmented
+    return flatsamps, augmented, np.reshape(prior_samples, nsteps*nwalkers), \
+        np.reshape(lnprobs, nsteps*nwalkers)
 
 
 def read_samples(samps, burnin=0):
