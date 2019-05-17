@@ -56,6 +56,34 @@ Example usage
 
     >> stellar age = 4.5 + 2.1 - 1.3
 
+If you want to just use a simple gyrochronology model without running MCMC,
+you can predict a stellar age from a rotation period like this:
+
+::
+    from stardate.lhf import age_model
+
+    bprp = .82  # Gaia BP - RP color.
+    log10_period = np.log10(26)
+    log10_age_yrs = age_model(log10_period, bprp)
+    print((10**log10_age_yrs)*1e-9, "Gyr")
+    >> 4.565055357152765 Gyr
+
+Or a rotation period from an age like this:
+
+::
+    from stardate.lhf import age_model
+
+    bprp = .82  # Gaia BP - RP color.
+    log10_age_yrs = np.log10(4.56*1e9)
+    log10_period = gyro_model_praesepe(log10_age_yrs, bprp)
+    print(10**log10_period, "days")
+    >> 25.98136488222407 days
+
+BUT be aware that these simple relations are only applicable to FGK and early
+M dwarfs on the main sequence, older than a few hundred Myrs.
+If you're not sure if gyrochronology is applicable to your star or just want
+the best age possible or if you'd like proper uncertainty estimates, I
+recommend using the full MCMC approach.
 
 .. Contents:
 
