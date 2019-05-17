@@ -30,7 +30,7 @@ Monte Carlo (using *emcee*) in order to infer a Bayesian age for your star.
 
 Example usage
 -------------
-::
+.. code-block: python
 
     import stardate as sd
 
@@ -59,7 +59,8 @@ Example usage
 If you want to just use a simple gyrochronology model without running MCMC,
 you can predict a stellar age from a rotation period like this:
 
-::
+.. code-block: python
+
     from stardate.lhf import age_model
 
     bprp = .82  # Gaia BP - RP color.
@@ -70,7 +71,8 @@ you can predict a stellar age from a rotation period like this:
 
 Or a rotation period from an age like this:
 
-::
+.. code-block: python
+
     from stardate.lhf import age_model
 
     bprp = .82  # Gaia BP - RP color.

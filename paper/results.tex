@@ -29,6 +29,12 @@ We added a small amount of noise to the `observed' stellar properties in order
 to reflect optimistic observational uncertainties for isochrone-dating.
 We added Gaussian noise with a standard deviation of 25 K to \teff, 0.01 dex
 to \feh\ and \logg, and 10 mmags to $B$, $V$, $J$, $H$, and $K$ magnitudes.
+These are just one choice of uncertainties that we could have adopted and are
+extremely optimistic.
+The uncertainties on predicted ages {\it will} depend strongly on all
+observational uncertainties, however, since this analysis is designed to show
+the relative improvement in stellar age precision when {\it rotation periods}
+are included, we chose to use best-case spectroscopic parameters.
 The noise added to Gaia $G$-band photometry ranged from
 0.3 mmag for stars brighter than 13th magnitude, to 10 mmag for stars
 around 20th magnitude \citep{evans2017, brown2018}.
@@ -166,6 +172,19 @@ Neither gyrochronology nor isochrone fitting can provide precise ages for
     \includegraphics[width=1\textwidth]{simulation_results}
 \label{fig:simulation_results}
 \end{figure}
+
+An important caveat associated with these results is that they strongly depend
+on the uncertainties adopted for all observables used in the analysis: \teff,
+\feh, \logg, $G$, $G_BP$, $G_RP$, $J$, $H$, $K$, $B$, $V$, and rotation
+period.
+Changing the uncertainties on these observables will affect the uncertainties
+on inferred ages in different ways.
+This demonstration is not intended to reflect the typical age uncertainties
+that will result for all stars in reality, it is merely an example of the
+increase in stellar age precision that results from one specific choice of
+uncertainties.
+Needless to say, estimating the uncertainties on observables accurately can be
+as important as accurately measuring the observables themselves.
 
 % Figure \ref{fig:all_iso_gyr} shows the inferred vs. true ages of all simulated
 % stars, colored by their \gaia\ \gcolor\ age.
