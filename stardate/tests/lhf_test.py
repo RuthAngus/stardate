@@ -4,6 +4,7 @@ from stardate.lhf import lnprob, calc_bv, gyro_model
 from stardate.lhf import convective_overturn_time, gyro_model_praesepe
 from stardate.lhf import gyro_model_rossby, sigma, age_model
 from tqdm import trange
+import stardate as sd
 
 # from isochrones.mist import MIST_Isochrone
 # mist = MIST_Isochrone(bands)
@@ -320,6 +321,11 @@ def test_on_hot_star():
     assert np.isfinite(prior)
 
 
+def test_Av():
+    iso_params = {"teff": (5770, 50),
+               "feh": (0, .01)}
+    star = sd.Star(iso_params, prot=26, prot_err=1, Av=.2, Av_err=.01)
+
 if __name__ == "__main__":
 
     print("\n Testing on hot star")
@@ -354,6 +360,9 @@ if __name__ == "__main__":
 
     print("\nTesting convective overturn timescale calculation...")
     test_convective_overturn_timescale()
+
+    print("\nTesting Av")
+    test_Av()
 
     # print("\n Test for NaNs")
     # test_for_nans()
