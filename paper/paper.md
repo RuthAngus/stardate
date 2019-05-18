@@ -46,7 +46,7 @@ Based on these observables, ``stardate`` combines the different dating methods
 to estimate posterior probability density functions over stellar age, as well
 as other parameters such as distance, extinction, metallicity and mass or
 evolutionary stage.
-The paper describing the method in more detail is Angus et al. (in prep).
+The paper describing the method in more detail is Angus et al. (submitted).
 
 ``stardate`` is built on top of the ``isochrones`` Python package
 [@isochrones] and uses the MIST stellar evolution models [@dotter2016],
