@@ -56,7 +56,9 @@ line in figure \ref{fig:praesepe}).
 In order to fit a relation to Praesepe, we removed rotational outliers bluer
 than \gcolor\ = 2.7 via sigma-clipping and fit a 5th-order polynomial to the
 remaining FGK and early M stars.
-We also fit a straight line to the late M dwarfs (\gcolor\ $>$ 2.7).
+We also fit a straight line to the late M dwarfs (\gcolor\ $>$ 2.7), to
+capture the mass-dependent initial rotation periods of low mass stars
+\citep{somers2017}.
 We fit a separable straight line function to the period-age relation using
 the ages of Praesepe and the Sun\footnote{The fitting process was
 performed in a Jupyter notebook available at
@@ -124,7 +126,7 @@ with the square root of their age.
 It does not describe stars hotter than around 6250 K which have a thin
 convective layers and a weak magnetic dynamo, nor does it describe fully
 convective stars which take a long time to converge onto the
-\citet{skumanich1972} braking law.
+\citet{skumanich1972} braking law \citep{krishnamurthi1997}.
 In addition, stars with Rossby numbers larger than around 2 do not show
 Skumanich-like magnetic braking \citep{vansaders2016, vansaders2018}, so
 equation \ref{eqn:fgk_gyro} does not describe these stars.
@@ -204,8 +206,8 @@ The rotation period model for each of these groups is described below.
         Rotation periods in young open clusters show a large amount of scatter
         because they have not yet converged onto the \citet{skumanich1972}
         spin-down sequence.}
-    \item{Finally, we model stars with very low and high metallicites (-3 $<$
-        [Fe/H] $<$ 3) with a log-normal distribution with mean given by
+    \item{Finally, we model stars with very low and high metallicites (-3 $>$
+        [Fe/H] $>$ 3) with a log-normal distribution with mean given by
         \ref{eqn:fgk_gyro}, \ref{eqn:m_gyro} or 0.56, depending on its color,
         and a standard deviation of 0.5 dex.
         Gyrochronology is not calibrated at these extreme metallicities due to
@@ -285,7 +287,7 @@ period rises to 6.
     We also increased the variance for stars younger than around 250 Myrs,
     because the rotation periods of these stars typically have not yet
     converged onto a tight gyrochronology sequence, and for very high and low
-    metallicity stars (-3 $\lesssim$ [Fe/H] $\lesssim$ 3) because the
+    metallicity stars (-3 $\gtrsim$ [Fe/H] $\gtrsim$ 3) because the
     gyrochronology relations have not been calibrated at these extreme values.
     Down-weighting the gyrochronal likelihood by the inverse variance
     ($1/\sigma^2$) allowed the ages of these stars to be mostly inferred

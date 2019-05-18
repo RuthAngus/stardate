@@ -6,8 +6,8 @@ age-dating is particularly acute for low mass (GKM) stars on the main sequence
 (MS).
 Using conventional dating methods, uncertainties on the ages of these stars
 can be as large as the age of the Universe.
-GKM dwarfs are difficult to age-date because their physical and observable
-properties do not change rapidly.
+GKM dwarfs are difficult to age-date because most of their physical and
+observable properties do not change rapidly.
 This is represented in the spacing of isochrones on a Hertzsprung-Russell
 diagram (HRD) or color-magnitude diagram (CMD).
 On the MS, isochrones are tightly spaced and, even with very precise
@@ -16,7 +16,8 @@ star on the HRD may be consistent with range of isochrones spanning several
 billion years.
 At main sequence turn-off however, isochrones are spread further apart, so
 that sufficiently precisely measured temperatures and luminosities can yield
-ages that are extremely precise \citep[\eg][]{pont2004}.
+ages that are extremely precise (with statistical uncertainties on the order
+of 5-10\%) \citep[\eg][]{pont2004}.
 % Typical age uncertainties of dwarfs.
 The classical method for measuring stellar ages is isochrone placement, or
 isochrone fitting, where surface gravity changes resulting from fusion in the
@@ -49,8 +50,9 @@ matter the initial rotation period, Solar type stars will have the same
 rotation period after around the age of the Hyades, 500-700 million years
 \citep{irwin2009, gallet2015}.
 After this time, the age of a star can be inferred, to first order, from its
-dust-corrected color (\eg\ B-V or \gcolor) and rotation period alone and this
-is the principle behind gyrochronology.
+dust-corrected color (\eg\ B-V or \gcolor) and {\it current} rotation period
+alone \citep[See][for an analysis of how initial conditions effect gyrochronal
+ages]{epstein2014}.
 
 The relation between age, rotation period and mass has been studied in detail,
 and several different models have been developed to capture the rotational
@@ -58,7 +60,7 @@ evolution of Sun-like stars.
 Some of these models are theoretical and based on physical processes; modeling
 angular momentum loss as a function of stellar properties as well as the
 properties of the magnetic field and stellar wind \citep[\eg][]{kawaler1988,
-kawaler1989, vansaders2013, matt2015, vansaders2016}.
+kawaler1989, pinsonneault1989, vansaders2013, matt2015, vansaders2016}.
 Other models are empirical and capture the behavior of stars from a purely
 observational standpoint, using simple functional forms that can reproduce the
 data \citep[\eg][]{barnes2003, barnes2007, mamajek2008, angus2015}.
@@ -72,11 +74,12 @@ For example, stars shown to be old from \kepler\ asteroseismic data rotate
 more rapidly than expected given their age \citep{angus2015, vansaders2016}.
 A new physically motivated gyrochronology model, capable of reproducing these
 data, was recently introduced \citep{vansaders2016}.
-It relaxes magnetic breaking at a critical Rossby number of around 2,
+It relaxes magnetic braking at a critical Rossby number of around 2,
 approximately the Solar value.
 This model predicts that, after stellar rotation periods lengthen enough to
-move stars across this $Ro$ threshold, stars stop spinning down and maintain a
-constant rotation period from then until they evolve off the MS.
+move stars across this $Ro$ threshold, stars conserve angular momentum and
+maintain a nearly constant rotation period from then until they evolve off the
+MS.
 As demonstrated in section \ref{section:results} however, this does not mean
 that the ages of stars with Ro $>$ 2 cannot be measured from their rotation
 periods, especially if their rotation periods are combined with HRD or CMD
@@ -86,10 +89,10 @@ The gyrochronology models that capture post $Ro$-threshold, rotational
 evolution \citep{vansaders2016} are the current state-of-the-art in rotation
 dating.
 These models can be computed over a grid of stellar parameters, and
-interpolated over to predict the age of a star.
-The process of measuring the age of a field star with these models is
-similar to inferring an age using any set of isochrones, with difference that
-rotation period is an additional observable dimension.
+interpolated-over to predict the age of a star.
+The process of measuring the age of a field star with these models is similar
+to inferring an age using any set of isochrones, with the difference being
+that rotation period is an additional observable dimension.
 Ages calculated using these models are therefore likely to be much more
 precise than using rotation-free isochrones since rotation period provides an
 additional anchor-point for the age of a star.
@@ -100,6 +103,7 @@ a combination of rotation periods and other observable properties that track
 stellar evolution on the HRD in concert.
 The main difference is that the gyrochronology model used here is an entirely
 empirically calibrated one, as opposed to a physically derived one.
+
 One major advantage of using a physically motivated gyrochronology model is
 the ability to rely on physics to interpolate or extrapolate over parts of
 parameter space with sparse data coverage.
@@ -156,7 +160,7 @@ implementation, in section \ref{section:results} we test this model on
 simulated stars and cluster stars, and in section \ref{section:conclusion} we
 discuss the implications of these tests and future pathways for development.
 Throughout this paper we use the term {\it `observables'} to refer to the
-following observed properties of a star, \teff, \logg, observed bulk
+following observed properties of a star: \teff, \logg, observed bulk
 metallicity ($[\hat{\mathrm{Fe/H}}]$), parallax ($\bar{\omega}$), photometric
 colors in different passbands (${\bf m_x} = [m_J, m_H, m_K, m_B, m_V, m_G,
 m_{GBP}, m_{GRP}...]$, etc) and rotation period ($P_{\mathrm{rot}}$).

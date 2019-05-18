@@ -73,7 +73,7 @@ Figure \ref{fig:rotation_model} shows the rotation periods of 841
 stars generated from the gyrochronology model.
 \begin{figure}
   \caption{
-The rotation period model.
+Data simulated from the rotation period model.
     Late F, GK and early M dwarfs (stars with 0.56 $<$ \gcolor\ $<$ 2.7 follow
     the Praesepe-calibrated gyrochronology relation (dashed gray lines), with
     the exception of old, slowly
@@ -106,7 +106,7 @@ choice of initial positions of the {\tt emcee} walkers influenced the final
 outcome because walkers occasionally got stuck in local minima.
 We found that the following set of initial parameters worked well, though not
 perfectly: EEP = 330, $A = 9.56$ Gyr, $F = -0.05$, $D = 269$ pc and $A_V =
-0.0$.
+0.0$\footnote{These are the default initial parameters provided in \sd.}.
 Figure \ref{fig:simulation_results} shows the results of combining
 gyrochronology with isochrone fitting for the simulated sample.
 The stars' true ages are plotted against their predicted ages, with ages
@@ -120,33 +120,37 @@ stars.
 The selection criteria for these groups are in the panel headings.
 The FGK dwarfs with low Rossby numbers showed the largest improvement: the
 median age precision for this group (defined as the standard deviation of the
-posterior as a percentage of the median age) was 11\% when using a combination
-of isochrones and gyrochronology, and 32\% using isochrone fitting alone.
-The age RMS of this group was 0.9 Gyr using isochrones and gyrochronology, and
-3.4 Gyr using isochrones only.
-This equates to a 3$\times$ improvement in age precision.
+posterior as a percentage of the median age) was 8\% when using a combination
+of isochrones and gyrochronology, and 22\% using isochrone fitting alone.
+This equates to an almost 3$\times$ improvement in age precision.
+The age RMS of this group was 0.8 Gyr using isochrones and gyrochronology, and
+2 Gyr using isochrones only.
 Despite the fact that stars with Rossby numbers of 2 have stopped spinning
-down and their rotation periods no longer evolve with age, their rotation
-periods are {\it still age informative}.
-This is because their rotation periods are still directly related to their
-age, but also {\it indirectly} related to their age via EEP and metallicity,
-as shown in equation \ref{eqn:gyro}.
-When including rotation periods to infer the ages of stars with large Rossby
-numbers, age precision improves from 21\% to 11\% and the age RMS improves
-from 2.5 to 0.9 Gyr.
+down and their rotation periods no longer evolve with age, the ages of these
+stars can still be relatively precisely constrained with isochrone fitting.
+The median age precision for stars with large Rossby numbers was 11\% with
+gyrochronology and isochrone fitting, and 13\% with isochrone fitting only.
+% This is because their rotation periods are still directly related to their
+% age, but also {\it indirectly} related to their age via EEP and metallicity,
+% as shown in equation \ref{eqn:gyro}.
+% When including rotation periods to infer the ages of stars with large Rossby
+% numbers, age precision improves from 21\% to 11\% and the age RMS improves
+% from 2.5 to 0.9 Gyr.
 % Age precision also increases for F dwarfs when incorporating their rotation
 % periods, even though they are not directly related to their ages.
 % This is because rotation period relates to color via the variance model in
 % equation \ref{eqn:gyro}.
 The precision of M dwarf ages did improve overall when their rotation periods
 were included, but this improvement was entirely driven by the early M dwarfs.
-The precision of this group improved from 56\% to 25\% and RMS from 4.5 Gyr
-to 3.8 Gyr.
+The precision of this group improved overall from 33\% to 22\% and RMS from
+5.4 Gyr to 4.6 Gyr.
 The precision of ages inferred for evolved stars changed very little when
 rotation periods were included in the inference process.
 This is because the variance of the rotation-age relation was inflated by a
 large amount in the gyrochronology model (equation \ref{eqn:gyro}), making
 rotation periods almost entirely uninformative for this group.
+The median age precision of subgiants from both gyrochronology and isochrone
+fitting and isochrone fitting alone was 7\%.
 
 \begin{figure}
   \caption{
@@ -180,8 +184,8 @@ period.
 Changing the uncertainties on these observables will affect the uncertainties
 on inferred ages in different ways.
 This demonstration is not intended to reflect the typical age uncertainties
-that will result for all stars in reality, it is merely an example of the
-increase in stellar age precision that results from one specific choice of
+that will result for all stars in reality, it merely exemplifies the increase
+in stellar age precision that results from one specific choice of
 uncertainties.
 Needless to say, estimating the uncertainties on observables accurately can be
 as important as accurately measuring the observables themselves.
@@ -260,7 +264,8 @@ as important as accurately measuring the observables themselves.
 % ages calculated with isochrone fitting only.
 % Although these are empirical uncertainties, calculated via MCMC which only
 % approximates the age posterior PDFs, they nevertheless show that combining
-% gyrochronology and isochrone fitting improves age precision on the MS.
+% gyrochronology and isochrone fitting improves age precision on the MS,
+% particularly at low masses.
 % \begin{figure}
 %   \caption{
 % Simulated stars on an HRD, colored by their relative age precision
