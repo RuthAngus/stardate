@@ -11,7 +11,7 @@ The two methods of isochrone fitting and gyrochronology were combined by
 taking the product of two likelihoods: one that contains an isochronal model
 and the other a gyrochronal one.
 We used the MIST stellar evolution models and computed isochronal ages and
-likelihoods using the {\tt isochrones.py} {\it Python} package.
+likelihoods using the {\tt isochrones} {\it Python} package.
 We fit a new broken power law gyrochronology model to the Praesepe cluster
 and included a modification recommended by \citet{vansaders2016} that accounts
 for weakened magnetic braking at Rossby numbers larger than 2.
@@ -70,12 +70,15 @@ This already includes tens-of-thousands of \kepler\ and \ktwo\ stars and could
 include millions more from \tess, \lsst, \wfirst, \plato, \gaia, and others in
 future.
 
-The code used in this project is available as a {\it python} package called
-\sd.
+The code used in this project is available as a {\it Python} package called
+\sd, DOI: \url{ https://doi.org/10.5281/zenodo.2712419}.
 It is available for download via Github\footnote{git clone
 https://github.com/RuthAngus/stardate.git} or through
 PyPI\footnote{pip install stardate\_code}.
-Documentation is available at https://stardate.readthedocs.io/en/latest/.
+Documentation is available at \url{https://stardate.readthedocs.io/en/latest/}.
 All code used to produce the figures in this paper is available at
-https://github.com/RuthAngus/stardate.
-\racomment{add github hash and Zenodo doi}.
+\url{https://github.com/RuthAngus/stardate}.
+This paper is based on code with the following Git hash:
+f739562c1546e117e9bb217e1732c62b41be8061.
+% git log --pretty=format:'%H' -n 1
+% git log --pretty=format:'%h' -n 1
