@@ -73,7 +73,7 @@ Or a rotation period from an age like this:
 
 ::
 
-    from stardate.lhf import age_model
+    from stardate.lhf import gyro_model_prasepe
 
     bprp = .82  # Gaia BP - RP color.
     log10_age_yrs = np.log10(4.56*1e9)
