@@ -30,7 +30,7 @@ Monte Carlo (using *emcee*) in order to infer a Bayesian age for your star.
 
 Example usage
 -------------
-.. code-block: python
+::
 
     import stardate as sd
 
@@ -59,7 +59,7 @@ Example usage
 If you want to just use a simple gyrochronology model without running MCMC,
 you can predict a stellar age from a rotation period like this:
 
-.. code-block: python
+::
 
     from stardate.lhf import age_model
 
@@ -71,7 +71,7 @@ you can predict a stellar age from a rotation period like this:
 
 Or a rotation period from an age like this:
 
-.. code-block: python
+::
 
     from stardate.lhf import age_model
 
@@ -83,9 +83,9 @@ Or a rotation period from an age like this:
 
 BUT be aware that these simple relations are only applicable to FGK and early
 M dwarfs on the main sequence, older than a few hundred Myrs.
-If you're not sure if gyrochronology is applicable to your star or just want
-the best age possible or if you'd like proper uncertainty estimates, I
-recommend using the full MCMC approach.
+If you're not sure if gyrochronology is applicable to your star, want the best
+age possible, or would like proper uncertainty estimates, I recommend using
+the full MCMC approach.
 
 .. Contents:
 
