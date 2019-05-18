@@ -208,79 +208,79 @@ as important as accurately measuring the observables themselves.
 % \label{fig:all_iso_gyro}
 % \end{figure}
 
-Figure \ref{fig:eep} shows the inferred equivalent evolutionary phase (EEP)
-for the simulated star sample.
-EEP is a dimensionless number that describes evolutionary stage and, combined
-with age and metallicity, determines stellar mass.
-An interesting result of inferring stellar properties with both isochrones
-{\it and} rotation periods is an increase in EEP precision.
-The reason for this is partly that EEP and age are correlated, so shrinking
-the age posterior also shrinks the EEP posterior, and partly because rotation
-period is a function of HRD position.
-As shown in equation \ref{eqn:gyro}, rotation period does not just depend on
-color and age, but also on EEP and [Fe/H].
-\begin{figure}
-  \caption{
-    Inferred EEP for the simulated star sample with isochrones plus
-    gyrochronology (left panel) and isochrone fitting only (right panel).
-    Rotation periods provide information about position on the HRD via
-equation \ref{eqn:gyro} and therefore improve all stellar parameters, not
-just age.
-    This figure was generated in a Jupyter Notebook available at
-    \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Results_plots.ipynb}.
-}
-  \centering
-    \includegraphics[width=1\textwidth]{eep}
-\label{fig:eep}
-\end{figure}
-In general, the posterior PDFs of stellar properties, inferred using
-isochrones or stellar evolution models, are multimodal.
-The stars with under-predicted EEP in both panels of figure \ref{fig:eep} are
-slightly evolved, with EEPs $>$ 400.
-These slightly evolved stars have two high probability modes: one at their
-true EEP and age values, and another at a lower EEP and corresponding lower
-age.
-In other words, these are subgiants being mistaken for dwarfs.
-Rotation periods do not carry information for subgiants, so including the
-rotation periods in the analysis of these stars doesn't break the degeneracy,
-and this is why stars with under-predicted EEPs are present in both panels.
-Stars with over-predicted EEPs in the right-hand panel of figure \ref{fig:eep}
-are usually dwarfs being confused for subgiants.
-The rotation periods of dwarfs are informative, so when the rotation periods
-are included in the analysis for these stars, the degeneracy is broken, the
-amplitude of the secondary mode is reduced, and their EEP is correctly
-inferred.
+% Figure \ref{fig:eep} shows the inferred equivalent evolutionary phase (EEP)
+% for the simulated star sample.
+% EEP is a dimensionless number that describes evolutionary stage and, combined
+% with age and metallicity, determines stellar mass.
+% An interesting result of inferring stellar properties with both isochrones
+% {\it and} rotation periods is an increase in EEP precision, .
+% The reason for this is partly that EEP and age are correlated, so shrinking
+% the age posterior also shrinks the EEP posterior, and partly because rotation
+% period is a function of HRD position.
+% As shown in equation \ref{eqn:gyro}, rotation period does not just depend on
+% color and age, but also on EEP and [Fe/H].
+% \begin{figure}
+%   \caption{
+%     Inferred EEP for the simulated star sample with isochrones plus
+%     gyrochronology (left panel) and isochrone fitting only (right panel).
+%     Rotation periods provide information about position on the HRD via
+% equation \ref{eqn:gyro} and therefore improve all stellar parameters, not
+% just age.
+%     This figure was generated in a Jupyter Notebook available at
+%     \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Results_plots.ipynb}.
+% }
+%   \centering
+%     \includegraphics[width=1\textwidth]{eep}
+% \label{fig:eep}
+% \end{figure}
+% In general, the posterior PDFs of stellar properties, inferred using
+% isochrones or stellar evolution models, are multimodal.
+% The stars with under-predicted EEP in both panels of figure \ref{fig:eep} are
+% slightly evolved, with EEPs $>$ 400.
+% These slightly evolved stars have two high probability modes: one at their
+% true EEP and age values, and another at a lower EEP and corresponding lower
+% age.
+% In other words, these are subgiants being mistaken for dwarfs.
+% Rotation periods do not carry information for subgiants, so including the
+% rotation periods in the analysis of these stars doesn't break the degeneracy,
+% and this is why stars with under-predicted EEPs are present in both panels.
+% Stars with over-predicted EEPs in the right-hand panel of figure \ref{fig:eep}
+% are usually dwarfs being confused for subgiants.
+% The rotation periods of dwarfs are informative, so when the rotation periods
+% are included in the analysis for these stars, the degeneracy is broken, the
+% amplitude of the secondary mode is reduced, and their EEP is correctly
+% inferred.
 
-Figure \ref{fig:precision} shows the simulated stars on an HRD, with
-points colored by the precision of their predicted ages
-(defined as the standard deviation of the age
-posterior PDF, as a percentage of the median age).
-The top panel shows the precision of ages calculated using both gyrochronology
-and isochrone fitting via \sd\ and the bottom panel shows the precision of
-ages calculated with isochrone fitting only.
-Although these are empirical uncertainties, calculated via MCMC which only
-approximates the age posterior PDFs, they nevertheless show that combining
-gyrochronology and isochrone fitting improves age precision on the MS.
-\begin{figure}
-  \caption{
-Simulated stars on an HRD, colored by their relative age precision
-    using gyrochronology and isochrone fitting via \sd\ (top panel) and
-    isochrone fitting only (bottom panel).
-Combining gyrochronology with isochrone fitting significantly improves stellar
-    age precision on the MS.
-Isochrone fitting provides precise ages for hot stars and subgiants and the
-    rotation periods of these stars are relatively uninformative, so
-    gyrochronology does not significantly improve their age precision.
-The ages of late M dwarfs are highly imprecise because their ages are not well
-    determined by either their rotation periods or their position on the HRD
-    or CMD.
-    This figure was generated in a Jupyter Notebook available at
-    \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Results_plots.ipynb}.
-}
-  \centering
-    \includegraphics[width=1\textwidth]{precision_plot}
-\label{fig:precision}
-\end{figure}
+% Figure \ref{fig:precision} shows the simulated stars on an HRD, with
+% points colored by the precision of their predicted ages
+% (defined as the standard deviation of the age
+% posterior PDF, as a percentage of the median age).
+% The top panel shows the precision of ages calculated using both gyrochronology
+% and isochrone fitting via \sd\ and the bottom panel shows the precision of
+% ages calculated with isochrone fitting only.
+% Although these are empirical uncertainties, calculated via MCMC which only
+% approximates the age posterior PDFs, they nevertheless show that combining
+% gyrochronology and isochrone fitting improves age precision on the MS.
+% \begin{figure}
+%   \caption{
+% Simulated stars on an HRD, colored by their relative age precision
+%     using gyrochronology and isochrone fitting via \sd\ (top panel) and
+%     isochrone fitting only (bottom panel).
+% Combining gyrochronology with isochrone fitting significantly improves stellar
+%     age precision on the MS.
+% Isochrone fitting provides precise ages for hot stars and subgiants and the
+%     rotation periods of these stars are relatively uninformative, so
+%     gyrochronology does not significantly improve their age precision.
+% The ages of late M dwarfs are highly imprecise because their ages are not well
+%     determined by either their rotation periods or their position on the HRD
+%     or CMD.
+%     This figure was generated in a Jupyter Notebook available at
+%     \url{https://github.com/RuthAngus/stardate/blob/master/paper/code/Results_plots.ipynb}.
+% }
+%   \centering
+%     \includegraphics[width=1\textwidth]{precision_plot}
+% \label{fig:precision}
+% \end{figure}
 
 This simulation experiment was designed to show the theoretical improvement in
 age precision when gyrochronology is incorporated into isochrone fitting.
