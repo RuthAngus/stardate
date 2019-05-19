@@ -9,8 +9,7 @@ authors:
    orcid: 0000-0003-4540-5661
    affiliation: "1, 2"
  - name: Timothy D. Morton
-   orcid:
-   affiliation: "3", "2"
+   affiliation: "3, 2"
  - name: Daniel Foreman-Mackey
    orcid: 0000-0002-9328-5652
    affiliation: "2"
