@@ -9,17 +9,14 @@ authors:
    orcid: 0000-0003-4540-5661
    affiliation: "1, 2"
  - name: Timothy D. Morton
-   orcid:
-   affiliation: "3", "2"
+   affiliation: "3, 2"
  - name: Daniel Foreman-Mackey
    orcid: 0000-0002-9328-5652
    affiliation: "2"
 affiliations:
- - name: Department of Astrophysics, American Museum of Natural History, New
-   York, NY, 10024, USA
+ - name: Department of Astrophysics, American Museum of Natural History, New York, NY, 10024, USA
    index: 1
- - name: Center for Computational Astrophysics, Flatiron Institute, New York,
-   NY, 10010, USA
+ - name: Center for Computational Astrophysics, Flatiron Institute, New York, NY, 10010, USA
    index: 2
  - name: Department of Astronomy, University of Florida, Gainesville, FL, USA
    index: 3
