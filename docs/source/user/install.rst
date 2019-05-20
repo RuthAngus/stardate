@@ -33,13 +33,10 @@ or
 
     pip install numpy pandas h5py tqdm
 
-You'll also need to download isochrones and switch to the bolo branch:
+You'll also need to download isochrones:
 
 .. code-block:: bash
 
     git clone https://github.com/timothydmorton/isochrones
     cd isochrones
-    git checkout bolo
     python setup.py install
-    
-Note that the bolo branch is currently the development branch for the upcoming release of isochrones v2.0, so stay tuned for updates.
