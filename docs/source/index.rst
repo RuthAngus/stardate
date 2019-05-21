@@ -28,6 +28,10 @@ maximum V-band extinction you should throw those in too.
 Set up the star object and :func:`stardate.Star.fit` will run Markov Chain
 Monte Carlo (using *emcee*) in order to infer a Bayesian age for your star.
 
+Note -- if you are running the example below for the first time, the
+isochrones will be downloaded and this could take a while.
+This will only happen once though!
+
 Example usage
 -------------
 ::
