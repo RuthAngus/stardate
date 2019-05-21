@@ -48,6 +48,49 @@ def gyro_model(log10_age, bv):
         return (n*np.log10(age_myr) + np.log10(a) + b*np.log10(bv-c))
 
 
+def gk_rotation_model(log10_age, bprp):
+    """
+    Predicts log10 rotation period from log10 color and log10 age.
+
+    Only applicable to GK dwarfs.
+    Args:
+        log10_age (float): The (log10) age.
+        bprp (float): The G_bp - G_rp color.
+    Returns:
+        log10_period (float): The period.
+    """
+
+    log10_bprp = np.log10(bprp)
+
+    # Parameters with Solar bp - rp = 0.82
+    p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
+         0.7161114835620975, -4.716819674578521, 0.6470950862322454,
+         -13.558898318835137, 0.9359250478865809]
+    return np.polyval(p[:5], log10_bprp) + p[5]*log10_age
+
+
+def gk_age_model(log10_period, bprp):
+    """
+    Predicts log10 age from log10 color and log10 period.
+
+    Only applicable to GK dwarfs.
+    Args:
+        log10_period (array): The (log10) period array.
+        log10_bprp (array): The (log10) G_bp - G_rp color array.
+    Returns:
+        log10_age (array): The (log10) age  array.
+    """
+    log10_bprp = np.log10(bprp)
+
+    # Hard-code the gyro parameters :-)
+    p = [-38.957586198640314, 28.709418579540294, -4.919056437046026,
+        0.7161114835620975, -4.716819674578521, 0.6470950862322454,
+        -13.558898318835137, 0.9359250478865809]
+
+    logage = (log10_period - np.polyval(p[:5], log10_bprp))/p[5]
+    return logage
+
+
 def gyro_model_praesepe(log10_age, bprp):
     """
     Predicts log10 rotation period from log10 color and log10 age.

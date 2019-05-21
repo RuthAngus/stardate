@@ -7,7 +7,7 @@ from .lhf import lnprob, lnlike, nll# , ptform
 from isochrones import StarModel, get_ichrone
 import emcee
 import scipy.optimize as spo
-from dynesty import NestedSampler
+# from dynesty import NestedSampler
 
 from isochrones.priors import FlatPrior
 from isochrones.mist import MIST_Isochrone
@@ -63,52 +63,52 @@ class Star(object):
         self.savedir = savedir
         self.filename = filename
 
-    def dynesty_fit(self, iso_only=False, gyro_only=False, rossby=True,
-                    model="praesepe"):
-        """
-        Run MCMC on a star using dynasty.
+    # def dynesty_fit(self, iso_only=False, gyro_only=False, rossby=True,
+    #                 model="praesepe"):
+    #     """
+    #     Run MCMC on a star using dynasty.
 
-        Explore the posterior probability density function of the stellar
-        parameters using MCMC (via dynasty).
+    #     Explore the posterior probability density function of the stellar
+    #     parameters using MCMC (via dynasty).
 
-        Args:
-            rossby (Optional[bool]): If True, magnetic braking will cease
-                after Ro = 2. Default is True.
-            iso_only (Optional[bool]): If true only the isochronal likelihood
-                function will be used.
-            gyro_only (Optional[bool]): If true only the gyrochronal
-                likelihood function will be used. Beware: this may not do what
-                you might assume it does... In general this setting is not
-                currently very useful!
-            rossby (Optional[bool]): If True, magnetic braking will cease
-                after Ro = 2. Default is True.
-            model (Optional[bool]): The gyrochronology model to use. The
-                default is "praesepe" (the Praesepe-based model). Can also be
-                "angus15" for the Angus et al. (2015) model.
+    #     Args:
+    #         rossby (Optional[bool]): If True, magnetic braking will cease
+    #             after Ro = 2. Default is True.
+    #         iso_only (Optional[bool]): If true only the isochronal likelihood
+    #             function will be used.
+    #         gyro_only (Optional[bool]): If true only the gyrochronal
+    #             likelihood function will be used. Beware: this may not do what
+    #             you might assume it does... In general this setting is not
+    #             currently very useful!
+    #         rossby (Optional[bool]): If True, magnetic braking will cease
+    #             after Ro = 2. Default is True.
+    #         model (Optional[bool]): The gyrochronology model to use. The
+    #             default is "praesepe" (the Praesepe-based model). Can also be
+    #             "angus15" for the Angus et al. (2015) model.
 
-        """
+    #     """
 
-        mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
-        # mod.set_prior(age=FlatPrior(8, 10.14))
+    #     mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
+    #     # mod.set_prior(age=FlatPrior(8, 10.14))
 
-        # lnlike arguments
-        args = [mod, self.prot, self.prot_err, iso_only, gyro_only, rossby,
-                model]
-        self.args = args
-        ndim = 5
-        sampler = NestedSampler(lnlike, ptform, ndim, logl_args=args,
-                                nlive=1500, bound="balls")
-        sampler.run_nested()
+    #     # lnlike arguments
+    #     args = [mod, self.prot, self.prot_err, iso_only, gyro_only, rossby,
+    #             model]
+    #     self.args = args
+    #     ndim = 5
+    #     sampler = NestedSampler(lnlike, ptform, ndim, logl_args=args,
+    #                             nlive=1500, bound="balls")
+    #     sampler.run_nested()
 
-        # normalized weights
-        self.weights = np.exp(sampler.results.logwt
-                              - sampler.results.logz[-1])
+    #     # normalized weights
+    #     self.weights = np.exp(sampler.results.logwt
+    #                           - sampler.results.logz[-1])
 
-        self.samples = sampler.results.samples
-        df = pd.DataFrame({"samples": [self.samples],
-                           "weights": [self.weights]})
-        fname = "{0}/{1}.h5".format(self.savedir, self.filename)
-        df.to_hdf(fname, key="samples", mode="w")
+    #     self.samples = sampler.results.samples
+    #     df = pd.DataFrame({"samples": [self.samples],
+    #                        "weights": [self.weights]})
+    #     fname = "{0}/{1}.h5".format(self.savedir, self.filename)
+    #     df.to_hdf(fname, key="samples", mode="w")
 
     def fit(self, inits=[329.58, 9.5596, -.0478, 260, .0045],
             nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
