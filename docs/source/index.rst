@@ -50,7 +50,10 @@ Example usage
     star = sd.Star(iso_params, prot=prot, prot_err=prot_err)  # Here's where you add a rotation period
 
     # Run the MCMC
-    star.fit()
+    star.fit(max_n=1000)
+
+    # max_n is the maximum number of MCMC samples. I recommend setting this
+    # much higher when running for real, or using the default value of 100000.
 
     # Print the median age with the 16th and 84th percentile uncertainties.
     age, errp, errm, samples = star.age_results()
