@@ -26,6 +26,9 @@ using `isochrones <https://github.com/timothydmorton/isochrones>`_ as
 gyrochronology.
 *stardate* reverts back to *isochrones* when no rotation period is provided.
 
+If you would like to contribute to this project, feel free to raise issues or
+submit pull requests from the github repo.
+
 .. Installation
 .. ============
 
