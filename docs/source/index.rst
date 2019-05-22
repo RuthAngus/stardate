@@ -20,9 +20,8 @@ gyrochronology.
 
 In order to get started you can create a dictionary containing the observables
 you have for your star.
-These could be atmospheric parameters (like those shown in the example below
-for the Sun), or just photometric colors, like those from *2MASS*, *SDSS* or
-*Gaia*.
+These could be atmospheric parameters (like those shown in the example below),
+or just photometric colors, like those from *2MASS*, *SDSS* or *Gaia*.
 If you have a parallax, asteroseismic parameters, or an idea of the
 maximum V-band extinction you should throw those in too.
 Set up the star object and :func:`stardate.Star.fit` will run Markov Chain
