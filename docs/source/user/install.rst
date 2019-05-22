@@ -11,6 +11,7 @@ From source:
     cd stardate
     python setup.py install
 
+
 Dependencies
 ------------
 
@@ -41,3 +42,7 @@ You'll also need to download isochrones:
     git clone https://github.com/timothydmorton/isochrones
     cd isochrones
     python setup.py install
+
+You can check out the
+`isochrones <https://isochrones.readthedocs.io/en/latest/index.html>`_
+documentation if you run into difficulties installing that.

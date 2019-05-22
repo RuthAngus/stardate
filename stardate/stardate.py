@@ -318,9 +318,9 @@ class Star(object):
                                                                      nsteps)
         samples = self.sampler.chain[:, burnin:, 1]
         samps = np.reshape(samples, (nwalkers*(nsteps - burnin)))
-        a = np.median(samps)
-        errp = np.percentile(samps, 84) - a
-        errm = a - np.percentile(samps, 16)
+        a = np.median((10**samps)*1e-9)
+        errp = np.percentile((10**samps)*1e-9, 84) - a
+        errm = a - np.percentile((10**samps)*1e-9, 16)
         return a, errm, errp, samps
 
 

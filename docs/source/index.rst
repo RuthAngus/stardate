@@ -39,14 +39,13 @@ Example usage
     import stardate as sd
 
     # Create a dictionary of observables
-    iso_params = {"teff": (5777, 10),     # Teff with uncertainty.
-                  "logg": (4.44, .05),    # logg with uncertainty.
-                  "feh": (0., .001),      # Metallicity with uncertainty.
-                  "parallax": (1., .01),  # Parallax in milliarcseconds.
-                  "B": (15.48, 0.02),     # You must provide at least one magnitude.
+    iso_params = {"teff": (4386, 50),     # Teff with uncertainty.
+                  "logg": (4.66, .05),    # logg with uncertainty.
+                  "feh": (0.0, .02),      # Metallicity with uncertainty.
+                  "parallax": (1.48, .1),  # Parallax in milliarcseconds.
                   "maxAV": .1}            # Maximum extinction
 
-    prot, prot_err = 26, 1
+    prot, prot_err = 29, 3
 
     # Set up the star object.
     star = sd.Star(iso_params, prot=prot, prot_err=prot_err)  # Here's where you add a rotation period
@@ -56,15 +55,16 @@ Example usage
 
     # Print the median age with the 16th and 84th percentile uncertainties.
     age, errp, errm, samples = star.age_results()
-    print("stellar age = {0} + {1} + {2}".format(age, errp, errm))
+    print("stellar age = {0:.2f} + {1:.2f} + {2:.2f}".format(age, errp, errm))
 
-    >> stellar age = 4.5 + 2.1 - 1.3
+    >> stellar age = 2.97 + 0.60 + 0.55
 
 If you want to just use a simple gyrochronology model without running MCMC,
 you can predict a stellar age from a rotation period like this:
 
 ::
 
+    import numpy as np
     from stardate.lhf import age_model
 
     bprp = .82  # Gaia BP - RP color.
@@ -77,7 +77,7 @@ Or a rotation period from an age like this:
 
 ::
 
-    from stardate.lhf import gyro_model_prasepe
+    from stardate.lhf import gyro_model_praesepe
 
     bprp = .82  # Gaia BP - RP color.
     log10_age_yrs = np.log10(4.56*1e9)
