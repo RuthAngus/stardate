@@ -9,6 +9,9 @@ stardate
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.2712419.svg
    :target: https://doi.org/10.5281/zenodo.2712419
 
+.. image:: http://joss.theoj.org/papers/ee2bbcd6b8fd88492d60f2fe77f4fcdd/status.svg
+   :target: http://joss.theoj.org/papers/ee2bbcd6b8fd88492d60f2fe77f4fcdd
+
 Checkout `the documentation <https://stardate.readthedocs.io/en/latest/>`_.
 
 *stardate* is a tool for measuring precise stellar ages.
