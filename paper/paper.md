@@ -18,7 +18,7 @@ affiliations:
    index: 1
  - name: Center for Computational Astrophysics, Flatiron Institute, New York, NY, 10010, USA
    index: 2
- - name: Department of Astronomy, University of Florida, Gainesville, FL, USA
+ - name: Department of Astronomy, University of Florida, Gainesville, FL, 32611, USA
    index: 3
 date: 30 April 2019
 bibliography: references.bib
@@ -40,9 +40,12 @@ available).
 They can also provide other information relating to stellar age, such as a
 rotation period.
 Based on these observables, ``stardate`` combines the different dating methods
-to estimate posterior probability density functions over stellar age, as well
-as other parameters such as distance, extinction, metallicity and mass or
-evolutionary stage.
+to estimate posterior probability density functions (PDFs) over stellar age,
+as well as other parameters such as distance, extinction, metallicity and mass
+or evolutionary stage.
+``stardate`` uses the ``emcee`` Python package [@emcee] to perform Markov
+Chain Monte Carlo sampling in order to estimate the posterior PDFs of the
+stellar parameters.
 The paper describing the method in more detail is Angus et al. (submitted).
 
 ``stardate`` is built on top of the ``isochrones`` Python package
