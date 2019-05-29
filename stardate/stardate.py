@@ -112,7 +112,8 @@ class Star(object):
 
     def fit(self, inits=[329.58, 9.5596, -.0478, 260, .0045],
             nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
-            gyro_only=False, optimize=False, rossby=True, model="praesepe"):
+            gyro_only=False, optimize=False, rossby=True, model="praesepe",
+            seed=None):
         """Run MCMC on a star using emcee.
 
         Explore the posterior probability density function of the stellar
@@ -146,6 +147,8 @@ class Star(object):
             model (Optional[bool]): The gyrochronology model to use. The
                 default is "praesepe" (the Praesepe-based model). Can also be
                 "angus15" for the Angus et al. (2015) model.
+            seed (Optional[int]): The random number seed. Set this if you want
+                to regenerate exactly the same samples each time.
 
         """
 
@@ -160,7 +163,8 @@ class Star(object):
         p_init = [inits[0], inits[1], inits[2], np.log(inits[3]), inits[4]]
         self.p_init = p_init
 
-        np.random.seed(42)
+        if seed is not None:
+            np.random.seed(seed)
 
         # Create the directory if it doesn't already exist.
         if not os.path.exists(self.savedir):
