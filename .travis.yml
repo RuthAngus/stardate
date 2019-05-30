@@ -21,10 +21,10 @@ script:
   # run the test script
   - pytest
   # try building documentation
-  - cd docs
-  - mkdir source/_static
-  - make html
+  # - cd docs
+  # - mkdir source/_static
+  # - make html
   # return to base directory
-  - cd ..
+  # - cd ..
 # after_success:
 #   - codecov
