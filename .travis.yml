@@ -10,7 +10,7 @@ python:
   - "3.7"
 install:
   - pip install --upgrade pip
-  - conda install -r requirements.txt
+  - pip install -r requirements.txt
   # install packages for documentation building
   - pip install sphinx sphinx-rtd-theme
   # install packages for testing
