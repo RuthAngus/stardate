@@ -11,14 +11,8 @@ python:
 install:
   - pip install --upgrade pip
   - pip install -r requirements.txt
-  # - pip install numpy
-  # - pip install pandas
-  # - pip install h5py
-  # - pip install numba
-  # - pip install tqdm
-  # - pip install isochrones
   # install packages for documentation building
-  # - pip install sphinx sphinx-rtd-theme
+  - pip install sphinx sphinx-rtd-theme
   # install packages for testing
   - pip install --upgrade pytest>=3.6.3
   # build stardate
