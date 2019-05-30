@@ -12,6 +12,11 @@ stardate
 .. image:: http://joss.theoj.org/papers/ee2bbcd6b8fd88492d60f2fe77f4fcdd/status.svg
    :target: http://joss.theoj.org/papers/ee2bbcd6b8fd88492d60f2fe77f4fcdd
 
+.. image:: https://travis-ci.org/RuthAngus/stardate.svg?branch=master
+    :target: https://travis-ci.org/RuthAngus/stardate
+
+
+
 Checkout `the documentation <https://stardate.readthedocs.io/en/latest/>`_.
 
 *stardate* is a tool for measuring precise stellar ages.
