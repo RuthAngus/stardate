@@ -1,0 +1,32 @@
+language: python
+sudo: false
+dist: xenial
+branches:
+  only:
+    master
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+install:
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+  # install packages for documentation building
+  - pip install sphinx sphinx-rtd-theme
+  # install packages for testing
+  - pip install --upgrade pytest>=3.6.3
+  - pip install pytest-cov pytest-socket
+  - pip install codecov
+  # build stardate
+  - pip install -e .
+script:
+  # run the test script
+  - pytest --cov=stardate
+  # try building documentation
+  - cd docs
+  - mkdir source/_static
+  - make html
+  # return to base directory
+  - cd ..
+# after_success:
+#   - codecov
