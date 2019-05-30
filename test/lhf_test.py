@@ -56,7 +56,7 @@ def test_lnprob_higher_likelihood_real():
     """
     The same test as above but for simulated data.
     """
-    df = pd.read_csv("../../paper/code/data/simulated_data.csv")
+    df = pd.read_csv("../paper/code/data/simulated_data.csv")
     teff_err = 25  # Kelvin
     logg_err = .05  # dex
     feh_err = .05  # dex
@@ -264,7 +264,7 @@ def test_gyro_model_praesepe():
 
 
 def test_praesepe_angus_model():
-    df = pd.read_csv("../../paper/code/data/praesepe.csv")
+    df = pd.read_csv("../paper/code/data/praesepe.csv")
     df = df.iloc[0]
 
     iso_params = {"G": (df["G"], df["G_err"]),
@@ -283,7 +283,7 @@ def test_praesepe_angus_model():
 
 
 def test_on_hot_star():
-    df = pd.read_csv("../../paper/code/data/simulated_data_noisy.csv")
+    df = pd.read_csv("../paper/code/data/simulated_data_noisy.csv")
     i = 21
     iso_params = dict({"teff": (df.teff.values[i], df.teff_err.values[i]),
                       "logg": (df.logg.values[i], df.logg_err.values[i]),
