@@ -1,9 +1,13 @@
 language: python
-sudo: required
 dist: xenial
 branches:
   only:
     master
+addons:
+  apt_packages:
+    # - libbz2-dev
+    - libhdf5-serial-dev
+    # - liblzo2-dev
 python:
   - "3.5"
   - "3.6"
