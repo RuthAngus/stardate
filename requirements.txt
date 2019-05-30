@@ -1,7 +1,0 @@
-numpy
-pandas
-h5py
-numba
-emcee
-tqdm
-isochrones
