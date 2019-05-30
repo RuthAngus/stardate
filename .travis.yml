@@ -12,6 +12,7 @@ addons:
 cache:
   directories:
   - "$HOME/.cache/pip"
+  - "$HOME/.isochrones"
 python:
   - "3.5"
   - "3.6"
