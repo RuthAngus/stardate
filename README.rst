@@ -16,7 +16,7 @@ stardate
     :target: https://travis-ci.org/RuthAngus/stardate
 
 .. image:: https://readthedocs.org/projects/stardate/badge/?version=latest
-:target: https://stardate.readthedocs.io/en/latest/?badge=latest
+    :target: https://stardate.readthedocs.io/en/latest/?badge=latest
 
 Checkout `the documentation <https://stardate.readthedocs.io/en/latest/>`_.
 
