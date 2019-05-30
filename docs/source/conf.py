@@ -31,6 +31,7 @@ autodoc_mock_imports = [
     "isochrones.mist",
     "h5py",
     "tqdm",
+    "emcee",
 ]
 
 # -- General configuration ------------------------------------------------
