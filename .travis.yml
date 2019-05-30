@@ -15,13 +15,11 @@ install:
   - pip install sphinx sphinx-rtd-theme
   # install packages for testing
   - pip install --upgrade pytest>=3.6.3
-  - pip install pytest-cov pytest-socket
-  - pip install codecov
   # build stardate
   - pip install -e .
 script:
   # run the test script
-  - pytest --cov=stardate
+  - pytest
   # try building documentation
   - cd docs
   - mkdir source/_static
