@@ -102,6 +102,7 @@ User Guide
    :maxdepth: 2
 
    user/install
+   user/tests
    user/api
 
 
