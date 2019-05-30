@@ -1,8 +1,8 @@
 Running tests
 ============
 
-You can test *stardate* using `pytest <https://docs.pytest.org/en/latest/>`_
-from the code base.
+You can test *stardate* from the code base using `pytest
+<https://docs.pytest.org/en/latest/>`_.
 
 .. code-block:: bash
 
