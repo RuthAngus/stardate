@@ -1,3 +1,4 @@
+sudo: false
 language: python
 dist: xenial
 branches:
@@ -8,6 +9,9 @@ addons:
     # - libbz2-dev
     - libhdf5-serial-dev
     # - liblzo2-dev
+cache:
+  directories:
+  - "$HOME/.cache/pip"
 python:
   - "3.5"
   - "3.6"
