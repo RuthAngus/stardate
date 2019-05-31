@@ -53,7 +53,7 @@ The dependencies of *stardate* are
 `pandas <https://pandas.pydata.org/>`_,
 `h5py <https://www.h5py.org/>`_,
 `numba <http://numba.pydata.org/>`_,
-`emcee <https://emcee.readthedocs.io/en/stable/>`_,
+`emcee3 <https://emcee.readthedocs.io/en/latest/>`_,
 `tqdm <https://tqdm.github.io/>`_ and
 `isochrones <https://github.com/timothydmorton/isochrones>`_.
 
