@@ -24,17 +24,11 @@ The dependencies of *stardate* are
 `tqdm <https://tqdm.github.io/>`_ and
 `isochrones <https://github.com/timothydmorton/isochrones>`_.
 
-These can be installed using conda or pip:
+These can be installed using pip:
 
 .. code-block:: bash
 
-    conda install numpy pandas h5py numba emcee tqdm isochrones
-
-or
-
-.. code-block:: bash
-
-    pip install numpy pandas h5py numba emcee tqdm isochrones
+    pip install numpy pandas h5py numba "emcee==3.0rc2" tqdm isochrones
 
 .. You'll also need to download isochrones:
 

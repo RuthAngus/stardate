@@ -20,6 +20,8 @@ stardate
 
 Checkout `the documentation <https://stardate.readthedocs.io/en/latest/>`_.
 
+*stardate* currently only works with python3.
+
 *stardate* is a tool for measuring precise stellar ages.
 it combines isochrone fitting with gyrochronology (rotation-based ages) to
 increase the precision of stellar ages on the main sequence.
@@ -55,17 +57,11 @@ The dependencies of *stardate* are
 `tqdm <https://tqdm.github.io/>`_ and
 `isochrones <https://github.com/timothydmorton/isochrones>`_.
 
-These can be installed using conda or pip:
+These can be installed using pip:
 
 .. code-block:: bash
 
-    conda install numpy pandas h5py numba emcee tqdm isochrones
-
-or
-
-.. code-block:: bash
-
-    pip install numpy pandas h5py numba emcee tqdm isochrones
+    pip install numpy pandas h5py numba "emcee==3.0rc2" tqdm isochrones
 
 .. You'll also need to download isochrones:
 

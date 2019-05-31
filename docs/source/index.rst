@@ -6,6 +6,8 @@
 stardate
 ====================================
 
+*stardate* currently only works with python3.
+
 *stardate* is a tool for measuring precise stellar ages.
 It combines isochrone fitting with gyrochronology (rotation-based age
 inference) to increase the precision of stellar ages on the main sequence.
