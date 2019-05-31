@@ -40,7 +40,10 @@ submit pull requests from the github repo.
 Installation
 ============
 
+Currently the best way to install *stardate* is from github.
+
 .. code-block:: bash
+
     git clone https://github.com/RuthAngus/stardate.git
     cd stardate
     python setup.py install
