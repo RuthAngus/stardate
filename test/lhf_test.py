@@ -90,7 +90,7 @@ def test_lnprob_higher_likelihood_real():
 #     """
 #     Something is causing the lhf to return NaN. Get to the bottom of it!
 #     """
-#     df = pd.read_csv("../paper/code/data/simulated_data.csv")
+#     df = pd.read_csv("paper/code/data/simulated_data.csv")
 #     for i in range(len(df)):
 #         print(i, "of", len(df))
 #         iso_params = pd.DataFrame(dict({"teff": (df.teff[i], 10),
