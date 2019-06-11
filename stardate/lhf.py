@@ -165,12 +165,8 @@ def age_model(log10_period, bprp):
         return logage
 
 
-def gyro_model_rossby(params, Ro_cutoff=1.5, rossby=True, model="praesepe"):
-    """Predict a rotation period from an age, B-V colour and mass.
-
-    Predict a rotation period from an age, B-V color and mass using the Angus
-    et al. (2015) gyrochronology model with the van Saders et al. (2016)
-    weakened magnetic braking correction.
+def gyro_model_rossby(params, Ro_cutoff=2, rossby=True, model="praesepe"):
+    """Predict a rotation period from parameters EEP, age, feh, distance, Av.
 
     Args:
         params (array): The stellar parameters: EEP, log10(age), [Fe/H],
@@ -187,7 +183,7 @@ def gyro_model_rossby(params, Ro_cutoff=1.5, rossby=True, model="praesepe"):
             the Angus et al. (2015) model will be used.
 
     Returns:
-        The log10(rotation period).
+        The log10(rotation period) and the period standard deviation in dex.
 
     """
     if model == "angus15":
@@ -204,13 +200,48 @@ def gyro_model_rossby(params, Ro_cutoff=1.5, rossby=True, model="praesepe"):
     # Calculate the additional sigma
     sig = sigma(params[0], params[1], params[2], color, model=model)
 
+    log_P = period_model(color, mass, params[1], Ro_cutoff=Ro_cutoff,
+                              rossby=rossby, model=model)
+    return log_P, sig
+
+
+def period_model(color, mass, age, Ro_cutoff=1.5, rossby=True,
+                 model="praesepe"):
+    """Predict a rotation period from an age, color and mass.
+
+    Predict a rotation period from an age, color and mass using either the
+    Angus et al. (2019) Praesepe model or the Angus et al. (2015)
+    gyrochronology model with the van Saders et al. (2016) weakened magnetic
+    braking correction.
+
+    Args:
+        color (float): Either a star's Gaia G_BP - G_RP color, if using the
+            praesepe model, or its B-V color, if using the Angus 2015 model.
+        mass (float): Stellar mass in Solar units.
+        age (float): log10 stellar age in years.
+        Ro_cutoff (float, optional): The critical Rossby number after which
+            stars retain their rotation period. This is 2.16 in van Saders et
+            al. (2016) and 2.08 in van Saders et al. (2018). We adopt a
+            default value of 2.
+        rossby (Optional[bool]): If True (default), the van Saders (2016)
+            weakened magnetic braking law will be implemented. If false, the
+            gyrochronology relation will be used unmodified.
+        model (Optional[str)]: The gyrochronology model. If "praesepe", the
+            Praesepe-based gyro model will be used (default) and if "angus15",
+            the Angus et al. (2015) model will be used.
+
+    Returns:
+        The log10(rotation period) and the standard deviation in dex.
+
+    """
+
     if not rossby:  # If Rossby model is switched off
         # Standard gyro model
         if model == "angus15":
-            log_P = gyro_model(params[1], color)
+            log_P = gyro_model(age, color)
         elif model == "praesepe":
-            log_P = gyro_model_praesepe(params[1], color)
-        return log_P, sig
+            log_P = gyro_model_praesepe(age, color)
+        return log_P
 
     # Otherwise the Rossby model is switched on.
     # Calculate the maximum theoretical rotation period for this mass.
@@ -229,17 +260,17 @@ def gyro_model_rossby(params, Ro_cutoff=1.5, rossby=True, model="praesepe"):
         log10_age_thresh = age_model(np.log10(pmax), color)
 
     # If star younger than critical age, predict rotation from age and color.
-    if params[1] < log10_age_thresh:
+    if age < log10_age_thresh:
         if model == "angus15":
-            log_P = gyro_model(params[1], color)
+            log_P = gyro_model(age, color)
         elif model == "praesepe":
-            log_P = gyro_model_praesepe(params[1], color)
+            log_P = gyro_model_praesepe(age, color)
 
     # If star older than this age, return maximum possible rotation period.
-    elif params[1] >= log10_age_thresh:
+    elif age >= log10_age_thresh:
         log_P = np.log10(pmax)
 
-    return log_P, sig
+    return log_P
 
 
 def calc_bv(mag_pars):
@@ -452,15 +483,18 @@ def lnlike(lnparams, *args):
         gyro_lnlike = -.5*((5/(20.))**2) - np.log(20.)
 
     else:
+        # The gyrochronology lhf.
+
+        # The model
         # Calculate a period using the gyrochronology model
         log10_period_model, sig = gyro_model_rossby(params, rossby=rossby,
                                                     model=model)
-        # if np.isnan(log10_period_model):
-        #     return lnpr, lnpr
 
+        # The variance model
         relative_err = period_err/period
         var = (relative_err*.434 + sig)**2
 
+        # The likelihood
         # Calculate the gyrochronology likelihood.
         gyro_lnlike = -.5*((log10_period_model - np.log10(period))**2/var) \
             - .5*np.log(2*np.pi*var)
