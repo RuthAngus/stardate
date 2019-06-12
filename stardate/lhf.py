@@ -600,8 +600,8 @@ def sigma(eep, log_age, feh, color, model="praesepe"):
     k_old, x0_old = 100, np.log10(10*1e9)
     k_young, x0_young = 20, np.log10(250*1e6)
     L_age = .5
-    k_feh, L_feh, x0_feh = 5, .5, 3.
-
+    # k_feh, L_feh, x0_feh = 5, .5, 3.
+    k_feh, L_feh, x0_feh = 50, .5, .25
 
     if model == "angus15":
         x0cool, x0hot = 1.4, .45
