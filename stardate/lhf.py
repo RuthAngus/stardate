@@ -165,7 +165,7 @@ def age_model(log10_period, bprp):
         return logage
 
 
-def gyro_model_rossby(params, Ro_cutoff=2, rossby=True, model="praesepe"):
+def gyro_model_rossby(params, Ro_cutoff=1.5, rossby=True, model="praesepe"):
     """Predict a rotation period from parameters EEP, age, feh, distance, Av.
 
     Args:
