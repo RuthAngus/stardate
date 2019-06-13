@@ -423,7 +423,7 @@ def lnprob(lnparams, *args):
     mod, period, period_err, iso_only, gyro_only, rossby, model = args
 
     # Put a prior on EEP
-    if params[0] > 2000:
+    if params[0] > 800 #2000:
         return -np.inf, -np.inf
 
     # If the prior is -inf, don't even try to calculate the isochronal
