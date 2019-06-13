@@ -480,7 +480,7 @@ def lnlike(lnparams, *args):
     if period is None or not np.isfinite(period) or period <= 0. \
             or period_err is None or not np.isfinite(period_err) \
             or period_err <= 0.:
-        gyro_lnlike = -.5*((5/(20.))**2) - np.log(20.)
+        gyro_lnlike, sig = -.5*((5/(20.))*2) - np.log(20.), 0
 
     else:
         # The gyrochronology lhf.
