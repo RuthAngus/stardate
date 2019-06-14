@@ -596,7 +596,7 @@ def sigma(eep, log_age, feh, color, model="praesepe"):
     """
     kcool, khot, keep = 100, 100, 10# .2
     Lcool, Lhot, Leep = .5, .5, 5
-    x0eep = 410
+    x0eep = 380 #410 #454
     k_old, x0_old = 100, np.log10(10*1e9)
     k_young, x0_young = 20, np.log10(250*1e6)
     L_age = .5
