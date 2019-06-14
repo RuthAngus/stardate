@@ -165,7 +165,7 @@ def age_model(log10_period, bprp):
         return logage
 
 
-def gyro_model_rossby(params, Ro_cutoff=1.5, rossby=True, model="praesepe"):
+def gyro_model_rossby(params, Ro_cutoff=2, rossby=True, model="praesepe"):
     """Predict a rotation period from parameters EEP, age, feh, distance, Av.
 
     Args:
@@ -205,7 +205,7 @@ def gyro_model_rossby(params, Ro_cutoff=1.5, rossby=True, model="praesepe"):
     return log_P, sig
 
 
-def period_model(color, mass, age, Ro_cutoff=1.5, rossby=True,
+def period_model(color, mass, age, Ro_cutoff=2, rossby=True,
                  model="praesepe"):
     """Predict a rotation period from an age, color and mass.
 
@@ -596,13 +596,13 @@ def sigma(eep, log_age, feh, color, model="praesepe"):
     """
     kcool, khot, keep = 100, 100, .2
     Lcool, Lhot, Leep = .5, .5, 5
-    x0eep = 454
+    x0eep = 400
     k_old, x0_old = 100, np.log10(10*1e9)
     k_young, x0_young = 20, np.log10(250*1e6)
     L_age = .5
     # k_feh, L_feh, x0_feh = 5, .5, 3.
-    # k_feh, L_feh, x0_feh = 50, .5, .2
-    k_feh, L_feh, x0_feh = 50, .5, .25
+    k_feh, L_feh, x0_feh = 50, .5, .2
+    # k_feh, L_feh, x0_feh = 50, .5, .25
 
     if model == "angus15":
         x0cool, x0hot = 1.4, .45
