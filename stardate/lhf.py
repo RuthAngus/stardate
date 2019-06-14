@@ -594,7 +594,7 @@ def sigma(eep, log_age, feh, color, model="praesepe"):
             B-V color if model == "angus15"
 
     """
-    kcool, khot, keep = 100, 100, .2
+    kcool, khot, keep = 100, 100, 1#.2
     Lcool, Lhot, Leep = .5, .5, 5
     x0eep = 380  #100 #454
     k_old, x0_old = 100, np.log10(10*1e9)
