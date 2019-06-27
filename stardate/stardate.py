@@ -4,7 +4,7 @@ import pandas as pd
 import h5py
 import tqdm
 from .lhf import lnprob, lnlike, nll# , ptform
-from isochrones import StarModel, get_ichrone
+from isochrones import StarModel, SingleStarModel, get_ichrone
 import emcee
 import scipy.optimize as spo
 # from dynesty import NestedSampler
@@ -179,7 +179,7 @@ class Star(object):
         self.backend = backend
 
         # Set up the StarModel object needed to calculate the likelihood.
-        mod = StarModel(mist, **self.iso_params)  # StarModel isochrones obj
+        mod = SingleStarModel(mist, **self.iso_params)  # StarModel isochrones obj
         # mod.set_prior(age=FlatPrior(bounds=(8, 10.14)))
 
         # Set up a Gaussian prior with the extinction, if provided.
