@@ -111,7 +111,7 @@ class Star(object):
     #     df.to_hdf(fname, key="samples", mode="w")
 
     def fit(self, inits=[329.58, 9.5596, -.0478, 260, .0045],
-            nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
+            nwalkers=50, max_n=100000, thin_by=100, burnin=0, iso_only=False,
             gyro_only=False, optimize=False, rossby=True, model="praesepe",
             seed=None, save_samples=True):
         """Run MCMC on a star using emcee.
@@ -123,7 +123,7 @@ class Star(object):
             inits (Optional[array-like]): A list of initial values to use for
                 EEP, age (in log10[yrs]), feh, distance (in pc) and Av.
             nwalkers (Optional[int]): The number of walkers to use with emcee.
-                The default is 24.
+                The default is 50.
             max_n (Optional[int]): The maximum number of samples to obtain
                 (although not necessarily to save -- see thin_by). The default
                 is 100000.
