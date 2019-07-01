@@ -113,7 +113,7 @@ class Star(object):
     def fit(self, inits=[329.58, 9.5596, -.0478, 260, .0045],
             nwalkers=24, max_n=100000, thin_by=100, burnin=0, iso_only=False,
             gyro_only=False, optimize=False, rossby=True, model="praesepe",
-            seed=None):
+            seed=None, save_samples=True):
         """Run MCMC on a star using emcee.
 
         Explore the posterior probability density function of the stellar
@@ -149,12 +149,16 @@ class Star(object):
                 "angus15" for the Angus et al. (2015) model.
             seed (Optional[int]): The random number seed. Set this if you want
                 to regenerate exactly the same samples each time.
+            save_samples (Optional[bool]): saving samples is the computational
+                bottleneck. If you want to save time and don't need to save
+                the samples using the HDF5 backend, set this to False.
 
         """
 
         self.max_n = max_n
         self.nwalkers = nwalkers
         self.thin_by = thin_by
+        self.save_samples = save_samples
 
         if burnin > max_n/thin_by:
             burnin = int(max_n/thin_by/3)
@@ -167,16 +171,18 @@ class Star(object):
             np.random.seed(seed)
 
         # Create the directory if it doesn't already exist.
-        if not os.path.exists(self.savedir):
-            os.makedirs(self.savedir)
+        if save_samples:
+            if not os.path.exists(self.savedir):
+                os.makedirs(self.savedir)
 
         # Set up the backend
         # Don't forget to clear it in case the file already exists
-        fn = "{0}/{1}.h5".format(self.savedir, self.filename)
-        backend = emcee.backends.HDFBackend(fn)
         ndim = 5
-        backend.reset(nwalkers, ndim)
-        self.backend = backend
+        if save_samples:
+            fn = "{0}/{1}.h5".format(self.savedir, self.filename)
+            backend = emcee.backends.HDFBackend(fn)
+            backend.reset(nwalkers, ndim)
+            self.backend = backend
 
         # Set up the StarModel object needed to calculate the likelihood.
         mod = SingleStarModel(mist, **self.iso_params)  # StarModel isochrones obj
@@ -243,59 +249,67 @@ class Star(object):
 
         max_n = self.max_n//self.thin_by
 
-        # p0 = [p_init + np.random.randn(ndim)*1e-4 for k in range(nwalkers)]
+        ndim = len(self.p_init)  # Should always be 5. Hard code it?
+        p0 = [np.random.randn(ndim)*1e-4 + self.p_init for j in
+              range(self.nwalkers)]
 
         # Broader gaussian for EEP initialization
-        ndim = len(self.p_init)  # Should always be 5. Hard code it?
-        p0 = np.empty((self.nwalkers, ndim))
-        p0[:, 0] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[0]
-        p0[:, 1] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[1]
-        p0[:, 2] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[2]
-        p0[:, 3] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[3]
-        p0[:, 4] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[4]
-        p0 = list(p0)
+        # p0 = np.empty((self.nwalkers, ndim))
+        # p0[:, 0] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[0]
+        # p0[:, 1] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[1]
+        # p0[:, 2] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[2]
+        # p0[:, 3] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[3]
+        # p0[:, 4] = np.random.randn(self.nwalkers)*1e-4 + self.p_init[4]
+        # p0 = list(p0)
 
-        sampler = emcee.EnsembleSampler(self.nwalkers, ndim, lnprob,
-                                        args=self.args, backend=self.backend)
+        if self.save_samples:
+            sampler = emcee.EnsembleSampler(
+                self.nwalkers, ndim, lnprob, args=self.args,
+                backend=self.backend)
 
-        # Copied from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
-        # ======================================================================
+            # Copied from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
+            # ======================================================================
 
-        # We'll track how the average autocorrelation time estimate changes
-        index = 0
-        autocorr = np.empty(max_n)
+            # We'll track how the average autocorrelation time estimate changes
+            index = 0
+            autocorr = np.empty(max_n)
 
-        # This will be useful to testing convergence
-        old_tau = np.inf
+            # This will be useful to testing convergence
+            old_tau = np.inf
 
-        # Now we'll sample for up to max_n steps
-        for sample in sampler.sample(p0, iterations=max_n,
-                                     thin_by=self.thin_by, store=True,
-                                     progress=True):
-            # Only check convergence every 100 steps
-            # if sampler.iteration % 100:
-            #     continue
+            # Now we'll sample for up to max_n steps
+            for sample in sampler.sample(p0, iterations=max_n,
+                                        thin_by=self.thin_by, store=True,
+                                        progress=True):
+                # Only check convergence every 100 steps
+                # if sampler.iteration % 100:
+                #     continue
 
-            # Compute the autocorrelation time so far
-            # Using tol=0 means that we'll always get an estimate even
-            # if it isn't trustworthy
-            if sampler.iteration > 100:
-                tau = sampler.get_autocorr_time(tol=0) * self.thin_by
-                autocorr[index] = np.mean(tau)
-                index += 1
+                # Compute the autocorrelation time so far
+                # Using tol=0 means that we'll always get an estimate even
+                # if it isn't trustworthy
+                if sampler.iteration > 100:
+                    tau = sampler.get_autocorr_time(tol=0) * self.thin_by
+                    autocorr[index] = np.mean(tau)
+                    index += 1
 
-                # Check convergence
-                converged = np.all(tau * 100 < sampler.iteration)
-                converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
-                converged &= np.all(tau) > 1
-                # print("100 samples?", np.all(tau * 100 < sampler.iteration))
-                # print(tau, tau*100, sampler.iteration)
-                # print("Small delta tau?", np.all(np.abs(old_tau - tau) / tau < 0.01))
-                # print(np.abs(old_tau - tau))
-                if converged:
-                    break
-                old_tau = tau
-        # ======================================================================
+                    # Check convergence
+                    converged = np.all(tau * 100 < sampler.iteration)
+                    converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
+                    converged &= np.all(tau) > 1
+                    # print("100 samples?", np.all(tau * 100 < sampler.iteration))
+                    # print(tau, tau*100, sampler.iteration)
+                    # print("Small delta tau?", np.all(np.abs(old_tau - tau) / tau < 0.01))
+                    # print(np.abs(old_tau - tau))
+                    if converged:
+                        break
+                    old_tau = tau
+            # ======================================================================
+
+        else:
+            sampler = emcee.EnsembleSampler(self.nwalkers, ndim, lnprob,
+                                            args=self.args)
+            sampler.run_mcmc(p0, max_n)
 
         return sampler
 
