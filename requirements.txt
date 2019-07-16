@@ -2,6 +2,6 @@ numpy
 pandas
 h5py
 numba
-emcee
+"emcee==3.0rc2"
 tqdm
 isochrones
