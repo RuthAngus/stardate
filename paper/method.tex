@@ -56,6 +56,12 @@ line in figure \ref{fig:praesepe}).
 In order to fit a relation to Praesepe, we removed rotational outliers bluer
 than \gcolor\ = 2.7 via sigma-clipping and fit a 5th-order polynomial to the
 remaining FGK and early M stars.
+\racomment{We found that a 5th order polynomial provided a substantially
+better fit than lower-order polynomials, which were not able to capture the
+sharp `elbow’ in the rotation period-color relation. Additional orders
+provided either a worse
+fit, tending towards extreme values at the boundaries, or diminishing returns
+in goodness-of-fit.}
 We also fit a straight line to the late M dwarfs (\gcolor\ $>$ 2.7), to
 capture the mass-dependent initial rotation periods of low mass stars
 \citep{somers2017}.
@@ -66,19 +72,19 @@ performed in a Jupyter notebook available at
 This new Praesepe-calibrated gyrochronology relation is,
 \begin{equation}
     \log_{10}(P_\mathrm{rot}) =
-    c_A\log_{10}(A) +
+    c_A\log_{10}(t) +
     \sum_{n=0}^4 c_n[\log_{10}(G_{BP}-G_{RP})]^n
 \label{eqn:fgk_gyro}
 \end{equation}
 for stars with \gcolor\ $<$ 2.7 and
 \begin{equation}
     \log_{10}(P_\mathrm{rot}) =
-    c_A\log_{10}(A) +
+    c_A\log_{10}(t) +
     \sum_{m=0}^1 b_m[\log_{10}(G_{BP}-G_{RP})]^m
 \label{eqn:m_gyro}
 \end{equation}
 for stars with \gcolor\ $>$ 2.7, where $P_{\mathrm{rot}}$ is rotation period
-in days and $A$ is age in years.
+in days and $t$ is age in years.
 Best-fit coefficient values are shown in table \ref{tab:coefficients}.
 \begin{table}[h!]
   \begin{center}
@@ -199,17 +205,17 @@ The rotation period model for each of these groups is described below.
         This is useful because we have not yet built an accurate rotation-age
         relation for subgiants into our model.}
     \item{We model stars younger than around 250 Myrs with a log-normal
-        distribution with mean function given by \ref{eqn:fgk_gyro},
+        distribution with mean function given by equation \ref{eqn:fgk_gyro},
         \ref{eqn:m_gyro} or 0.56, depending on it whether it has
-        an intermediate, blue or red color, respectively and a inflated
+        an intermediate, red, or blue color respectively and a inflated
         standard deviation of 0.5 dex.
         Rotation periods in young open clusters show a large amount of scatter
         because they have not yet converged onto the \citet{skumanich1972}
         spin-down sequence.}
-    \item{Finally, we model stars with very low and high metallicites (-3 $>$
-        [Fe/H] $>$ 3) with a log-normal distribution with mean given by
-        \ref{eqn:fgk_gyro}, \ref{eqn:m_gyro} or 0.56, depending on its color,
-        and a standard deviation of 0.5 dex.
+    \item{Finally, we model stars with very low and high metallicites (-0.2
+        $>$ [Fe/H] $>$ 0.2) with a log-normal distribution with mean given by
+        equation \ref{eqn:fgk_gyro}, \ref{eqn:m_gyro} or 0.56, depending on
+        its color, and a standard deviation of 0.5 dex.
         Gyrochronology is not calibrated at these extreme metallicities due to
         a lack of suitable metal poor and rich calibration stars.
         Rather than assume the same gyrochronology model can be na\"ively
@@ -264,8 +270,8 @@ would cause the posterior distributions over stellar parameters to be more
 difficult to sample.
 The sigmoid functions shown in figure \ref{fig:variance} reach half their
 maximum values at \gcolor\ = 0.56 and 2.5 for hot and cool stars respectively,
-EEP = 454 for subgiants, age = 250 Myrs for young stars, $[$Fe/H$]$ = -3 for
-metal poor stars and 3 for metal rich stars.
+EEP = 454 for subgiants, age = 250 Myrs for young stars, $[$M/H$]$ = -0.2 for
+metal poor stars and 0.2 for metal rich stars.
 The logistic growth rate, or steepness, of the sigmoid functions is 100
 dex$^{-1}$ for both color transitions, .2 EEP$^{-1}$ for the EEP transition,
 20 dex$^{-1}$ for the age transition and 5 dex$^{-1}$ for the both metallicity
@@ -287,7 +293,7 @@ period rises to 6.
     We also increased the variance for stars younger than around 250 Myrs,
     because the rotation periods of these stars typically have not yet
     converged onto a tight gyrochronology sequence, and for very high and low
-    metallicity stars (-3 $\gtrsim$ [Fe/H] $\gtrsim$ 3) because the
+    metallicity stars (-0.2 $\gtrsim$ [Fe/H] $\gtrsim$ 0.2) because the
     gyrochronology relations have not been calibrated at these extreme values.
     Down-weighting the gyrochronal likelihood by the inverse variance
     ($1/\sigma^2$) allowed the ages of these stars to be mostly inferred
@@ -310,22 +316,22 @@ gyrochronology and isochrone fitting simultaneously.
 Our goal was to infer the age of a star from its observable properties by
 estimating the posterior probability density function (PDF) over age,
 \begin{equation} \label{eqn:eqn1}
-    % p(A|{\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
-    p(A|{\bf m_x}, P_{\mathrm{rot}}, \bar{\omega}),
+    % p(t|{\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
+    p(t|{\bf m_x}, P_{\mathrm{rot}}, \bar{\pi}),
 \end{equation}
-where $A$ is age, ${\bf m_x}$ is a vector of
+where $t$ is age, ${\bf m_x}$ is a vector of
 apparent magnitudes in various bandpasses,
 \prot\ is the rotation period and \pmega\ is parallax.
-Spectroscopic properties (\teff, \logg\ and $\hat{\mathrm{Fe/H}}$) and/or
+Spectroscopic properties (\teff, \logg\ and $\mathrm{[Fe/H]}$) and/or
 asteroseismic parameters (\dnu\ and \numax) may also be available for a star,
 in which case they would appear to the right of the `$|$' in the above
 equation since they are observables.
 In order to calculate a posterior PDF over age, other stellar parameters must
 be marginalized over.
 These parameters are distance ($D$), V-band extinction ($A_V$), the
-inferred metallicity, $F$\footnote{The inferred metallicity is a
-model parameter which is different to the {\it observed} metallicity which
-would appear on the right side of the $`|'$ in equation \ref{eqn:eqn1}.},
+inferred metallicity, $[M/H]$\footnote{The inferred metallicity, [M/H] is a
+model parameter which is different to the {\it observed} metallicity, [Fe/H]
+which would appear on the right side of the $`|'$ in equation \ref{eqn:eqn1}.},
 and equivalent evolutionary phase (abbreviated to EEP or
 $E$).
 EEP is a dimensionless number ranging from around 200 for M dwarfs up
@@ -336,14 +342,14 @@ Mass is uniquely defined by EEP, age and metallicity.
 The marginalization involves integrating over these extra parameters,
 \begin{eqnarray} \label{eqn:bayes}
     % & p(A|{\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
-    & p(A|{\bf m_x},
-    P_{\mathrm{rot}}, \bar{\omega})
+    & p(t|{\bf m_x},
+    P_{\mathrm{rot}}, \bar{\pi})
 \\ \nonumber
     % & \propto \int p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F},
     & \propto \int p({\bf m_x},
-    P_\mathrm{rot}, \bar{\omega}|
-    A, E, F, D, A_V)~p(A)\, p(E)\, p(F)\, p(D)\, p(A_V)\, \mathrm{d}E\,
-    \mathrm{d}F\, \mathrm{d}D\, \mathrm{d}A_V.
+    P_\mathrm{rot}, \bar{\pi}|
+    t, E, [M/H], D, A_V)~p(t)\, p(E)\, p([M/H])\, p(D)\, p(A_V)\, \mathrm{d}E\,
+    \mathrm{d}[M/H]\, \mathrm{d}D\, \mathrm{d}A_V.
 \end{eqnarray}
 This equation is a form of Bayes' rule,
 \begin{equation} \label{eqn:eqn2}
@@ -351,12 +357,12 @@ This equation is a form of Bayes' rule,
 \end{equation}
 where the likelihood of the data given the model is,
 \begin{equation} \label{eqn:full_likelihood}
-    % p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\omega},
-    p({\bf m_x}, \bar{\omega}, P_{\mathrm{rot}}|A, E, D, A_V, F),
+    % p({\bf m_x}, T_{\mathrm{eff}}, \log(g), \hat{F}, \bar{\pi},
+    p({\bf m_x}, \bar{\pi}, P_{\mathrm{rot}}|t, E, D, A_V, [M/H]),
 \end{equation}
 and the prior PDF over parameters is,
 \begin{equation} \label{eqn:prior}
-    p(A)\, p(E)\, p(D)\, p(A_V)\, p(F).
+    p(t)\, p(E)\, p(D)\, p(A_V)\, p([M/H]).
 \end{equation}
 The priors we used are described in the appendix.
 
@@ -373,7 +379,7 @@ The isochronal likelihood function was,
 \begin{eqnarray} \label{eqn:isochrones_only_likelihood}
     % & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x}, T_{\mathrm{eff}}, \log(g),
     & \mathcal{L_{\mathrm{iso}}} = p({\bf m_x},
-    \bar{\omega}|A, E, F, D,
+    \bar{\pi}|t, E, [M/H], D,
     A_V) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi)^n \det(\Sigma)}}
     \exp\left( -\frac{1}{2} ({\bf O_I} - {\bf I})^T \Sigma ^{-1}
@@ -383,13 +389,13 @@ where ${\bf O_I}$ is the vector of n observables: \pmega, ${\bf m_x}$ plus
 spectroscopic and/or asteroseismic observables if available, and $\Sigma$ is
 the covariance matrix of that set of observables.
 ${\bf I}$ is the vector of {\it model} observables that correspond to a set of
-parameters: $A$, $E$, $F$, $D$ and $A_V$, calculated using an isochrone model.
+parameters: $t$, $E$, $[M/H]$, $D$ and $A_V$, calculated using an isochrone model.
 We assumed there is no covariance between these observables and so this
 covariance matrix consists of individual parameter variances along the
 diagonal with zeros everywhere else.
 The gyrochronal likelihood function was,
 \begin{eqnarray} \label{eqn:gyro_likelihood}
-    & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |A, E, F, D, A_V) \\ \nonumber
+    & \mathcal{L_{\mathrm{gyro}}} = p(P_\mathrm{rot} |t, E, [M/H], D, A_V) \\ \nonumber
     & = \frac{1}{\sqrt{(2\pi) \det(\Sigma_P)}}
     \exp\left( -\frac{1}{2} ({\bf P_O} - {\bf P_P})^T \Sigma_P ^{-1}
     ({\bf P_O} - {\bf P_P})\right),
@@ -420,8 +426,8 @@ from the MIST model grid using {\tt isochrones.py} \citep{isochrones} and
 compared to the measured observables via the isochronal likelihood,
 $\mathcal{L}_{\mathrm{iso}}$ (also computed using {\tt isochrones.py}).
 The parameters were also passed to the gyrochronology model (equation
-\ref{eqn:gyro}) where $A$, $E$,
-$F$, $D$ and $A_V$ were used to calculate \gcolor\ color and mass from the
+\ref{eqn:gyro}) where $t$, $E$,
+$[M/H]$, $D$ and $A_V$ were used to calculate \gcolor\ color and mass from the
 MIST model grid and, in turn, rotation period via the gyrochronology model.
 EEP and \gcolor\ were also used to calculate the additional rotation period
 variance, added to the individual period uncertainties.

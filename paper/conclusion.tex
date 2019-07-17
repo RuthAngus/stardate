@@ -30,9 +30,29 @@ stellar parameters.
 Although V-band extinction is marginalized over during inference, correcting
 photometry for dust-extinction {\it before} analysis, or including it as a
 prior can improve the accuracy of stellar ages measured with \sd.
+\racomment{
+We also tested \sd\ on a set of 21 \kepler\ asteroseismic stars
+\citep{vansaders2016}.
+We found that discrepancies between ages measured with \sd\ and ages measured
+with asteroseismology are likely produced by differences between the MIST and
+BaSTI stellar evolution models.
+In general, the new Praesepe-based gyrochronology relation is not a good model
+for all asteroseismic stars.
+Ultimately, these empirical gyrochronology relations need further, and
+more detailed calibration.
+Asteroseismic and cluster stars provide an opportunity for calibration but
+given the high-dimensionality of the gyrochronology relations (\ie\ rotation
+period depends on age, mass, metallicity, surface gravity, etc), many stars
+with precise ages, spanning a range of properties, are still needed to {\it
+reliably} calibrate them.
+}
 
-\sd\ may predict inaccurate ages for stars in close binaries whose
-interactions influence their rotation period evolution.
+In cases where gyrochronology predicts inaccurate stellar ages it is either
+because models are not correctly calibrated, because the rotation periods or
+rotation period uncertainties are themselves inaccurate, or because of
+rotational outliers.
+For example, \sd\ may predict inaccurate ages for stars in close binaries
+whose interactions influence their rotation period evolution.
 Rotational outliers are often seen in clusters \citep[see \eg][]{douglas2016,
 rebull2016, douglas2017, rebull2017} and many of these fall above the main
 sequence on a CMD, indicating that they are binaries.
@@ -42,8 +62,8 @@ For example, a common rotation period measurement failure mode is to measure
 half the true rotation period.
 The best way to prevent an erroneous or outlying rotation period from
 resulting in an erroneous age measurement is to {\it allow} for outlying
-rotation periods using a mixture model, and we intend to build a mixture model
-into \sd\ in future.
+rotation periods using a mixture model, a feature that could be built into
+\sd\ in the future.
 
 % Motivation
 The optimal way to age-date stars is by combining {\it all} their available
@@ -68,7 +88,7 @@ on each other.
 a rotation period and broad-band photometry.
 This already includes tens-of-thousands of \kepler\ and \ktwo\ stars and could
 include millions more from \tess, \lsst, \wfirst, \plato, \gaia, and others in
-future.
+the future.
 
 The code used in this project is available as a {\it Python} package called
 \sd, DOI: \url{ https://doi.org/10.5281/zenodo.2712419}.
