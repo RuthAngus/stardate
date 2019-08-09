@@ -85,5 +85,25 @@ def test_iso_lnlike():
     assert iso_median == test_median
 
 
+# def test_large_sigma():
+
+#     iso_params = {"teff": (5770, 10),
+#                 "feh": (-2., .01),
+#                 "logg": (4.44, .1),
+#                 "parallax": (1, 1)}
+
+#     mod = SingleStarModel(mist, **iso_params)  # StarModel isochrones obj
+#     params = [354, np.log10(4.56*1e9), -2., 1000, 0.]
+#     lnparams = [354, np.log10(4.56*1e9), -2., np.log(1000), 0.]
+
+#     # Test lnprob with gyro on
+#     args = [mod, 26, 1., False, False, True, "praesepe"]
+#     print(lnprob(lnparams, *args))
+
+#     # Test lnprob with gyro off
+#     args = [mod, None, None, True, False, True, "praesepe"]
+#     print(lnprob(lnparams, *args))
+
+
 if __name__ == "__main__":
     test_iso_lnlike()
