@@ -153,7 +153,7 @@ Praesepe cluster and the Sun, that includes a variance model to capture the
 rotational behavior of stars whose rotation periods do not lengthen with the
 square-root of time, and parts of the Hertzsprung-Russell diagram where
 gyrochronology has not been calibrated.
-This publication is accompanied by an open source {\it Python} package (\sd)
+This publication is accompanied by an open source {\it Python} package, \sd,
 for inferring the ages of main-sequence and subgiant FGKM stars from rotation
 periods, spectroscopic parameters and/or apparent magnitudes and parallaxes.
 \end{abstract}
@@ -173,7 +173,7 @@ diagram (HRD) or color-magnitude diagram (CMD).
 On the MS, isochrones are tightly spaced and, even with very precise
 measurements of effective temperature and luminosity, the position of a MS
 star on the HRD may be consistent with range of isochrones spanning several
-billion years.
+billion years \citep[see][for a review of stellar ages]{soderblom2010}.
 At the main-sequence turnoff however, isochrones are spread further apart, so
 that sufficiently precisely measured temperatures and luminosities can yield
 ages that are extremely precise (with minimum statistical uncertainties on the
@@ -389,12 +389,14 @@ line in figure \ref{fig:praesepe}).
 In order to fit a relation to Praesepe, we removed rotational outliers bluer
 than \gcolor\ = 2.7 via sigma-clipping and fit a 5th-order polynomial to the
 remaining FGK and early M stars.
-\racomment{We found that a 5th order polynomial provided a substantially
+% \racomment{
+    We found that a 5th order polynomial provided a substantially
 better fit than lower-order polynomials, which were not able to capture the
 sharp `elbow’ in the rotation period-color relation. Additional orders
 provided either a worse
 fit, tending towards extreme values at the boundaries, or diminishing returns
-in goodness-of-fit.}
+in goodness-of-fit.
+% }
 We also fit a straight line to the late M dwarfs (\gcolor\ $>$ 2.7), to
 capture the mass-dependent initial rotation periods of low mass stars
 \citep{somers2017}.
@@ -812,7 +814,7 @@ extinctions at random for 1000 stars from the following uniform distributions:
 & D \sim U(10, 1000)~\mathrm{[pc]} \\
 & A_V \sim U(0, 0.1).
 \end{eqnarray}
-\teff, \logg, \fhat, parallax, and apparent magnitudes $B$, $V$, $J$, $H$, $K$,
+\teff, \logg, [Fe/H], parallax, and apparent magnitudes $B$, $V$, $J$, $H$, $K$,
 \gaia\ $G$, $G_{BP}$ and $G_{RP}$ were generated from these
 stellar parameters using the MIST stellar evolution models.
 We added a small amount of noise to the `observed' stellar properties in order
@@ -969,7 +971,7 @@ Neither gyrochronology nor isochrone fitting can provide precise ages for
 
 An important caveat associated with these results is that they strongly depend
 on the uncertainties adopted for all observables used in the analysis: \teff,
-\feh, \logg, $G$, $G_BP$, $G_RP$, $J$, $H$, $K$, $B$, $V$, and rotation
+\feh, \logg, $G$, $G_{BP}$, $G_{RP}$, $J$, $H$, $K$, $B$, $V$, and rotation
 period.
 Changing the uncertainties on these observables will affect the uncertainties
 on inferred ages in different ways.
@@ -1101,7 +1103,7 @@ Figure \ref{fig:NGC6819} shows the period-color relation of this
 cluster and figure \ref{fig:NGC6819_results} shows the results of inferring
 the ages of individual cluster members using a combination of gyrochronology
 and isochrone fitting (via \sd) and isochrone fitting alone.
-The ages of F stars in this cluster (\gcolor\ $\sim$ 5.5-6.5) were relatively
+The ages of F stars in this cluster (\gcolor\ $\sim$ 0.5-0.75) were relatively
 precisely constrained by isochrone fitting alone because, at 2.5 Gyr, they are
 approaching the MS turnoff.
 For these hot stars, ages inferred with gyrochronology and isochrones were
@@ -1201,7 +1203,8 @@ standard techniques such as Lomb-Scargle periodograms and autocorrelation
 functions do not provide them.
 % In general, formal rotation period uncertainties should probably be calculated
 % empirically via simulations as in the \citet{aigrain2015} study.
-\racomment{Ideally, rotation period uncertainties should capture {\it both} the
+% \racomment{
+    Ideally, rotation period uncertainties should capture {\it both} the
 measurement precision, {\it and} the physical uncertainty introduced by the
 latitudinal movement of star spots on the surface of a differentially rotating
 star.
@@ -1223,10 +1226,12 @@ A thorough exploration of how rotation period uncertainties, from both
 measurement uncertainty and physical variation, affect stellar ages via
 gyrochronology is key to understanding the power of gyrochronology as an
 age-dating method.
-For now, we leave this exploration for a future study.}
+For now, we leave this exploration for a future study.
+% }
 
 \subsection{Test 3: Kepler asteroseismic stars}
-\racomment{In order to test our method in the regime where both isochrone
+% \racomment{
+    In order to test our method in the regime where both isochrone
 fitting and gyrochronology become important, we recovered the ages of the 21
 asteroseismic stars analysed in \citet{vansaders2016}.
 These 21 stars were observed in \kepler's short cadence mode and are a mixture
@@ -1269,9 +1274,9 @@ Black triangles are shown for stars where gyrochronology {\it is} applicable.
 The white circles show ages inferred from isochrones only.
 Dashed lines connect the three different age measurements for the same
 stars.
-}
+% }
 
-\racomment{
+% \racomment{
 Although the ages of all 21 stars shown in figure \ref{fig:astero} were
 inferred with a joint isochronal and gyrochronal model, most (all but 8) were
 either too evolved, too metal poor, or too metal rich for gyrochronology to
@@ -1285,9 +1290,9 @@ information for some of them because these stars are relatively old and/or
 relatively hot.
 % Isochrones are information-rich for these hot and old stars, and this is
 % exactly where gyrochronology is at its most information-poor.
-}
+% }
 
-\racomment{
+% \racomment{
 In general, there is relatively poor agreement between the asteroseismic ages
 and the ages inferred using \sd.
 Much of this discrepancy is driven by differences in the isochronal ages,
@@ -1302,9 +1307,9 @@ effective temperature range as the asteroseismic stars, the age discrepancy
 between the two sets of models can be as large as 1-2 billion years.
 The MIST isochrones lie above the BaSTI isochrones on the HR diagram, leading
 to a systematic underprediction of ages.
-}
+% }
 
-\racomment{
+% \racomment{
 The gyrochronal ages, where gyrochronology is applicable, do not show
 excellent agreement with the asteroseismic ages either.
 The four hot stars to the left in figure \ref{fig:astero} are rotating more
@@ -1330,7 +1335,7 @@ period of around 20 days (Latham, private communication).
 It is the only clear SB1 in the \citet{vansaders2016} sample, although some
 others do have binary companions with long orbital periods, for which tidal
 interactions are not expected to be strong.
-}
+% }
 
 \begin{figure}
     \caption{ A comparison of stellar ages inferred using
@@ -1382,7 +1387,7 @@ stellar parameters.
 Although V-band extinction is marginalized over during inference, correcting
 photometry for dust-extinction before analysis, or including it as a
 prior can improve the accuracy of stellar ages measured with \sd.
-\racomment{
+% \racomment{
 We also tested \sd\ on a set of 21 \kepler\ asteroseismic stars
 \citep{vansaders2016}.
 We found that discrepancies between ages measured with \sd\ and ages measured
@@ -1397,7 +1402,7 @@ given the high-dimensionality of the gyrochronology relations (\ie\ rotation
 period depends on age, mass, metallicity, surface gravity, etc), many stars
 with precise ages, spanning a range of properties, are still needed to
 reliably calibrate them.
-}
+% }
 
 In cases where gyrochronology predicts inaccurate stellar ages it is either
 because models are not correctly calibrated, because the rotation periods or
