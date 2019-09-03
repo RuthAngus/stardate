@@ -20,6 +20,8 @@ affiliations:
    index: 2
  - name: Department of Astronomy, University of Florida, Gainesville, FL, 32611, USA
    index: 3
+aas-doi: 10.3847/1538-3881/ab3c53
+aas-journal: Astronomical Journal
 date: 30 April 2019
 bibliography: references.bib
 ---
