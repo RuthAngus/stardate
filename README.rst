@@ -104,9 +104,9 @@ Example usage
 
     # Print the median age with the 16th and 84th percentile uncertainties.
     age, errm, errp, samples = star.age_results()
-    print("stellar age = {0:.2f} + {1:.2f} + {2:.2f}".format(age, errp, errm))
+    print("stellar age = {0:.2f} + {1:.2f} - {2:.2f}".format(age, errp, errm))
 
-    >> stellar age = 2.97 + 0.60 + 0.55
+    >> stellar age = 2.97 + 0.55 - 0.60
 
 If you want to just use a simple gyrochronology model without running MCMC,
 you can predict a stellar age from a rotation period like this:
