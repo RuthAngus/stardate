@@ -103,7 +103,7 @@ Example usage
     # much higher when running for real, or using the default value of 100000.
 
     # Print the median age with the 16th and 84th percentile uncertainties.
-    age, errp, errm, samples = star.age_results()
+    age, errm, errp, samples = star.age_results()
     print("stellar age = {0:.2f} + {1:.2f} + {2:.2f}".format(age, errp, errm))
 
     >> stellar age = 2.97 + 0.60 + 0.55
