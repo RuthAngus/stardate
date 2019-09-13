@@ -81,7 +81,7 @@ def test_on_sun():
     fn = "star_test"
     star = sd.Star(iso_params, prot=26., prot_err=26*.01, Av=0., Av_err=.001,
                    savedir=".", filename=fn)
-    star.fit(max_n=1000, seed=42)
+    star.fit(max_n=1000, seed=42, save_samples=True)
     samples = star.samples
 
     flatsamples, _, _, _ = load_samples("{0}.h5".format(fn))
