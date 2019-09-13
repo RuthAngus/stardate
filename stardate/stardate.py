@@ -113,7 +113,7 @@ class Star(object):
     def fit(self, inits=[329.58, 9.5596, -.0478, 260, .0045],
             nwalkers=50, max_n=100000, thin_by=100, burnin=0, iso_only=False,
             gyro_only=False, optimize=False, rossby=True, model="praesepe",
-            seed=None, save_samples=True):
+            seed=None, save_samples=False):
         """Run MCMC on a star using emcee.
 
         Explore the posterior probability density function of the stellar
