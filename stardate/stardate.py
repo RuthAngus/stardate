@@ -227,6 +227,7 @@ class Star(object):
         self.sampler = sampler
 
         nwalkers, nsteps, ndim = np.shape(self.sampler.chain)
+        print("nsteps", nsteps, "burnin", burnin)
         self.samples = np.reshape(self.sampler.chain[:, burnin:, :],
                                   (nwalkers*(nsteps-burnin), ndim))
 
@@ -247,7 +248,9 @@ class Star(object):
             sampler: the emcee sampler object.
         """
 
-        max_n = self.max_n//self.thin_by
+        max_n = self.max_n
+        if self.save_samples:
+            max_n = self.max_n//self.thin_by
 
         ndim = len(self.p_init)  # Should always be 5. Hard code it?
         p0 = [np.random.randn(ndim)*1e-4 + self.p_init for j in
@@ -309,7 +312,7 @@ class Star(object):
         else:
             sampler = emcee.EnsembleSampler(self.nwalkers, ndim, lnprob,
                                             args=self.args)
-            sampler.run_mcmc(p0, max_n)
+            sampler.run_mcmc(p0, max_n, progress=True)
 
         return sampler
 
