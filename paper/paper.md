@@ -48,7 +48,7 @@ or evolutionary stage.
 ``stardate`` uses the ``emcee`` Python package [@emcee] to perform Markov
 Chain Monte Carlo sampling in order to estimate the posterior PDFs of the
 stellar parameters.
-The paper describing the method in more detail is Angus et al. (submitted).
+The paper describing the method in more detail is [@angus2019].
 
 ``stardate`` is built on top of the ``isochrones`` Python package
 [@isochrones] and uses the MIST stellar evolution models [@dotter2016],
